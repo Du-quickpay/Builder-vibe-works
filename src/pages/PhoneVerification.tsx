@@ -523,9 +523,19 @@ const PhoneVerification = () => {
             border-radius: 0 !important;
             max-width: none !important;
             height: 100vh;
+            min-height: 100vh;
+            margin: 0;
             display: flex;
-            align-items: flex-start;
-            padding-top: 0;
+            flex-direction: column;
+            justify-content: flex-start;
+          }
+          .form-card > div {
+            padding: 20px !important;
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
           }
           .desktop-bg-image {
             display: none !important;
