@@ -72,25 +72,32 @@ const PhoneVerification = () => {
     <div
       style={{
         display: "flex",
-        height: "885px",
+        minHeight: "100vh",
+        flexDirection: "column",
       }}
+      className="lg:flex-row lg:h-screen"
     >
       <div
         style={{
           alignItems: "center",
           backgroundColor: "rgb(14, 35, 66)",
           display: "flex",
-          height: "100%",
-          justifyContent: "space-evenly",
+          flex: "1",
+          justifyContent: "center",
+          padding: "16px",
           width: "100%",
         }}
+        className="lg:justify-space-evenly lg:flex-row"
       >
         {/* Login Form Card */}
         <div
           style={{
             backgroundColor: "rgb(255, 255, 255)",
             borderRadius: "16px",
+            width: "100%",
+            maxWidth: "480px",
           }}
+          className="lg:max-w-[480px]"
         >
           <div
             style={{
@@ -98,7 +105,6 @@ const PhoneVerification = () => {
               flexDirection: "column",
               gap: "8px",
               padding: "20px",
-              width: "480px",
             }}
           >
             {/* Header */}
@@ -375,9 +381,10 @@ const PhoneVerification = () => {
           </div>
         </div>
 
-        {/* Background Image */}
+        {/* Background Image - Hidden on mobile, visible on lg+ */}
         <div
           style={{
+            display: "none",
             height: "100%",
             maxWidth: "720px",
             overflowX: "hidden",
@@ -385,6 +392,7 @@ const PhoneVerification = () => {
             position: "relative",
             width: "100%",
           }}
+          className="lg:block lg:flex-1"
         >
           <img
             src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
@@ -493,6 +501,79 @@ const PhoneVerification = () => {
           100% {
             transform: rotate(360deg);
           }
+        }
+
+        @media (max-width: 1023px) {
+          .lg\\:justify-space-evenly {
+            justify-content: center;
+          }
+          .lg\\:flex-row {
+            flex-direction: column;
+          }
+          .lg\\:block {
+            display: none !important;
+          }
+          .lg\\:h-screen {
+            height: auto;
+          }
+          .lg\\:flex-1 {
+            flex: none;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .lg\\:justify-space-evenly {
+            justify-content: space-evenly;
+          }
+          .lg\\:flex-row {
+            flex-direction: row;
+          }
+          .lg\\:block {
+            display: block !important;
+          }
+          .lg\\:h-screen {
+            height: 100vh;
+          }
+          .lg\\:flex-1 {
+            flex: 1;
+          }
+          .lg\\:max-w-\\[480px\\] {
+            max-width: 480px;
+          }
+        }
+
+        @media (max-width: 639px) {
+          .sm\\:w-\\[56px\\] {
+            width: 48px;
+          }
+          .sm\\:min-w-\\[56px\\] {
+            min-width: 48px;
+          }
+          .sm\\:h-\\[56px\\] {
+            height: 48px !important;
+          }
+          .sm\\:text-\\[20px\\] {
+            font-size: 18px !important;
+          }
+        }
+
+        @media (min-width: 640px) {
+          .sm\\:w-\\[56px\\] {
+            width: 56px;
+          }
+          .sm\\:min-w-\\[56px\\] {
+            min-width: 56px;
+          }
+          .sm\\:h-\\[56px\\] {
+            height: 56px !important;
+          }
+          .sm\\:text-\\[20px\\] {
+            font-size: 20px !important;
+          }
+        }
+
+        .focus\\:border-blue-500:focus {
+          border-color: rgb(0, 122, 255) !important;
         }
       `}</style>
     </div>

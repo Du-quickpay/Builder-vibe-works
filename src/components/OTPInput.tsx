@@ -140,10 +140,9 @@ export const OTPInput = ({
       style={{
         direction: "ltr",
         display: "flex",
+        gap: "8px",
+        justifyContent: "center",
         flexWrap: "wrap",
-        marginRight: "-8px",
-        marginTop: "-8px",
-        width: "calc(100% + 8px)",
       }}
     >
       {Array.from({ length }, (_, index) => (
@@ -151,20 +150,16 @@ export const OTPInput = ({
           key={index}
           style={{
             direction: "ltr",
-            flexBasis: "0px",
-            flexGrow: "1",
-            maxWidth: "100%",
-            paddingRight: "8px",
-            paddingTop: "8px",
+            width: "48px",
+            minWidth: "48px",
           }}
+          className="sm:w-[56px] sm:min-w-[56px]"
         >
           <div
             style={{
               direction: "ltr",
               display: "inline-flex",
               flexDirection: "column",
-              marginBottom: "8px",
-              marginTop: "16px",
               position: "relative",
               verticalAlign: "top",
               width: "100%",
@@ -201,48 +196,31 @@ export const OTPInput = ({
                   animationDuration: "0.01s",
                   animationName: "mui-auto-fill-cancel",
                   appearance: "auto",
-                  boxSizing: "content-box",
+                  boxSizing: "border-box",
                   cursor: "text",
                   direction: "ltr",
                   overflowX: "clip",
                   overflowY: "clip",
-                  paddingBottom: "10px",
-                  paddingLeft: "12px",
-                  paddingRight: "12px",
-                  paddingTop: "10px",
+                  padding: "12px 8px",
                   textAlign: "center",
                   width: "100%",
+                  height: "48px",
                   border: "1px solid rgba(0, 0, 0, 0.2)",
                   borderRadius: "8px",
-                  fontSize: "16px",
+                  fontSize: "18px",
                   fontWeight: "500",
                   backgroundColor: "rgb(255, 255, 255)",
+                  outline: "none",
+                  transition: "border-color 0.15s ease",
                 }}
+                className="sm:h-[56px] sm:text-[20px] focus:border-blue-500"
                 autoComplete={index === 0 ? "one-time-code" : "off"}
               />
               <fieldset
                 aria-hidden="true"
                 style={{
-                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-                  borderBottomLeftRadius: "8px",
-                  borderBottomRightRadius: "8px",
-                  borderBottomStyle: "solid",
-                  borderBottomWidth: "1px",
-                  borderColor: "rgba(0, 0, 0, 0.2)",
-                  borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
-                  borderLeftStyle: "solid",
-                  borderLeftWidth: "1px",
+                  border: "1px solid rgba(0, 0, 0, 0.2)",
                   borderRadius: "8px",
-                  borderRight: "1px solid rgba(0, 0, 0, 0.2)",
-                  borderRightStyle: "solid",
-                  borderRightWidth: "1px",
-                  borderStyle: "solid",
-                  borderTop: "1px solid rgba(0, 0, 0, 0.2)",
-                  borderTopLeftRadius: "8px",
-                  borderTopRightRadius: "8px",
-                  borderTopStyle: "solid",
-                  borderTopWidth: "1px",
-                  borderWidth: "1px",
                   bottom: "0px",
                   cursor: "text",
                   direction: "ltr",
@@ -250,8 +228,7 @@ export const OTPInput = ({
                   minWidth: "0%",
                   overflowX: "hidden",
                   overflowY: "hidden",
-                  paddingLeft: "8px",
-                  paddingRight: "8px",
+                  padding: "0 8px",
                   pointerEvents: "none",
                   position: "absolute",
                   right: "0px",
