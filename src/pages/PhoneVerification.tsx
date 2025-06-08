@@ -69,304 +69,432 @@ const PhoneVerification = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[rgb(15,35,65)] overflow-hidden">
-      {/* Progress Bar - Exact positioning */}
-      <div className="fixed top-0 right-0 w-full h-0.5 z-[10310]">
+    <div
+      style={{
+        display: "flex",
+        height: "885px",
+      }}
+    >
+      <div
+        style={{
+          alignItems: "center",
+          backgroundColor: "rgb(14, 35, 66)",
+          display: "flex",
+          height: "100%",
+          justifyContent: "space-evenly",
+          width: "100%",
+        }}
+      >
+        {/* Login Form Card */}
         <div
-          className="bg-[rgb(0,122,255)] h-full transition-transform duration-300"
           style={{
-            width: "100%",
-            transform: "translateX(50%)",
+            backgroundColor: "rgb(255, 255, 255)",
+            borderRadius: "16px",
           }}
-        />
-      </div>
-
-      {/* Main Content Container */}
-      <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-evenly w-full min-h-screen p-4 lg:p-0">
-        {/* Verification Form Section */}
-        <div className="flex items-center justify-center w-full lg:w-auto">
+        >
           <div
-            className="w-full max-w-md lg:max-w-[480px] mx-auto"
             style={{
-              backgroundColor: "rgb(255, 255, 255)",
-              borderRadius: "16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              padding: "20px",
+              width: "480px",
             }}
           >
-            <div className="flex flex-col gap-2" style={{ padding: "20px" }}>
-              {/* Header - Exact Wallex Style */}
-              <div className="flex justify-between items-center w-full">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleEditNumber}
-                    className="flex-shrink-0 p-0 bg-transparent hover:bg-gray-100"
-                    style={{
-                      borderRadius: "50%",
-                      backgroundColor: "rgba(0, 0, 0, 0)",
-                    }}
-                  >
-                    <ChevronLeft
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        color: "rgba(0, 0, 0, 0.6)",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </Button>
-                  <span
-                    style={{
-                      fontWeight: "700",
-                      fontSize: "16px",
-                      color: "rgb(0, 0, 0)",
-                    }}
-                  >
-                    تائید شماره همراه
-                  </span>
-                </div>
-                <a href="#" className="flex items-center flex-shrink-0">
-                  <img
-                    src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
-                    alt="صرافی خرید فروش ارزهای دیجیتال"
-                    style={{
-                      width: "128px",
-                      height: "24px",
-                      objectFit: "contain",
-                    }}
-                  />
-                </a>
-              </div>
-
-              {/* Separator */}
-              <hr
-                style={{
-                  borderColor: "rgba(0, 0, 0, 0.2)",
-                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-                  marginLeft: "-20px",
-                  marginRight: "-20px",
-                  marginTop: "8px",
-                  marginBottom: "8px",
-                }}
-              />
-
-              {/* Content */}
+            {/* Header */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
               <div
-                className="flex flex-col gap-2"
-                style={{ marginTop: "16px" }}
+                style={{
+                  alignItems: "flex-start",
+                  display: "flex",
+                  gap: "8px",
+                }}
               >
-                {/* SMS Confirmation Alert */}
-                <AlertMessage>
-                  <span>کد تایید به شماره </span>
-                  <b
-                    dir="ltr"
-                    style={{
-                      display: "inline",
-                      fontWeight: "700",
-                      direction: "ltr",
-                    }}
-                  >
-                    {maskedPhoneNumber}
-                  </b>
-                  <span> پیامک شد.</span>
-                </AlertMessage>
-
-                {/* OTP Input Section */}
-                <div
+                <button
+                  onClick={handleEditNumber}
                   style={{
-                    direction: "ltr",
+                    alignItems: "center",
+                    backgroundColor: "rgba(0, 0, 0, 0)",
+                    borderRadius: "50%",
+                    border: "none",
+                    color: "rgba(0, 0, 0, 0.6)",
+                    cursor: "pointer",
                     display: "flex",
-                    flexWrap: "wrap",
-                    marginRight: "-8px",
-                    marginTop: "16px",
-                    width: "calc(100% + 8px)",
+                    flexShrink: "0",
+                    fontSize: "24px",
+                    justifyContent: "center",
+                    lineHeight: "42px",
+                    position: "relative",
+                    textAlign: "center",
+                    transitionDuration: "0.15s",
+                    transitionProperty: "background-color",
+                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                    userSelect: "none",
+                    verticalAlign: "middle",
                   }}
                 >
-                  <div
-                    style={{
-                      direction: "ltr",
-                      flexBasis: "0px",
-                      flexGrow: "1",
-                      maxWidth: "100%",
-                      paddingRight: "8px",
-                      paddingTop: "8px",
-                    }}
-                  >
-                    <OTPInput
-                      length={6}
-                      value={otp}
-                      onComplete={handleOTPComplete}
-                      onChange={handleOTPChange}
-                      disabled={isSubmitting}
-                      className="mb-4"
-                    />
-                  </div>
-                </div>
+                  <ChevronLeft style={{ width: "24px", height: "24px" }} />
+                </button>
+                <span
+                  style={{
+                    fontWeight: "700",
+                  }}
+                >
+                  تائید شماره همراه
+                </span>
+              </div>
+              <a>
+                <img
+                  src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
+                  alt="صرافی خرید فروش ارزهای دیجیتال"
+                  width="128"
+                  height="24"
+                  style={{
+                    aspectRatio: "auto 128 / 24",
+                    display: "inline",
+                    height: "24px",
+                    width: "128px",
+                  }}
+                />
+              </a>
+            </div>
 
-                {errors.otp && (
-                  <p
-                    className="text-right mt-2"
-                    style={{
-                      color: "rgb(220, 38, 38)",
-                      fontSize: "12px",
-                    }}
-                  >
-                    {errors.otp}
-                  </p>
-                )}
+            {/* Separator */}
+            <hr
+              style={{
+                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                borderColor: "rgba(0, 0, 0, 0.2)",
+                flexShrink: "0",
+                marginLeft: "-20px",
+                marginRight: "-20px",
+                overflowX: "hidden",
+                overflowY: "hidden",
+              }}
+            />
 
-                {/* Countdown Timer */}
-                <div>
-                  <p
+            {/* Content */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                marginTop: "16px",
+              }}
+            >
+              {/* Alert Message */}
+              <AlertMessage>
+                <span>کد تایید به شماره </span>
+                <b
+                  dir="ltr"
+                  style={{
+                    display: "inline",
+                    fontWeight: "700",
+                    direction: "ltr",
+                  }}
+                >
+                  {maskedPhoneNumber}
+                </b>
+                <span> پیامک شد.</span>
+              </AlertMessage>
+
+              {/* OTP Input Grid */}
+              <OTPInput
+                length={6}
+                value={otp}
+                onComplete={handleOTPComplete}
+                onChange={handleOTPChange}
+                disabled={isSubmitting}
+              />
+
+              {errors.otp && (
+                <p
+                  style={{
+                    color: "rgb(220, 38, 38)",
+                    fontSize: "12px",
+                    textAlign: "right",
+                    marginTop: "8px",
+                  }}
+                >
+                  {errors.otp}
+                </p>
+              )}
+
+              {/* Countdown Timer */}
+              <div>
+                <p
+                  style={{
+                    color: "rgba(0, 0, 0, 0.6)",
+                    fontSize: "14px",
+                    lineHeight: "24.01px",
+                    paddingBottom: "4px",
+                    paddingTop: "4px",
+                  }}
+                >
+                  {countdown > 0 ? (
+                    <>
+                      <span>{countdown}</span>
+                      <span> ثانیه تا ارسال مجدد کد</span>
+                    </>
+                  ) : (
+                    <button
+                      onClick={handleResendCode}
+                      style={{
+                        color: "rgb(0, 122, 255)",
+                        textDecoration: "underline",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      ارسال مجدد کد
+                    </button>
+                  )}
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ marginTop: "16px" }}>
+                <hr
+                  style={{
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                    borderColor: "rgba(0, 0, 0, 0.2)",
+                    flexShrink: "0",
+                    marginBottom: "16px",
+                    marginLeft: "-20px",
+                    marginRight: "-20px",
+                    overflowX: "hidden",
+                    overflowY: "hidden",
+                  }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                  }}
+                >
+                  <button
+                    onClick={handleEditNumber}
                     style={{
+                      alignItems: "center",
+                      backgroundColor: "rgba(0, 0, 0, 0)",
+                      border: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderRadius: "8px",
                       color: "rgba(0, 0, 0, 0.6)",
-                      fontSize: "14px",
-                      lineHeight: "24.01px",
-                      paddingBottom: "4px",
-                      paddingTop: "4px",
-                      textAlign: "right",
+                      cursor: "pointer",
+                      display: "flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                      transitionDuration: "0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
                     }}
                   >
-                    {countdown > 0 ? (
-                      <>
-                        <span>{countdown}</span>
-                        <span> ثانیه تا ارسال مجدد کد</span>
-                      </>
-                    ) : (
-                      <button
-                        onClick={handleResendCode}
+                    <span>ویرایش شماره</span>
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting || otp.length !== 6}
+                    style={{
+                      alignItems: "center",
+                      backgroundColor: "rgb(23, 29, 38)",
+                      border: "none",
+                      borderRadius: "8px",
+                      color: "rgb(255, 255, 255)",
+                      cursor:
+                        isSubmitting || otp.length !== 6
+                          ? "not-allowed"
+                          : "pointer",
+                      display: "flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      opacity: isSubmitting || otp.length !== 6 ? "0.5" : "1",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                      transitionDuration: "0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <div
                         style={{
-                          color: "rgb(0, 122, 255)",
-                          textDecoration: "underline",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
-                        ارسال مجدد کد
-                      </button>
+                        <div
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            border: "2px solid rgb(255, 255, 255)",
+                            borderTop: "2px solid transparent",
+                            borderRadius: "50%",
+                            animation: "spin 1s linear infinite",
+                            marginRight: "8px",
+                          }}
+                        />
+                        در حال بررسی...
+                      </div>
+                    ) : (
+                      <>
+                        <span style={{ display: "contents" }} />
+                        <span>ثبت و ادامه</span>
+                      </>
                     )}
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div style={{ marginTop: "16px" }}>
-                  <hr
-                    style={{
-                      borderColor: "rgba(0, 0, 0, 0.2)",
-                      borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-                      marginLeft: "-20px",
-                      marginRight: "-20px",
-                      marginBottom: "16px",
-                    }}
-                  />
-                  <div
-                    className="flex gap-3"
-                    style={{
-                      display: "flex",
-                      gap: "12px",
-                    }}
-                  >
-                    <Button
-                      type="button"
-                      onClick={handleEditNumber}
-                      className="w-full"
-                      style={{
-                        backgroundColor: "rgba(0, 0, 0, 0)",
-                        border: "1px solid rgba(0, 0, 0, 0.2)",
-                        borderRadius: "8px",
-                        color: "rgba(0, 0, 0, 0.6)",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        padding: "10px 16px",
-                        textTransform: "uppercase",
-                        width: "100%",
-                      }}
-                    >
-                      ویرایش شماره
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={handleSubmit}
-                      disabled={isSubmitting || otp.length !== 6}
-                      className="w-full"
-                      style={{
-                        backgroundColor: "rgb(23, 29, 38)",
-                        borderRadius: "8px",
-                        color: "rgb(255, 255, 255)",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        padding: "10px 16px",
-                        textTransform: "uppercase",
-                        width: "100%",
-                        cursor:
-                          isSubmitting || otp.length !== 6
-                            ? "not-allowed"
-                            : "pointer",
-                        opacity: isSubmitting || otp.length !== 6 ? "0.5" : "1",
-                        border: "none",
-                      }}
-                    >
-                      {isSubmitting ? (
-                        <div className="flex items-center justify-center">
-                          <div
-                            className="animate-spin rounded-full border-b-2 border-white mr-2"
-                            style={{ width: "16px", height: "16px" }}
-                          />
-                          <span>در حال بررسی...</span>
-                        </div>
-                      ) : (
-                        "ثبت و ادامه"
-                      )}
-                    </Button>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Background Image Section */}
-        <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1 lg:h-full lg:max-w-[720px] lg:w-full overflow-hidden relative">
+        {/* Background Image */}
+        <div
+          style={{
+            height: "100%",
+            maxWidth: "720px",
+            overflowX: "hidden",
+            overflowY: "hidden",
+            position: "relative",
+            width: "100%",
+          }}
+        >
           <img
             src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
             alt="رتبه یک حجم معاملات بیت‌کوین"
-            className="w-full h-auto max-h-[600px] object-contain"
             loading="lazy"
             decoding="async"
+            style={{
+              bottom: "0px",
+              height: "100%",
+              left: "0px",
+              objectFit: "contain",
+              position: "absolute",
+              right: "0px",
+              top: "0px",
+              width: "100%",
+            }}
           />
         </div>
       </div>
 
-      {/* Support Button */}
-      <Button
-        className="fixed bottom-4 left-4 z-[1050] flex items-center transition-all duration-250 shadow-lg"
+      {/* Progress Bar */}
+      <div
         style={{
+          height: "2px",
+          position: "fixed",
+          right: "0px",
+          top: "0px",
+          width: "100%",
+          zIndex: "10310",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgb(0, 122, 255)",
+            height: "100%",
+            width: "100%",
+            transform: "matrix(1, 0, 0, 1, 1280, 0)",
+          }}
+        />
+      </div>
+
+      {/* Support Button */}
+      <button
+        style={{
+          alignItems: "center",
           backgroundColor: "rgb(0, 122, 255)",
           borderRadius: "8px",
-          padding: "4px 16px",
+          border: "none",
+          bottom: "16px",
+          boxShadow:
+            "rgba(0, 0, 0, 0.1) 0px 0px 2px 0px, rgba(0, 0, 0, 0.15) 0px 8px 20px 0px",
+          color: "rgb(255, 255, 255)",
+          cursor: "pointer",
+          display: "flex",
           fontSize: "14px",
           fontWeight: "500",
+          justifyContent: "center",
+          left: "16px",
+          lineHeight: "24.01px",
+          paddingBottom: "4px",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          paddingTop: "4px",
+          position: "fixed",
+          textAlign: "center",
           textTransform: "uppercase",
-          color: "rgb(255, 255, 255)",
-          border: "none",
+          transitionDuration: "0.25s",
+          transitionProperty: "background-color, box-shadow, border-color",
+          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+          userSelect: "none",
+          verticalAlign: "middle",
+          zIndex: "1050",
         }}
-        type="button"
       >
-        <span className="flex items-center">
+        <span
+          style={{
+            display: "flex",
+            fontSize: "14px",
+            fontWeight: "500",
+            lineHeight: "24.01px",
+            marginLeft: "4px",
+            marginRight: "-8px",
+            textAlign: "center",
+            textTransform: "uppercase",
+          }}
+        >
           <MessageSquare
-            className="mr-2"
             style={{
               width: "22px",
               height: "22px",
+              fontSize: "20px",
+              fontWeight: "500",
+              lineHeight: "34.3px",
               marginLeft: "8px",
-              marginRight: "-8px",
             }}
           />
         </span>
-        <span className="hidden sm:inline">پشتیبانی والکس</span>
-        <span className="sm:hidden">پشتیبانی</span>
-      </Button>
+        <span>پشتیبانی والکس</span>
+      </button>
+
+      <style jsx>{`
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
 };

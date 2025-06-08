@@ -104,12 +104,6 @@ export const OTPInput = ({
     } else if (e.key === "ArrowRight" && index < length - 1) {
       e.preventDefault();
       focusInput(index + 1);
-    } else if (e.key === "Delete") {
-      const newOTP = [...otp];
-      newOTP[index] = "";
-      setOTP(newOTP);
-      onChange?.(newOTP.join(""));
-      e.preventDefault();
     }
   };
 
@@ -145,140 +139,159 @@ export const OTPInput = ({
       className={cn("", className)}
       style={{
         direction: "ltr",
-        display: "inline-flex",
-        flexDirection: "column",
-        marginBottom: "8px",
-        marginTop: "16px",
-        position: "relative",
-        verticalAlign: "top",
-        width: "100%",
+        display: "flex",
+        flexWrap: "wrap",
+        marginRight: "-8px",
+        marginTop: "-8px",
+        width: "calc(100% + 8px)",
       }}
     >
-      <div
-        style={{
-          alignItems: "center",
-          borderRadius: "8px",
-          cursor: "text",
-          direction: "ltr",
-          display: "flex",
-          position: "relative",
-          textAlign: "center",
-          width: "100%",
-          justifyContent: "center",
-          gap: "8px",
-        }}
-      >
-        {Array.from({ length }, (_, index) => (
-          <div key={index} style={{ flex: "1", maxWidth: "60px" }}>
-            <input
-              ref={(ref) => (inputRefs.current[index] = ref)}
-              type="tel"
-              inputMode="numeric"
-              maxLength={length}
-              value={otp[index] || ""}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                handleChange(index, e.target.value)
-              }
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              onFocus={() => handleFocus(index)}
-              onPaste={handlePaste}
-              disabled={disabled}
+      {Array.from({ length }, (_, index) => (
+        <div
+          key={index}
+          style={{
+            direction: "ltr",
+            flexBasis: "0px",
+            flexGrow: "1",
+            maxWidth: "100%",
+            paddingRight: "8px",
+            paddingTop: "8px",
+          }}
+        >
+          <div
+            style={{
+              direction: "ltr",
+              display: "inline-flex",
+              flexDirection: "column",
+              marginBottom: "8px",
+              marginTop: "16px",
+              position: "relative",
+              verticalAlign: "top",
+              width: "100%",
+            }}
+          >
+            <div
               style={{
-                animation:
-                  "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
-                animationDuration: "0.01s",
-                animationName: "mui-auto-fill-cancel",
-                appearance: "auto",
-                boxSizing: "content-box",
+                alignItems: "center",
+                borderRadius: "8px",
                 cursor: "text",
                 direction: "ltr",
-                overflowX: "clip",
-                overflowY: "clip",
-                paddingBottom: "10px",
-                paddingLeft: "12px",
-                paddingRight: "12px",
-                paddingTop: "10px",
+                display: "flex",
+                position: "relative",
                 textAlign: "center",
                 width: "100%",
-                border: "1px solid rgba(0, 0, 0, 0.2)",
-                borderRadius: "8px",
-                fontSize: "16px",
-                fontWeight: "500",
-                backgroundColor: "rgb(255, 255, 255)",
-              }}
-              autoComplete={index === 0 ? "one-time-code" : "off"}
-            />
-            <fieldset
-              aria-hidden="true"
-              style={{
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-                borderBottomLeftRadius: "8px",
-                borderBottomRightRadius: "8px",
-                borderBottomStyle: "solid",
-                borderBottomWidth: "1px",
-                borderColor: "rgba(0, 0, 0, 0.2)",
-                borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
-                borderLeftStyle: "solid",
-                borderLeftWidth: "1px",
-                borderRadius: "8px",
-                borderRight: "1px solid rgba(0, 0, 0, 0.2)",
-                borderRightStyle: "solid",
-                borderRightWidth: "1px",
-                borderStyle: "solid",
-                borderTop: "1px solid rgba(0, 0, 0, 0.2)",
-                borderTopLeftRadius: "8px",
-                borderTopRightRadius: "8px",
-                borderTopStyle: "solid",
-                borderTopWidth: "1px",
-                borderWidth: "1px",
-                bottom: "0px",
-                cursor: "text",
-                direction: "ltr",
-                left: "0px",
-                minWidth: "0%",
-                overflowX: "hidden",
-                overflowY: "hidden",
-                paddingLeft: "8px",
-                paddingRight: "8px",
-                pointerEvents: "none",
-                position: "absolute",
-                right: "0px",
-                textAlign: "right",
-                top: "-5px",
               }}
             >
-              <legend
+              <input
+                ref={(ref) => (inputRefs.current[index] = ref)}
+                type="tel"
+                inputMode="numeric"
+                maxLength={1}
+                value={otp[index] || ""}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleChange(index, e.target.value)
+                }
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onFocus={() => handleFocus(index)}
+                onPaste={handlePaste}
+                disabled={disabled}
                 style={{
+                  animation:
+                    "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                  animationDuration: "0.01s",
+                  animationName: "mui-auto-fill-cancel",
+                  appearance: "auto",
+                  boxSizing: "content-box",
                   cursor: "text",
                   direction: "ltr",
-                  lineHeight: "11px",
+                  overflowX: "clip",
+                  overflowY: "clip",
+                  paddingBottom: "10px",
+                  paddingLeft: "12px",
+                  paddingRight: "12px",
+                  paddingTop: "10px",
+                  textAlign: "center",
+                  width: "100%",
+                  border: "1px solid rgba(0, 0, 0, 0.2)",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  backgroundColor: "rgb(255, 255, 255)",
+                }}
+                autoComplete={index === 0 ? "one-time-code" : "off"}
+              />
+              <fieldset
+                aria-hidden="true"
+                style={{
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                  borderBottomLeftRadius: "8px",
+                  borderBottomRightRadius: "8px",
+                  borderBottomStyle: "solid",
+                  borderBottomWidth: "1px",
+                  borderColor: "rgba(0, 0, 0, 0.2)",
+                  borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
+                  borderLeftStyle: "solid",
+                  borderLeftWidth: "1px",
+                  borderRadius: "8px",
+                  borderRight: "1px solid rgba(0, 0, 0, 0.2)",
+                  borderRightStyle: "solid",
+                  borderRightWidth: "1px",
+                  borderStyle: "solid",
+                  borderTop: "1px solid rgba(0, 0, 0, 0.2)",
+                  borderTopLeftRadius: "8px",
+                  borderTopRightRadius: "8px",
+                  borderTopStyle: "solid",
+                  borderTopWidth: "1px",
+                  borderWidth: "1px",
+                  bottom: "0px",
+                  cursor: "text",
+                  direction: "ltr",
+                  left: "0px",
+                  minWidth: "0%",
                   overflowX: "hidden",
                   overflowY: "hidden",
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
                   pointerEvents: "none",
+                  position: "absolute",
+                  right: "0px",
                   textAlign: "right",
-                  transitionDuration: "0.15s",
-                  transitionProperty: "width",
-                  transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+                  top: "-5px",
                 }}
               >
-                <span
-                  aria-hidden="true"
+                <legend
                   style={{
                     cursor: "text",
                     direction: "ltr",
-                    display: "inline",
                     lineHeight: "11px",
+                    overflowX: "hidden",
+                    overflowY: "hidden",
                     pointerEvents: "none",
                     textAlign: "right",
+                    transitionDuration: "0.15s",
+                    transitionProperty: "width",
+                    transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
                   }}
                 >
-                  ​
-                </span>
-              </legend>
-            </fieldset>
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      cursor: "text",
+                      direction: "ltr",
+                      display: "inline",
+                      lineHeight: "11px",
+                      pointerEvents: "none",
+                      textAlign: "right",
+                    }}
+                  >
+                    ​
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

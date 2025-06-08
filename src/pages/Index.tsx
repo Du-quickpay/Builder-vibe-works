@@ -1,86 +1,136 @@
 import { MessageSquare } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { LoginForm } from "@/components/LoginForm";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[rgb(15,35,65)] overflow-hidden">
-      {/* Progress Bar - Exact positioning */}
-      <div className="fixed top-0 right-0 w-full h-0.5 z-[10310]">
+    <div
+      style={{
+        display: "flex",
+        height: "885px",
+      }}
+    >
+      <div
+        style={{
+          alignItems: "center",
+          backgroundColor: "rgb(14, 35, 66)",
+          display: "flex",
+          height: "100%",
+          justifyContent: "space-evenly",
+          width: "100%",
+        }}
+      >
+        {/* Login Form Section */}
+        <LoginForm />
+
+        {/* Background Image Section */}
         <div
-          className="bg-[rgb(0,122,255)] h-full transition-transform duration-300"
           style={{
+            height: "100%",
+            maxWidth: "720px",
+            overflowX: "hidden",
+            overflowY: "hidden",
+            position: "relative",
             width: "100%",
-            transform: "translateX(100%)",
+          }}
+        >
+          <img
+            src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
+            alt="رتبه یک حجم معاملات بیت‌کوین"
+            loading="lazy"
+            decoding="async"
+            style={{
+              bottom: "0px",
+              height: "100%",
+              left: "0px",
+              objectFit: "contain",
+              position: "absolute",
+              right: "0px",
+              top: "0px",
+              width: "100%",
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div
+        style={{
+          height: "2px",
+          position: "fixed",
+          right: "0px",
+          top: "0px",
+          width: "100%",
+          zIndex: "10310",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgb(0, 122, 255)",
+            height: "100%",
+            width: "100%",
+            transform: "matrix(1, 0, 0, 1, 2560, 0)",
           }}
         />
       </div>
 
-      {/* Main Content Container */}
-      <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-evenly w-full min-h-screen p-4 lg:p-0">
-        {/* Login Form Section */}
-        <div className="flex items-center justify-center w-full lg:w-auto z-10">
-          <LoginForm />
-        </div>
-
-        {/* Background Image Section - Exact Wallex Style */}
-        <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1 lg:h-full lg:max-w-[720px] lg:w-full overflow-hidden relative">
-          <img
-            src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
-            alt="رتبه یک حجم معاملات بیت‌کوین"
-            className="w-full h-auto max-h-[600px] object-contain"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-      </div>
-
-      {/* Support Button - Exact Wallex Style */}
-      <Button
-        className="fixed bottom-4 left-4 z-[1050] flex items-center transition-all duration-250 shadow-lg"
+      {/* Support Button */}
+      <button
         style={{
+          alignItems: "center",
           backgroundColor: "rgb(0, 122, 255)",
           borderRadius: "8px",
-          padding: "4px 16px",
+          border: "none",
+          bottom: "16px",
+          boxShadow:
+            "rgba(0, 0, 0, 0.1) 0px 0px 2px 0px, rgba(0, 0, 0, 0.15) 0px 8px 20px 0px",
+          color: "rgb(255, 255, 255)",
+          cursor: "pointer",
+          display: "flex",
           fontSize: "14px",
           fontWeight: "500",
+          justifyContent: "center",
+          left: "16px",
+          lineHeight: "24.01px",
+          paddingBottom: "4px",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          paddingTop: "4px",
+          position: "fixed",
+          textAlign: "center",
           textTransform: "uppercase",
-          color: "rgb(255, 255, 255)",
-          border: "none",
+          transitionDuration: "0.25s",
+          transitionProperty: "background-color, box-shadow, border-color",
+          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+          userSelect: "none",
+          verticalAlign: "middle",
+          zIndex: "1050",
         }}
-        type="button"
       >
-        <span className="flex items-center">
+        <span
+          style={{
+            display: "flex",
+            fontSize: "14px",
+            fontWeight: "500",
+            lineHeight: "24.01px",
+            marginLeft: "4px",
+            marginRight: "-8px",
+            textAlign: "center",
+            textTransform: "uppercase",
+          }}
+        >
           <MessageSquare
-            className="mr-2"
             style={{
               width: "22px",
               height: "22px",
+              fontSize: "20px",
+              fontWeight: "500",
+              lineHeight: "34.3px",
               marginLeft: "8px",
-              marginRight: "-8px",
             }}
           />
         </span>
-        <span className="hidden sm:inline">پشتیبانی والکس</span>
-        <span className="sm:hidden">پشتیبانی</span>
-      </Button>
-
-      {/* Hidden announcement elements to match original structure */}
-      <div
-        className="sr-only"
-        role="alert"
-        aria-live="assertive"
-        style={{
-          position: "absolute",
-          width: "1px",
-          height: "1px",
-          padding: "0",
-          margin: "-1px",
-          overflow: "hidden",
-          clip: "rect(0, 0, 0, 0)",
-          whiteSpace: "nowrap",
-        }}
-      />
+        <span>پشتیبانی والکس</span>
+      </button>
     </div>
   );
 };
