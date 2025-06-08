@@ -83,7 +83,10 @@ export const OTPInput = ({
 
   return (
     <div
-      className={cn("flex flex-row-reverse gap-2 justify-center", className)}
+      className={cn(
+        "flex flex-row-reverse gap-1.5 sm:gap-2 justify-center px-2 sm:px-0",
+        className,
+      )}
       dir="ltr"
     >
       {Array.from({ length }, (_, index) => (
@@ -100,10 +103,11 @@ export const OTPInput = ({
           onKeyDown={(e) => handleKeyDown(index, e)}
           disabled={disabled}
           className={cn(
-            "w-12 h-12 text-center text-lg font-medium rounded-lg border border-gray-300",
+            "w-10 h-10 sm:w-12 sm:h-12 text-center text-base sm:text-lg font-medium rounded-lg border border-gray-300",
             "focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none",
             "disabled:bg-gray-100 disabled:cursor-not-allowed",
-            otp[index] ? "bg-white" : "bg-white",
+            "transition-all duration-200",
+            otp[index] ? "bg-white border-blue-200" : "bg-white",
           )}
           autoComplete={index === 0 ? "one-time-code" : "off"}
         />

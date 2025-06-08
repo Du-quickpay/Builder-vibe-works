@@ -65,33 +65,35 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl">
-      <div className="flex flex-col gap-2 p-5 w-[480px]">
+    <div className="bg-white rounded-2xl w-full max-w-md lg:max-w-[480px] mx-auto">
+      <div className="flex flex-col gap-2 p-4 sm:p-5 lg:p-5">
         {/* Header */}
         <div className="flex justify-between items-center w-full">
-          <div className="flex items-start gap-2">
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full border-0 text-gray-600 hover:bg-gray-100"
+              className="rounded-full border-0 text-gray-600 hover:bg-gray-100 flex-shrink-0"
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             </Button>
-            <span className="font-bold">ورود یا ثبت‌نام</span>
+            <span className="font-bold text-sm sm:text-base">
+              ورود یا ثبت‌نام
+            </span>
           </div>
-          <a href="#" className="flex items-center">
+          <a href="#" className="flex items-center flex-shrink-0">
             <img
               src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
               alt="صرافی خرید فروش ارزهای دیجیتال"
               width={128}
               height={24}
-              className="h-6 w-32 object-contain"
+              className="h-5 w-24 sm:h-6 sm:w-32 object-contain"
             />
           </a>
         </div>
 
         {/* Separator */}
-        <hr className="border-gray-200 -mx-5 my-2" />
+        <hr className="border-gray-200 -mx-4 sm:-mx-5 my-2" />
 
         {/* Content */}
         <div className="flex flex-col gap-2 mt-4">
@@ -202,16 +204,18 @@ export const LoginForm = () => {
 
             {/* Submit Section */}
             <div className="mt-4">
-              <hr className="border-gray-200 -mx-5 mb-4" />
+              <hr className="border-gray-200 -mx-4 sm:-mx-5 mb-4" />
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-lg py-2 px-4 font-medium uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-lg py-2.5 sm:py-2 px-4 font-medium text-xs sm:text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    در حال ارسال کد...
+                    <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin mr-2" />
+                    <span className="text-xs sm:text-sm">
+                      در حال ارسال کد...
+                    </span>
                   </div>
                 ) : (
                   "ثبت و ادامه"

