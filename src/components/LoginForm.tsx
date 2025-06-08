@@ -48,13 +48,15 @@ export const LoginForm = () => {
         {/* Content */}
         <div className="flex flex-col gap-2 mt-4">
           {/* Alert Messages */}
-          <AlertMessage>مطمئن شوید که در دامنه wallex.ir هستید.</AlertMessage>
+          <div className="space-y-2">
+            <AlertMessage>
+              مطمئن شوید که در دامنه wallex.ir هستید.
+            </AlertMessage>
 
-          <AlertMessage>
-            در صورتی که تنظیمات ورود را بر روی ایمیل قرار داده‌اید، کد ورود به
-            ایمیل ارسال خواهد شد.
-          </AlertMessage>
-
+            <AlertMessage>
+              در صورتی که تنظیمات ورود را بر روی ایمیل قرار داده‌اید، کد ورود به ایمیل ارسال خواهد شد.
+            </AlertMessage>
+          </div>
           {/* Form */}
           <form onSubmit={handleSubmit}>
             {/* Mobile Number Input */}
@@ -107,32 +109,30 @@ export const LoginForm = () => {
             <div
               className={cn(
                 "overflow-hidden transition-all duration-300",
-                showInviteCode ? "h-auto visible" : "h-0 invisible",
+                showInviteCode ? "h-auto visible" : "h-0 invisible"
               )}
             >
-              <div className="flex w-full">
-                <div className="w-full">
+              {showInviteCode && (
+                <div className="flex w-full">
                   <div className="w-full">
-                    <Input
-                      type="text"
-                      placeholder="کد معرف (اختیاری)"
-                      value={inviteCode}
-                      onChange={(e) => setInviteCode(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right"
-                    />
-                    <p className="text-gray-600 text-xs mt-2 text-right flex items-center">
-                      <Info className="h-4 w-4 mr-2 text-gray-600" />
-                      <span>
-                        کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
-                      </span>
-                    </p>
+                    <div className="w-full">
+                      <Input
+                        name="invite_code"
+                        type="text"
+                        placeholder="کد معرف (اختیاری)"
+                        value={inviteCode}
+                        onChange={(e) => setInviteCode(e.target.value)}
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      />
+                      <p className="text-gray-600 text-xs mt-2 text-right flex items-center">
+                        <Info className="h-4 w-4 mr-2 text-gray-600" />
+                        <span>کد دعوت صرفا در ��مان ثبت‌نام قابل استفاده است.</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
-
-            {/* Submit Section */}
-            <div className="mt-4">
               <hr className="border-gray-200 -mx-5 mb-4" />
               <Button
                 type="submit"
