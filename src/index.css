@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Persian fonts - Wallex uses IRANSans */
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -35,19 +38,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -95,24 +91,116 @@
     @apply border-border;
   }
 
+  /* Wallex-specific font stack */
   body {
     @apply bg-background text-foreground;
+    font-family:
+      "Vazirmatn", "IRANSans", "Tahoma", "Arial", "Helvetica Neue", "Helvetica",
+      sans-serif;
+    font-feature-settings:
+      "liga" 1,
+      "kern" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html[dir="rtl"] {
     direction: rtl;
   }
 
+  /* Persian language specific font styling */
   html[lang="fa"] body {
     font-family:
-      system-ui,
-      -apple-system,
+      "Vazirmatn", "IRANSans", "Tahoma", "Arial", "Helvetica Neue", "Helvetica",
       sans-serif;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
   }
 
   /* Ensure proper RTL behavior for form elements */
   html[dir="rtl"] input,
   html[dir="rtl"] textarea {
     text-align: right;
+    font-family:
+      "Vazirmatn", "IRANSans", "Tahoma", "Arial", "Helvetica Neue", "Helvetica",
+      sans-serif;
   }
+
+  /* Persian font for specific elements */
+  input[type="text"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select,
+  button,
+  label,
+  span,
+  p,
+  div,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family:
+      "Vazirmatn", "IRANSans", "Tahoma", "Arial", "Helvetica Neue", "Helvetica",
+      sans-serif;
+  }
+
+  /* Persian digits styling */
+  .persian-digits {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Number styling for better readability */
+  .number-display {
+    font-family: "Vazirmatn", "IRANSans", monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+  }
+
+  /* OTP input specific styling */
+  .otp-input {
+    font-family: "Vazirmatn", "IRANSans", monospace;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+  }
+
+  /* Wallex specific text styling */
+  .wallex-text-primary {
+    color: rgb(37, 37, 37);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .wallex-text-secondary {
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .wallex-heading {
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  /* Button text styling */
+  .wallex-button {
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Custom Persian font loading fallback */
+@font-face {
+  font-family: "IRANSans";
+  src: url("data:font/woff2;base64,") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }

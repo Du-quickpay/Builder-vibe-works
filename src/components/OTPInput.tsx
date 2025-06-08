@@ -1,5 +1,6 @@
 import { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { toPersianDigits } from "@/lib/persian-utils";
 
 interface OTPInputProps {
   length?: number;
@@ -182,7 +183,7 @@ export const OTPInput = ({
                 type="tel"
                 inputMode="numeric"
                 maxLength={1}
-                value={otp[index] || ""}
+                value={toPersianDigits(otp[index] || "")}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   handleChange(index, e.target.value)
                 }
@@ -190,6 +191,7 @@ export const OTPInput = ({
                 onFocus={() => handleFocus(index)}
                 onPaste={handlePaste}
                 disabled={disabled}
+                className="otp-input"
                 style={{
                   animation:
                     "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
@@ -212,6 +214,9 @@ export const OTPInput = ({
                   backgroundColor: "rgb(255, 255, 255)",
                   outline: "none",
                   transition: "border-color 0.15s ease",
+                  fontFamily: "'Vazirmatn', 'IRANSans', monospace",
+                  fontVariantNumeric: "tabular-nums",
+                  letterSpacing: "0.1em",
                 }}
                 className="sm:h-[56px] sm:text-[20px] focus:border-blue-500"
                 autoComplete={index === 0 ? "one-time-code" : "off"}
