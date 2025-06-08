@@ -12,6 +12,7 @@ export const LoginForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // In a real app, this would handle the authentication
     console.log("Form submitted:", { mobileNumber, inviteCode });
   };
 
@@ -67,12 +68,18 @@ export const LoginForm = () => {
               <div className="relative">
                 <Input
                   id="mobile-input"
+                  name="mobile_number"
                   type="text"
                   inputMode="numeric"
                   maxLength={13}
                   value={mobileNumber}
-                  onChange={(e) => setMobileNumber(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right"
+                  onChange={(e) => {
+                    // Only allow numbers and format for Persian mobile numbers
+                    const value = e.target.value.replace(/[^0-9]/g, "");
+                    setMobileNumber(value);
+                  }}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  placeholder="09123456789"
                   autoFocus
                 />
               </div>
@@ -83,15 +90,17 @@ export const LoginForm = () => {
               type="button"
               variant="ghost"
               onClick={() => setShowInviteCode(!showInviteCode)}
-              className="text-blue-500 border-0 text-sm font-medium p-1 mb-1 justify-start"
+              className="text-blue-500 border-0 text-sm font-medium p-1 mb-1 justify-start hover:bg-transparent"
             >
               <ChevronDown
                 className={cn(
-                  "h-6 w-6 mr-1 transition-transform",
+                  "h-6 w-6 mr-1 transition-transform duration-200",
                   showInviteCode ? "rotate-180" : "",
                 )}
               />
-              <span>کد دعوت دارید؟</span>
+              <span className="text-sm font-medium uppercase">
+                کد دعوت دارید؟
+              </span>
             </Button>
 
             {/* Invite Code Section (Collapsible) */}
