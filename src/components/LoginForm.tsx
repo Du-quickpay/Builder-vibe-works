@@ -9,11 +9,54 @@ export const LoginForm = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [showInviteCode, setShowInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{
+    mobileNumber?: string;
+    inviteCode?: string;
+  }>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateMobileNumber = (number: string): boolean => {
+    // Persian mobile number validation (should start with 09 and be 11 digits)
+    const mobileRegex = /^09\d{9}$/;
+    return mobileRegex.test(number);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would handle the authentication
-    console.log("Form submitted:", { mobileNumber, inviteCode });
+    setErrors({});
+
+    // Validation
+    const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
+
+    if (!mobileNumber) {
+      newErrors.mobileNumber = "شماره همراه الزامی است";
+    } else if (!validateMobileNumber(mobileNumber)) {
+      newErrors.mobileNumber = "شماره همراه معتبر نیست";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // In a real app, this would handle the authentication
+      console.log("Form submitted:", { mobileNumber, inviteCode });
+
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Handle success (redirect, show success message, etc.)
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrors({
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -73,17 +116,33 @@ export const LoginForm = () => {
                   name="mobile_number"
                   type="text"
                   inputMode="numeric"
-                  maxLength={13}
+                  maxLength={11}
                   value={mobileNumber}
                   onChange={(e) => {
                     // Only allow numbers and format for Persian mobile numbers
                     const value = e.target.value.replace(/[^0-9]/g, "");
                     setMobileNumber(value);
+                    // Clear errors when user starts typing
+                    if (errors.mobileNumber) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        mobileNumber: undefined,
+                      }));
+                    }
                   }}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className={cn(
+                    "w-full rounded-lg border px-3 py-2 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500",
+                    errors.mobileNumber ? "border-red-500" : "border-gray-300",
+                  )}
                   placeholder="09123456789"
                   autoFocus
+                  disabled={isSubmitting}
                 />
+                {errors.mobileNumber && (
+                  <p className="text-red-500 text-xs mt-1 text-right">
+                    {errors.mobileNumber}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -141,9 +200,17 @@ export const LoginForm = () => {
               <hr className="border-gray-200 -mx-5 mb-4" />
               <Button
                 type="submit"
-                className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-lg py-2 px-4 font-medium uppercase"
+                disabled={isSubmitting}
+                className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-lg py-2 px-4 font-medium uppercase disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                ثبت و ادامه
+                {isSubmitting ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                    در حال پردازش...
+                  </div>
+                ) : (
+                  "ثبت و ادامه"
+                )}
               </Button>
             </div>
           </form>
