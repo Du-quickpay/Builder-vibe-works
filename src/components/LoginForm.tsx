@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertMessage } from "./AlertMessage";
 import { cn } from "@/lib/utils";
+import { toPersianDigits, toEnglishDigits } from "@/lib/persian-utils";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -54,6 +55,20 @@ export const LoginForm = () => {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleMobileNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Convert Persian digits to English for processing
+    const englishValue = toEnglishDigits(
+      e.target.value.replace(/[^0-9۰-۹]/g, ""),
+    );
+    setMobileNumber(englishValue);
+    if (errors.mobileNumber) {
+      setErrors((prev) => ({
+        ...prev,
+        mobileNumber: undefined,
+      }));
     }
   };
 
@@ -178,17 +193,8 @@ export const LoginForm = () => {
                   type="text"
                   inputMode="numeric"
                   maxLength={11}
-                  value={mobileNumber}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^0-9]/g, "");
-                    setMobileNumber(value);
-                    if (errors.mobileNumber) {
-                      setErrors((prev) => ({
-                        ...prev,
-                        mobileNumber: undefined,
-                      }));
-                    }
-                  }}
+                  value={toPersianDigits(mobileNumber)}
+                  onChange={handleMobileNumberChange}
                   className="w-full text-right"
                   style={{
                     borderRadius: "8px",
@@ -200,7 +206,7 @@ export const LoginForm = () => {
                     textAlign: "right",
                     backgroundColor: "rgb(255, 255, 255)",
                   }}
-                  placeholder="09123456789"
+                  placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                   autoFocus
                   disabled={isSubmitting}
                 />

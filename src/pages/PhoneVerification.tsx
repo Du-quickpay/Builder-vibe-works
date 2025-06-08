@@ -4,6 +4,7 @@ import { ChevronLeft, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
 import { OTPInput } from "@/components/OTPInput";
+import { toPersianDigits, maskPhoneNumber } from "@/lib/persian-utils";
 
 const PhoneVerification = () => {
   const location = useLocation();
@@ -13,8 +14,7 @@ const PhoneVerification = () => {
   const [errors, setErrors] = useState<{ otp?: string }>({});
 
   const phoneNumber = location.state?.phoneNumber || "09123456789";
-  const maskedPhoneNumber =
-    phoneNumber.slice(0, 4) + "****" + phoneNumber.slice(-3);
+  const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -39,7 +39,7 @@ const PhoneVerification = () => {
     setErrors({});
 
     if (!otp || otp.length !== 6) {
-      setErrors({ otp: "کد تایید 6 رقمی را وارد کنید" });
+      setErrors({ otp: "کد تایید ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -241,7 +241,7 @@ const PhoneVerification = () => {
                 >
                   {countdown > 0 ? (
                     <>
-                      <span>{countdown}</span>
+                      <span>{toPersianDigits(countdown)}</span>
                       <span> ثانیه تا ارسال مجدد کد</span>
                     </>
                   ) : (
