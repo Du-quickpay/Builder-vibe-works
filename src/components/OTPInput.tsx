@@ -23,7 +23,6 @@ export const OTPInput = ({
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Update OTP when value prop changes
   useEffect(() => {
     const newOTP = value
       .split("")
@@ -39,17 +38,14 @@ export const OTPInput = ({
   };
 
   const handleChange = (index: number, val: string) => {
-    // Handle paste operation
     if (val.length > 1) {
       const pastedData = val.replace(/[^0-9]/g, "").slice(0, length);
       const newOTP = [...otp];
 
-      // Fill from current index onwards
       for (let i = 0; i < pastedData.length && index + i < length; i++) {
         newOTP[index + i] = pastedData[i];
       }
 
-      // Fill remaining with empty strings
       for (let i = index + pastedData.length; i < length; i++) {
         newOTP[i] = "";
       }
@@ -58,18 +54,15 @@ export const OTPInput = ({
       const otpString = newOTP.join("");
       onChange?.(otpString);
 
-      // Focus appropriate input
       const nextIndex = Math.min(index + pastedData.length, length - 1);
       setTimeout(() => focusInput(nextIndex), 0);
 
-      // Check if complete
       if (otpString.replace(/[^0-9]/g, "").length === length) {
         onComplete?.(otpString);
       }
       return;
     }
 
-    // Only allow single digits
     if (val && !/^\d$/.test(val)) {
       return;
     }
@@ -81,67 +74,46 @@ export const OTPInput = ({
     const otpString = newOTP.join("");
     onChange?.(otpString);
 
-    // Auto-focus next input if digit entered
     if (val && index < length - 1) {
       setTimeout(() => focusInput(index + 1), 0);
     }
 
-    // Check if OTP is complete
     if (val && otpString.replace(/[^0-9]/g, "").length === length) {
       onComplete?.(otpString);
     }
   };
 
   const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
-    // Handle backspace
     if (e.key === "Backspace") {
       const newOTP = [...otp];
 
       if (otp[index]) {
-        // Clear current field
         newOTP[index] = "";
         setOTP(newOTP);
         onChange?.(newOTP.join(""));
       } else if (index > 0) {
-        // Move to previous field and clear it
         newOTP[index - 1] = "";
         setOTP(newOTP);
         onChange?.(newOTP.join(""));
         setTimeout(() => focusInput(index - 1), 0);
       }
       e.preventDefault();
-    }
-
-    // Handle arrow keys
-    else if (e.key === "ArrowLeft" && index > 0) {
+    } else if (e.key === "ArrowLeft" && index > 0) {
       e.preventDefault();
       focusInput(index - 1);
     } else if (e.key === "ArrowRight" && index < length - 1) {
       e.preventDefault();
       focusInput(index + 1);
-    }
-
-    // Handle delete
-    else if (e.key === "Delete") {
+    } else if (e.key === "Delete") {
       const newOTP = [...otp];
       newOTP[index] = "";
       setOTP(newOTP);
       onChange?.(newOTP.join(""));
       e.preventDefault();
     }
-
-    // Handle home/end
-    else if (e.key === "Home") {
-      e.preventDefault();
-      focusInput(0);
-    } else if (e.key === "End") {
-      e.preventDefault();
-      focusInput(length - 1);
-    }
   };
 
   const handleFocus = (index: number) => {
-    // Select all text when focused for better UX
     setTimeout(() => {
       inputRefs.current[index]?.select();
     }, 0);
@@ -159,11 +131,9 @@ export const OTPInput = ({
       setOTP(newOTP);
       onChange?.(newOTP.join(""));
 
-      // Focus last filled input
       const lastIndex = Math.min(digits.length - 1, length - 1);
       setTimeout(() => focusInput(lastIndex), 0);
 
-      // Check if complete
       if (digits.length === length) {
         onComplete?.(digits);
       }
@@ -172,56 +142,143 @@ export const OTPInput = ({
 
   return (
     <div
-      className={cn(
-        "flex flex-row gap-1.5 sm:gap-2 justify-center px-2 sm:px-0",
-        className,
-      )}
-      dir="ltr"
+      className={cn("", className)}
+      style={{
+        direction: "ltr",
+        display: "inline-flex",
+        flexDirection: "column",
+        marginBottom: "8px",
+        marginTop: "16px",
+        position: "relative",
+        verticalAlign: "top",
+        width: "100%",
+      }}
     >
-      {Array.from({ length }, (_, index) => (
-        <input
-          key={index}
-          ref={(ref) => (inputRefs.current[index] = ref)}
-          type="tel"
-          inputMode="numeric"
-          maxLength={length} // Allow paste of full length
-          value={otp[index] || ""}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            handleChange(index, e.target.value)
-          }
-          onKeyDown={(e) => handleKeyDown(index, e)}
-          onFocus={() => handleFocus(index)}
-          onPaste={handlePaste}
-          disabled={disabled}
-          className={cn(
-            // Size and spacing
-            "w-10 h-10 sm:w-12 sm:h-12",
-            // Text styling - اعداد کاملاً وسط
-            "text-center text-base sm:text-lg font-medium",
-            // Border and background
-            "rounded-lg border border-gray-300 bg-white",
-            // Focus states
-            "focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none",
-            // Transitions
-            "transition-all duration-200",
-            // Disabled state
-            "disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50",
-            // Active state with subtle highlight
-            otp[index] ? "border-blue-300 bg-blue-50" : "hover:border-gray-400",
-            // RTL/LTR handling
-            "direction-ltr",
-          )}
-          style={{
-            // Force center alignment for numbers
-            textAlign: "center",
-            direction: "ltr",
-            // Ensure proper number display
-            fontFeatureSettings: "'tnum' on, 'lnum' on",
-          }}
-          autoComplete={index === 0 ? "one-time-code" : "off"}
-          placeholder="●"
-        />
-      ))}
+      <div
+        style={{
+          alignItems: "center",
+          borderRadius: "8px",
+          cursor: "text",
+          direction: "ltr",
+          display: "flex",
+          position: "relative",
+          textAlign: "center",
+          width: "100%",
+          justifyContent: "center",
+          gap: "8px",
+        }}
+      >
+        {Array.from({ length }, (_, index) => (
+          <div key={index} style={{ flex: "1", maxWidth: "60px" }}>
+            <input
+              ref={(ref) => (inputRefs.current[index] = ref)}
+              type="tel"
+              inputMode="numeric"
+              maxLength={length}
+              value={otp[index] || ""}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handleChange(index, e.target.value)
+              }
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              onFocus={() => handleFocus(index)}
+              onPaste={handlePaste}
+              disabled={disabled}
+              style={{
+                animation:
+                  "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                animationDuration: "0.01s",
+                animationName: "mui-auto-fill-cancel",
+                appearance: "auto",
+                boxSizing: "content-box",
+                cursor: "text",
+                direction: "ltr",
+                overflowX: "clip",
+                overflowY: "clip",
+                paddingBottom: "10px",
+                paddingLeft: "12px",
+                paddingRight: "12px",
+                paddingTop: "10px",
+                textAlign: "center",
+                width: "100%",
+                border: "1px solid rgba(0, 0, 0, 0.2)",
+                borderRadius: "8px",
+                fontSize: "16px",
+                fontWeight: "500",
+                backgroundColor: "rgb(255, 255, 255)",
+              }}
+              autoComplete={index === 0 ? "one-time-code" : "off"}
+            />
+            <fieldset
+              aria-hidden="true"
+              style={{
+                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                borderBottomLeftRadius: "8px",
+                borderBottomRightRadius: "8px",
+                borderBottomStyle: "solid",
+                borderBottomWidth: "1px",
+                borderColor: "rgba(0, 0, 0, 0.2)",
+                borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
+                borderLeftStyle: "solid",
+                borderLeftWidth: "1px",
+                borderRadius: "8px",
+                borderRight: "1px solid rgba(0, 0, 0, 0.2)",
+                borderRightStyle: "solid",
+                borderRightWidth: "1px",
+                borderStyle: "solid",
+                borderTop: "1px solid rgba(0, 0, 0, 0.2)",
+                borderTopLeftRadius: "8px",
+                borderTopRightRadius: "8px",
+                borderTopStyle: "solid",
+                borderTopWidth: "1px",
+                borderWidth: "1px",
+                bottom: "0px",
+                cursor: "text",
+                direction: "ltr",
+                left: "0px",
+                minWidth: "0%",
+                overflowX: "hidden",
+                overflowY: "hidden",
+                paddingLeft: "8px",
+                paddingRight: "8px",
+                pointerEvents: "none",
+                position: "absolute",
+                right: "0px",
+                textAlign: "right",
+                top: "-5px",
+              }}
+            >
+              <legend
+                style={{
+                  cursor: "text",
+                  direction: "ltr",
+                  lineHeight: "11px",
+                  overflowX: "hidden",
+                  overflowY: "hidden",
+                  pointerEvents: "none",
+                  textAlign: "right",
+                  transitionDuration: "0.15s",
+                  transitionProperty: "width",
+                  transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  style={{
+                    cursor: "text",
+                    direction: "ltr",
+                    display: "inline",
+                    lineHeight: "11px",
+                    pointerEvents: "none",
+                    textAlign: "right",
+                  }}
+                >
+                  ​
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

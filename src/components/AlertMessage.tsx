@@ -10,21 +10,80 @@ export const AlertMessage = ({ children, className }: AlertMessageProps) => {
   return (
     <div
       role="alert"
-      className={cn(
-        "flex w-full rounded-lg border border-blue-500 bg-blue-50/50 p-3 sm:p-4 text-blue-600 transition-all duration-300",
-        className,
-      )}
+      className={cn("flex w-full transition-all duration-300", className)}
+      style={{
+        backgroundColor: "rgba(0, 122, 255, 0.05)",
+        border: "1px solid rgb(0, 122, 255)",
+        borderRadius: "8px",
+        color: "rgb(0, 122, 255)",
+        display: "flex",
+        fontSize: "12px",
+        lineHeight: "20.004px",
+        padding: "16px",
+        transitionDuration: "0.3s",
+        transitionProperty: "box-shadow",
+        transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+        width: "100%",
+      }}
     >
-      <div className="flex ml-1.5 sm:ml-2 opacity-90 flex-shrink-0">
-        <Info className="h-5 w-5 sm:h-6 sm:w-6" />
+      <div
+        className="flex flex-shrink-0"
+        style={{
+          display: "flex",
+          fontSize: "22px",
+          lineHeight: "36.674px",
+          marginLeft: "8px",
+          opacity: "0.9",
+        }}
+      >
+        <Info
+          style={{
+            width: "24px",
+            height: "24px",
+            color: "rgb(0, 122, 255)",
+          }}
+        />
       </div>
-      <div className="flex-grow overflow-auto">
-        <div className="flex justify-between items-start">
-          <div className="text-xs sm:text-sm leading-5 sm:leading-6 text-right">
+      <div
+        className="flex-grow overflow-auto"
+        style={{
+          flexGrow: "1",
+          fontSize: "14px",
+          lineHeight: "24.01px",
+          overflowX: "auto",
+          overflowY: "auto",
+        }}
+      >
+        <div
+          className="flex justify-between items-start"
+          style={{
+            alignItems: "flex-start",
+            display: "flex",
+            fontSize: "14px",
+            justifyContent: "space-between",
+            lineHeight: "24.01px",
+          }}
+        >
+          <div
+            className="text-right"
+            style={{
+              fontSize: "14px",
+              lineHeight: "24.01px",
+              textAlign: "right",
+            }}
+          >
             {children}
           </div>
         </div>
-        <div className="flex items-center" />
+        <div
+          className="flex items-center"
+          style={{
+            alignItems: "center",
+            display: "flex",
+            fontSize: "14px",
+            lineHeight: "24.01px",
+          }}
+        />
       </div>
     </div>
   );

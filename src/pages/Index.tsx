@@ -4,7 +4,18 @@ import { LoginForm } from "@/components/LoginForm";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen bg-[#0e2342] overflow-hidden">
+    <div className="min-h-screen bg-[rgb(15,35,65)] overflow-hidden">
+      {/* Progress Bar - Exact positioning */}
+      <div className="fixed top-0 right-0 w-full h-0.5 z-[10310]">
+        <div
+          className="bg-[rgb(0,122,255)] h-full transition-transform duration-300"
+          style={{
+            width: "100%",
+            transform: "translateX(100%)",
+          }}
+        />
+      </div>
+
       {/* Main Content Container */}
       <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-evenly w-full min-h-screen p-4 lg:p-0">
         {/* Login Form Section */}
@@ -12,7 +23,7 @@ const Index = () => {
           <LoginForm />
         </div>
 
-        {/* Background Image Section */}
+        {/* Background Image Section - Exact Wallex Style */}
         <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1 lg:h-full lg:max-w-[720px] lg:w-full overflow-hidden relative">
           <img
             src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
@@ -24,28 +35,52 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="fixed top-0 right-0 w-full h-0.5 z-[10310]">
-        <div className="bg-blue-500 h-full w-full transform translate-x-full animate-pulse" />
-      </div>
-
-      {/* Support Button */}
+      {/* Support Button - Exact Wallex Style */}
       <Button
-        className="fixed bottom-4 left-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-3 sm:px-4 py-1 text-xs sm:text-sm font-medium uppercase shadow-lg z-[1050] flex items-center transition-all duration-250"
+        className="fixed bottom-4 left-4 z-[1050] flex items-center transition-all duration-250 shadow-lg"
+        style={{
+          backgroundColor: "rgb(0, 122, 255)",
+          borderRadius: "8px",
+          padding: "4px 16px",
+          fontSize: "14px",
+          fontWeight: "500",
+          textTransform: "uppercase",
+          color: "rgb(255, 255, 255)",
+          border: "none",
+        }}
         type="button"
       >
-        <span className="flex ml-1 -mr-2">
-          <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+        <span className="flex items-center">
+          <MessageSquare
+            className="mr-2"
+            style={{
+              width: "22px",
+              height: "22px",
+              marginLeft: "8px",
+              marginRight: "-8px",
+            }}
+          />
         </span>
         <span className="hidden sm:inline">پشتیبانی والکس</span>
         <span className="sm:hidden">پشتیبانی</span>
       </Button>
-      {/* Hidden Elements (matching original structure) */}
-      <div className="hidden">
-        <span className="sr-only h-0 w-0 border-2 border-inset border-gray-800 overflow-clip invisible" />
-        <span className="sr-only border-2 border-inset border-gray-800 overflow-clip" />
-        <div />
-      </div>
+
+      {/* Hidden announcement elements to match original structure */}
+      <div
+        className="sr-only"
+        role="alert"
+        aria-live="assertive"
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          padding: "0",
+          margin: "-1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+        }}
+      />
     </div>
   );
 };
