@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronDown, Info } from "lucide-react";
+import { ChevronLeft, ChevronDown, Info, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertMessage } from "./AlertMessage";
@@ -205,7 +205,7 @@ export const LoginForm = () => {
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
                     در حال پردازش...
                   </div>
                 ) : (
