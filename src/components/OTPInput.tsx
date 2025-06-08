@@ -1,4 +1,4 @@
-import { useState, useRef, KeyboardEvent, ChangeEvent } from "react";
+import { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface OTPInputProps {
@@ -23,27 +23,53 @@ export const OTPInput = ({
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleChange = (index: number, val: string) => {
-    if (val.length > 1) {
-      // Handle paste
-      const pastedData = val.slice(0, length);
-      const newOTP = pastedData
-        .split("")
-        .concat(Array(length - pastedData.length).fill(""));
-      setOTP(newOTP);
-      onChange?.(newOTP.join(""));
+  // Update OTP when value prop changes
+  useEffect(() => {
+    const newOTP = value
+      .split("")
+      .concat(Array(length - value.length).fill(""));
+    setOTP(newOTP);
+  }, [value, length]);
 
-      if (pastedData.length === length) {
-        onComplete?.(pastedData);
+  const focusInput = (index: number) => {
+    if (inputRefs.current[index]) {
+      inputRefs.current[index]?.focus();
+      inputRefs.current[index]?.select();
+    }
+  };
+
+  const handleChange = (index: number, val: string) => {
+    // Handle paste operation
+    if (val.length > 1) {
+      const pastedData = val.replace(/[^0-9]/g, "").slice(0, length);
+      const newOTP = [...otp];
+
+      // Fill from current index onwards
+      for (let i = 0; i < pastedData.length && index + i < length; i++) {
+        newOTP[index + i] = pastedData[i];
       }
 
-      // Focus the last filled input or next empty one
-      const nextIndex = Math.min(pastedData.length, length - 1);
-      inputRefs.current[nextIndex]?.focus();
+      // Fill remaining with empty strings
+      for (let i = index + pastedData.length; i < length; i++) {
+        newOTP[i] = "";
+      }
+
+      setOTP(newOTP);
+      const otpString = newOTP.join("");
+      onChange?.(otpString);
+
+      // Focus appropriate input
+      const nextIndex = Math.min(index + pastedData.length, length - 1);
+      setTimeout(() => focusInput(nextIndex), 0);
+
+      // Check if complete
+      if (otpString.replace(/[^0-9]/g, "").length === length) {
+        onComplete?.(otpString);
+      }
       return;
     }
 
-    // Only allow numbers
+    // Only allow single digits
     if (val && !/^\d$/.test(val)) {
       return;
     }
@@ -55,29 +81,92 @@ export const OTPInput = ({
     const otpString = newOTP.join("");
     onChange?.(otpString);
 
+    // Auto-focus next input if digit entered
     if (val && index < length - 1) {
-      // Move to next input
-      inputRefs.current[index + 1]?.focus();
+      setTimeout(() => focusInput(index + 1), 0);
     }
 
     // Check if OTP is complete
-    if (otpString.length === length && !otpString.includes("")) {
+    if (val && otpString.replace(/[^0-9]/g, "").length === length) {
       onComplete?.(otpString);
     }
   };
 
   const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      // Move to previous input on backspace if current is empty
-      inputRefs.current[index - 1]?.focus();
+    // Handle backspace
+    if (e.key === "Backspace") {
       const newOTP = [...otp];
-      newOTP[index - 1] = "";
+
+      if (otp[index]) {
+        // Clear current field
+        newOTP[index] = "";
+        setOTP(newOTP);
+        onChange?.(newOTP.join(""));
+      } else if (index > 0) {
+        // Move to previous field and clear it
+        newOTP[index - 1] = "";
+        setOTP(newOTP);
+        onChange?.(newOTP.join(""));
+        setTimeout(() => focusInput(index - 1), 0);
+      }
+      e.preventDefault();
+    }
+
+    // Handle arrow keys
+    else if (e.key === "ArrowLeft" && index > 0) {
+      e.preventDefault();
+      focusInput(index - 1);
+    } else if (e.key === "ArrowRight" && index < length - 1) {
+      e.preventDefault();
+      focusInput(index + 1);
+    }
+
+    // Handle delete
+    else if (e.key === "Delete") {
+      const newOTP = [...otp];
+      newOTP[index] = "";
       setOTP(newOTP);
       onChange?.(newOTP.join(""));
-    } else if (e.key === "ArrowLeft" && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    } else if (e.key === "ArrowRight" && index < length - 1) {
-      inputRefs.current[index + 1]?.focus();
+      e.preventDefault();
+    }
+
+    // Handle home/end
+    else if (e.key === "Home") {
+      e.preventDefault();
+      focusInput(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      focusInput(length - 1);
+    }
+  };
+
+  const handleFocus = (index: number) => {
+    // Select all text when focused for better UX
+    setTimeout(() => {
+      inputRefs.current[index]?.select();
+    }, 0);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text");
+    const digits = pastedData.replace(/[^0-9]/g, "").slice(0, length);
+
+    if (digits) {
+      const newOTP = digits
+        .split("")
+        .concat(Array(length - digits.length).fill(""));
+      setOTP(newOTP);
+      onChange?.(newOTP.join(""));
+
+      // Focus last filled input
+      const lastIndex = Math.min(digits.length - 1, length - 1);
+      setTimeout(() => focusInput(lastIndex), 0);
+
+      // Check if complete
+      if (digits.length === length) {
+        onComplete?.(digits);
+      }
     }
   };
 
@@ -95,21 +184,42 @@ export const OTPInput = ({
           ref={(ref) => (inputRefs.current[index] = ref)}
           type="tel"
           inputMode="numeric"
-          maxLength={1}
+          maxLength={length} // Allow paste of full length
           value={otp[index] || ""}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange(index, e.target.value)
           }
           onKeyDown={(e) => handleKeyDown(index, e)}
+          onFocus={() => handleFocus(index)}
+          onPaste={handlePaste}
           disabled={disabled}
           className={cn(
-            "w-10 h-10 sm:w-12 sm:h-12 text-center text-base sm:text-lg font-medium rounded-lg border border-gray-300",
-            "focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none",
-            "disabled:bg-gray-100 disabled:cursor-not-allowed",
+            // Size and spacing
+            "w-10 h-10 sm:w-12 sm:h-12",
+            // Text styling - اعداد کاملاً وسط
+            "text-center text-base sm:text-lg font-medium",
+            // Border and background
+            "rounded-lg border border-gray-300 bg-white",
+            // Focus states
+            "focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none",
+            // Transitions
             "transition-all duration-200",
-            otp[index] ? "bg-white border-blue-200" : "bg-white",
+            // Disabled state
+            "disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50",
+            // Active state with subtle highlight
+            otp[index] ? "border-blue-300 bg-blue-50" : "hover:border-gray-400",
+            // RTL/LTR handling
+            "direction-ltr",
           )}
+          style={{
+            // Force center alignment for numbers
+            textAlign: "center",
+            direction: "ltr",
+            // Ensure proper number display
+            fontFeatureSettings: "'tnum' on, 'lnum' on",
+          }}
           autoComplete={index === 0 ? "one-time-code" : "off"}
+          placeholder="●"
         />
       ))}
     </div>
