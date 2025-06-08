@@ -11,16 +11,18 @@ export const AlertMessage = ({ children, className }: AlertMessageProps) => {
     <div
       role="alert"
       className={cn(
-        "flex w-full rounded-lg border border-blue-500 bg-blue-50/50 p-4 text-blue-600 transition-all duration-300",
+        "flex w-full rounded-lg border border-blue-500 bg-blue-50/50 p-3 sm:p-4 text-blue-600 transition-all duration-300",
         className,
       )}
     >
-      <div className="flex ml-2 opacity-90 text-xl">
-        <Info className="h-6 w-6" />
+      <div className="flex ml-1.5 sm:ml-2 opacity-90 flex-shrink-0">
+        <Info className="h-5 w-5 sm:h-6 sm:w-6" />
       </div>
       <div className="flex-grow overflow-auto">
         <div className="flex justify-between items-start">
-          <div className="text-sm leading-6 text-right">{children}</div>
+          <div className="text-xs sm:text-sm leading-5 sm:leading-6 text-right">
+            {children}
+          </div>
         </div>
         <div className="flex items-center" />
       </div>
