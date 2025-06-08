@@ -12,7 +12,10 @@ export const LoginForm = () => {
   const [showInviteCode, setShowInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ mobileNumber?: string; inviteCode?: string }>({});
+  const [errors, setErrors] = useState<{
+    mobileNumber?: string;
+    inviteCode?: string;
+  }>({});
 
   const validateMobileNumber = (number: string): boolean => {
     // Persian mobile number validation (should start with 09 and be 11 digits)
@@ -45,19 +48,19 @@ export const LoginForm = () => {
       console.log("Sending SMS to:", { mobileNumber, inviteCode });
 
       // Simulate API call to send SMS
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Navigate to verification page
       navigate("/verify-phone", {
-        state: { phoneNumber: mobileNumber }
+        state: { phoneNumber: mobileNumber },
       });
-
     } catch (error) {
       console.error("SMS sending error:", error);
-      setErrors({ mobileNumber: "خطا در ارسال کد تایید. لطفا دوباره تلاش کنید." });
+      setErrors({
+        mobileNumber: "خطا در ارسال کد تایید. لطفا دوباره تلاش کنید.",
+      });
     } finally {
       setIsSubmitting(false);
-    }
     }
   };
 
@@ -208,7 +211,7 @@ export const LoginForm = () => {
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    در حال پردازش...
+                    در حال ارسال کد...
                   </div>
                 ) : (
                   "ثبت و ادامه"
