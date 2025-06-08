@@ -2,41 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import Yekan font - Wallex uses Yekan/IRANYekan */
-@import url("https://cdn.jsdelivr.net/gh/rastikerdar/yekan-font@v1.0.1/dist/font-face.css");
+/* Import IRANSans font - The exact font used by Wallex.ir */
+@font-face {
+  font-family: "IRANSans";
+  src:
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Light.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Light.woff")
+      format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IRANSans";
+  src:
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans.woff")
+      format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IRANSans";
+  src:
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Medium.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Medium.woff")
+      format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IRANSans";
+  src:
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Bold.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Bold.woff")
+      format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-
     --radius: 0.5rem;
-
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -50,28 +86,20 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
@@ -86,86 +114,46 @@
   }
 }
 
-/* Custom Yekan font faces for better compatibility */
-@font-face {
-  font-family: "Yekan";
-  src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/yekan-font@v1.0.1/dist/Yekan.woff2")
-      format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/yekan-font@v1.0.1/dist/Yekan.woff")
-      format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "YekanBakh";
-  src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh-font@v1.0.0/dist/YekanBakh-Regular.woff2")
-      format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh-font@v1.0.0/dist/YekanBakh-Regular.woff")
-      format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "YekanBakh";
-  src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh-font@v1.0.0/dist/YekanBakh-Bold.woff2")
-      format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh-font@v1.0.0/dist/YekanBakh-Bold.woff")
-      format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @layer base {
   * {
     @apply border-border;
   }
 
-  /* Wallex-specific font stack using Yekan */
+  /* Wallex exact font stack - IRANSans only */
   body {
     @apply bg-background text-foreground;
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
-    font-feature-settings:
-      "liga" 0,
-      "kern" 1;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: normal;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    line-height: 1.6;
   }
 
   html[dir="rtl"] {
     direction: rtl;
   }
 
-  /* Persian language specific font styling */
-  html[lang="fa"] body {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
-    line-height: 1.7;
-    letter-spacing: 0;
+  /* Force IRANSans on all elements */
+  * {
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
   }
 
-  /* Ensure proper RTL behavior for form elements */
+  html[lang="fa"] body {
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    line-height: 1.6;
+    letter-spacing: normal;
+  }
+
+  /* Form elements with IRANSans */
   html[dir="rtl"] input,
   html[dir="rtl"] textarea {
     text-align: right;
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
   }
 
-  /* Persian font for all elements */
+  /* All UI elements with IRANSans */
   input[type="text"],
   input[type="tel"],
   input[type="number"],
@@ -182,12 +170,10 @@
   h4,
   h5,
   h6 {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
   }
 
-  /* Wallex specific headings */
+  /* Headings - exactly like Wallex */
   h1,
   h2,
   h3,
@@ -195,69 +181,73 @@
   h5,
   h6,
   .wallex-heading {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
     font-weight: 700;
     line-height: 1.4;
-    letter-spacing: -0.01em;
+    letter-spacing: normal;
   }
 
-  /* Persian digits styling - matching Wallex */
+  /* Persian numbers with IRANSans */
   .persian-digits {
-    font-family: "YekanBakh", "Yekan", "IRANYekan", "IRANSans", monospace;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
   }
 
-  /* Number styling for better readability */
+  /* Number display */
   .number-display {
-    font-family: "YekanBakh", "Yekan", "IRANYekan", "IRANSans", monospace;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
   }
 
-  /* OTP input specific styling - exact Wallex style */
+  /* OTP input with IRANSans */
   .otp-input {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", monospace !important;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
-    letter-spacing: 0;
+    letter-spacing: normal;
   }
 
-  /* Wallex specific text styling */
+  /* Wallex text styles */
   .wallex-text-primary {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
     color: rgb(37, 37, 37);
     font-weight: 400;
     line-height: 1.6;
   }
 
   .wallex-text-secondary {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
     color: rgba(0, 0, 0, 0.6);
     font-weight: 400;
     line-height: 1.6;
   }
 
-  /* Button text styling - exact Wallex */
+  /* Button styling */
   .wallex-button {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
     font-weight: 500;
-    letter-spacing: 0;
+    letter-spacing: normal;
   }
 
-  /* Ensure consistent font loading */
-  * {
-    font-family:
-      "YekanBakh", "Yekan", "IRANYekan", "IRANSans", "Tahoma", "Arial",
-      sans-serif;
+  /* Specific selectors for better targeting */
+  .btn,
+  .button,
+  button {
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+  }
+
+  /* Input specific styling */
+  input {
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+  }
+
+  /* Text elements */
+  .text,
+  .title,
+  .subtitle,
+  .content {
+    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
   }
 }
