@@ -214,9 +214,10 @@ export const OTPInput = ({
                   backgroundColor: "rgb(255, 255, 255)",
                   outline: "none",
                   transition: "border-color 0.15s ease",
-                  fontFamily: "'Vazirmatn', 'IRANSans', monospace",
+                  fontFamily:
+                    "'YekanBakh', 'Yekan', 'IRANYekan', 'IRANSans', monospace",
                   fontVariantNumeric: "tabular-nums",
-                  letterSpacing: "0.1em",
+                  letterSpacing: "0",
                 }}
                 className="sm:h-[56px] sm:text-[20px] focus:border-blue-500"
                 autoComplete={index === 0 ? "one-time-code" : "off"}
