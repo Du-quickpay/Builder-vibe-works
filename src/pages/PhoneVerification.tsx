@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { ChevronLeft, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
 import { OTPInput } from "@/components/OTPInput";
 
 const PhoneVerification = () => {
+  const location = useLocation();
   const [otp, setOTP] = useState("");
   const [countdown, setCountdown] = useState(54);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ otp?: string }>({});
 
-  // Mock phone number - in real app this would come from previous step or state management
-  const maskedPhoneNumber = "0910****565";
+  // Get phone number from navigation state and mask it for display
+  const phoneNumber = location.state?.phoneNumber || "09123456789";
+  const maskedPhoneNumber =
+    phoneNumber.slice(0, 4) + "****" + phoneNumber.slice(-3);
 
   // Countdown timer
   useEffect(() => {
