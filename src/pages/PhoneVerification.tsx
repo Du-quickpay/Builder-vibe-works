@@ -72,32 +72,28 @@ const PhoneVerification = () => {
     <div
       style={{
         display: "flex",
-        minHeight: "100vh",
-        flexDirection: "column",
+        height: "885px",
       }}
-      className="lg:flex-row lg:h-screen"
     >
       <div
         style={{
           alignItems: "center",
           backgroundColor: "rgb(14, 35, 66)",
           display: "flex",
-          flex: "1",
+          height: "100%",
           justifyContent: "center",
-          padding: "16px",
           width: "100%",
         }}
-        className="lg:justify-space-evenly lg:flex-row"
+        className="mobile-full-screen"
       >
         {/* Login Form Card */}
         <div
           style={{
             backgroundColor: "rgb(255, 255, 255)",
-            borderRadius: "16px",
             width: "100%",
             maxWidth: "480px",
           }}
-          className="lg:max-w-[480px]"
+          className="form-card"
         >
           <div
             style={{
@@ -105,6 +101,7 @@ const PhoneVerification = () => {
               flexDirection: "column",
               gap: "8px",
               padding: "20px",
+              width: "100%",
             }}
           >
             {/* Header */}
@@ -392,7 +389,7 @@ const PhoneVerification = () => {
             position: "relative",
             width: "100%",
           }}
-          className="lg:block lg:flex-1"
+          className="desktop-bg-image"
         >
           <img
             src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
@@ -503,77 +500,36 @@ const PhoneVerification = () => {
           }
         }
 
-        @media (max-width: 1023px) {
-          .lg\\:justify-space-evenly {
-            justify-content: center;
-          }
-          .lg\\:flex-row {
-            flex-direction: column;
-          }
-          .lg\\:block {
-            display: none !important;
-          }
-          .lg\\:h-screen {
-            height: auto;
-          }
-          .lg\\:flex-1 {
-            flex: none;
-          }
-        }
-
+        /* Desktop styles (1024px and up) */
         @media (min-width: 1024px) {
-          .lg\\:justify-space-evenly {
-            justify-content: space-evenly;
+          .mobile-full-screen {
+            justify-content: space-evenly !important;
           }
-          .lg\\:flex-row {
-            flex-direction: row;
+          .form-card {
+            border-radius: 16px;
           }
-          .lg\\:block {
+          .desktop-bg-image {
             display: block !important;
           }
-          .lg\\:h-screen {
+        }
+
+        /* Mobile and tablet styles (up to 1023px) */
+        @media (max-width: 1023px) {
+          .mobile-full-screen {
+            padding: 0 !important;
+            justify-content: center !important;
+          }
+          .form-card {
+            border-radius: 0 !important;
+            max-width: none !important;
             height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 0;
           }
-          .lg\\:flex-1 {
-            flex: 1;
+          .desktop-bg-image {
+            display: none !important;
           }
-          .lg\\:max-w-\\[480px\\] {
-            max-width: 480px;
-          }
-        }
-
-        @media (max-width: 639px) {
-          .sm\\:w-\\[56px\\] {
-            width: 48px;
-          }
-          .sm\\:min-w-\\[56px\\] {
-            min-width: 48px;
-          }
-          .sm\\:h-\\[56px\\] {
-            height: 48px !important;
-          }
-          .sm\\:text-\\[20px\\] {
-            font-size: 18px !important;
-          }
-        }
-
-        @media (min-width: 640px) {
-          .sm\\:w-\\[56px\\] {
-            width: 56px;
-          }
-          .sm\\:min-w-\\[56px\\] {
-            min-width: 56px;
-          }
-          .sm\\:h-\\[56px\\] {
-            height: 56px !important;
-          }
-          .sm\\:text-\\[20px\\] {
-            font-size: 20px !important;
-          }
-        }
-
-        .focus\\:border-blue-500:focus {
-          border-color: rgb(0, 122, 255) !important;
         }
       `}</style>
     </div>
