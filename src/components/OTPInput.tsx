@@ -83,11 +83,9 @@ export const OTPInput = ({
 
   return (
     <div
-      className={cn(
-        "flex flex-row-reverse gap-1.5 sm:gap-2 justify-center px-2 sm:px-0",
-        className,
-      )}
+      className={cn("flex flex-row gap-1.5 sm:gap-2 justify-center px-2 sm:px-0", className)}
       dir="ltr"
+    >
     >
       {Array.from({ length }, (_, index) => (
         <input
