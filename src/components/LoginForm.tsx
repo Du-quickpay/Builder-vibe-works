@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronDown, Info, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,11 +7,12 @@ import { AlertMessage } from "./AlertMessage";
 import { cn } from "@/lib/utils";
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const [mobileNumber, setMobileNumber] = useState("");
   const [showInviteCode, setShowInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{
+  const [errors, setErrors] = useState<{ mobileNumber?: string; inviteCode?: string }>({});
     mobileNumber?: string;
     inviteCode?: string;
   }>({});
@@ -42,20 +44,23 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      // In a real app, this would handle the authentication
-      console.log("Form submitted:", { mobileNumber, inviteCode });
+      // In a real app, this would send SMS verification code
+      console.log("Sending SMS to:", { mobileNumber, inviteCode });
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Simulate API call to send SMS
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Handle success (redirect, show success message, etc.)
-    } catch (error) {
-      console.error("Login error:", error);
-      setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+      // Navigate to verification page
+      navigate("/verify-phone", {
+        state: { phoneNumber: mobileNumber }
       });
+
+    } catch (error) {
+      console.error("SMS sending error:", error);
+      setErrors({ mobileNumber: "خطا در ارسال کد تایید. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
+    }
     }
   };
 
