@@ -98,4 +98,21 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  html[dir="rtl"] {
+    direction: rtl;
+  }
+
+  html[lang="fa"] body {
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* Ensure proper RTL behavior for form elements */
+  html[dir="rtl"] input,
+  html[dir="rtl"] textarea {
+    text-align: right;
+  }
 }
