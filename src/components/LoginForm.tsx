@@ -13,9 +13,6 @@ export const LoginForm = () => {
   const [inviteCode, setInviteCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ mobileNumber?: string; inviteCode?: string }>({});
-    mobileNumber?: string;
-    inviteCode?: string;
-  }>({});
 
   const validateMobileNumber = (number: string): boolean => {
     // Persian mobile number validation (should start with 09 and be 11 digits)
