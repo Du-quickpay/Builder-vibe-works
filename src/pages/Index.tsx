@@ -26,7 +26,7 @@ const Index = () => {
 
       {/* Progress Bar */}
       <div className="fixed top-0 right-0 w-full h-0.5 z-[10310]">
-        <div className="bg-blue-500 h-full w-full transform translate-x-full" />
+        <div className="bg-blue-500 h-full w-full transform translate-x-full animate-pulse" />
       </div>
 
       {/* Support Button */}
