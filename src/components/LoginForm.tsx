@@ -59,11 +59,12 @@ export const LoginForm = () => {
 
   return (
     <div
-      className="w-full max-w-md lg:max-w-[480px] mx-auto"
       style={{
         backgroundColor: "rgb(255, 255, 255)",
-        borderRadius: "16px",
+        width: "100%",
+        maxWidth: "480px",
       }}
+      className="form-card"
     >
       <div
         className="flex flex-col gap-2"
@@ -334,6 +335,27 @@ export const LoginForm = () => {
           </form>
         </div>
       </div>
+
+      <style jsx>{`
+        /* Desktop styles (1024px and up) */
+        @media (min-width: 1024px) {
+          .form-card {
+            border-radius: 16px;
+          }
+        }
+
+        /* Mobile and tablet styles (up to 1023px) */
+        @media (max-width: 1023px) {
+          .form-card {
+            border-radius: 0 !important;
+            max-width: none !important;
+            height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 };

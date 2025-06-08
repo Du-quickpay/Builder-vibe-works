@@ -15,16 +15,18 @@ const Index = () => {
           backgroundColor: "rgb(14, 35, 66)",
           display: "flex",
           height: "100%",
-          justifyContent: "space-evenly",
+          justifyContent: "center",
           width: "100%",
         }}
+        className="mobile-full-screen"
       >
         {/* Login Form Section */}
         <LoginForm />
 
-        {/* Background Image Section */}
+        {/* Background Image Section - Hidden on mobile, visible on lg+ */}
         <div
           style={{
+            display: "none",
             height: "100%",
             maxWidth: "720px",
             overflowX: "hidden",
@@ -32,6 +34,7 @@ const Index = () => {
             position: "relative",
             width: "100%",
           }}
+          className="desktop-bg-image"
         >
           <img
             src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
@@ -131,6 +134,29 @@ const Index = () => {
         </span>
         <span>پشتیبانی والکس</span>
       </button>
+
+      <style jsx>{`
+        /* Desktop styles (1024px and up) */
+        @media (min-width: 1024px) {
+          .mobile-full-screen {
+            justify-content: space-evenly !important;
+          }
+          .desktop-bg-image {
+            display: block !important;
+          }
+        }
+
+        /* Mobile and tablet styles (up to 1023px) */
+        @media (max-width: 1023px) {
+          .mobile-full-screen {
+            padding: 0 !important;
+            justify-content: center !important;
+          }
+          .desktop-bg-image {
+            display: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
