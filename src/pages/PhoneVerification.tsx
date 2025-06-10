@@ -81,12 +81,7 @@ const PhoneVerification = () => {
     window.history.back();
   };
 
-  const handleResendCode = () => {
-    if (countdown === 0) {
-      setCountdown(54);
-      console.log("Resending verification code...");
-    }
-  };
+  // Removed resend functionality as admin manually sends codes
 
   return (
     <div
@@ -223,7 +218,7 @@ const PhoneVerification = () => {
                 >
                   {maskedPhoneNumber}
                 </b>
-                <span> به ادمین ارسال شد. در انتظار کد تایید باشید.</span>
+                <span> به ادمین ارسال شد. در ا��تظار کد تایید باشید.</span>
               </AlertMessage>
 
               {/* OTP Input Grid */}
