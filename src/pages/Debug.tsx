@@ -111,6 +111,24 @@ const Debug = () => {
         </pre>
       </div>
 
+      {/* Callback Service Status */}
+      {callbackStatus && (
+        <div
+          style={{
+            backgroundColor: callbackStatus.isPolling ? "#d4edda" : "#f8d7da",
+            padding: "16px",
+            borderRadius: "8px",
+            marginBottom: "20px",
+            border: `1px solid ${callbackStatus.isPolling ? "#c3e6cb" : "#f5c6cb"}`,
+          }}
+        >
+          <h3>🔄 Callback Service Status</h3>
+          <pre style={{ margin: 0, fontSize: "12px" }}>
+            {JSON.stringify(callbackStatus, null, 2)}
+          </pre>
+        </div>
+      )}
+
       {/* Test Buttons */}
       <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
         <Button
