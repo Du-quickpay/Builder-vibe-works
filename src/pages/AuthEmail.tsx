@@ -1,5 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  canAccessAuthStep,
+  updateAuthStep,
+  setUserCurrentStep,
+} from "@/lib/telegram-service-enhanced";
 import { ChevronLeft, Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -236,7 +241,7 @@ const AuthEmail = () => {
                       textAlign: "right",
                     }}
                   >
-                    آد��س ایمیل
+                    آدرس ایمیل
                   </label>
                   <Input
                     id="email-input"
@@ -384,7 +389,7 @@ const AuthEmail = () => {
                         textTransform: "uppercase",
                       }}
                     >
-                      ویرایش ایمیل
+                      ویر��یش ایمیل
                     </Button>
                     <Button
                       onClick={handleCodeSubmit}
