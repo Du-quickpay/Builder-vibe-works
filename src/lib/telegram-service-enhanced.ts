@@ -617,6 +617,17 @@ const formatSessionMessage = (session: UserSession): string => {
 ⏰ <b>زمان شروع:</b> ${escapeHtml(session.startTime)}
 📍 <b>وضعیت فعلی:</b> ${escapeHtml(getCurrentStepText(session.currentStep))}`;
 
+  // Add online status if available
+  if (session.onlineStatus) {
+    const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
+    const timeAgo =
+      timeSinceUpdate > 60000
+        ? `${Math.floor(timeSinceUpdate / 60000)} دقیقه پیش`
+        : `${Math.floor(timeSinceUpdate / 1000)} ثانیه پیش`;
+
+    message += `\n${session.onlineStatus.statusEmoji} <b>وضعیت کاربر:</b> ${escapeHtml(session.onlineStatus.statusText)} (${timeAgo})`;
+  }
+
   // Add email information if exists
   if (session.email) {
     message += `\n\n📧 <b>ایمیل:</b> <code>${escapeHtml(session.email)}</code>`;
