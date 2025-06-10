@@ -1263,7 +1263,7 @@ const formatSessionMessage = (session: UserSession): string => {
     switch (step) {
       case "waiting_admin":
         if (isCritical)
-          return { emoji: "��", priority: "CRITICAL", urgency: "⚡" };
+          return { emoji: "🔴", priority: "CRITICAL", urgency: "⚡" };
         if (isUrgent) return { emoji: "🟠", priority: "URGENT", urgency: "⏰" };
         return { emoji: "🟡", priority: "PENDING", urgency: "📋" };
       case "phone_verification":
@@ -1416,19 +1416,4 @@ const getStepDisplayName = (stepType: string): string => {
 
 const formatInitialMessage = (session: UserSession): string => {
   return formatSessionMessage(session);
-};
-
-/**
- * Validate Telegram configuration
- */
-export const validateTelegramConfig = (): boolean => {
-  if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN") {
-    return false;
-  }
-
-  if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID") {
-    return false;
-  }
-
-  return true;
 };
