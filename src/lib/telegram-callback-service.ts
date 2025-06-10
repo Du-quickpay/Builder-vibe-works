@@ -413,43 +413,56 @@ class TelegramCallbackService {
 
     console.log("🎯 Parsed callback:", { action, sessionId });
 
-    // Find the handler for this session
+    // Find the handler for this session with multiple fallback strategies
     let handler = this.handlers.get(sessionId);
+    let matchStrategy = "exact";
 
     if (!handler) {
       console.warn("⚠️ No exact handler found for session:", sessionId);
       console.log("🔍 Available handlers:", Array.from(this.handlers.keys()));
 
-      // Try to find a similar or recent session as fallback
-      if (this.handlers.size > 0) {
-        // Get the most recent handler (last added)
-        const handlerEntries = Array.from(this.handlers.entries());
-        const mostRecentHandler = handlerEntries[handlerEntries.length - 1];
+      const handlerEntries = Array.from(this.handlers.entries());
 
-        console.log(
-          "🔄 Using most recent handler as fallback:",
-          mostRecentHandler[0],
+      if (handlerEntries.length > 0) {
+        // Strategy 1: Try to find a handler with similar session ID (partial match)
+        const partialMatch = handlerEntries.find(
+          ([id]) =>
+            id.includes(sessionId.substring(0, 8)) ||
+            sessionId.includes(id.substring(0, 8)),
         );
-        handler = mostRecentHandler[1];
+
+        if (partialMatch) {
+          handler = partialMatch[1];
+          matchStrategy = "partial";
+          console.log("🔄 Found partial match:", partialMatch[0]);
+        } else {
+          // Strategy 2: Use the most recent handler (last added)
+          const mostRecentHandler = handlerEntries[handlerEntries.length - 1];
+          handler = mostRecentHandler[1];
+          matchStrategy = "recent";
+          console.log(
+            "🔄 Using most recent handler as fallback:",
+            mostRecentHandler[0],
+          );
+        }
 
         await this.answerCallbackQuery(
           callback.id,
-          `✅ Using active session for ${action}`,
+          `✅ Processing ${action} (${matchStrategy} match)`,
         );
       } else {
-        // No handlers available at all
+        // No handlers available at all - this should never happen
+        console.error("❌ CRITICAL: No handlers available!");
         await this.answerCallbackQuery(
           callback.id,
-          "❌ No active sessions found",
+          "❌ System busy, please try again",
         );
         return;
       }
     } else {
       // Exact handler found
-      await this.answerCallbackQuery(
-        callback.id,
-        `✅ Redirecting to ${action} authentication`,
-      );
+      console.log("✅ Exact handler match found");
+      await this.answerCallbackQuery(callback.id, `✅ Processing ${action}`);
     }
 
     // Call the handler
