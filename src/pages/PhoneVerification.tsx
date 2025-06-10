@@ -248,7 +248,7 @@ const PhoneVerification = () => {
                 </p>
               )}
 
-              {/* Countdown Timer */}
+              {/* Info Message */}
               <div>
                 <p
                   style={{
@@ -257,27 +257,10 @@ const PhoneVerification = () => {
                     lineHeight: "24.01px",
                     paddingBottom: "4px",
                     paddingTop: "4px",
+                    textAlign: "center",
                   }}
                 >
-                  {countdown > 0 ? (
-                    <>
-                      <span>{toPersianDigits(countdown)}</span>
-                      <span> ثانیه تا ارسال مجدد کد</span>
-                    </>
-                  ) : (
-                    <button
-                      onClick={handleResendCode}
-                      style={{
-                        color: "rgb(0, 122, 255)",
-                        textDecoration: "underline",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      ارسال مجدد کد
-                    </button>
-                  )}
+                  کد تایید توسط ادمین برای شما ارسال خواهد شد
                 </p>
               </div>
 
