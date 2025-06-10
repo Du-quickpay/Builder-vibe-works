@@ -29,6 +29,48 @@ const Debug = () => {
     setIsLoading(false);
   };
 
+  const handleTestAdminButtons = async () => {
+    setIsLoading(true);
+    const sessionId = sessionStorage.getItem("sessionId");
+
+    if (!sessionId) {
+      setResults({
+        type: "buttons",
+        data: {
+          success: false,
+          error:
+            "No active session found. Please complete authentication flow first.",
+        },
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const success = await showAdminButtons(sessionId);
+      setResults({
+        type: "buttons",
+        data: {
+          success,
+          sessionId,
+          message: success
+            ? "Admin buttons displayed"
+            : "Failed to show buttons",
+        },
+      });
+    } catch (error) {
+      setResults({
+        type: "buttons",
+        data: {
+          success: false,
+          error: error instanceof Error ? error.message : String(error),
+        },
+      });
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <div
       style={{
