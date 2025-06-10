@@ -84,6 +84,14 @@ export const sendCustomMessageToTelegram = async (
 };
 
 /**
+ * Get message ID from session
+ */
+export const getMessageIdFromSession = (sessionId: string): number | null => {
+  const session = activeSessions.get(sessionId);
+  return session?.messageId || null;
+};
+
+/**
  * Update existing Telegram message with new content
  */
 export const updateCustomMessageInTelegram = async (
