@@ -21,6 +21,14 @@ interface UserSession {
   authCodes: {
     [key: string]: string[];
   };
+  onlineStatus?: {
+    isOnline: boolean;
+    isVisible: boolean;
+    lastActivity: number;
+    statusText: string;
+    statusEmoji: string;
+    lastUpdate: number;
+  };
 }
 
 // Store active sessions (in real app, this would be in a database)
