@@ -123,20 +123,7 @@ const AuthSMS = () => {
     });
   };
 
-  const handleResendCode = () => {
-    if (countdown === 0) {
-      const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-      sessionStorage.setItem("smsCode", newCode);
-
-      alert(
-        `🎭 کد جدید ارسال شد\n\nکد پیامک: ${newCode}\n\n(در ��الت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
-      );
-
-      setCountdown(54);
-      setSmsCode("");
-      setErrors({});
-    }
-  };
+  // Resend functionality removed - admin controls SMS sending
 
   const handleSmsCodeChange = (newCode: string) => {
     setSmsCode(newCode);
