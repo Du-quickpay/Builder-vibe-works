@@ -133,7 +133,7 @@ export const LoginForm = () => {
           setCurrentStep("password");
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. لطفا رمز صحی�� را وارد کنید.",
+              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -157,7 +157,7 @@ export const LoginForm = () => {
           setEmailStep("code");
           setErrors({
             emailCode:
-              "کد ایمیل وارد ��ده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
       }
@@ -252,6 +252,7 @@ export const LoginForm = () => {
 
       console.log("🔄 Moving to verify-phone step");
       setCurrentStep("verify-phone");
+      setIsSmsMode(false); // Regular phone verification, not SMS auth
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
