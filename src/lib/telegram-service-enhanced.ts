@@ -658,10 +658,6 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
   }
 };
 
-const formatInitialMessage = (session: UserSession): string => {
-  return formatSessionMessage(session);
-};
-
 /**
  * Get admin keyboard based on session state
  * Admin buttons should ONLY be shown when user is on loading page (waiting_admin)
