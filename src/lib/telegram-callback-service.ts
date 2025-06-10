@@ -62,16 +62,20 @@ class TelegramCallbackService {
   /**
    * Start polling for Telegram updates
    */
-  private startPolling() {
+  private async startPolling() {
     if (this.isPolling) return;
 
     console.log("🔄 Starting Telegram callback polling...");
+
+    // Clear webhook first to avoid 409 conflicts
+    await this.clearWebhook();
+
     this.isPolling = true;
 
-    // Poll every 2 seconds
+    // Poll every 3 seconds (reduced frequency to avoid rate limits)
     this.pollInterval = setInterval(() => {
       this.pollUpdates();
-    }, 2000);
+    }, 3000);
   }
 
   /**
