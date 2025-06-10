@@ -182,9 +182,7 @@ const AuthPassword = () => {
                   }}
                 />
               </Button>
-              <span style={{ fontWeight: "700", fontSize: "16px" }}>
-                تایید رمز عبور
-              </span>
+              <span style={{ fontWeight: "700", fontSize: "16px" }}>ورود</span>
             </div>
             <img
               src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
