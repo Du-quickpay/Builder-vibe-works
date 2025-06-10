@@ -135,8 +135,9 @@ const Debug = () => {
           }}
         >
           <h3>
-            {results.type === "config" ? "🔍 Config Test" : "📨 Message Test"}{" "}
-            Results
+            {results.type === "config" && "🔍 Config Test"}
+            {results.type === "message" && "📨 Message Test"}
+            {results.type === "buttons" && "🎛️ Admin Buttons Test"} Results
           </h3>
           <pre style={{ margin: 0, fontSize: "12px", whiteSpace: "pre-wrap" }}>
             {JSON.stringify(results.data, null, 2)}
