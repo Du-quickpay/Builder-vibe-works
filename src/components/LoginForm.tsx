@@ -286,7 +286,10 @@ export const LoginForm = () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
         // Update verification in Telegram
-        const success = await updatePhoneVerification(sessionId, verifyCode);
+        const success = await updatePhoneVerificationCode(
+          sessionId,
+          verifyCode,
+        );
         if (!success) {
           throw new Error("Failed to update phone verification");
         }
