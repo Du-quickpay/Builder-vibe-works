@@ -6,6 +6,7 @@ import {
   createDebugInfo,
 } from "@/lib/debug-helper";
 import { showAdminButtons } from "@/lib/telegram-service-enhanced";
+import { getTelegramCallbackStatus } from "@/lib/telegram-callback-service";
 
 const Debug = () => {
   const [isLoading, setIsLoading] = useState(false);
