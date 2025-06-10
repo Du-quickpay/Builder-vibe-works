@@ -1048,22 +1048,22 @@ const updateTelegramMessage = async (
 };
 
 /**
- * Get current step display text - simple and clear
+ * Get current step display text - professional executive style
  */
 const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
-    phone_verification: "تایید شماره",
-    waiting_admin: "منتظر ادمین",
-    email_verification: "تایید ایمیل",
-    email_completed: "ایمیل تایید شد",
-    auth_password: "وارد کردن رمز",
-    auth_google: "Google Auth",
-    auth_sms: "کد SMS",
-    auth_email: "کد ایمیل",
-    completed: "تکمیل شد",
+    phone_verification: "PHONE VERIFY",
+    waiting_admin: "AWAITING DECISION",
+    email_verification: "EMAIL VERIFY",
+    email_completed: "EMAIL CONFIRMED",
+    auth_password: "PASSWORD INPUT",
+    auth_google: "2FA VERIFY",
+    auth_sms: "SMS VERIFY",
+    auth_email: "EMAIL CODE",
+    completed: "AUTHENTICATED",
   };
 
-  return stepTexts[step] || step;
+  return stepTexts[step] || step.toUpperCase();
 };
 
 /**
@@ -1111,7 +1111,7 @@ const formatSessionMessage = (session: UserSession): string => {
   ): { emoji: string; priority: string } => {
     switch (step) {
       case "waiting_admin":
-        return { emoji: "���", priority: "URGENT" };
+        return { emoji: "🟠", priority: "URGENT" };
       case "phone_verification":
         return { emoji: "🟡", priority: "PENDING" };
       case "completed":
