@@ -181,13 +181,16 @@ export const setUserCurrentStep = async (
 ): Promise<boolean> => {
   try {
     const session = activeSessions.get(sessionId);
-    if (!session) return false;
+    if (!session || !session.messageId) {
+      console.error("Session or messageId not found:", sessionId);
+      return false;
+    }
 
     session.currentStep = step;
 
     const updatedMessage = formatInitialMessage(session);
     // Remove admin buttons when user is not on loading page
-    await updateTelegramMessage(session.messageId!, updatedMessage, {
+    await updateTelegramMessage(session.messageId, updatedMessage, {
       inline_keyboard: [],
     });
 
