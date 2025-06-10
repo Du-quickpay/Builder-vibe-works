@@ -247,11 +247,10 @@ export const LoginForm = () => {
 
       console.log("🔄 Moving to verify-phone step");
       setCurrentStep("verify-phone");
-      setIsSmsCodeMode(false); // Regular phone verification, not SMS auth
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا ��ر ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -420,7 +419,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. ��طفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -515,7 +514,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال ��د. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -760,7 +759,7 @@ export const LoginForm = () => {
                   ? "رمز عبور"
                   : currentStep === "google"
                     ? "Google Authenticator"
-                    : "ور��د"}
+                    : "ورود"}
             </span>
           </div>
           <a href="#">
@@ -1323,7 +1322,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                            کد دعوت صرفا در زمان ثبت‌نا�� قابل استفاده است.
                           </span>
                         </p>
                       </div>
