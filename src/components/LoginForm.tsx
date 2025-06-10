@@ -142,6 +142,7 @@ export const LoginForm = () => {
           break;
         case "sms":
           setCurrentStep("verify-phone");
+          setIsSmsCodeMode(true);
           setErrors({
             verifyCode:
               "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
@@ -257,7 +258,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا د�� ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -3149,7 +3150,7 @@ export const LoginForm = () => {
                         <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
-                      "ارسال کد تایید"
+                      "ارسال ��د تایید"
                     )}
                   </button>
                 </div>
