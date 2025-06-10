@@ -250,7 +250,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا ��ر ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -350,7 +350,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "ر��ز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -1535,7 +1535,7 @@ export const LoginForm = () => {
                         textEmphasisColor: "rgb(0, 122, 255)",
                       }}
                     >
-                      <span>کد تایید به شماره </span>
+                      <span>کد تای��د به شماره </span>
                       <b
                         dir="ltr"
                         style={{
@@ -1852,26 +1852,23 @@ export const LoginForm = () => {
                     onClick={() => setCurrentStep("phone")}
                     style={{
                       alignItems: "center",
-                      borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderBottomStyle: "solid",
                       borderBottomWidth: "1px",
-                      borderColor: "rgba(0, 0, 0, 0.2)",
-                      borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderBottomColor: "rgba(0, 0, 0, 0.2)",
                       borderLeftStyle: "solid",
                       borderLeftWidth: "1px",
+                      borderLeftColor: "rgba(0, 0, 0, 0.2)",
                       borderRadius: "8px",
-                      borderRight: "1px solid rgba(0, 0, 0, 0.2)",
                       borderRightStyle: "solid",
                       borderRightWidth: "1px",
-                      borderStyle: "solid",
-                      borderTop: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderRightColor: "rgba(0, 0, 0, 0.2)",
                       borderTopLeftRadius: "8px",
                       borderTopRightRadius: "8px",
                       borderTopStyle: "solid",
                       borderTopWidth: "1px",
-                      borderWidth: "1px",
+                      borderTopColor: "rgba(0, 0, 0, 0.2)",
                       color: "rgba(0, 0, 0, 0.6)",
                       cursor: "pointer",
                       display: "flex",
