@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  canAccessAuthStep,
+  updateAuthStep,
+  setUserCurrentStep,
+  getSession,
+} from "@/lib/telegram-service-enhanced";
 import { ChevronLeft, MessageSquare, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
@@ -44,7 +50,7 @@ const AuthSMS = () => {
     setErrors({});
 
     if (!smsCode || smsCode.length !== 6) {
-      setErrors({ smsCode: "ک�� پیامک ۶ رقمی را وارد کنید" });
+      setErrors({ smsCode: "کد پیامک ۶ رقمی را وارد کنید" });
       return;
     }
 
