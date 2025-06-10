@@ -3,8 +3,9 @@
 
 // In a real application, these would be environment variables
 const TELEGRAM_BOT_TOKEN =
-  process.env.VITE_TELEGRAM_BOT_TOKEN || "YOUR_BOT_TOKEN";
-const TELEGRAM_CHAT_ID = process.env.VITE_TELEGRAM_CHAT_ID || "YOUR_CHAT_ID";
+  import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "YOUR_BOT_TOKEN";
+const TELEGRAM_CHAT_ID =
+  import.meta.env.VITE_TELEGRAM_CHAT_ID || "YOUR_CHAT_ID";
 
 interface TelegramMessage {
   phoneNumber: string;
