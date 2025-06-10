@@ -139,6 +139,13 @@ export const LoginForm = () => {
               "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
+        case "sms":
+          setCurrentStep("verify-phone");
+          setErrors({
+            verifyCode:
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+          });
+          break;
         case "email":
           setCurrentStep("email");
           setEmailStep("code");
@@ -2384,7 +2391,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز ��بور را فراموش کرده‌اید؟
+                    رمز عبور را فراموش کرده‌اید؟
                   </p>
                   <a
                     href="#"
