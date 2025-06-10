@@ -149,7 +149,6 @@ export const LoginForm = () => {
           );
         }
       });
-      };
 
       // Start tracking
       userActivityService.startTracking(sessionId, handleStatusChange);
@@ -2939,7 +2938,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ���
+                              ​
                             </span>
                           </legend>
                         </fieldset>
