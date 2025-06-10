@@ -338,18 +338,6 @@ const Debug = () => {
           }}
         >
           <Button
-            onClick={() => handleSimulateAdminClick("incorrect_phone")}
-            style={{ backgroundColor: "#dc3545" }}
-          >
-            ❌ Phone Wrong
-          </Button>
-          <Button
-            onClick={() => handleSimulateAdminClick("incorrect_verification")}
-            style={{ backgroundColor: "#dc3545" }}
-          >
-            ❌ Code Wrong
-          </Button>
-          <Button
             onClick={() => handleSimulateAdminClick("incorrect_password")}
             style={{ backgroundColor: "#dc3545" }}
           >
