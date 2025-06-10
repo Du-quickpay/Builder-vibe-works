@@ -185,6 +185,43 @@ const Debug = () => {
         </Button>
       </div>
 
+      {/* Simulate Admin Actions */}
+      <div style={{ marginBottom: "20px" }}>
+        <h3>🎭 Simulate Admin Actions</h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            gap: "8px",
+          }}
+        >
+          <Button
+            onClick={() => handleSimulateAdminClick("password")}
+            style={{ backgroundColor: "#6c757d" }}
+          >
+            🔒 Password
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("google")}
+            style={{ backgroundColor: "#dc3545" }}
+          >
+            📱 Google Auth
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("sms")}
+            style={{ backgroundColor: "#28a745" }}
+          >
+            💬 SMS Code
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("email")}
+            style={{ backgroundColor: "#17a2b8" }}
+          >
+            📧 Email Code
+          </Button>
+        </div>
+      </div>
+
       {/* Results */}
       {results && (
         <div
