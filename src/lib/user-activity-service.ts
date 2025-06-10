@@ -13,13 +13,13 @@ class UserActivityService {
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private activityTimeout: NodeJS.Timeout | null = null;
   private onStatusChange: ((status: ActivityStatus) => void) | null = null;
-  private readonly HEARTBEAT_INTERVAL = 5000; // 5 seconds for real-time updates
-  private readonly ACTIVITY_TIMEOUT = 10000; // 10 seconds without activity = inactive
+  private readonly HEARTBEAT_INTERVAL = 15000; // 15 seconds (optimized from 5s)
+  private readonly ACTIVITY_TIMEOUT = 20000; // 20 seconds without activity = inactive
 
-  // Smart rate limiting for status updates
+  // Optimized rate limiting for better performance
   private lastStatusUpdate = 0;
-  private readonly MIN_UPDATE_INTERVAL = 2000; // Minimum 2 seconds between updates (much faster)
-  private readonly IMPORTANT_UPDATE_INTERVAL = 500; // 500ms for important changes (online/offline/visibility)
+  private readonly MIN_UPDATE_INTERVAL = 8000; // Minimum 8 seconds between updates (optimized)
+  private readonly IMPORTANT_UPDATE_INTERVAL = 3000; // 3 seconds for important changes (optimized)
   private pendingUpdate: NodeJS.Timeout | null = null;
   private lastStatusSent: string = "";
   private lastImportantUpdate = 0;
@@ -132,9 +132,9 @@ class UserActivityService {
   }
 
   /**
-   * Throttled user activity handler to prevent spam (faster for real-time feel)
+   * Throttled user activity handler to prevent spam (optimized for performance)
    */
-  private throttledUserActivity = this.throttle(
+  private throttledUserActivity = this.throttle(() => this.handleUserActivity(), 10000);
     () => this.handleUserActivity(),
     2000,
   );
