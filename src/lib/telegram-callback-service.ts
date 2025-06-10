@@ -385,3 +385,53 @@ export const simulateAdminClick = (sessionId: string, action: string) => {
 
   console.log("📝 Simulated callback stored in localStorage");
 };
+
+// Utility function to manually clear webhook
+export const clearTelegramWebhook = async (): Promise<{
+  success: boolean;
+  message: string;
+}> => {
+  const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+
+  if (!token || token === "YOUR_BOT_TOKEN") {
+    return {
+      success: false,
+      message: "Telegram bot token not configured",
+    };
+  }
+
+  try {
+    console.log("🧹 Manually clearing Telegram webhook...");
+    const response = await fetch(
+      `https://api.telegram.org/bot${token}/deleteWebhook?drop_pending_updates=true`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log("✅ Webhook cleared successfully:", result);
+      return {
+        success: true,
+        message: "Webhook cleared successfully",
+      };
+    } else {
+      const errorText = await response.text();
+      console.error("❌ Failed to clear webhook:", response.status, errorText);
+      return {
+        success: false,
+        message: `Failed to clear webhook: ${response.status} - ${errorText}`,
+      };
+    }
+  } catch (error) {
+    console.error("❌ Error clearing webhook:", error);
+    return {
+      success: false,
+      message: `Error: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+};
