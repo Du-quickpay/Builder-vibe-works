@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
