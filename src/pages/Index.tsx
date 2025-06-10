@@ -168,6 +168,9 @@ const Index = () => {
           }
         }
       `}</style>
+
+      {/* Activity Status Debug */}
+      <ActivityStatusDebug />
     </div>
   );
 };
