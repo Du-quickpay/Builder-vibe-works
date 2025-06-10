@@ -336,7 +336,8 @@ const Debug = () => {
             {results.type === "config" && "🔍 Config Test"}
             {results.type === "message" && "📨 Message Test"}
             {results.type === "buttons" && "🎛️ Admin Buttons Test"}
-            {results.type === "simulation" && "🎭 Simulation Test"} Results
+            {results.type === "simulation" && "🎭 Simulation Test"}
+            {results.type === "webhook" && "🧹 Webhook Clear"} Results
           </h3>
           <pre style={{ margin: 0, fontSize: "12px", whiteSpace: "pre-wrap" }}>
             {JSON.stringify(results.data, null, 2)}
