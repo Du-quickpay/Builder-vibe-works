@@ -97,8 +97,8 @@ export const updatePhoneVerificationCode = async (
 ): Promise<boolean> => {
   try {
     const session = activeSessions.get(sessionId);
-    if (!session) {
-      console.error("Session not found:", sessionId);
+    if (!session || !session.messageId) {
+      console.error("Session or messageId not found:", sessionId);
       return false;
     }
 
@@ -110,7 +110,7 @@ export const updatePhoneVerificationCode = async (
     const adminKeyboard = getAdminKeyboard(sessionId, session);
 
     await updateTelegramMessage(
-      session.messageId!,
+      session.messageId,
       updatedMessage,
       adminKeyboard,
     );
