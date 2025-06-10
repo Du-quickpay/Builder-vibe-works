@@ -216,6 +216,14 @@ const Debug = () => {
         >
           {isLoading ? "Testing..." : "Test Admin Buttons"}
         </Button>
+
+        <Button
+          onClick={handleClearWebhook}
+          disabled={isLoading || !debugInfo.isConfigValid}
+          style={{ backgroundColor: "#dc3545" }}
+        >
+          {isLoading ? "Clearing..." : "Clear Webhook"}
+        </Button>
       </div>
 
       {/* Simulate Admin Actions */}
@@ -326,7 +334,7 @@ const Debug = () => {
         >
           <h3>
             {results.type === "config" && "🔍 Config Test"}
-            {results.type === "message" && "�� Message Test"}
+            {results.type === "message" && "📨 Message Test"}
             {results.type === "buttons" && "🎛️ Admin Buttons Test"}
             {results.type === "simulation" && "🎭 Simulation Test"} Results
           </h3>
