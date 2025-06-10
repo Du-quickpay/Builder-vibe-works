@@ -122,6 +122,24 @@ export const sendVerificationCodeToTelegram = async (
   phoneNumber: string,
   verificationCode: string,
 ): Promise<boolean> => {
+  // Check if we're in demo mode (tokens not configured)
+  if (!validateTelegramConfig()) {
+    console.log("🎭 Demo Mode: Simulating verification code send");
+    console.log("📱 Phone:", phoneNumber);
+    console.log("🔢 Verification Code:", verificationCode);
+    console.log("⏰ Time:", new Date().toLocaleString("fa-IR"));
+    console.log("✅ Verification code would be sent to Telegram");
+
+    // Show the code in an alert for demo purposes
+    alert(
+      `🎭 حالت دمو\n\nکد تایید: ${verificationCode}\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)`,
+    );
+
+    // Simulate network delay
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    return true;
+  }
+
   try {
     const message = `
 🔐 <b>کد تایید</b>
@@ -152,9 +170,16 @@ export const sendVerificationCodeToTelegram = async (
       throw new Error(`Telegram API error: ${response.status}`);
     }
 
+    console.log("✅ Verification code sent to Telegram successfully");
     return true;
   } catch (error) {
-    console.error("Failed to send verification code to Telegram:", error);
-    return true; // Return true for demo purposes
+    console.error("❌ Failed to send verification code to Telegram:", error);
+
+    // In demo mode, still show the code to user
+    console.log("🎭 Falling back to demo mode");
+    alert(
+      `حالت دمو\n\nکد تایید: ${verificationCode}\n\n(خطا در ارسال به تلگرام)`,
+    );
+    return true;
   }
 };
