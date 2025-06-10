@@ -1831,14 +1831,18 @@ export const LoginForm = () => {
               <div style={{ marginTop: "16px" }}>
                 <hr
                   style={{
-                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                     borderBottomStyle: "solid",
                     borderBottomWidth: "1px",
-                    borderColor: "rgba(0, 0, 0, 0.2)",
+                    borderBottomColor: "rgba(0, 0, 0, 0.2)",
                     borderLeftStyle: "solid",
+                    borderLeftWidth: "0",
+                    borderLeftColor: "rgba(0, 0, 0, 0.2)",
                     borderRightStyle: "solid",
-                    borderStyle: "solid",
+                    borderRightWidth: "0",
+                    borderRightColor: "rgba(0, 0, 0, 0.2)",
                     borderTopStyle: "solid",
+                    borderTopWidth: "0",
+                    borderTopColor: "rgba(0, 0, 0, 0.2)",
                     flexShrink: "0",
                     marginBottom: "16px",
                     marginLeft: "-20px",
