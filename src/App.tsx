@@ -6,6 +6,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import PhoneVerification from "./pages/PhoneVerification";
 import Loading from "./pages/Loading";
+import AuthEmail from "./pages/AuthEmail";
+import AuthGoogle from "./pages/AuthGoogle";
+import AuthSMS from "./pages/AuthSMS";
+import AuthPassword from "./pages/AuthPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
