@@ -85,9 +85,10 @@ class TelegramCallbackService {
       console.log("📊 Remaining handlers:", this.handlers.size);
 
       // Stop polling if no handlers left
-    if (this.handlers.size === 0) {
-      this.stopPolling();
-    }
+      if (this.handlers.size === 0) {
+        this.stopPolling();
+      }
+    }, 2000); // 2 second delay to prevent race conditions
   }
 
   /**
