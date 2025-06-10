@@ -10,6 +10,7 @@ import {
   getTelegramCallbackStatus,
   simulateAdminClick,
 } from "@/lib/telegram-callback-service";
+import { getSession } from "@/lib/telegram-service-enhanced";
 
 const Debug = () => {
   const [isLoading, setIsLoading] = useState(false);
