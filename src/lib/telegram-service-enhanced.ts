@@ -1197,36 +1197,36 @@ const updateTelegramMessage = async (
 };
 
 /**
- * Get current step display text
+ * Get current step display text with professional descriptions
  */
 const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
-    phone_verification: "در انتظار کد تایید شماره",
-    waiting_admin: "در انتظار دستور ادمین",
-    email_verification: "در انتظار کد تایید ایمیل",
-    email_completed: "ایمیل تایید شد",
-    auth_password: "وارد کردن رمز عبور",
-    auth_google: "وارد کردن کد Google Auth",
-    auth_sms: "وارد کردن کد پیامک",
-    auth_email: "وارد کردن کد ایمیل",
-    completed: "تکمیل شده",
+    phone_verification: "🔄 در حال تایید شماره همراه",
+    waiting_admin: "⏳ منتظر تصمیم ادمین",
+    email_verification: "📧 در حال تایید ایمیل",
+    email_completed: "✅ ایمیل با موفقیت تایید شد",
+    auth_password: "🔒 وارد کردن رمز عبور",
+    auth_google: "📱 احراز هویت دو مرحله‌ای",
+    auth_sms: "💬 تایید کد پیامکی",
+    auth_email: "📨 تایید کد ایمیلی",
+    completed: "✅ فرآیند احراز هویت تکمیل شد",
   };
 
-  return stepTexts[step] || step;
+  return stepTexts[step] || `❓ وضعیت نامشخص: ${step}`;
 };
 
 /**
- * Get step display name
+ * Get step display name with better descriptions
  */
 const getStepDisplayName = (stepType: string): string => {
   const names: { [key: string]: string } = {
-    password: "رمز عبور",
-    google: "Google Authenticator",
-    sms: "کد پیامک",
-    email: "کد ایمیل",
+    password: "🔒 رمز عبور حساب",
+    google: "📱 Google Authenticator",
+    sms: "💬 کد تایید پیامکی",
+    email: "📧 کد تایید ایمیلی",
   };
 
-  return names[stepType] || stepType;
+  return names[stepType] || `🔐 ${stepType}`;
 };
 
 /**
