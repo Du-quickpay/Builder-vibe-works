@@ -137,7 +137,7 @@ export const LoginForm = () => {
           setCurrentStep("google");
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد ص��یح را وارد کنید.",
           });
           break;
         case "sms":
@@ -255,6 +255,7 @@ export const LoginForm = () => {
 
       console.log("🔄 Moving to verify-phone step");
       setCurrentStep("verify-phone");
+      setIsSmsCodeMode(false); // Regular phone verification, not SMS auth
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
@@ -370,7 +371,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند خا��ی باشد",
       });
       return;
     }
