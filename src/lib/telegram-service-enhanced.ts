@@ -814,10 +814,11 @@ const lastMessageContent = new Map<
 >();
 
 /**
- * Clean up old sessions (older than 1 hour)
+ * Clean up old sessions and rate limit data (older than 1 hour)
  */
 const cleanupOldSessions = () => {
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  const now = Date.now();
 
   for (const [sessionId, session] of activeSessions.entries()) {
     const sessionTime = new Date(session.startTime);
@@ -827,10 +828,32 @@ const cleanupOldSessions = () => {
       // Also clean up message content
       if (session.messageId) {
         lastMessageContent.delete(session.messageId);
+        rateLimitMap.delete(session.messageId);
       }
     }
   }
+
+  // Clean up old message content entries
+  for (const [messageId, content] of lastMessageContent.entries()) {
+    if (now - content.timestamp > 2 * 60 * 60 * 1000) {
+      // 2 hours
+      console.log("🧹 Cleaning up old message content:", messageId);
+      lastMessageContent.delete(messageId);
+    }
+  }
+
+  // Clean up old rate limit entries
+  for (const [messageId, limitInfo] of rateLimitMap.entries()) {
+    if (now - limitInfo.lastUpdate > 60 * 60 * 1000) {
+      // 1 hour
+      console.log("🧹 Cleaning up old rate limit data:", messageId);
+      rateLimitMap.delete(messageId);
+    }
+  }
 };
+
+// Auto cleanup every 10 minutes
+setInterval(cleanupOldSessions, 10 * 60 * 1000);
 
 // Run cleanup every 30 minutes
 setInterval(cleanupOldSessions, 30 * 60 * 1000);
