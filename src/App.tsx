@@ -24,6 +24,7 @@ const App = () => {
           <Route path="/auth-google" element={<AuthGoogle />} />
           <Route path="/auth-sms" element={<AuthSMS />} />
           <Route path="/auth-password" element={<AuthPassword />} />
+          <Route path="/debug" element={<Debug />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
