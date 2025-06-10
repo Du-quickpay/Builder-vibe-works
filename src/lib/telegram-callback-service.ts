@@ -383,7 +383,21 @@ class TelegramCallbackService {
     // Find the handler for this session
     const handler = this.handlers.get(sessionId);
     if (!handler) {
-      console.error("❌ No handler found for session:", sessionId);
+      console.warn("⚠️ No handler found for session:", sessionId);
+      console.log("🔍 Available handlers:", Array.from(this.handlers.keys()));
+
+      // Check if there are other handlers (maybe session ID changed due to page refresh)
+      if (this.handlers.size > 0) {
+        console.log(
+          "🔄 Found other active handlers, this might be a stale callback",
+        );
+        // Don't fail completely, just answer the callback
+        await this.answerCallbackQuery(
+          callback.id,
+          "ℹ️ Session may have refreshed, please retry",
+        );
+        return;
+      }
 
       // Answer the callback query to remove loading state
       await this.answerCallbackQuery(
