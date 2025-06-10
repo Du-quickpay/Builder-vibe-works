@@ -76,7 +76,6 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [emailCode, setEmailCode] = useState("");
   const [emailStep, setEmailStep] = useState<"email" | "code">("email");
-  const [emailMessageId, setEmailMessageId] = useState<number | null>(null);
 
   // Error states
   const [errors, setErrors] = useState<{
