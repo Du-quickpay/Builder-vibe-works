@@ -92,6 +92,34 @@ class TelegramCallbackService {
   }
 
   /**
+   * Clear webhook to avoid conflicts
+   */
+  private async clearWebhook() {
+    if (!this.validateToken()) return;
+
+    try {
+      console.log("🧹 Clearing Telegram webhook...");
+      const response = await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/deleteWebhook?drop_pending_updates=true`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (response.ok) {
+        console.log("✅ Webhook cleared successfully");
+      } else {
+        console.warn("⚠️ Failed to clear webhook:", response.status);
+      }
+    } catch (error) {
+      console.warn("⚠️ Error clearing webhook:", error);
+    }
+  }
+
+  /**
    * Poll for new updates from Telegram
    */
   private async pollUpdates() {
@@ -105,7 +133,7 @@ class TelegramCallbackService {
 
     try {
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&timeout=1`,
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&timeout=10&limit=1`,
         {
           method: "GET",
           headers: {
@@ -115,9 +143,36 @@ class TelegramCallbackService {
       );
 
       if (!response.ok) {
+        if (response.status === 409) {
+          console.warn(
+            "⚠️ Telegram 409 Conflict - clearing webhook and retrying...",
+          );
+          await this.clearWebhook();
+          // Wait a bit before next poll
+          setTimeout(() => {}, 5000);
+          return;
+        }
+
         console.error("❌ Failed to get Telegram updates:", response.status);
+
+        // If we get repeated errors, slow down polling
+        if (this.consecutiveErrors > 5) {
+          console.log("⏸️ Too many errors, temporarily stopping polling...");
+          this.stopPolling();
+          setTimeout(() => {
+            if (this.handlers.size > 0) {
+              console.log("🔄 Restarting polling after error cooldown...");
+              this.startPolling();
+            }
+          }, 30000); // Wait 30 seconds before restarting
+        }
+
+        this.consecutiveErrors++;
         return;
       }
+
+      // Reset error counter on successful request
+      this.consecutiveErrors = 0;
 
       const data = await response.json();
       const updates: TelegramUpdate[] = data.result || [];
@@ -131,6 +186,7 @@ class TelegramCallbackService {
       }
     } catch (error) {
       console.error("❌ Error polling Telegram updates:", error);
+      this.consecutiveErrors++;
     }
   }
 
