@@ -14,11 +14,24 @@ export const DebugStatus = ({ sessionId }: DebugStatusProps) => {
   const [status, setStatus] = useState<SimpleActivityState | null>(null);
   const [updateCount, setUpdateCount] = useState(0);
   const [lastUpdate, setLastUpdate] = useState<string>("");
+  const [networkStatus, setNetworkStatus] = useState<string>("🔍 Checking...");
+  const [telegramMode, setTelegramMode] = useState<string>("🔍 Checking...");
 
   useEffect(() => {
     if (!sessionId) return;
 
     console.log("🛠️ Starting debug status tracker for session:", sessionId);
+
+    // Check network and Telegram status
+    const checkConnectivity = async () => {
+      const isConfigured = validateTelegramConfig();
+      setTelegramMode(isConfigured ? "📡 Real Mode" : "🎭 Demo Mode");
+
+      const hasNetwork = await checkNetworkConnectivity();
+      setNetworkStatus(hasNetwork ? "🌐 Connected" : "📴 Offline");
+    };
+
+    checkConnectivity();
 
     const handleStatusChange = (state: SimpleActivityState) => {
       console.log("🛠️ DEBUG: Status changed:", state);
