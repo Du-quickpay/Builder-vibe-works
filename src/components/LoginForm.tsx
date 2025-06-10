@@ -175,6 +175,7 @@ export const LoginForm = () => {
         setCurrentStep("verify-phone");
         setVerifyCode("");
         setCountdown(60);
+        setIsSmsCodeMode(true);
         setErrors({});
         setHasError(false);
         break;
@@ -256,7 +257,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا د�� ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
