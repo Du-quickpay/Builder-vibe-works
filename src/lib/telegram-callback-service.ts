@@ -89,7 +89,7 @@ class TelegramCallbackService {
       if (this.handlers.size === 0) {
         this.stopPolling();
       }
-    }, 2000); // 2 second delay to prevent race conditions
+    }, 5000); // 5 second delay to prevent race conditions
   }
 
   /**
