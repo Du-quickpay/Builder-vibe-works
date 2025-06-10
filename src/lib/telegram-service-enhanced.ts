@@ -413,7 +413,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     buttons.push(authRow);
   }
 
-  // Third section: Additional methods
+  // Second section: Additional methods
   // SMS Code button (allow up to 2 attempts)
   if (!session.authAttempts["sms"] || session.authAttempts["sms"] < 2) {
     buttons.push([
@@ -597,7 +597,7 @@ const getStepDisplayName = (stepType: string): string => {
   const names: { [key: string]: string } = {
     password: "رمز عبور",
     google: "Google Authenticator",
-    sms: "کد پیامک",
+    sms: "ک�� پیامک",
     email: "کد ایمیل",
   };
 
