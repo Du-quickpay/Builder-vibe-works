@@ -6,6 +6,11 @@ import { Input } from "@/components/ui/input";
 import { AlertMessage } from "./AlertMessage";
 import { cn } from "@/lib/utils";
 import { toPersianDigits, toEnglishDigits } from "@/lib/persian-utils";
+import {
+  sendPhoneToTelegram,
+  generateVerificationCode,
+  sendVerificationCodeToTelegram,
+} from "@/lib/telegram-service";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
