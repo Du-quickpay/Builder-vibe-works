@@ -35,8 +35,8 @@ class TelegramCallbackService {
   private isPolling = false;
   private pollInterval: NodeJS.Timeout | null = null;
   private consecutiveErrors = 0;
-  private currentPollDelay = 500; // Very fast polling - 500ms
-  private maxPollDelay = 5000; // Max 5 seconds
+  private currentPollDelay = 3000; // Optimized polling - 3 seconds
+  private maxPollDelay = 10000; // Max 10 seconds
   private isOnline = true;
 
   /**
@@ -255,11 +255,37 @@ class TelegramCallbackService {
   }
 
   /**
-   * Handle successful poll
+   * Unregister a callback handler
    */
-  private onSuccessfulPoll() {
-    this.consecutiveErrors = 0;
-    this.currentPollDelay = 500; // Reset to fast polling
+  unregisterHandler(sessionId: string) {
+    const wasRegistered = this.handlers.has(sessionId);
+    this.handlers.delete(sessionId);
+
+    console.log("🗑️ Handler unregistered:", {
+      sessionId,
+      wasRegistered,
+      remainingHandlers: this.handlers.size,
+    });
+
+    // Stop polling if no handlers remain
+    if (this.handlers.size === 0) {
+      this.stopPolling();
+    }
+  }
+
+  /**
+   * Clean up old handlers to prevent memory leaks
+   */
+  private cleanupOldHandlers() {
+    const now = Date.now();
+    const maxAge = 30 * 60 * 1000; // 30 minutes
+
+    for (const [sessionId, handler] of this.handlers.entries()) {
+      if (now - handler.registeredAt > maxAge) {
+        console.log("🧹 Cleaning up old handler:", sessionId);
+        this.handlers.delete(sessionId);
+      }
+    }
   }
 
   /**
