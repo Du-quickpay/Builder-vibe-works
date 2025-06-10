@@ -163,6 +163,13 @@ export const LoginForm = () => {
         setErrors({});
         setHasError(false);
         break;
+      case "sms":
+        setCurrentStep("verify-phone");
+        setVerifyCode("");
+        setCountdown(60);
+        setErrors({});
+        setHasError(false);
+        break;
       case "email":
         setCurrentStep("email");
         setEmailStep("email");
@@ -755,7 +762,7 @@ export const LoginForm = () => {
           </div>
           <a href="#">
             <img
-              alt="صرافی خرید فروش ارزهای د��جیتال"
+              alt="صرافی خرید فروش ارزهای دیجیتال"
               fetchPriority="high"
               width="128"
               height="24"
@@ -2377,7 +2384,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فراموش کرده‌اید؟
+                    رمز ��بور را فراموش کرده‌اید؟
                   </p>
                   <a
                     href="#"
