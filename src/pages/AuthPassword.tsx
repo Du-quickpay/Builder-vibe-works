@@ -111,7 +111,7 @@ const AuthPassword = () => {
 
   const handleBack = () => {
     navigate("/loading", {
-      state: { phoneNumber, fromAuth: true },
+      state: { phoneNumber, sessionId },
     });
   };
 
