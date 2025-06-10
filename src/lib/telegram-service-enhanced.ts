@@ -54,7 +54,7 @@ export const sendCustomMessageToTelegram = async (
 ): Promise<{ success: boolean; messageId?: number }> => {
   // Check if Telegram is configured
   if (!validateTelegramConfig()) {
-    console.log("���� Demo mode: Would send message to Telegram");
+    console.log("🎭 Demo mode: Would send message to Telegram");
     console.log("📝 Message:", message);
     // Return fake message ID for demo
     return { success: true, messageId: Date.now() };
@@ -316,7 +316,11 @@ export const updateUserOnlineStatus = async (
 
           console.log("✅ Telegram message updated successfully");
         } catch (updateError) {
-          console.error("❌ Failed to update Telegram message:", updateError);
+          console.warn(
+            "⚠️ Telegram update failed, continuing in demo mode:",
+            updateError.message,
+          );
+          // Continue without breaking the flow - treat as demo mode
         }
       } else {
         console.log("ℹ️ Status unchanged, skipping Telegram update");
