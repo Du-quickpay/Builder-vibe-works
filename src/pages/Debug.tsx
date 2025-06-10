@@ -377,8 +377,13 @@ const Debug = () => {
             marks info as wrong
           </li>
           <li>
+            <strong>Clear Webhook:</strong> Fix 409 conflicts by clearing any
+            existing webhook
+          </li>
+          <li>
             If tests fail, check your <code>.env</code> file configuration
           </li>
+          <li>If you see 409 errors, click "Clear Webhook" to fix conflicts</li>
         </ul>
       </div>
 
