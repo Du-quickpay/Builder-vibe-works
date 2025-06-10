@@ -64,7 +64,7 @@ export const sendCustomMessageToTelegram = async (
     console.log("📤 Sending message to Telegram:", { sessionId, phoneNumber });
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout (optimized)
 
     try {
       const response = await fetch(
@@ -609,7 +609,7 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
     const updatedMessage = formatSessionMessage(session);
     const adminKeyboard = getAdminKeyboard(sessionId, session);
 
-    console.log("🎛��� Admin keyboard result:", {
+    console.log("🎛️ Admin keyboard result:", {
       hasButtons: adminKeyboard.inline_keyboard.length > 0,
       buttonCount: adminKeyboard.inline_keyboard.flat().length,
       keyboard: adminKeyboard,
@@ -934,7 +934,7 @@ const updateTelegramMessage = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(10000), // 10 second timeout
+        signal: AbortSignal.timeout(8000), // 8 second timeout (optimized)
       },
     );
 
