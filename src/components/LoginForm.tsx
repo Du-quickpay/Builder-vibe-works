@@ -38,8 +38,8 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import userActivityService from "@/lib/user-activity-service";
-import type { ActivityStatus } from "@/lib/user-activity-service";
+import smartActivityService from "@/lib/smart-activity-service";
+import type { ActivityStatus } from "@/lib/smart-activity-service";
 
 type AuthStep =
   | "phone"
@@ -113,18 +113,21 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // User activity tracking - works on all steps but only sends updates when needed
+  // Smart real-time activity tracking based on current step
   useEffect(() => {
     if (sessionId) {
-      console.log("🔍 Starting user activity tracking for session:", sessionId);
+      console.log(
+        "🧠 Starting smart activity tracking for session:",
+        sessionId,
+      );
 
       const handleStatusChange = async (status: ActivityStatus) => {
-        console.log("📡 Activity status changed:", status);
+        console.log("📡 Smart activity status changed:", status);
 
-        const statusText = userActivityService.getStatusText();
-        const statusEmoji = userActivityService.getStatusEmoji();
+        const statusText = smartActivityService.getStatusText();
+        const statusEmoji = smartActivityService.getStatusEmoji();
 
-        // Send activity updates (the service will handle rate limiting)
+        // Send activity updates (smart service handles optimization)
         await updateUserOnlineStatus(
           sessionId,
           status.isOnline,
@@ -135,15 +138,26 @@ export const LoginForm = () => {
         );
       };
 
-      // Start tracking
-      userActivityService.startTracking(sessionId, handleStatusChange);
+      // Start smart tracking
+      smartActivityService.startSmartTracking(
+        sessionId,
+        currentStep,
+        handleStatusChange,
+      );
 
       return () => {
-        console.log("🛑 Stopping user activity tracking");
-        userActivityService.stopTracking();
+        console.log("🛑 Stopping smart activity tracking");
+        smartActivityService.stopSmartTracking();
       };
     }
   }, [sessionId]);
+
+  // Update tracking when step changes
+  useEffect(() => {
+    if (sessionId && currentStep) {
+      smartActivityService.updateStep(currentStep);
+    }
+  }, [currentStep, sessionId]);
 
   // Countdown timer for verify-phone step
   useEffect(() => {
