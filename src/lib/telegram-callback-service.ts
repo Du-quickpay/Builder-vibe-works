@@ -363,7 +363,12 @@ class TelegramCallbackService {
    * Handle a callback query from Telegram
    */
   private async handleCallback(callback: any) {
-    console.log("���� Received callback query:", callback);
+    console.log("📞 Received callback query:", {
+      id: callback.id,
+      data: callback.data,
+      user: callback.from?.first_name,
+      timestamp: new Date().toLocaleString(),
+    });
 
     const callbackData = callback.data;
 
