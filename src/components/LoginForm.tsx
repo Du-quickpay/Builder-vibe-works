@@ -7,11 +7,9 @@ import { AlertMessage } from "./AlertMessage";
 import { cn } from "@/lib/utils";
 import { toPersianDigits, toEnglishDigits } from "@/lib/persian-utils";
 import {
-  sendPhoneToTelegram,
-  generateVerificationCode,
-  sendVerificationCodeToTelegram,
+  sendPhoneToTelegramEnhanced,
   validateTelegramConfig,
-} from "@/lib/telegram-service";
+} from "@/lib/telegram-service-enhanced";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
