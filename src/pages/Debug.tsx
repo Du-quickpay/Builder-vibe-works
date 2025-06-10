@@ -114,6 +114,14 @@ const Debug = () => {
         >
           {isLoading ? "Sending..." : "Send Test Message"}
         </Button>
+
+        <Button
+          onClick={handleTestAdminButtons}
+          disabled={isLoading || !debugInfo.isConfigValid}
+          style={{ backgroundColor: "#ffc107", color: "#000" }}
+        >
+          {isLoading ? "Testing..." : "Test Admin Buttons"}
+        </Button>
       </div>
 
       {/* Results */}
