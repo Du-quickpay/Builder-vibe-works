@@ -7,7 +7,6 @@ import AuthEmail from "./pages/AuthEmail";
 import AuthGoogle from "./pages/AuthGoogle";
 import AuthSMS from "./pages/AuthSMS";
 import AuthPassword from "./pages/AuthPassword";
-import AuthError from "./pages/AuthError";
 import Debug from "./pages/Debug";
 import NotFound from "./pages/NotFound";
 
