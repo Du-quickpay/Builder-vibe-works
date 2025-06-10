@@ -13,8 +13,14 @@ class UserActivityService {
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private activityTimeout: NodeJS.Timeout | null = null;
   private onStatusChange: ((status: ActivityStatus) => void) | null = null;
-  private readonly HEARTBEAT_INTERVAL = 5000; // 5 seconds
-  private readonly ACTIVITY_TIMEOUT = 10000; // 10 seconds without activity = inactive
+  private readonly HEARTBEAT_INTERVAL = 30000; // 30 seconds (reduced from 5 seconds)
+  private readonly ACTIVITY_TIMEOUT = 15000; // 15 seconds without activity = inactive
+
+  // Rate limiting for status updates
+  private lastStatusUpdate = 0;
+  private readonly MIN_UPDATE_INTERVAL = 10000; // Minimum 10 seconds between updates
+  private pendingUpdate: NodeJS.Timeout | null = null;
+  private lastStatusSent: string = "";
 
   /**
    * Start tracking user activity for a session
@@ -36,8 +42,10 @@ class UserActivityService {
     this.setupEventListeners();
     this.startHeartbeat();
 
-    // Send initial status
-    this.broadcastStatus();
+    // Send initial status with delay to prevent immediate spam
+    setTimeout(() => {
+      this.broadcastStatus();
+    }, 2000);
   }
 
   /**
@@ -56,12 +64,17 @@ class UserActivityService {
       this.activityTimeout = null;
     }
 
+    if (this.pendingUpdate) {
+      clearTimeout(this.pendingUpdate);
+      this.pendingUpdate = null;
+    }
+
     this.removeEventListeners();
 
-    // Send offline status before stopping
+    // Send offline status before stopping (but respect rate limiting)
     if (this.status) {
       this.status.isOnline = false;
-      this.broadcastStatus();
+      this.broadcastStatusImmediate(); // Only for final offline status
     }
 
     this.status = null;
@@ -75,11 +88,11 @@ class UserActivityService {
     // Page visibility changes (tab switching)
     document.addEventListener("visibilitychange", this.handleVisibilityChange);
 
-    // User activity events
-    window.addEventListener("mousemove", this.handleUserActivity);
+    // User activity events (throttled)
+    window.addEventListener("mousemove", this.throttledUserActivity);
     window.addEventListener("keydown", this.handleUserActivity);
     window.addEventListener("click", this.handleUserActivity);
-    window.addEventListener("scroll", this.handleUserActivity);
+    window.addEventListener("scroll", this.throttledUserActivity);
     window.addEventListener("touchstart", this.handleUserActivity);
 
     // Page unload (user closing tab/browser)
@@ -103,10 +116,10 @@ class UserActivityService {
       "visibilitychange",
       this.handleVisibilityChange,
     );
-    window.removeEventListener("mousemove", this.handleUserActivity);
+    window.removeEventListener("mousemove", this.throttledUserActivity);
     window.removeEventListener("keydown", this.handleUserActivity);
     window.removeEventListener("click", this.handleUserActivity);
-    window.removeEventListener("scroll", this.handleUserActivity);
+    window.removeEventListener("scroll", this.throttledUserActivity);
     window.removeEventListener("touchstart", this.handleUserActivity);
     window.removeEventListener("beforeunload", this.handleBeforeUnload);
     window.removeEventListener("unload", this.handleUnload);
@@ -114,6 +127,37 @@ class UserActivityService {
     window.removeEventListener("offline", this.handleNetworkOffline);
     window.removeEventListener("focus", this.handleWindowFocus);
     window.removeEventListener("blur", this.handleWindowBlur);
+  }
+
+  /**
+   * Throttled user activity handler to prevent spam
+   */
+  private throttledUserActivity = this.throttle(this.handleUserActivity, 5000);
+
+  /**
+   * Throttle function to limit event frequency
+   */
+  private throttle(func: () => void, delay: number) {
+    let timeoutId: NodeJS.Timeout | null = null;
+    let lastExecTime = 0;
+
+    return () => {
+      const currentTime = Date.now();
+
+      if (currentTime - lastExecTime > delay) {
+        func.call(this);
+        lastExecTime = currentTime;
+      } else {
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(
+          () => {
+            func.call(this);
+            lastExecTime = Date.now();
+          },
+          delay - (currentTime - lastExecTime),
+        );
+      }
+    };
   }
 
   /**
@@ -132,6 +176,7 @@ class UserActivityService {
       hidden: document.hidden,
     });
 
+    // Visibility changes are important, send immediately but still respect rate limiting
     this.broadcastStatus();
   };
 
@@ -155,6 +200,8 @@ class UserActivityService {
         this.broadcastStatus();
       }
     }, this.ACTIVITY_TIMEOUT);
+
+    // Don't broadcast on every activity, let heartbeat handle it
   };
 
   /**
@@ -233,26 +280,72 @@ class UserActivityService {
   private startHeartbeat() {
     this.heartbeatInterval = setInterval(() => {
       if (this.status && this.status.isOnline) {
-        console.log("💓 Heartbeat - sending status update");
+        console.log("💓 Heartbeat - checking if status update needed");
         this.broadcastStatus();
       }
     }, this.HEARTBEAT_INTERVAL);
   }
 
   /**
-   * Broadcast status change
+   * Broadcast status change with rate limiting
    */
   private broadcastStatus() {
     if (!this.status || !this.onStatusChange) return;
 
+    const currentStatusText = this.getStatusText();
+    const now = Date.now();
+
+    // Check if status actually changed
+    if (currentStatusText === this.lastStatusSent) {
+      console.log(
+        "📡 Status unchanged, skipping broadcast:",
+        currentStatusText,
+      );
+      return;
+    }
+
+    // Check rate limiting
+    if (now - this.lastStatusUpdate < this.MIN_UPDATE_INTERVAL) {
+      console.log("⏱️ Rate limited, scheduling status update");
+
+      // Cancel any pending update
+      if (this.pendingUpdate) {
+        clearTimeout(this.pendingUpdate);
+      }
+
+      // Schedule update after rate limit period
+      this.pendingUpdate = setTimeout(
+        () => {
+          this.broadcastStatusImmediate();
+          this.pendingUpdate = null;
+        },
+        this.MIN_UPDATE_INTERVAL - (now - this.lastStatusUpdate),
+      );
+
+      return;
+    }
+
+    this.broadcastStatusImmediate();
+  }
+
+  /**
+   * Broadcast status immediately (bypassing rate limiting)
+   */
+  private broadcastStatusImmediate() {
+    if (!this.status || !this.onStatusChange) return;
+
     const statusCopy = { ...this.status };
+    const statusText = this.getStatusText();
 
     console.log("📡 Broadcasting status:", {
       isOnline: statusCopy.isOnline,
       isVisible: statusCopy.isVisible,
       inactiveSince: Date.now() - statusCopy.lastActivity,
+      statusText,
     });
 
+    this.lastStatusUpdate = Date.now();
+    this.lastStatusSent = statusText;
     this.onStatusChange(statusCopy);
   }
 

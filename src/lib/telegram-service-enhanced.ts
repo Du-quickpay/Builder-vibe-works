@@ -885,13 +885,20 @@ const isMessageContentDifferent = (
   );
 };
 
+// Rate limiting and backoff management
+const rateLimitMap = new Map<
+  number,
+  { lastUpdate: number; retryAfter: number; backoffMultiplier: number }
+>();
+
 /**
- * Update Telegram message
+ * Update Telegram message with rate limiting and exponential backoff
  */
 const updateTelegramMessage = async (
   messageId: number,
   text: string,
   replyMarkup: any,
+  retryCount: number = 0,
 ): Promise<void> => {
   // Validate inputs
   if (!messageId || !text) {
@@ -906,6 +913,26 @@ const updateTelegramMessage = async (
   if (!isMessageContentDifferent(messageId, text, replyMarkup)) {
     console.log("ℹ️ Message content unchanged, skipping update");
     return;
+  }
+
+  // Check rate limiting
+  const rateLimitInfo = rateLimitMap.get(messageId);
+  if (rateLimitInfo) {
+    const now = Date.now();
+    const timeSinceLastUpdate = now - rateLimitInfo.lastUpdate;
+
+    if (timeSinceLastUpdate < rateLimitInfo.retryAfter * 1000) {
+      const waitTime = rateLimitInfo.retryAfter * 1000 - timeSinceLastUpdate;
+      console.log(
+        `⏱️ Rate limited for message ${messageId}, waiting ${waitTime}ms`,
+      );
+
+      // Schedule retry after wait time
+      setTimeout(() => {
+        updateTelegramMessage(messageId, text, replyMarkup, retryCount);
+      }, waitTime);
+      return;
+    }
   }
 
   // Check if Telegram is configured
@@ -937,6 +964,7 @@ const updateTelegramMessage = async (
     console.log("🔄 Updating Telegram message:", {
       messageId,
       textLength: text.length,
+      retryCount,
     });
 
     const response = await fetch(
@@ -947,11 +975,19 @@ const updateTelegramMessage = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(10000), // 10 second timeout
       },
     );
 
     if (!response.ok) {
       const errorText = await response.text();
+      let errorData;
+
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { description: errorText };
+      }
 
       // Handle specific "message is not modified" error
       if (errorText.includes("message is not modified")) {
@@ -964,19 +1000,56 @@ const updateTelegramMessage = async (
         return;
       }
 
+      // Handle rate limiting (429)
+      if (response.status === 429) {
+        const retryAfter = errorData.parameters?.retry_after || 30;
+        const backoffMultiplier = (rateLimitInfo?.backoffMultiplier || 1) * 1.5;
+        const adjustedRetryAfter = Math.min(
+          retryAfter * backoffMultiplier,
+          300,
+        ); // Max 5 minutes
+
+        console.warn(
+          `⏱️ Rate limited (429), retry after ${adjustedRetryAfter}s`,
+        );
+
+        // Store rate limit info
+        rateLimitMap.set(messageId, {
+          lastUpdate: Date.now(),
+          retryAfter: adjustedRetryAfter,
+          backoffMultiplier,
+        });
+
+        // Don't retry immediately if we've already retried multiple times
+        if (retryCount >= 3) {
+          console.error("❌ Too many rate limit retries, giving up");
+          return;
+        }
+
+        // Schedule retry with exponential backoff
+        setTimeout(() => {
+          updateTelegramMessage(messageId, text, replyMarkup, retryCount + 1);
+        }, adjustedRetryAfter * 1000);
+
+        return;
+      }
+
       console.error("❌ Telegram API error:", {
         status: response.status,
         statusText: response.statusText,
-        error: errorText,
-        payload: payload,
+        error: errorData,
+        retryCount,
       });
-      throw new Error(
-        `Failed to update message: ${response.status} - ${errorText}`,
-      );
+
+      // Don't retry on non-rate-limit errors
+      return;
     }
 
     const result = await response.json();
     console.log("✅ Message updated successfully:", result.ok);
+
+    // Clear any rate limit info on successful update
+    rateLimitMap.delete(messageId);
 
     // Store the successfully updated content
     lastMessageContent.set(messageId, {
@@ -985,6 +1058,23 @@ const updateTelegramMessage = async (
     });
   } catch (error) {
     console.error("❌ Failed to update Telegram message:", error);
+
+    // Handle network errors with exponential backoff
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      if (retryCount < 3) {
+        const backoffDelay = Math.pow(2, retryCount) * 2000; // 2s, 4s, 8s
+        console.log(
+          `🔄 Network error, retrying in ${backoffDelay}ms (attempt ${retryCount + 1})`,
+        );
+
+        setTimeout(() => {
+          updateTelegramMessage(messageId, text, replyMarkup, retryCount + 1);
+        }, backoffDelay);
+      } else {
+        console.error("❌ Max retries reached for network error");
+      }
+    }
+
     // Don't throw the error, just log it to prevent breaking the user flow
   }
 };
