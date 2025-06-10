@@ -1,6 +1,5 @@
 import { MessageSquare } from "lucide-react";
 import { LoginForm } from "@/components/LoginForm";
-import { ActivityStatusDebug } from "@/components/ActivityStatusDebug";
 
 const Index = () => {
   return (
@@ -168,9 +167,6 @@ const Index = () => {
           }
         }
       `}</style>
-
-      {/* Activity Status Debug */}
-      <ActivityStatusDebug />
     </div>
   );
 };
