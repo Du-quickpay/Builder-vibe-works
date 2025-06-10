@@ -387,18 +387,6 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   const buttons = [];
 
-  // First row: Always show phone number wrong button (after phone verification)
-  buttons.push([
-    {
-      text: "❌ شماره اشتباه",
-      callback_data: `incorrect_phone_${sessionId}`,
-    },
-    {
-      text: "❌ کد تایید اشتباه",
-      callback_data: `incorrect_verification_${sessionId}`,
-    },
-  ]);
-
   // Second section: Authentication method buttons (show if not attempted yet)
   const authRow = [];
 
