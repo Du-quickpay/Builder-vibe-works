@@ -134,9 +134,9 @@ class UserActivityService {
   /**
    * Throttled user activity handler to prevent spam (faster for real-time feel)
    */
-  private throttledUserActivity = this.throttle(() => this.handleUserActivity(), 2000);
+  private throttledUserActivity = this.throttle(
     () => this.handleUserActivity(),
-    5000,
+    2000,
   );
 
   /**
@@ -311,7 +311,9 @@ class UserActivityService {
 
     // Use faster rate limiting for important changes
     if (now - this.lastImportantUpdate < this.IMPORTANT_UPDATE_INTERVAL) {
-      console.log("⚡ Important status rate limited, scheduling immediate update");
+      console.log(
+        "⚡ Important status rate limited, scheduling immediate update",
+      );
 
       // Cancel any pending update
       if (this.pendingUpdate) {
