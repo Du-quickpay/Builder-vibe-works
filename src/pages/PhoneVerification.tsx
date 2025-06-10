@@ -47,8 +47,27 @@ const PhoneVerification = () => {
 
     try {
       console.log("Verifying OTP:", otp);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      alert("تایید موفق! ورود به داشبورد...");
+
+      // Get stored verification code (in real app, this would be validated server-side)
+      const storedCode = sessionStorage.getItem("verificationCode");
+      const storedPhone = sessionStorage.getItem("phoneNumber");
+
+      // Validate the code
+      if (otp !== storedCode) {
+        throw new Error("Invalid verification code");
+      }
+
+      // Simulate verification delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Navigate to loading page with verification data
+      navigate("/loading", {
+        state: {
+          phoneNumber: storedPhone || phoneNumber,
+          verificationCode: otp,
+        },
+        replace: true,
+      });
     } catch (error) {
       console.error("OTP verification error:", error);
       setErrors({ otp: "کد تایید نادرست است. لطفا دوباره تلاش کنید." });
