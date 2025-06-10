@@ -162,56 +162,51 @@ class TelegramCallbackService {
    * Poll for new updates from Telegram
    */
   private async pollUpdates() {
-    if (!this.validateToken()) {
-      console.log("🎭 Demo mode: Simulating callback polling");
+    // Check if we should continue polling
+    if (!this.isPolling) {
+      return;
+    }
 
-      // In demo mode, we'll check for simulated callbacks in localStorage
+    // Handle demo mode
+    if (!this.validateToken()) {
+      console.log("🎭 Demo mode: Checking for simulated callbacks");
       this.checkForSimulatedCallbacks();
+      this.scheduleNextPoll();
+      return;
+    }
+
+    // Check network status
+    if (!this.isOnline) {
+      console.log("🌐 Network offline, skipping poll");
+      this.scheduleNextPoll();
       return;
     }
 
     try {
+      // Create AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&timeout=10&limit=1`,
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&timeout=5&limit=1`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
+          signal: controller.signal,
         },
       );
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        if (response.status === 409) {
-          console.warn(
-            "⚠️ Telegram 409 Conflict - clearing webhook and retrying...",
-          );
-          await this.clearWebhook();
-          // Wait a bit before next poll
-          setTimeout(() => {}, 5000);
-          return;
-        }
-
-        console.error("❌ Failed to get Telegram updates:", response.status);
-
-        // If we get repeated errors, slow down polling
-        if (this.consecutiveErrors > 5) {
-          console.log("⏸️ Too many errors, temporarily stopping polling...");
-          this.stopPolling();
-          setTimeout(() => {
-            if (this.handlers.size > 0) {
-              console.log("🔄 Restarting polling after error cooldown...");
-              this.startPolling();
-            }
-          }, 30000); // Wait 30 seconds before restarting
-        }
-
-        this.consecutiveErrors++;
+        await this.handleHttpError(response);
         return;
       }
 
-      // Reset error counter on successful request
-      this.consecutiveErrors = 0;
+      // Success! Reset error handling
+      this.onSuccessfulPoll();
 
       const data = await response.json();
       const updates: TelegramUpdate[] = data.result || [];
@@ -223,10 +218,79 @@ class TelegramCallbackService {
           await this.handleCallback(update.callback_query);
         }
       }
+
     } catch (error) {
-      console.error("❌ Error polling Telegram updates:", error);
-      this.consecutiveErrors++;
+      await this.handleNetworkError(error);
+    } finally {
+      // Schedule next poll
+      this.scheduleNextPoll();
     }
+  }
+
+  /**
+   * Handle successful poll
+   */
+  private onSuccessfulPoll() {
+    this.consecutiveErrors = 0;
+    this.currentPollDelay = 3000; // Reset to normal delay
+  }
+
+  /**
+   * Handle HTTP errors
+   */
+  private async handleHttpError(response: Response) {
+    if (response.status === 409) {
+      console.warn("⚠️ Telegram 409 Conflict - clearing webhook...");
+      await this.clearWebhook();
+      this.currentPollDelay = 10000; // Wait longer after 409
+      return;
+    }
+
+    console.error(`❌ HTTP ${response.status} error from Telegram API`);
+    this.incrementErrorsAndAdjustDelay();
+  }
+
+  /**
+   * Handle network errors (fetch failures)
+   */
+  private async handleNetworkError(error: any) {
+    if (error.name === 'AbortError') {
+      console.warn("⏰ Request timeout - network may be slow");
+    } else {
+      console.warn("🌐 Network error (likely connection issue):", error.message);
+    }
+
+    this.incrementErrorsAndAdjustDelay();
+  }
+
+  /**
+   * Increment error count and adjust polling delay
+   */
+  private incrementErrorsAndAdjustDelay() {
+    this.consecutiveErrors++;
+
+    // Exponential backoff
+    this.currentPollDelay = Math.min(
+      this.currentPollDelay * 1.5,
+      this.maxPollDelay
+    );
+
+    console.log(`⚠️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay/1000}s`);
+
+    // Stop polling after too many errors
+    if (this.consecutiveErrors >= 10) {
+      console.log("❌ Too many consecutive errors, stopping polling");
+      this.stopPolling();
+
+      // Auto-restart after 60 seconds if handlers still exist
+      setTimeout(() => {
+        if (this.handlers.size > 0 && !this.isPolling) {
+          console.log("🔄 Auto-restarting polling after error cooldown");
+          this.startPolling();
+        }
+      }, 60000);
+    }
+  }
   }
 
   /**
