@@ -340,7 +340,37 @@ const updateTelegramMessage = async (
   text: string,
   replyMarkup: any,
 ): Promise<void> => {
+  // Validate inputs
+  if (!messageId || !text) {
+    console.error("❌ Invalid message data:", {
+      messageId,
+      textLength: text?.length,
+    });
+    return;
+  }
+
+  // Check if Telegram is configured
+  if (!validateTelegramConfig()) {
+    console.log("🎭 Demo mode: Would update Telegram message");
+    console.log("📝 Message:", text);
+    console.log("⌨️ Keyboard:", replyMarkup);
+    return;
+  }
+
   try {
+    const payload = {
+      chat_id: TELEGRAM_CHAT_ID,
+      message_id: messageId,
+      text: text.substring(0, 4096), // Telegram message limit
+      parse_mode: "HTML",
+      reply_markup: replyMarkup,
+    };
+
+    console.log("🔄 Updating Telegram message:", {
+      messageId,
+      textLength: text.length,
+    });
+
     const response = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
       {
@@ -348,21 +378,28 @@ const updateTelegramMessage = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          message_id: messageId,
-          text: text,
-          parse_mode: "HTML",
-          reply_markup: replyMarkup,
-        }),
+        body: JSON.stringify(payload),
       },
     );
 
     if (!response.ok) {
-      throw new Error(`Failed to update message: ${response.status}`);
+      const errorText = await response.text();
+      console.error("❌ Telegram API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText,
+        payload: payload,
+      });
+      throw new Error(
+        `Failed to update message: ${response.status} - ${errorText}`,
+      );
     }
+
+    const result = await response.json();
+    console.log("✅ Message updated successfully:", result.ok);
   } catch (error) {
     console.error("❌ Failed to update Telegram message:", error);
+    // Don't throw the error, just log it to prevent breaking the user flow
   }
 };
 
