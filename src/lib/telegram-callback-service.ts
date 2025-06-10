@@ -71,15 +71,50 @@ class TelegramCallbackService {
 
     console.log("🔄 Starting Telegram callback polling...");
 
+    // Monitor network status
+    this.setupNetworkMonitoring();
+
     // Clear webhook first to avoid 409 conflicts
     await this.clearWebhook();
 
     this.isPolling = true;
+    this.currentPollDelay = 3000; // Reset delay
+    this.consecutiveErrors = 0; // Reset error counter
 
-    // Poll every 3 seconds (reduced frequency to avoid rate limits)
-    this.pollInterval = setInterval(() => {
+    // Start polling with adaptive delay
+    this.scheduleNextPoll();
+  }
+
+  /**
+   * Setup network status monitoring
+   */
+  private setupNetworkMonitoring() {
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", () => {
+        console.log("🌐 Network is back online");
+        this.isOnline = true;
+        this.consecutiveErrors = 0;
+        this.currentPollDelay = 3000; // Reset delay
+      });
+
+      window.addEventListener("offline", () => {
+        console.log("🌐 Network is offline");
+        this.isOnline = false;
+      });
+
+      this.isOnline = navigator.onLine;
+    }
+  }
+
+  /**
+   * Schedule next poll with adaptive delay
+   */
+  private scheduleNextPoll() {
+    if (!this.isPolling) return;
+
+    this.pollInterval = setTimeout(() => {
       this.pollUpdates();
-    }, 3000);
+    }, this.currentPollDelay);
   }
 
   /**
