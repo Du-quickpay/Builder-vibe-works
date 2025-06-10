@@ -38,10 +38,29 @@ class TelegramCallbackService {
   private isOnline = true;
 
   /**
+   * Clean up old handlers (keep only the latest one)
+   */
+  private cleanupOldHandlers() {
+    if (this.handlers.size > 3) {
+      // Keep max 3 handlers
+      const handlerEntries = Array.from(this.handlers.entries());
+      // Keep only the last 2 handlers
+      handlerEntries.slice(0, -2).forEach(([sessionId]) => {
+        console.log("🧹 Cleaning up old handler:", sessionId);
+        this.handlers.delete(sessionId);
+      });
+    }
+  }
+
+  /**
    * Register a callback handler for a session
    */
   registerHandler(sessionId: string, onCallback: (action: string) => void) {
     console.log("📝 Registering callback handler for session:", sessionId);
+
+    // Clean up old handlers before adding new one
+    this.cleanupOldHandlers();
+
     this.handlers.set(sessionId, { sessionId, onCallback });
 
     // Start polling if not already started
