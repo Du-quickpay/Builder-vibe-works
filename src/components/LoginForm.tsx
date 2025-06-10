@@ -137,7 +137,7 @@ export const LoginForm = () => {
           setCurrentStep("google");
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد ص��یح را وارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "sms":
@@ -172,14 +172,7 @@ export const LoginForm = () => {
         setErrors({});
         setHasError(false);
         break;
-      case "sms":
-        setCurrentStep("verify-phone");
-        setVerifyCode("");
-        setCountdown(60);
-        setIsSmsCodeMode(true);
-        setErrors({});
-        setHasError(false);
-        break;
+
       case "email":
         setCurrentStep("email");
         setEmailStep("email");
@@ -219,7 +212,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه ال��امی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -259,7 +252,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ��رسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -371,7 +364,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خا��ی باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
