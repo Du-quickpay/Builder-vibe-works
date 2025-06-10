@@ -1190,3 +1190,22 @@ const formatSessionMessage = (session: UserSession): string => {
 
   return message;
 };
+
+const formatInitialMessage = (session: UserSession): string => {
+  return formatSessionMessage(session);
+};
+
+/**
+ * Validate Telegram configuration
+ */
+export const validateTelegramConfig = (): boolean => {
+  if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN") {
+    return false;
+  }
+
+  if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID") {
+    return false;
+  }
+
+  return true;
+};
