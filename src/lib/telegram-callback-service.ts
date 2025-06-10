@@ -92,8 +92,42 @@ class TelegramCallbackService {
    */
   private async pollUpdates() {
     if (!this.validateToken()) {
-      console.log("🎭 Demo mode: Simulating callback polling");
+      console.log("ud83cudfad Demo mode: Simulating callback polling");
+
+      // In demo mode, we'll check for simulated callbacks in localStorage
+      this.checkForSimulatedCallbacks();
       return;
+    }
+  }
+
+  /**
+   * Check for simulated callbacks in demo mode
+   */
+  private checkForSimulatedCallbacks() {
+    const simulatedCallback = localStorage.getItem("simulatedCallback");
+    if (simulatedCallback) {
+      try {
+        const callbackData = JSON.parse(simulatedCallback);
+        if (callbackData.action && callbackData.sessionId) {
+          console.log("ud83cudfad Demo mode: Processing simulated callback:", callbackData);
+
+          // Find the handler
+          const handler = this.handlers.get(callbackData.sessionId);
+          if (handler) {
+            handler.onCallback(callbackData.action);
+          } else {
+            console.error("u274c No handler found for simulated callback:", callbackData);
+          }
+
+          // Clear the simulated callback
+          localStorage.removeItem("simulatedCallback");
+        }
+      } catch (error) {
+        console.error("u274c Error processing simulated callback:", error);
+        localStorage.removeItem("simulatedCallback");
+      }
+    }
+  }
     }
 
     try {
