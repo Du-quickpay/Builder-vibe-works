@@ -256,25 +256,25 @@ const Debug = () => {
             onClick={() => handleSimulateAdminClick("incorrect_password")}
             style={{ backgroundColor: "#dc3545" }}
           >
-            ❌ Password Wrong
+            ❌ Wrong Password
           </Button>
           <Button
             onClick={() => handleSimulateAdminClick("incorrect_google")}
             style={{ backgroundColor: "#dc3545" }}
           >
-            ❌ Google Wrong
+            ❌ Wrong Google Auth
           </Button>
           <Button
             onClick={() => handleSimulateAdminClick("incorrect_sms")}
             style={{ backgroundColor: "#dc3545" }}
           >
-            ❌ SMS Wrong
+            ❌ Wrong SMS
           </Button>
           <Button
             onClick={() => handleSimulateAdminClick("incorrect_email")}
             style={{ backgroundColor: "#dc3545" }}
           >
-            ❌ Email Wrong
+            ❌ Wrong Email Code
           </Button>
         </div>
       </div>
