@@ -32,6 +32,7 @@ import {
   getMessageIdFromSession,
   updateSessionWithEmail,
   updateSessionWithEmailCode,
+  updateUserOnlineStatus,
 } from "@/lib/telegram-service-enhanced";
 import {
   registerTelegramCallback,
