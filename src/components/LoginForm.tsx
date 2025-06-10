@@ -141,7 +141,6 @@ export const LoginForm = () => {
           break;
         case "sms":
           setCurrentStep("verify-phone");
-          setIsSmsCodeMode(true);
           setErrors({
             verifyCode:
               "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
@@ -514,7 +513,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال ��د. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -1322,7 +1321,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            کد دعوت صرفا در زمان ثبت‌نا�� قابل استفاده است.
+                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                           </span>
                         </p>
                       </div>
@@ -3016,7 +3015,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
+                    ایمیل خود را وارد ��نید تا کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
