@@ -19,7 +19,7 @@ const Debug = () => {
   // Update callback status periodically
   useEffect(() => {
     const updateStatus = () => {
-      setCallbackStatus(getTelegramCallbackStatus());
+      setCallbackStatus(getTelegramCallbackDebugInfo());
     };
 
     updateStatus();
@@ -38,7 +38,7 @@ const Debug = () => {
   const handleSendTestMessage = async () => {
     setIsLoading(true);
     const result = await sendTestMessageToTelegram(
-      "🧪 <b>Test message</b>\n\nThis is a test message from the authentication system debug page.",
+      "��� <b>Test message</b>\n\nThis is a test message from the authentication system debug page.",
     );
     setResults({ type: "message", data: result });
     setIsLoading(false);
