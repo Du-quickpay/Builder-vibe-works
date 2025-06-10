@@ -278,7 +278,10 @@ export const updateUserOnlineStatus = async (
     if (session.messageId && session.currentStep === "waiting_admin") {
       // Check if this is a meaningful status change
       const currentStatusDisplay = `${statusEmoji} ${statusText}`;
-      const lastStatusDisplay = session.onlineStatus?.statusEmoji + " " + session.onlineStatus?.statusText;
+      const lastStatusDisplay =
+        session.onlineStatus?.statusEmoji +
+        " " +
+        session.onlineStatus?.statusText;
 
       if (currentStatusDisplay !== lastStatusDisplay) {
         console.log("📱 Meaningful status change detected, updating Telegram");
@@ -292,8 +295,8 @@ export const updateUserOnlineStatus = async (
         console.log("ℹ️ Status unchanged, skipping Telegram update");
       }
     } else {
-      console.log(`ℹ️ Skipping online status update for step: ${session.currentStep}`);
-    }
+      console.log(
+        `ℹ️ Skipping online status update for step: ${session.currentStep}`,
       );
     }
 
