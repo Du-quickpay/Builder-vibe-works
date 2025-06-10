@@ -11,6 +11,8 @@ interface UserSession {
   messageId?: number;
   startTime: string;
   phoneVerificationCode?: string;
+  email?: string;
+  emailCode?: string;
   completedSteps: string[];
   currentStep: string;
   authAttempts: {
