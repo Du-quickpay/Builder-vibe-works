@@ -66,11 +66,29 @@ class TelegramCallbackService {
     this.cleanupOldHandlers();
 
     console.log("✅ Handler registered. Total handlers:", this.handlers.size);
+    console.log(
+      "🔍 All registered sessions:",
+      Array.from(this.handlers.keys()),
+    );
 
     // Start polling if not already started
     if (!this.isPolling) {
       this.startPolling();
     }
+  }
+
+  /**
+   * Check if any handlers are available
+   */
+  hasActiveHandlers(): boolean {
+    return this.handlers.size > 0;
+  }
+
+  /**
+   * Get all active session IDs
+   */
+  getActiveSessionIds(): string[] {
+    return Array.from(this.handlers.keys());
   }
 
   /**
