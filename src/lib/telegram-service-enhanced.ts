@@ -627,10 +627,65 @@ export const canAccessAuthStep = (
 };
 
 /**
- * Get session data
+ * Validate Telegram configuration
  */
-export const getSession = (sessionId: string): UserSession | undefined => {
-  return activeSessions.get(sessionId);
+export const validateTelegramConfig = (): boolean => {
+  const hasToken =
+    TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN";
+  const hasChatId = TELEGRAM_CHAT_ID && TELEGRAM_CHAT_ID !== "YOUR_CHAT_ID";
+
+  if (!hasToken || !hasChatId) {
+    console.log("⚠️ Telegram not configured, running in demo mode");
+    return false;
+  }
+
+  return true;
+};
+
+/**
+ * Check network connectivity and Telegram API accessibility
+ */
+export const checkNetworkConnectivity = async (): Promise<boolean> => {
+  try {
+    // First check basic connectivity
+    if (!navigator.onLine) {
+      console.log("🌐 Browser reports offline");
+      return false;
+    }
+
+    // Try a simple network test
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+    try {
+      const response = await fetch("https://httpbin.org/get", {
+        method: "GET",
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        console.log("✅ Network connectivity confirmed");
+        return true;
+      } else {
+        console.log("⚠️ Network test failed:", response.status);
+        return false;
+      }
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError.name === "AbortError") {
+        console.log("⏰ Network test timed out");
+      } else {
+        console.log("🌐 Network test failed:", fetchError.message);
+      }
+      return false;
+    }
+  } catch (error) {
+    console.log("❌ Network check error:", error.message);
+    return false;
+  }
 };
 
 /**
@@ -1208,7 +1263,7 @@ const formatSessionMessage = (session: UserSession): string => {
     switch (step) {
       case "waiting_admin":
         if (isCritical)
-          return { emoji: "🔴", priority: "CRITICAL", urgency: "⚡" };
+          return { emoji: "��", priority: "CRITICAL", urgency: "⚡" };
         if (isUrgent) return { emoji: "🟠", priority: "URGENT", urgency: "⏰" };
         return { emoji: "🟡", priority: "PENDING", urgency: "📋" };
       case "phone_verification":
