@@ -27,10 +27,15 @@ interface UserSession {
 const activeSessions = new Map<string, UserSession>();
 
 /**
- * Generate unique session ID
+ * Generate unique session ID with better collision resistance
  */
 export const generateSessionId = (): string => {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  const timestamp = Date.now().toString(36);
+  const random1 = Math.random().toString(36).substr(2, 8);
+  const random2 = Math.random().toString(36).substr(2, 4);
+  const counter = Math.floor(Math.random() * 1000).toString(36);
+
+  return `${timestamp}_${random1}_${random2}_${counter}`;
 };
 
 /**
