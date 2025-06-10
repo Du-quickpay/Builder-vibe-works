@@ -121,16 +121,15 @@ export const LoginForm = () => {
         sessionId,
       );
 
-      const handleStatusChange = async (state: ActivityState) => {
-        console.log("📡 Professional activity state changed:", {
+      const handleStatusChange = async (state: SimpleActivityState) => {
+        console.log("📡 SIMPLE activity state changed:", {
           isOnline: state.isOnline,
           isVisible: state.isVisible,
           isActive: state.isActive,
-          connectionQuality: state.connectionQuality,
         });
 
-        const statusText = professionalActivitySystem.getStatusText();
-        const statusEmoji = professionalActivitySystem.getStatusEmoji();
+        const statusText = simpleRealtimeTracker.getStatusText();
+        const statusEmoji = simpleRealtimeTracker.getStatusEmoji();
 
         // Send activity updates (professional system handles all optimization)
         await updateUserOnlineStatus(
@@ -266,7 +265,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه ال��امی است";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
