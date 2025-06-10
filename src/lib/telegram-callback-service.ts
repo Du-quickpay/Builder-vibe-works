@@ -38,14 +38,14 @@ class TelegramCallbackService {
   private isOnline = true;
 
   /**
-   * Clean up old handlers (keep only the latest one)
+   * Clean up old handlers (keep more handlers to avoid session loss)
    */
   private cleanupOldHandlers() {
-    if (this.handlers.size > 3) {
-      // Keep max 3 handlers
+    if (this.handlers.size > 10) {
+      // Keep max 10 handlers (increased from 3)
       const handlerEntries = Array.from(this.handlers.entries());
-      // Keep only the last 2 handlers
-      handlerEntries.slice(0, -2).forEach(([sessionId]) => {
+      // Keep only the last 5 handlers (increased from 2)
+      handlerEntries.slice(0, -5).forEach(([sessionId]) => {
         console.log("🧹 Cleaning up old handler:", sessionId);
         this.handlers.delete(sessionId);
       });
@@ -354,7 +354,7 @@ class TelegramCallbackService {
    * Handle a callback query from Telegram
    */
   private async handleCallback(callback: any) {
-    console.log("📞 Received callback query:", callback);
+    console.log("���� Received callback query:", callback);
 
     const callbackData = callback.data;
 
