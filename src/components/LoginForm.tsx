@@ -10,6 +10,7 @@ import {
   sendPhoneToTelegram,
   generateVerificationCode,
   sendVerificationCodeToTelegram,
+  validateTelegramConfig,
 } from "@/lib/telegram-service";
 
 export const LoginForm = () => {
@@ -35,7 +36,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه الزا��ی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
