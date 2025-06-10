@@ -274,13 +274,17 @@ export const updateUserOnlineStatus = async (
 
     activeSessions.set(sessionId, session);
 
-    // Update Telegram message if session is in waiting_admin state
+    // Only update Telegram message if session is in waiting_admin state
     if (session.messageId && session.currentStep === "waiting_admin") {
       const updatedMessage = formatSessionMessage(session);
       await updateTelegramMessage(
         session.messageId,
         updatedMessage,
         getAdminKeyboard(sessionId, session),
+      );
+    } else {
+      console.log(
+        `ℹ️ Skipping online status update for step: ${session.currentStep}`,
       );
     }
 
