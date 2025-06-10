@@ -38,8 +38,8 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import smartActivityService from "@/lib/smart-activity-service";
-import type { ActivityStatus } from "@/lib/smart-activity-service";
+import professionalActivitySystem from "@/lib/professional-activity-system";
+import type { ActivityState } from "@/lib/professional-activity-system";
 
 type AuthStep =
   | "phone"
