@@ -11,8 +11,21 @@ import { getTelegramCallbackStatus } from "@/lib/telegram-callback-service";
 const Debug = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<any>(null);
+  const [callbackStatus, setCallbackStatus] = useState<any>(null);
 
   const debugInfo = createDebugInfo();
+
+  // Update callback status periodically
+  useEffect(() => {
+    const updateStatus = () => {
+      setCallbackStatus(getTelegramCallbackStatus());
+    };
+
+    updateStatus();
+    const interval = setInterval(updateStatus, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleTestConfig = async () => {
     setIsLoading(true);
