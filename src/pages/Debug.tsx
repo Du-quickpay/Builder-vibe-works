@@ -123,6 +123,22 @@ const Debug = () => {
     setIsLoading(false);
   };
 
+  const handleStopPolling = () => {
+    stopTelegramPolling();
+    setResults({
+      type: "polling",
+      data: { success: true, message: "Polling stopped" },
+    });
+  };
+
+  const handleStartPolling = () => {
+    startTelegramPolling();
+    setResults({
+      type: "polling",
+      data: { success: true, message: "Polling started" },
+    });
+  };
+
   return (
     <div
       style={{
