@@ -1,5 +1,6 @@
 import { MessageSquare } from "lucide-react";
 import { LoginForm } from "@/components/LoginForm";
+import { ActivityStatusDebug } from "@/components/ActivityStatusDebug";
 
 const Index = () => {
   return (
@@ -136,7 +137,7 @@ const Index = () => {
             }}
           />
         </span>
-        <span>پشتیبانی والکس</span>
+        <span>پشتیبانی وا��کس</span>
       </button>
 
       <style jsx>{`
