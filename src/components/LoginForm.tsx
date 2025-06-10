@@ -64,6 +64,7 @@ export const LoginForm = () => {
   // Phone verification states
   const [verifyCode, setVerifyCode] = useState("");
   const [countdown, setCountdown] = useState(60);
+  const [isSmsCodeMode, setIsSmsCodeMode] = useState(false);
 
   // Password states
   const [password, setPassword] = useState("");
