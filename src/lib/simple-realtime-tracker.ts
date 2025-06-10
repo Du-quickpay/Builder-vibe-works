@@ -445,7 +445,7 @@ class SimpleRealtimeTracker {
 
       // Check activity consistency
       if (this.state.isActive !== shouldBeActive) {
-        this.debug("🔧 FIXING ACTIVITY STATE", {
+        this.debug("��� FIXING ACTIVITY STATE", {
           stored: this.state.isActive,
           shouldBe: shouldBeActive,
           timeSinceActivity,
@@ -465,7 +465,7 @@ class SimpleRealtimeTracker {
   }
 
   /**
-   * Send update immediately with deduplication
+   * Send update immediately with deduplication and error recovery
    */
   private sendUpdate(reason: string) {
     try {
@@ -506,12 +506,28 @@ class SimpleRealtimeTracker {
       // Store current state as last sent
       this.lastSentState = currentStateSignature;
 
-      // Send the update
-      this.callback({ ...this.state });
+      // Send the update with error recovery
+      try {
+        this.callback({ ...this.state });
+        this.debug("✅ Update sent successfully");
+      } catch (callbackError) {
+        console.warn("⚠️ Callback error (continuing operation):", {
+          error: callbackError.message,
+          reason,
+          timestamp: new Date().toLocaleTimeString(),
+        });
 
-      this.debug("✅ Update sent successfully");
+        // Don't stop tracking just because one update failed
+        // This ensures the real-time tracker continues working even if Telegram fails
+      }
     } catch (error) {
-      console.error("❌ Error sending update:", error);
+      console.warn("⚠️ Error in sendUpdate (continuing operation):", {
+        error: error.message,
+        reason,
+        timestamp: new Date().toLocaleTimeString(),
+      });
+
+      // Continue operation - don't let errors stop the tracker
     }
   }
 }
