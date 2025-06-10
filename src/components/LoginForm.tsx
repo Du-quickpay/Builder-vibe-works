@@ -64,6 +64,7 @@ export const LoginForm = () => {
   // Phone verification states
   const [verifyCode, setVerifyCode] = useState("");
   const [countdown, setCountdown] = useState(60);
+  const [isSmsMode, setIsSmsMode] = useState(false); // Track if user came from Wrong SMS
 
   // Password states
   const [password, setPassword] = useState("");
