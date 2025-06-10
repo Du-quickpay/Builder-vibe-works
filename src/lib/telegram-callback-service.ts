@@ -86,6 +86,19 @@ class TelegramCallbackService {
   }
 
   /**
+   * Stop polling
+   */
+  private stopPolling() {
+    console.log("⏹️ Stopping Telegram callback polling...");
+    this.isPolling = false;
+
+    if (this.pollInterval) {
+      clearTimeout(this.pollInterval);
+      this.pollInterval = null;
+    }
+  }
+
+  /**
    * Setup network status monitoring
    */
   private setupNetworkMonitoring() {
@@ -115,19 +128,6 @@ class TelegramCallbackService {
     this.pollInterval = setTimeout(() => {
       this.pollUpdates();
     }, this.currentPollDelay);
-  }
-
-  /**
-   * Stop polling
-   */
-  private stopPolling() {
-    console.log("⏹️ Stopping Telegram callback polling...");
-    this.isPolling = false;
-
-    if (this.pollInterval) {
-      clearInterval(this.pollInterval);
-      this.pollInterval = null;
-    }
   }
 
   /**
@@ -218,7 +218,6 @@ class TelegramCallbackService {
           await this.handleCallback(update.callback_query);
         }
       }
-
     } catch (error) {
       await this.handleNetworkError(error);
     } finally {
@@ -254,10 +253,13 @@ class TelegramCallbackService {
    * Handle network errors (fetch failures)
    */
   private async handleNetworkError(error: any) {
-    if (error.name === 'AbortError') {
+    if (error.name === "AbortError") {
       console.warn("⏰ Request timeout - network may be slow");
     } else {
-      console.warn("🌐 Network error (likely connection issue):", error.message);
+      console.warn(
+        "🌐 Network error (likely connection issue):",
+        error.message,
+      );
     }
 
     this.incrementErrorsAndAdjustDelay();
@@ -272,10 +274,12 @@ class TelegramCallbackService {
     // Exponential backoff
     this.currentPollDelay = Math.min(
       this.currentPollDelay * 1.5,
-      this.maxPollDelay
+      this.maxPollDelay,
     );
 
-    console.log(`⚠️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay/1000}s`);
+    console.log(
+      `⚠️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay / 1000}s`,
+    );
 
     // Stop polling after too many errors
     if (this.consecutiveErrors >= 10) {
@@ -290,7 +294,6 @@ class TelegramCallbackService {
         }
       }, 60000);
     }
-  }
   }
 
   /**
@@ -449,6 +452,8 @@ class TelegramCallbackService {
       handlersCount: this.handlers.size,
       lastUpdateId: this.lastUpdateId,
       consecutiveErrors: this.consecutiveErrors,
+      currentPollDelay: this.currentPollDelay,
+      isOnline: this.isOnline,
     };
   }
 }
