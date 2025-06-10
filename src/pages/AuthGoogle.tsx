@@ -1,5 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  canAccessAuthStep,
+  updateAuthStep,
+  setUserCurrentStep,
+} from "@/lib/telegram-service-enhanced";
 import { ChevronLeft, Smartphone, Loader2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
