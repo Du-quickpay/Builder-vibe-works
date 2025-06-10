@@ -400,30 +400,42 @@ class TelegramCallbackService {
     console.log("🎯 Parsed callback:", { action, sessionId });
 
     // Find the handler for this session
-    const handler = this.handlers.get(sessionId);
+    let handler = this.handlers.get(sessionId);
+
     if (!handler) {
-      console.warn("⚠️ No handler found for session:", sessionId);
+      console.warn("⚠️ No exact handler found for session:", sessionId);
       console.log("🔍 Available handlers:", Array.from(this.handlers.keys()));
 
-      // Check if there are other handlers (maybe session ID changed due to page refresh)
+      // Try to find a similar or recent session as fallback
       if (this.handlers.size > 0) {
+        // Get the most recent handler (last added)
+        const handlerEntries = Array.from(this.handlers.entries());
+        const mostRecentHandler = handlerEntries[handlerEntries.length - 1];
+
         console.log(
-          "🔄 Found other active handlers, this might be a stale callback",
+          "🔄 Using most recent handler as fallback:",
+          mostRecentHandler[0],
         );
-        // Don't fail completely, just answer the callback
+        handler = mostRecentHandler[1];
+
         await this.answerCallbackQuery(
           callback.id,
-          "ℹ️ Session may have refreshed, please retry",
+          `✅ Using active session for ${action}`,
+        );
+      } else {
+        // No handlers available at all
+        await this.answerCallbackQuery(
+          callback.id,
+          "❌ No active sessions found",
         );
         return;
       }
-
-      // Answer the callback query to remove loading state
+    } else {
+      // Exact handler found
       await this.answerCallbackQuery(
         callback.id,
-        "❌ Session expired or not found",
+        `✅ Redirecting to ${action} authentication`,
       );
-      return;
     }
 
     // Answer the callback query first
