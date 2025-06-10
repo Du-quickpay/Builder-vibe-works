@@ -846,7 +846,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added Complete Auth button");
   }
 
-  console.log("🎛️ Final keyboard:", { inline_keyboard: buttons });
+  console.log("🎛��� Final keyboard:", { inline_keyboard: buttons });
   return { inline_keyboard: buttons };
 };
 
@@ -981,6 +981,24 @@ const updateTelegramMessage = async (
   }
 
   try {
+    // Double-check Telegram configuration before making request
+    if (
+      !TELEGRAM_BOT_TOKEN ||
+      TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN" ||
+      !TELEGRAM_CHAT_ID ||
+      TELEGRAM_CHAT_ID === "YOUR_CHAT_ID"
+    ) {
+      console.log("🎭 Invalid/Demo Telegram config, switching to demo mode");
+      const existing = lastMessageContent.get(messageId);
+      lastMessageContent.set(messageId, {
+        text,
+        replyMarkup: JSON.stringify(replyMarkup),
+        timestamp: Date.now(),
+        updateCount: (existing?.updateCount || 0) + 1,
+      });
+      return;
+    }
+
     const payload: any = {
       chat_id: TELEGRAM_CHAT_ID,
       message_id: messageId,
@@ -997,7 +1015,13 @@ const updateTelegramMessage = async (
       messageId,
       textLength: text.length,
       retryCount,
+      botToken: TELEGRAM_BOT_TOKEN.substring(0, 10) + "...",
+      chatId: TELEGRAM_CHAT_ID,
     });
+
+    // Create abort controller for timeout handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
     const response = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
@@ -1007,9 +1031,11 @@ const updateTelegramMessage = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(8000), // 8 second timeout (optimized)
+        signal: controller.signal,
       },
     );
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
