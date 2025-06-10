@@ -212,7 +212,7 @@ const PhoneVerification = () => {
             >
               {/* Alert Message */}
               <AlertMessage>
-                <span>کد تایید به شماره </span>
+                <span>اطلاعات شماره </span>
                 <b
                   dir="ltr"
                   style={{
@@ -223,7 +223,7 @@ const PhoneVerification = () => {
                 >
                   {maskedPhoneNumber}
                 </b>
-                <span> پیامک شد.</span>
+                <span> به ادمین ارسال شد. در انتظار کد تایید باشید.</span>
               </AlertMessage>
 
               {/* OTP Input Grid */}
@@ -262,7 +262,7 @@ const PhoneVerification = () => {
                   {countdown > 0 ? (
                     <>
                       <span>{toPersianDigits(countdown)}</span>
-                      <span> ثانیه تا ��رسال مجدد کد</span>
+                      <span> ثانیه تا ارسال مجدد کد</span>
                     </>
                   ) : (
                     <button
