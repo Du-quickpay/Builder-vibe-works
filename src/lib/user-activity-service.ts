@@ -13,16 +13,17 @@ class UserActivityService {
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private activityTimeout: NodeJS.Timeout | null = null;
   private onStatusChange: ((status: ActivityStatus) => void) | null = null;
-  private readonly HEARTBEAT_INTERVAL = 15000; // 15 seconds (optimized from 5s)
-  private readonly ACTIVITY_TIMEOUT = 20000; // 20 seconds without activity = inactive
+  private readonly HEARTBEAT_INTERVAL = 30000; // 30 seconds - further optimized
+  private readonly ACTIVITY_TIMEOUT = 30000; // 30 seconds without activity = inactive
 
-  // Optimized rate limiting for better performance
+  // Conservative rate limiting to prevent system overload
   private lastStatusUpdate = 0;
-  private readonly MIN_UPDATE_INTERVAL = 8000; // Minimum 8 seconds between updates (optimized)
-  private readonly IMPORTANT_UPDATE_INTERVAL = 3000; // 3 seconds for important changes (optimized)
+  private readonly MIN_UPDATE_INTERVAL = 15000; // Minimum 15 seconds between updates
+  private readonly IMPORTANT_UPDATE_INTERVAL = 5000; // 5 seconds for important changes
   private pendingUpdate: NodeJS.Timeout | null = null;
   private lastStatusSent: string = "";
   private lastImportantUpdate = 0;
+  private updateCount = 0; // Track total updates
 
   /**
    * Start tracking user activity for a session
@@ -292,13 +293,19 @@ class UserActivityService {
   }
 
   /**
-   * Broadcast important status changes immediately (online/offline/visibility)
+   * Broadcast important status changes with throttling
    */
   private broadcastImportantStatus() {
     if (!this.status || !this.onStatusChange) return;
 
     const currentStatusText = this.getStatusText();
     const now = Date.now();
+
+    // Prevent excessive updates - max 10 per session
+    if (this.updateCount > 10) {
+      console.log("🛑 Update limit reached, skipping status broadcast");
+      return;
+    }
 
     // Check if status actually changed
     if (currentStatusText === this.lastStatusSent) {
@@ -309,18 +316,16 @@ class UserActivityService {
       return;
     }
 
-    // Use faster rate limiting for important changes
+    // Use rate limiting for important changes
     if (now - this.lastImportantUpdate < this.IMPORTANT_UPDATE_INTERVAL) {
-      console.log(
-        "⚡ Important status rate limited, scheduling immediate update",
-      );
+      console.log("⚡ Important status rate limited, scheduling update");
 
       // Cancel any pending update
       if (this.pendingUpdate) {
         clearTimeout(this.pendingUpdate);
       }
 
-      // Schedule with shorter delay for important updates
+      // Schedule with delay for important updates
       this.pendingUpdate = setTimeout(
         () => {
           this.broadcastStatusImmediate();
@@ -333,6 +338,8 @@ class UserActivityService {
     }
 
     this.lastImportantUpdate = now;
+    this.updateCount++;
+    this.updateCount++;
     this.broadcastStatusImmediate();
   }
 
