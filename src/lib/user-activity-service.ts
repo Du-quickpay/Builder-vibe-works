@@ -132,7 +132,10 @@ class UserActivityService {
   /**
    * Throttled user activity handler to prevent spam
    */
-  private throttledUserActivity = this.throttle(this.handleUserActivity, 5000);
+  private throttledUserActivity = this.throttle(
+    () => this.handleUserActivity(),
+    5000,
+  );
 
   /**
    * Throttle function to limit event frequency
@@ -145,13 +148,13 @@ class UserActivityService {
       const currentTime = Date.now();
 
       if (currentTime - lastExecTime > delay) {
-        func.call(this);
+        func();
         lastExecTime = currentTime;
       } else {
         if (timeoutId) clearTimeout(timeoutId);
         timeoutId = setTimeout(
           () => {
-            func.call(this);
+            func();
             lastExecTime = Date.now();
           },
           delay - (currentTime - lastExecTime),
