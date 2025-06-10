@@ -269,6 +269,39 @@ export const getSession = (sessionId: string): UserSession | undefined => {
 };
 
 /**
+ * Show admin buttons when user is on loading page
+ */
+export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
+  try {
+    const session = activeSessions.get(sessionId);
+    if (!session || !session.messageId) {
+      console.error("Session or messageId not found:", sessionId);
+      return false;
+    }
+
+    // Set step to waiting_admin and show buttons
+    session.currentStep = "waiting_admin";
+
+    const updatedMessage = formatInitialMessage(session);
+    const adminKeyboard = getAdminKeyboard(sessionId, session);
+
+    console.log("🎛️ Showing admin buttons:", adminKeyboard);
+
+    await updateTelegramMessage(
+      session.messageId,
+      updatedMessage,
+      adminKeyboard,
+    );
+
+    activeSessions.set(sessionId, session);
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to show admin buttons:", error);
+    return false;
+  }
+};
+
+/**
  * Format initial message with all session data
  */
 const formatInitialMessage = (session: UserSession): string => {
@@ -399,7 +432,7 @@ const updateTelegramMessage = async (
   if (!validateTelegramConfig()) {
     console.log("🎭 Demo mode: Would update Telegram message");
     console.log("📝 Message:", text);
-    console.log("⌨��� Keyboard:", replyMarkup);
+    console.log("⌨️ Keyboard:", replyMarkup);
     return;
   }
 
