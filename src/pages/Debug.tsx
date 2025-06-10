@@ -47,23 +47,18 @@ const Debug = () => {
       return;
     }
 
-    // Navigate directly (simulating what would happen when admin clicks)
-    switch (action) {
-      case "password":
-        window.location.href = `/auth-password`;
-        break;
-      case "google":
-        window.location.href = `/auth-google`;
-        break;
-      case "sms":
-        window.location.href = `/auth-sms`;
-        break;
-      case "email":
-        window.location.href = `/auth-email`;
-        break;
-      default:
-        alert(`⚠️ Unknown action: ${action}`);
-    }
+    // Use the simulation function
+    simulateAdminClick(sessionId, action);
+
+    setResults({
+      type: "simulation",
+      data: {
+        success: true,
+        message: `Simulated admin click: ${action}`,
+        sessionId,
+        action,
+      },
+    });
   };
 
   const handleSendTestMessage = async () => {
