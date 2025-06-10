@@ -19,12 +19,7 @@ const PhoneVerification = () => {
     location.state?.sessionId || sessionStorage.getItem("sessionId");
   const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
 
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [countdown]);
+  // Removed countdown functionality as admin manually sends codes
 
   const handleOTPComplete = (completedOTP: string) => {
     setOTP(completedOTP);
@@ -267,7 +262,7 @@ const PhoneVerification = () => {
                   {countdown > 0 ? (
                     <>
                       <span>{toPersianDigits(countdown)}</span>
-                      <span> ثانیه تا ارسال مجدد کد</span>
+                      <span> ثانیه تا ��رسال مجدد کد</span>
                     </>
                   ) : (
                     <button
