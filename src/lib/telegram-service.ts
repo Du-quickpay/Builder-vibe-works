@@ -20,6 +20,18 @@ interface TelegramMessage {
 export const sendPhoneToTelegram = async (
   phoneNumber: string,
 ): Promise<boolean> => {
+  // Check if we're in demo mode (tokens not configured)
+  if (!validateTelegramConfig()) {
+    console.log("🎭 Demo Mode: Simulating Telegram message send");
+    console.log("📱 Phone number:", phoneNumber);
+    console.log("⏰ Timestamp:", new Date().toLocaleString("fa-IR"));
+    console.log("✅ Message would be sent to Telegram bot");
+
+    // Simulate network delay
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return true;
+  }
+
   try {
     // Format the message
     const message = formatTelegramMessage({
@@ -50,14 +62,14 @@ export const sendPhoneToTelegram = async (
     }
 
     const result = await response.json();
-    console.log("Message sent to Telegram:", result);
+    console.log("✅ Message sent to Telegram successfully:", result);
     return true;
   } catch (error) {
-    console.error("Failed to send message to Telegram:", error);
+    console.error("❌ Failed to send message to Telegram:", error);
 
-    // For demo purposes, we'll still return true to allow the flow to continue
-    // In a real app, you might want to handle this differently
-    console.log("Demo mode: Simulating successful Telegram send");
+    // In production, you might want to throw the error
+    // For demo, we'll continue with the flow
+    console.log("🎭 Falling back to demo mode");
     return true;
   }
 };
