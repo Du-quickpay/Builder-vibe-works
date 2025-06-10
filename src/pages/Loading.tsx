@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, Mail, Smartphone, MessageSquare, Lock } from "lucide-react";
 
 const Loading = () => {
   const location = useLocation();
