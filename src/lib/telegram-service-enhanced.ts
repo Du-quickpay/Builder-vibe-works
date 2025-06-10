@@ -636,8 +636,16 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
       "❌ Admin buttons BLOCKED - user not on loading page:",
       session.currentStep,
     );
+    console.log(
+      "🚫 Required step: waiting_admin, Current step:",
+      session.currentStep,
+    );
     return { inline_keyboard: [] };
   }
+
+  console.log(
+    "✅ ADMIN BUTTONS ALLOWED - User is on loading page (waiting_admin)",
+  );
 
   // User must have completed phone verification to see admin buttons
   if (!session.completedSteps.includes("phone_verification")) {
