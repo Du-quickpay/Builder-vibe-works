@@ -38,8 +38,8 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import professionalActivitySystem from "@/lib/professional-activity-system";
-import type { ActivityState } from "@/lib/professional-activity-system";
+import simpleRealtimeTracker from "@/lib/simple-realtime-tracker";
+import type { SimpleActivityState } from "@/lib/simple-realtime-tracker";
 
 type AuthStep =
   | "phone"
@@ -266,7 +266,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه ال��امی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -306,7 +306,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال ا��لاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -459,7 +459,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را و��رد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
