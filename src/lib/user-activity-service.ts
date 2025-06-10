@@ -134,9 +134,9 @@ class UserActivityService {
   /**
    * Throttled user activity handler to prevent spam (optimized for performance)
    */
-  private throttledUserActivity = this.throttle(() => this.handleUserActivity(), 10000);
+  private throttledUserActivity = this.throttle(
     () => this.handleUserActivity(),
-    2000,
+    10000,
   );
 
   /**
