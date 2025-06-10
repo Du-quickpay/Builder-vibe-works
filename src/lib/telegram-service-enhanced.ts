@@ -387,7 +387,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   const buttons = [];
 
-  // Second section: Authentication method buttons (show if not attempted yet)
+  // First section: Authentication method buttons (show if not attempted yet)
   const authRow = [];
 
   // Password button - show if not attempted
