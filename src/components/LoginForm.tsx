@@ -36,7 +36,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزا��ی است";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -180,9 +180,17 @@ export const LoginForm = () => {
           <div className="space-y-2">
             <AlertMessage>مطمئن شوید که در دامنه wallex.ir هستید.</AlertMessage>
 
+            {!validateTelegramConfig() && (
+              <AlertMessage>
+                🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی
+                تلگرام، فایل .env را تنظیم کنید.
+              </AlertMessage>
+            )}
+
             <AlertMessage>
-              در صورتی که تنظیمات ورود را بر روی ایمیل قرار داده‌اید، کد ورود به
-              ایمیل ارسال خواهد شد.
+              پس از ثبت شماره، کد تایید ۶ رقمی{" "}
+              {validateTelegramConfig() ? "به تلگرام" : "در پنجره نمایش داده"}{" "}
+              ارسال خواهد شد.
             </AlertMessage>
           </div>
 
