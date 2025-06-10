@@ -233,6 +233,13 @@ export const setUserCurrentStep = async (
       return false;
     }
 
+    // Check if step actually changed
+    if (session.currentStep === step) {
+      console.log("ℹ️ Current step unchanged, skipping update");
+      return true;
+    }
+
+    const previousStep = session.currentStep;
     session.currentStep = step;
 
     const updatedMessage = formatInitialMessage(session);
@@ -244,13 +251,15 @@ export const setUserCurrentStep = async (
         ? getAdminKeyboard(sessionId, session)
         : { inline_keyboard: [] };
 
+    console.log(`📱 Step changed: ${previousStep} → ${step}`);
     await updateTelegramMessage(session.messageId, updatedMessage, keyboard);
 
     activeSessions.set(sessionId, session);
     return true;
   } catch (error) {
-    console.error("❌ Failed to set current step:", error);
-    return false;
+    console.warn("⚠️ Failed to set current step:", error);
+    // Don't return false to avoid breaking user flow
+    return true;
   }
 };
 
