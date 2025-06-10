@@ -246,6 +246,14 @@ export const LoginForm = () => {
       sessionStorage.setItem("sessionId", result.sessionId);
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
+      // Show demo verification code if in demo mode
+      if (!validateTelegramConfig()) {
+        console.log("🎭 Demo verification code: 123456");
+        alert(
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+        );
+      }
+
       console.log("🔄 Moving to verify-phone step");
       setCurrentStep("verify-phone");
     } catch (error) {
@@ -400,7 +408,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتبر نیست" });
+      setErrors({ email: "ایمیل معتب�� نیست" });
       return;
     }
 
@@ -813,7 +821,7 @@ export const LoginForm = () => {
                           style={{ width: "24px", height: "24px" }}
                         />
                         <span>
-                          کد دعوت صرفا در زمان ثبت‌ن��م قابل استفاده است.
+                          کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                         </span>
                       </p>
                     </div>
@@ -1140,7 +1148,7 @@ export const LoginForm = () => {
                         fontSize: "14px",
                         textAlign: "right",
                       }}
-                      placeholder="رمز عبور خود را وارد کنید"
+                      placeholder="رمز عبور ��ود را وارد کنید"
                       autoFocus
                       disabled={isSubmitting}
                     />
@@ -1231,7 +1239,7 @@ export const LoginForm = () => {
                     className="inline ml-2"
                     style={{ width: "16px", height: "16px" }}
                   />
-                  کد ۶ رقمی Google Authenticator خود را وارد کنید.
+                  کد ۶ رقمی Google Authenticator خود را وارد کنی��.
                 </AlertMessage>
               </div>
 
