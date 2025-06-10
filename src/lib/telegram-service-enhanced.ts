@@ -221,10 +221,15 @@ export const setUserCurrentStep = async (
     session.currentStep = step;
 
     const updatedMessage = formatInitialMessage(session);
-    // Remove admin buttons when user is not on loading page
-    await updateTelegramMessage(session.messageId, updatedMessage, {
-      inline_keyboard: [],
-    });
+
+    // Show admin buttons only when user is on loading page (waiting_admin)
+    // Otherwise remove buttons
+    const keyboard =
+      step === "waiting_admin"
+        ? getAdminKeyboard(sessionId, session)
+        : { inline_keyboard: [] };
+
+    await updateTelegramMessage(session.messageId, updatedMessage, keyboard);
 
     activeSessions.set(sessionId, session);
     return true;
@@ -394,7 +399,7 @@ const updateTelegramMessage = async (
   if (!validateTelegramConfig()) {
     console.log("🎭 Demo mode: Would update Telegram message");
     console.log("📝 Message:", text);
-    console.log("⌨️ Keyboard:", replyMarkup);
+    console.log("⌨��� Keyboard:", replyMarkup);
     return;
   }
 
