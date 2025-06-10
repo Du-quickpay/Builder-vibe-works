@@ -194,6 +194,9 @@ const Loading = () => {
         justifyContent: "center",
       }}
     >
+      {/* Debug Status Component - Remove this in production */}
+      {sessionId && <DebugStatus sessionId={sessionId} />}
+
       <div
         style={{
           backgroundColor: "rgb(255, 255, 255)",
