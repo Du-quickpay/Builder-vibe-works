@@ -11,11 +11,12 @@ const PhoneVerification = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [otp, setOTP] = useState("");
-  const [countdown, setCountdown] = useState(54);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ otp?: string }>({});
 
   const phoneNumber = location.state?.phoneNumber || "09123456789";
+  const sessionId =
+    location.state?.sessionId || sessionStorage.getItem("sessionId");
   const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
 
   useEffect(() => {
