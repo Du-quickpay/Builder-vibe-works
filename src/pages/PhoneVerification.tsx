@@ -8,6 +8,7 @@ import { toPersianDigits, maskPhoneNumber } from "@/lib/persian-utils";
 
 const PhoneVerification = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [otp, setOTP] = useState("");
   const [countdown, setCountdown] = useState(54);
   const [isSubmitting, setIsSubmitting] = useState(false);
