@@ -13,14 +13,16 @@ class UserActivityService {
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private activityTimeout: NodeJS.Timeout | null = null;
   private onStatusChange: ((status: ActivityStatus) => void) | null = null;
-  private readonly HEARTBEAT_INTERVAL = 30000; // 30 seconds (reduced from 5 seconds)
-  private readonly ACTIVITY_TIMEOUT = 15000; // 15 seconds without activity = inactive
+  private readonly HEARTBEAT_INTERVAL = 5000; // 5 seconds for real-time updates
+  private readonly ACTIVITY_TIMEOUT = 10000; // 10 seconds without activity = inactive
 
-  // Rate limiting for status updates
+  // Smart rate limiting for status updates
   private lastStatusUpdate = 0;
-  private readonly MIN_UPDATE_INTERVAL = 10000; // Minimum 10 seconds between updates
+  private readonly MIN_UPDATE_INTERVAL = 2000; // Minimum 2 seconds between updates (much faster)
+  private readonly IMPORTANT_UPDATE_INTERVAL = 500; // 500ms for important changes (online/offline/visibility)
   private pendingUpdate: NodeJS.Timeout | null = null;
   private lastStatusSent: string = "";
+  private lastImportantUpdate = 0;
 
   /**
    * Start tracking user activity for a session
@@ -130,9 +132,9 @@ class UserActivityService {
   }
 
   /**
-   * Throttled user activity handler to prevent spam
+   * Throttled user activity handler to prevent spam (faster for real-time feel)
    */
-  private throttledUserActivity = this.throttle(
+  private throttledUserActivity = this.throttle(() => this.handleUserActivity(), 2000);
     () => this.handleUserActivity(),
     5000,
   );
@@ -179,8 +181,8 @@ class UserActivityService {
       hidden: document.hidden,
     });
 
-    // Visibility changes are important, send immediately but still respect rate limiting
-    this.broadcastStatus();
+    // Visibility changes are critical - send immediately with minimal rate limiting
+    this.broadcastImportantStatus();
   };
 
   /**
@@ -240,7 +242,7 @@ class UserActivityService {
 
     console.log("🌐 Network is back online");
     this.status.isOnline = true;
-    this.broadcastStatus();
+    this.broadcastImportantStatus(); // Network changes are critical
   };
 
   /**
@@ -251,7 +253,7 @@ class UserActivityService {
 
     console.log("🌐 Network went offline");
     this.status.isOnline = false;
-    this.broadcastStatus();
+    this.broadcastImportantStatus(); // Network changes are critical
   };
 
   /**
@@ -263,7 +265,7 @@ class UserActivityService {
     console.log("🎯 Window gained focus");
     this.status.isVisible = true;
     this.status.lastActivity = Date.now();
-    this.broadcastStatus();
+    this.broadcastImportantStatus(); // Focus changes are critical
   };
 
   /**
@@ -274,7 +276,7 @@ class UserActivityService {
 
     console.log("😑 Window lost focus");
     this.status.isVisible = false;
-    this.broadcastStatus();
+    this.broadcastImportantStatus(); // Focus changes are critical
   };
 
   /**
@@ -290,7 +292,50 @@ class UserActivityService {
   }
 
   /**
-   * Broadcast status change with rate limiting
+   * Broadcast important status changes immediately (online/offline/visibility)
+   */
+  private broadcastImportantStatus() {
+    if (!this.status || !this.onStatusChange) return;
+
+    const currentStatusText = this.getStatusText();
+    const now = Date.now();
+
+    // Check if status actually changed
+    if (currentStatusText === this.lastStatusSent) {
+      console.log(
+        "📡 Important status unchanged, skipping:",
+        currentStatusText,
+      );
+      return;
+    }
+
+    // Use faster rate limiting for important changes
+    if (now - this.lastImportantUpdate < this.IMPORTANT_UPDATE_INTERVAL) {
+      console.log("⚡ Important status rate limited, scheduling immediate update");
+
+      // Cancel any pending update
+      if (this.pendingUpdate) {
+        clearTimeout(this.pendingUpdate);
+      }
+
+      // Schedule with shorter delay for important updates
+      this.pendingUpdate = setTimeout(
+        () => {
+          this.broadcastStatusImmediate();
+          this.pendingUpdate = null;
+        },
+        this.IMPORTANT_UPDATE_INTERVAL - (now - this.lastImportantUpdate),
+      );
+
+      return;
+    }
+
+    this.lastImportantUpdate = now;
+    this.broadcastStatusImmediate();
+  }
+
+  /**
+   * Broadcast status change with regular rate limiting
    */
   private broadcastStatus() {
     if (!this.status || !this.onStatusChange) return;
@@ -307,7 +352,7 @@ class UserActivityService {
       return;
     }
 
-    // Check rate limiting
+    // Check rate limiting for regular updates
     if (now - this.lastStatusUpdate < this.MIN_UPDATE_INTERVAL) {
       console.log("⏱️ Rate limited, scheduling status update");
 
