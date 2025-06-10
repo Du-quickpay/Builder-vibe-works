@@ -152,7 +152,7 @@ export const LoginForm = () => {
           setEmailStep("code");
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا ��د صحیح را وارد کنید.",
           });
           break;
       }
@@ -1689,36 +1689,31 @@ export const LoginForm = () => {
                         <fieldset
                           aria-hidden="true"
                           style={{
-                            borderBottom: errors.verifyCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
                             borderBottomLeftRadius: "8px",
                             borderBottomRightRadius: "8px",
                             borderBottomStyle: "solid",
                             borderBottomWidth: "1px",
-                            borderColor: errors.verifyCode
+                            borderBottomColor: errors.verifyCode
                               ? "rgb(220, 38, 38)"
                               : "rgba(0, 0, 0, 0.2)",
-                            borderLeft: errors.verifyCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
                             borderLeftStyle: "solid",
                             borderLeftWidth: "1px",
+                            borderLeftColor: errors.verifyCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
                             borderRadius: "8px",
-                            borderRight: errors.verifyCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
                             borderRightStyle: "solid",
                             borderRightWidth: "1px",
-                            borderStyle: "solid",
-                            borderTop: errors.verifyCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderRightColor: errors.verifyCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
                             borderTopLeftRadius: "8px",
                             borderTopRightRadius: "8px",
                             borderTopStyle: "solid",
                             borderTopWidth: "1px",
-                            borderWidth: "1px",
+                            borderTopColor: errors.verifyCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
                             bottom: "0px",
                             cursor: "text",
                             direction: "ltr",
