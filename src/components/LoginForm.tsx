@@ -142,16 +142,12 @@ export const LoginForm = () => {
         );
       };
 
-      // Start professional tracking
-      professionalActivitySystem.startTracking(
-        sessionId,
-        handleStatusChange,
-        currentStep,
-      );
+      // Start simple real-time tracking
+      simpleRealtimeTracker.start(sessionId, handleStatusChange);
 
       return () => {
-        console.log("🛑 Stopping professional activity tracking");
-        professionalActivitySystem.stopTracking();
+        console.log("🛑 Stopping simple real-time tracking");
+        simpleRealtimeTracker.stop();
       };
     }
   }, [sessionId, currentStep]);
@@ -295,7 +291,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت و��قعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
