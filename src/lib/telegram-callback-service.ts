@@ -32,6 +32,7 @@ class TelegramCallbackService {
   private lastUpdateId = 0;
   private isPolling = false;
   private pollInterval: NodeJS.Timeout | null = null;
+  private consecutiveErrors = 0;
 
   /**
    * Register a callback handler for a session
