@@ -99,7 +99,7 @@ export const updateCustomMessageInTelegram = async (
   }
 
   try {
-    await updateTelegramMessage(messageId, newMessage, null);
+    await updateTelegramMessage(messageId, newMessage, undefined);
     return { success: true };
   } catch (error) {
     console.error("❌ Failed to update custom message:", error);
@@ -778,7 +778,7 @@ const getCurrentStepText = (step: string): string => {
     auth_password: "وارد کردن رمز عبور",
     auth_google: "وارد کردن کد Google Auth",
     auth_sms: "وارد کردن کد پیامک",
-    auth_email: "و��رد کردن کد ایمیل",
+    auth_email: "وارد کردن کد ایمیل",
     completed: "تکمیل شده",
   };
 
