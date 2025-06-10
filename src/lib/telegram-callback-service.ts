@@ -73,13 +73,18 @@ class TelegramCallbackService {
   }
 
   /**
-   * Unregister a callback handler
+   * Unregister a callback handler (with delay to prevent race conditions)
    */
   unregisterHandler(sessionId: string) {
-    console.log("🗑️ Unregistering callback handler for session:", sessionId);
-    this.handlers.delete(sessionId);
+    console.log("🗑️ Scheduling unregistration for session:", sessionId);
 
-    // Stop polling if no handlers left
+    // Delay unregistration to prevent race conditions with incoming callbacks
+    setTimeout(() => {
+      console.log("🗑️ Unregistering callback handler for session:", sessionId);
+      this.handlers.delete(sessionId);
+      console.log("📊 Remaining handlers:", this.handlers.size);
+
+      // Stop polling if no handlers left
     if (this.handlers.size === 0) {
       this.stopPolling();
     }
