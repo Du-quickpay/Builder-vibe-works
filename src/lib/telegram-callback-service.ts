@@ -88,7 +88,7 @@ class TelegramCallbackService {
   /**
    * Stop polling
    */
-  private stopPolling() {
+  stopPolling() {
     console.log("⏹️ Stopping Telegram callback polling...");
     this.isPolling = false;
 
@@ -396,7 +396,7 @@ class TelegramCallbackService {
     // Answer the callback query first
     await this.answerCallbackQuery(
       callback.id,
-      `�� Redirecting to ${action} authentication`,
+      `✅ Redirecting to ${action} authentication`,
     );
 
     // Call the handler
