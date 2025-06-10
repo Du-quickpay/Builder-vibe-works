@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { getSession, showAdminButtons } from "@/lib/telegram-service-enhanced";
+import {
+  getSession,
+  showAdminButtons,
+  setUserCurrentStep,
+} from "@/lib/telegram-service-enhanced";
 import {
   registerTelegramCallback,
   unregisterTelegramCallback,
@@ -166,7 +170,7 @@ const Loading = () => {
             خطا در جلسه
           </h2>
           <p style={{ color: "rgba(0, 0, 0, 0.6)", margin: "0" }}>
-            جلسه شما منقضی شده است. لطفا مجدد تلاش کنید.
+            جلسه شما منقضی شده اس��. لطفا مجدد تلاش کنید.
           </p>
         </div>
       </div>
