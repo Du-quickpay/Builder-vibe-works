@@ -129,7 +129,7 @@ const AuthSMS = () => {
       sessionStorage.setItem("smsCode", newCode);
 
       alert(
-        `🎭 کد جدید ارسال شد\n\nکد پیامک: ${newCode}\n\n(در حالت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
+        `🎭 کد جدید ارسال شد\n\nکد پیامک: ${newCode}\n\n(در ��الت واقعی این کد به شماره ${phoneNumber} ارسال می‌شود)`,
       );
 
       setCountdown(54);
@@ -244,11 +244,9 @@ const AuthSMS = () => {
                   className="inline ml-2"
                   style={{ width: "16px", height: "16px" }}
                 />
-                کد تایید به شماره{" "}
-                <strong style={{ direction: "ltr" }}>
-                  {maskedPhoneNumber}
-                </strong>{" "}
-                پیامک شد.
+                {isSecondAttempt
+                  ? "کد اول نادرست بود. این آخرین فرصت شما است."
+                  : `کد پیامک به شماره ${maskedPhoneNumber} توسط ادمین ارسال خواهد شد.`}
               </AlertMessage>
             </div>
 
