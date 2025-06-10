@@ -487,7 +487,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     buttons.push(wrongButtonsRow2);
   }
 
-  // Final section: Complete Auth button (if user has completed at least one additional step)
+  // Fourth section: Complete Auth button (if user has completed at least one additional step)
   if (session.completedSteps.length > 1) {
     buttons.push([
       {
