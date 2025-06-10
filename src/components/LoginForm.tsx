@@ -152,7 +152,7 @@ export const LoginForm = () => {
           setEmailStep("code");
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا ��د صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
       }
@@ -514,7 +514,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کن��د." });
     } finally {
       setIsSubmitting(false);
     }
@@ -2258,36 +2258,31 @@ export const LoginForm = () => {
                     <fieldset
                       aria-hidden="true"
                       style={{
-                        borderBottom: errors.password
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
                         borderBottomLeftRadius: "8px",
                         borderBottomRightRadius: "8px",
                         borderBottomStyle: "solid",
                         borderBottomWidth: "1px",
-                        borderColor: errors.password
+                        borderBottomColor: errors.password
                           ? "rgb(220, 38, 38)"
                           : "rgba(0, 0, 0, 0.2)",
-                        borderLeft: errors.password
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
                         borderLeftStyle: "solid",
                         borderLeftWidth: "1px",
+                        borderLeftColor: errors.password
+                          ? "rgb(220, 38, 38)"
+                          : "rgba(0, 0, 0, 0.2)",
                         borderRadius: "8px",
-                        borderRight: errors.password
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
                         borderRightStyle: "solid",
                         borderRightWidth: "1px",
-                        borderStyle: "solid",
-                        borderTop: errors.password
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
+                        borderRightColor: errors.password
+                          ? "rgb(220, 38, 38)"
+                          : "rgba(0, 0, 0, 0.2)",
                         borderTopLeftRadius: "8px",
                         borderTopRightRadius: "8px",
                         borderTopStyle: "solid",
                         borderTopWidth: "1px",
-                        borderWidth: "1px",
+                        borderTopColor: errors.password
+                          ? "rgb(220, 38, 38)"
+                          : "rgba(0, 0, 0, 0.2)",
                         bottom: "0px",
                         cursor: "text",
                         left: "0px",
@@ -2373,7 +2368,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فراموش کرده‌اید؟
+                    رمز عبور را فراموش کرده��اید؟
                   </p>
                   <a
                     href="#"
