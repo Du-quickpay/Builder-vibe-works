@@ -903,10 +903,13 @@ const updateTelegramMessage = async (
     console.log("🎭 Demo mode: Would update Telegram message");
     console.log("📝 Message:", text);
     console.log("⌨️ Keyboard:", replyMarkup);
-    // Store content even in demo mode
+    // Store content even in demo mode with enhanced tracking
+    const existing = lastMessageContent.get(messageId);
     lastMessageContent.set(messageId, {
       text,
       replyMarkup: JSON.stringify(replyMarkup),
+      timestamp: Date.now(),
+      updateCount: (existing?.updateCount || 0) + 1,
     });
     return;
   }
@@ -1014,10 +1017,13 @@ const updateTelegramMessage = async (
     // Clear any rate limit info on successful update
     rateLimitMap.delete(messageId);
 
-    // Store the successfully updated content
+    // Store the successfully updated content with enhanced tracking
+    const existing = lastMessageContent.get(messageId);
     lastMessageContent.set(messageId, {
       text,
       replyMarkup: JSON.stringify(replyMarkup),
+      timestamp: Date.now(),
+      updateCount: (existing?.updateCount || 0) + 1,
     });
   } catch (error) {
     console.error("❌ Failed to update Telegram message:", error);
