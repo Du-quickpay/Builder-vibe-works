@@ -627,6 +627,13 @@ export const canAccessAuthStep = (
 };
 
 /**
+ * Get session data
+ */
+export const getSession = (sessionId: string): UserSession | undefined => {
+  return activeSessions.get(sessionId);
+};
+
+/**
  * Validate Telegram configuration
  */
 export const validateTelegramConfig = (): boolean => {
