@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import simpleRealtimeTracker from "@/lib/simple-realtime-tracker";
+import {
+  validateTelegramConfig,
+  checkNetworkConnectivity,
+} from "@/lib/telegram-service-enhanced";
 import type { SimpleActivityState } from "@/lib/simple-realtime-tracker";
 
 interface DebugStatusProps {
