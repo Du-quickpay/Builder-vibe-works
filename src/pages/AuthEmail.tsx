@@ -349,7 +349,7 @@ const AuthEmail = () => {
                           className="animate-spin mr-2"
                           style={{ width: "16px", height: "16px" }}
                         />
-                        در حال ارسال کد...
+                        <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
@@ -453,7 +453,7 @@ const AuthEmail = () => {
                             className="animate-spin mr-2"
                             style={{ width: "16px", height: "16px" }}
                           />
-                          در حال تایید...
+                          <span>در حال تایید...</span>
                         </div>
                       ) : (
                         "تایید کد"

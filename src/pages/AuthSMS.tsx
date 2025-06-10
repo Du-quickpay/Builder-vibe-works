@@ -384,7 +384,7 @@ const AuthSMS = () => {
                       className="animate-spin mr-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    در حال تایید...
+                    <span>در حال تایید...</span>
                   </div>
                 ) : (
                   "تایید کد"

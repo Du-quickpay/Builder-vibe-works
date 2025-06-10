@@ -382,7 +382,7 @@ const AuthPassword = () => {
                         className="animate-spin mr-2"
                         style={{ width: "16px", height: "16px" }}
                       />
-                      در حال بررسی...
+                      <span>در حال بررسی...</span>
                     </div>
                   ) : (
                     "تایید رمز عبور"

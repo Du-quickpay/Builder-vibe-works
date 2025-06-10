@@ -44,7 +44,7 @@ const AuthGoogle = () => {
       if (hasError) {
         setErrors({
           googleCode:
-            "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+            "کد Google Authenticator وارد شده ��شتباه است. لطفا کد صحیح را وارد کنید.",
         });
       }
 
@@ -365,7 +365,7 @@ const AuthGoogle = () => {
                       className="animate-spin mr-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    در حال تایید...
+                    <span>در حال تایید...</span>
                   </div>
                 ) : (
                   "تایید کد"
