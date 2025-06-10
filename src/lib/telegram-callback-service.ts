@@ -346,6 +346,7 @@ class TelegramCallbackService {
       isPolling: this.isPolling,
       handlersCount: this.handlers.size,
       lastUpdateId: this.lastUpdateId,
+      consecutiveErrors: this.consecutiveErrors,
     };
   }
 }
