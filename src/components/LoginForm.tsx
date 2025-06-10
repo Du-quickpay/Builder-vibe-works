@@ -1846,7 +1846,7 @@ export const LoginForm = () => {
                       fontSize: "14px",
                     }}
                   >
-                    ویرایش شماره
+                    ویر��یش شماره
                   </button>
 
                   {/* Submit Button */}
@@ -2900,6 +2900,7 @@ export const LoginForm = () => {
         @media (min-width: 1024px) {
           .form-card {
             border-radius: 16px;
+            max-width: 480px;
           }
         }
 
@@ -2907,21 +2908,36 @@ export const LoginForm = () => {
         @media (max-width: 1023px) {
           .form-card {
             border-radius: 0 !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
             max-width: none !important;
-            height: 100vh;
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            overflow: hidden !important;
           }
           .form-card > div {
             padding: 20px !important;
-            height: 100%;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+            height: 100% !important;
+            overflow-y: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            width: 100% !important;
+          }
+
+          /* Ensure body and html don't interfere on mobile */
+          body,
+          html {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
           }
         }
 
