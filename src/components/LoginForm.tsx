@@ -514,7 +514,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کن��د." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -2368,7 +2368,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فراموش کرده��اید؟
+                    رمز عبور را فراموش کرده‌اید؟
                   </p>
                   <a
                     href="#"
@@ -2782,36 +2782,31 @@ export const LoginForm = () => {
                         <fieldset
                           aria-hidden="true"
                           style={{
-                            borderBottom: errors.googleCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
                             borderBottomLeftRadius: "8px",
                             borderBottomRightRadius: "8px",
                             borderBottomStyle: "solid",
                             borderBottomWidth: "1px",
-                            borderColor: errors.googleCode
+                            borderBottomColor: errors.googleCode
                               ? "rgb(220, 38, 38)"
                               : "rgba(0, 0, 0, 0.2)",
-                            borderLeft: errors.googleCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
                             borderLeftStyle: "solid",
                             borderLeftWidth: "1px",
+                            borderLeftColor: errors.googleCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
                             borderRadius: "8px",
-                            borderRight: errors.googleCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
                             borderRightStyle: "solid",
                             borderRightWidth: "1px",
-                            borderStyle: "solid",
-                            borderTop: errors.googleCode
-                              ? "1px solid rgb(220, 38, 38)"
-                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderRightColor: errors.googleCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
                             borderTopLeftRadius: "8px",
                             borderTopRightRadius: "8px",
                             borderTopStyle: "solid",
                             borderTopWidth: "1px",
-                            borderWidth: "1px",
+                            borderTopColor: errors.googleCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
                             bottom: "0px",
                             cursor: "text",
                             direction: "ltr",
