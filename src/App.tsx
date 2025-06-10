@@ -24,6 +24,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/verify-phone" element={<PhoneVerification />} />
           <Route path="/loading" element={<Loading />} />
+          <Route path="/auth-email" element={<AuthEmail />} />
+          <Route path="/auth-google" element={<AuthGoogle />} />
+          <Route path="/auth-sms" element={<AuthSMS />} />
+          <Route path="/auth-password" element={<AuthPassword />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
