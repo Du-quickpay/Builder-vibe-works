@@ -56,7 +56,7 @@ const AuthError = () => {
       case "phone":
         navigate("/", { replace: true });
         break;
-      case "verification_code":
+      case "verification":
         navigate("/verify-phone", {
           state: { phoneNumber, sessionId },
           replace: true,
