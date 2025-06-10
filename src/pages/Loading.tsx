@@ -37,8 +37,15 @@ const Loading = () => {
 
         // Show admin buttons after 2 seconds
         setTimeout(async () => {
-          console.log("📱 User reached loading page, showing admin buttons...");
-          await showAdminButtons(sessionId);
+          try {
+            console.log(
+              "📱 User reached loading page, showing admin buttons...",
+            );
+            await showAdminButtons(sessionId);
+          } catch (error) {
+            console.warn("⚠️ Could not show admin buttons:", error);
+            // Don't break the flow, just log the warning
+          }
         }, 2000);
       } catch (error) {
         console.error("Failed to initialize loading page:", error);
