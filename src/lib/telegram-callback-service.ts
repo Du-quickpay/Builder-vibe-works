@@ -38,17 +38,18 @@ class TelegramCallbackService {
   private isOnline = true;
 
   /**
-   * Clean up old handlers (keep more handlers to avoid session loss)
+   * Clean up old handlers (keep even more handlers to avoid session loss)
    */
   private cleanupOldHandlers() {
-    if (this.handlers.size > 10) {
-      // Keep max 10 handlers (increased from 3)
+    if (this.handlers.size > 20) {
+      // Keep max 20 handlers (increased from 10)
       const handlerEntries = Array.from(this.handlers.entries());
-      // Keep only the last 5 handlers (increased from 2)
-      handlerEntries.slice(0, -5).forEach(([sessionId]) => {
+      // Keep only the last 15 handlers (increased from 5)
+      handlerEntries.slice(0, -15).forEach(([sessionId]) => {
         console.log("🧹 Cleaning up old handler:", sessionId);
         this.handlers.delete(sessionId);
       });
+      console.log(`🧹 Cleanup complete. Kept ${this.handlers.size} handlers`);
     }
   }
 
