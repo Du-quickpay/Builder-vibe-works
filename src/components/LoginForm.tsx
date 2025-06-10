@@ -131,9 +131,24 @@ export const LoginForm = () => {
           status.isOnline,
           status.isVisible,
           status.lastActivity,
-          userActivityService.getStatusText(),
-          userActivityService.getStatusEmoji(),
-        );
+      userActivityService.startTracking(sessionId, async (status) => {
+        console.log("📡 Activity status changed:", status);
+
+        // Only update if on loading step to prevent unnecessary API calls
+        if (currentStep === "loading") {
+          const statusText = userActivityService.getStatusText();
+          const statusEmoji = userActivityService.getStatusEmoji();
+
+          await updateUserOnlineStatus(
+            sessionId,
+            status.isOnline,
+            status.isVisible,
+            status.lastActivity,
+            statusText,
+            statusEmoji
+          );
+        }
+      });
       };
 
       // Start tracking
@@ -818,7 +833,7 @@ export const LoginForm = () => {
               {currentStep === "verify-phone"
                 ? "تائید شماره همراه"
                 : currentStep === "password"
-                  ? "رم�� عبور"
+                  ? "رمز عبور"
                   : currentStep === "google"
                     ? "Google Authenticator"
                     : "ورود"}
@@ -2924,7 +2939,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ​
+                              ���
                             </span>
                           </legend>
                         </fieldset>
