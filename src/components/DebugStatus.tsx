@@ -101,9 +101,27 @@ export const DebugStatus = ({ sessionId }: DebugStatusProps) => {
         <div>🌐 Online: {status.isOnline ? "✅" : "❌"}</div>
         <div>👁️ Visible: {status.isVisible ? "✅" : "❌"}</div>
         <div>⚡ Active: {status.isActive ? "✅" : "❌"}</div>
-        <div>📊 Updates: {updateCount}</div>
-        <div>🕐 Last: {lastUpdate}</div>
-        <div>🆔 Session: {sessionId.slice(0, 8)}...</div>
+        <div
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.2)",
+            marginTop: "4px",
+            paddingTop: "4px",
+          }}
+        >
+          <div>{networkStatus}</div>
+          <div>{telegramMode}</div>
+        </div>
+        <div
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.2)",
+            marginTop: "4px",
+            paddingTop: "4px",
+          }}
+        >
+          <div>📊 Updates: {updateCount}</div>
+          <div>🕐 Last: {lastUpdate}</div>
+          <div>🆔 Session: {sessionId.slice(0, 8)}...</div>
+        </div>
       </div>
     </div>
   );
