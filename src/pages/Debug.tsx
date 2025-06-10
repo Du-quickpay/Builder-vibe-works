@@ -6,13 +6,7 @@ import {
   createDebugInfo,
 } from "@/lib/debug-helper";
 import { showAdminButtons } from "@/lib/telegram-service-enhanced";
-import {
-  getTelegramCallbackStatus,
-  simulateAdminClick,
-  clearTelegramWebhook,
-  stopTelegramPolling,
-  startTelegramPolling,
-} from "@/lib/telegram-callback-service";
+import { getTelegramCallbackDebugInfo } from "@/lib/telegram-callback-service";
 import { getSession } from "@/lib/telegram-service-enhanced";
 
 const Debug = () => {
