@@ -9,6 +9,7 @@ import { showAdminButtons } from "@/lib/telegram-service-enhanced";
 import {
   getTelegramCallbackStatus,
   simulateAdminClick,
+  clearTelegramWebhook,
 } from "@/lib/telegram-callback-service";
 import { getSession } from "@/lib/telegram-service-enhanced";
 
