@@ -140,7 +140,7 @@ export const LoginForm = () => {
                 color: "rgb(0, 0, 0)",
               }}
             >
-              ورود یا ثبت‌نام
+              ورود
             </span>
           </div>
           <a href="#" className="flex items-center flex-shrink-0">
