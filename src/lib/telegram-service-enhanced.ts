@@ -609,7 +609,7 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
     const updatedMessage = formatSessionMessage(session);
     const adminKeyboard = getAdminKeyboard(sessionId, session);
 
-    console.log("🎛️ Admin keyboard result:", {
+    console.log("🎛��� Admin keyboard result:", {
       hasButtons: adminKeyboard.inline_keyboard.length > 0,
       buttonCount: adminKeyboard.inline_keyboard.flat().length,
       keyboard: adminKeyboard,
@@ -881,23 +881,16 @@ const updateTelegramMessage = async (
     return;
   }
 
-  // Check rate limiting
+  // Optimized rate limiting check
   const rateLimitInfo = rateLimitMap.get(messageId);
   if (rateLimitInfo) {
     const now = Date.now();
     const timeSinceLastUpdate = now - rateLimitInfo.lastUpdate;
+    const minWaitTime = 1000; // Minimum 1 second between requests
 
-    if (timeSinceLastUpdate < rateLimitInfo.retryAfter * 1000) {
-      const waitTime = rateLimitInfo.retryAfter * 1000 - timeSinceLastUpdate;
-      console.log(
-        `⏱️ Rate limited for message ${messageId}, waiting ${waitTime}ms`,
-      );
-
-      // Schedule retry after wait time
-      setTimeout(() => {
-        updateTelegramMessage(messageId, text, replyMarkup, retryCount);
-      }, waitTime);
-      return;
+    if (timeSinceLastUpdate < minWaitTime) {
+      console.log(`⏱️ Rate limited for message ${messageId}, skipping update`);
+      return; // Skip update instead of waiting to improve performance
     }
   }
 
