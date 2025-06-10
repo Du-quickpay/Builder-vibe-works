@@ -6,6 +6,10 @@ import {
   getSession,
   showAdminButtons,
 } from "@/lib/telegram-service-enhanced";
+import {
+  registerTelegramCallback,
+  unregisterTelegramCallback,
+} from "@/lib/telegram-callback-service";
 
 const Loading = () => {
   const location = useLocation();
