@@ -452,15 +452,11 @@ class TelegramCallbackService {
       );
     }
 
-    // Answer the callback query first
-    await this.answerCallbackQuery(
-      callback.id,
-      `✅ Redirecting to ${action} authentication`,
-    );
-
     // Call the handler
     try {
+      console.log("🎯 Calling handler for action:", action);
       handler.onCallback(action);
+      console.log("✅ Handler called successfully");
     } catch (error) {
       console.error("❌ Error in callback handler:", error);
     }
