@@ -39,6 +39,12 @@ const Loading = () => {
           handleAdminAction(action);
         });
 
+        // Set user step to waiting_admin for real-time activity tracking
+        console.log(
+          "🚀 Setting user step to waiting_admin for activity tracking...",
+        );
+        await setUserCurrentStep(sessionId, "waiting_admin");
+
         // Show admin buttons after 2 seconds
         setTimeout(async () => {
           try {
