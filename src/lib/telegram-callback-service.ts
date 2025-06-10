@@ -66,7 +66,7 @@ class TelegramCallbackService {
   /**
    * Start polling for Telegram updates
    */
-  private async startPolling() {
+  async startPolling() {
     if (this.isPolling) return;
 
     console.log("🔄 Starting Telegram callback polling...");
@@ -396,7 +396,7 @@ class TelegramCallbackService {
     // Answer the callback query first
     await this.answerCallbackQuery(
       callback.id,
-      `✅ Redirecting to ${action} authentication`,
+      `�� Redirecting to ${action} authentication`,
     );
 
     // Call the handler
