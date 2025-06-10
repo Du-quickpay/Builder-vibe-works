@@ -645,6 +645,15 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added Email Code button");
   }
 
+  // Wrong SMS button - always available (moved from wrong buttons section)
+  buttons.push([
+    {
+      text: "❌ Wrong SMS",
+      callback_data: `incorrect_sms_${sessionId}`,
+    },
+  ]);
+  console.log("✅ Added Wrong SMS button (always available)");
+
   // Third section: Wrong buttons (ONLY show if user has attempted that method at least once)
   const wrongButtonsRow1 = [];
   const wrongButtonsRow2 = [];
