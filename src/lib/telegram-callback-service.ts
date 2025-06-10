@@ -33,8 +33,8 @@ class TelegramCallbackService {
   private isPolling = false;
   private pollInterval: NodeJS.Timeout | null = null;
   private consecutiveErrors = 0;
-  private currentPollDelay = 3000; // Start with 3 seconds
-  private maxPollDelay = 30000; // Max 30 seconds
+  private currentPollDelay = 1000; // Start with 1 second (faster response)
+  private maxPollDelay = 10000; // Max 10 seconds (reduced from 30)
   private isOnline = true;
 
   /**
