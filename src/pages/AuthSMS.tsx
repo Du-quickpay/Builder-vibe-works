@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft, MessageSquare, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ const AuthSMS = () => {
     setErrors({});
 
     if (!smsCode || smsCode.length !== 6) {
-      setErrors({ smsCode: "کد پیامک ۶ رقمی را وارد کنید" });
+      setErrors({ smsCode: "ک�� پیامک ۶ رقمی را وارد کنید" });
       return;
     }
 
