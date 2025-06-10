@@ -16,7 +16,7 @@ const AuthError = () => {
     switch (errorType) {
       case "phone":
         return "شماره همراه وارد شده اشتباه است.";
-      case "verification_code":
+      case "verification":
         return "کد تایید وارد شده اشتباه است.";
       case "password":
         return "رمز عبور وارد شده اشتباه است.";
@@ -35,7 +35,7 @@ const AuthError = () => {
     switch (errorType) {
       case "phone":
         return "شماره همراه اشتباه";
-      case "verification_code":
+      case "verification":
         return "کد تایید اشتباه";
       case "password":
         return "رمز عبور اشتباه";
