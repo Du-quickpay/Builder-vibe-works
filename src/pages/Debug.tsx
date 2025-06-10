@@ -114,6 +114,13 @@ const Debug = () => {
     });
   };
 
+  const handleClearWebhook = async () => {
+    setIsLoading(true);
+    const result = await clearTelegramWebhook();
+    setResults({ type: "webhook", data: result });
+    setIsLoading(false);
+  };
+
   return (
     <div
       style={{
@@ -319,7 +326,7 @@ const Debug = () => {
         >
           <h3>
             {results.type === "config" && "🔍 Config Test"}
-            {results.type === "message" && "📨 Message Test"}
+            {results.type === "message" && "�� Message Test"}
             {results.type === "buttons" && "🎛️ Admin Buttons Test"}
             {results.type === "simulation" && "🎭 Simulation Test"} Results
           </h3>
