@@ -241,7 +241,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می��شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -932,36 +932,31 @@ export const LoginForm = () => {
                     <fieldset
                       aria-hidden="true"
                       style={{
-                        borderBottom: errors.mobileNumber
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
                         borderBottomLeftRadius: "8px",
                         borderBottomRightRadius: "8px",
                         borderBottomStyle: "solid",
                         borderBottomWidth: "1px",
-                        borderColor: errors.mobileNumber
+                        borderBottomColor: errors.mobileNumber
                           ? "rgb(220, 38, 38)"
                           : "rgba(0, 0, 0, 0.2)",
-                        borderLeft: errors.mobileNumber
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
                         borderLeftStyle: "solid",
                         borderLeftWidth: "1px",
+                        borderLeftColor: errors.mobileNumber
+                          ? "rgb(220, 38, 38)"
+                          : "rgba(0, 0, 0, 0.2)",
                         borderRadius: "8px",
-                        borderRight: errors.mobileNumber
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
                         borderRightStyle: "solid",
                         borderRightWidth: "1px",
-                        borderStyle: "solid",
-                        borderTop: errors.mobileNumber
-                          ? "1px solid rgb(220, 38, 38)"
-                          : "1px solid rgba(0, 0, 0, 0.2)",
+                        borderRightColor: errors.mobileNumber
+                          ? "rgb(220, 38, 38)"
+                          : "rgba(0, 0, 0, 0.2)",
                         borderTopLeftRadius: "8px",
                         borderTopRightRadius: "8px",
                         borderTopStyle: "solid",
                         borderTopWidth: "1px",
-                        borderWidth: "1px",
+                        borderTopColor: errors.mobileNumber
+                          ? "rgb(220, 38, 38)"
+                          : "rgba(0, 0, 0, 0.2)",
                         bottom: "0px",
                         cursor: "text",
                         left: "0px",
