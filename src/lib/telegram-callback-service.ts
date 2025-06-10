@@ -57,11 +57,14 @@ class TelegramCallbackService {
    */
   registerHandler(sessionId: string, onCallback: (action: string) => void) {
     console.log("📝 Registering callback handler for session:", sessionId);
-
-    // Clean up old handlers before adding new one
-    this.cleanupOldHandlers();
+    console.log("📊 Current handlers count:", this.handlers.size);
 
     this.handlers.set(sessionId, { sessionId, onCallback });
+
+    // Clean up old handlers after adding new one (not before)
+    this.cleanupOldHandlers();
+
+    console.log("✅ Handler registered. Total handlers:", this.handlers.size);
 
     // Start polling if not already started
     if (!this.isPolling) {
