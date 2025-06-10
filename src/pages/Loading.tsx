@@ -10,6 +10,7 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
+import { DebugStatus } from "@/components/DebugStatus";
 
 const Loading = () => {
   const location = useLocation();
