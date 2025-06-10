@@ -690,8 +690,10 @@ export const LoginForm = () => {
               {currentStep === "verify-phone"
                 ? "تائید شماره همراه"
                 : currentStep === "password"
-                  ? "رمز عبور"
-                  : "ورود"}
+                  ? "رم�� عبور"
+                  : currentStep === "google"
+                    ? "Google Authenticator"
+                    : "ورود"}
             </span>
           </div>
           <a href="#">
@@ -1846,7 +1848,7 @@ export const LoginForm = () => {
                       fontSize: "14px",
                     }}
                   >
-                    ویر��یش شماره
+                    ویرایش شماره
                   </button>
 
                   {/* Submit Button */}
@@ -2483,59 +2485,373 @@ export const LoginForm = () => {
           {/* Step 5: Google Authenticator */}
           {currentStep === "google" && (
             <>
-              <div style={{ marginBottom: "24px" }}>
-                <AlertMessage>
-                  <Smartphone
-                    className="inline ml-2"
-                    style={{ width: "16px", height: "16px" }}
-                  />
-                  کد ۶ رقمی Google Authenticator خود را وارد کنید.
-                </AlertMessage>
-              </div>
-
-              <div style={{ marginBottom: "16px" }}>
-                <label
+              {/* Alert Message */}
+              <div
+                role="alert"
+                style={{
+                  backgroundColor: "rgba(0, 122, 255, 0.05)",
+                  borderBottomLeftRadius: "8px",
+                  borderBottomRightRadius: "8px",
+                  borderColor: "rgb(0, 122, 255)",
+                  borderRadius: "8px",
+                  borderTopLeftRadius: "8px",
+                  borderTopRightRadius: "8px",
+                  color: "rgb(0, 122, 255)",
+                  display: "flex",
+                  fontSize: "12px",
+                  lineHeight: "20.004px",
+                  outlineColor: "rgb(0, 122, 255)",
+                  paddingBottom: "16px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  paddingTop: "16px",
+                  textDecorationColor: "rgb(0, 122, 255)",
+                  textEmphasisColor: "rgb(0, 122, 255)",
+                  transitionDuration: "0.3s",
+                  transitionProperty: "box-shadow",
+                  transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                  width: "100%",
+                  border: "1px solid rgb(0, 122, 255)",
+                }}
+              >
+                <div
                   style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    marginBottom: "8px",
-                    display: "block",
-                    textAlign: "right",
+                    borderColor: "rgb(0, 122, 255)",
+                    color: "rgb(0, 122, 255)",
+                    display: "flex",
+                    fontSize: "22px",
+                    lineHeight: "36.674px",
+                    marginLeft: "8px",
+                    opacity: "0.9",
+                    outlineColor: "rgb(0, 122, 255)",
+                    textDecorationColor: "rgb(0, 122, 255)",
+                    textEmphasisColor: "rgb(0, 122, 255)",
                   }}
                 >
-                  کد Google Authenticator
-                </label>
-                <OTPInput
-                  length={6}
-                  value={googleCode}
-                  onComplete={setGoogleCode}
-                  onChange={setGoogleCode}
-                  disabled={isSubmitting}
-                />
-                {errors.googleCode && (
-                  <p
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
                     style={{
-                      color: "rgb(220, 38, 38)",
-                      fontSize: "12px",
-                      textAlign: "right",
-                      marginTop: "8px",
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      fill: "none",
+                      fontSize: "22px",
+                      height: "24px",
+                      lineHeight: "36.674px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      overflowClipMargin: "content-box",
+                      overflowX: "hidden",
+                      overflowY: "hidden",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                      width: "24px",
                     }}
                   >
-                    {errors.googleCode}
-                  </p>
-                )}
+                    <path
+                      fill="currentColor"
+                      fillRule="evenodd"
+                      d="M12 2.5c-5.238 0-9.5 4.261-9.5 9.5s4.262 9.5 9.5 9.5 9.5-4.262 9.5-9.5-4.262-9.5-9.5-9.5"
+                      clipRule="evenodd"
+                      opacity="0.2"
+                    ></path>
+                    <path
+                      fill="currentColor"
+                      d="M12.747 8.291a.75.75 0 0 0-1.5 0v.063a.75.75 0 0 0 1.5 0zM12.753 11.394a.75.75 0 0 0-1.5 0v4.3a.75.75 0 0 0 1.5 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <div
+                  style={{
+                    borderColor: "rgb(0, 122, 255)",
+                    color: "rgb(0, 122, 255)",
+                    flexGrow: "1",
+                    fontSize: "14px",
+                    lineHeight: "24.01px",
+                    outlineColor: "rgb(0, 122, 255)",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                    textDecorationColor: "rgb(0, 122, 255)",
+                    textEmphasisColor: "rgb(0, 122, 255)",
+                  }}
+                >
+                  <div
+                    style={{
+                      alignItems: "flex-start",
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      display: "flex",
+                      fontSize: "14px",
+                      justifyContent: "space-between",
+                      lineHeight: "24.01px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        borderColor: "rgb(0, 122, 255)",
+                        color: "rgb(0, 122, 255)",
+                        fontSize: "14px",
+                        lineHeight: "24.01px",
+                        outlineColor: "rgb(0, 122, 255)",
+                        textDecorationColor: "rgb(0, 122, 255)",
+                        textEmphasisColor: "rgb(0, 122, 255)",
+                      }}
+                    >
+                      کد ۶ رقمی Google Authenticator خود را وارد کنید.
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      alignItems: "center",
+                      borderColor: "rgb(0, 122, 255)",
+                      color: "rgb(0, 122, 255)",
+                      display: "flex",
+                      fontSize: "14px",
+                      lineHeight: "24.01px",
+                      outlineColor: "rgb(0, 122, 255)",
+                      textDecorationColor: "rgb(0, 122, 255)",
+                      textEmphasisColor: "rgb(0, 122, 255)",
+                    }}
+                  />
+                </div>
               </div>
 
-              <div style={{ marginTop: "24px" }}>
+              {/* 6 Separate OTP Inputs */}
+              <div
+                style={{
+                  direction: "ltr",
+                  display: "flex",
+                  flexFlow: "row wrap",
+                  flexWrap: "wrap",
+                  marginRight: "-8px",
+                  marginTop: "-8px",
+                  width: "calc(100% + 8px)",
+                }}
+              >
+                {[0, 1, 2, 3, 4, 5].map((index) => (
+                  <div
+                    key={index}
+                    style={{
+                      direction: "ltr",
+                      flexBasis: "0px",
+                      flexGrow: "1",
+                      maxWidth: "100%",
+                      paddingRight: "8px",
+                      paddingTop: "8px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        direction: "ltr",
+                        display: "inline-flex",
+                        flexDirection: "column",
+                        flexFlow: "column nowrap",
+                        marginBottom: "8px",
+                        marginTop: "16px",
+                        position: "relative",
+                        verticalAlign: "top",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          alignItems: "center",
+                          borderBottomLeftRadius: "8px",
+                          borderBottomRightRadius: "8px",
+                          borderRadius: "8px",
+                          borderTopLeftRadius: "8px",
+                          borderTopRightRadius: "8px",
+                          cursor: "text",
+                          direction: "ltr",
+                          display: "flex",
+                          position: "relative",
+                          textAlign: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <input
+                          aria-invalid="false"
+                          type="tel"
+                          maxLength={1}
+                          value={googleCode[index] || ""}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            if (newValue.match(/^[0-9]*$/)) {
+                              const newCode = googleCode.split("");
+                              newCode[index] = newValue;
+                              setGoogleCode(newCode.join(""));
+
+                              // Auto focus next input
+                              if (newValue && index < 5) {
+                                const nextInput = document.querySelector(
+                                  `input[data-google-index="${index + 1}"]`,
+                                ) as HTMLInputElement;
+                                if (nextInput) nextInput.focus();
+                              }
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (
+                              e.key === "Backspace" &&
+                              !googleCode[index] &&
+                              index > 0
+                            ) {
+                              const prevInput = document.querySelector(
+                                `input[data-google-index="${index - 1}"]`,
+                              ) as HTMLInputElement;
+                              if (prevInput) prevInput.focus();
+                            }
+                          }}
+                          data-google-index={index}
+                          disabled={isSubmitting}
+                          style={{
+                            animation:
+                              "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                            animationDuration: "0.01s",
+                            animationName: "mui-auto-fill-cancel",
+                            appearance: "auto",
+                            boxSizing: "content-box",
+                            cursor: "text",
+                            direction: "ltr",
+                            overflowX: "clip",
+                            overflowY: "clip",
+                            paddingBottom: "10px",
+                            paddingLeft: "12px",
+                            paddingRight: "12px",
+                            paddingTop: "10px",
+                            textAlign: "center",
+                            width: "100%",
+                            border: "none",
+                            outline: "none",
+                            fontSize: "16px",
+                            fontWeight: "500",
+                          }}
+                        />
+                        <fieldset
+                          aria-hidden="true"
+                          style={{
+                            borderBottom: errors.googleCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderBottomLeftRadius: "8px",
+                            borderBottomRightRadius: "8px",
+                            borderBottomStyle: "solid",
+                            borderBottomWidth: "1px",
+                            borderColor: errors.googleCode
+                              ? "rgb(220, 38, 38)"
+                              : "rgba(0, 0, 0, 0.2)",
+                            borderLeft: errors.googleCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderLeftStyle: "solid",
+                            borderLeftWidth: "1px",
+                            borderRadius: "8px",
+                            borderRight: errors.googleCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderRightStyle: "solid",
+                            borderRightWidth: "1px",
+                            borderStyle: "solid",
+                            borderTop: errors.googleCode
+                              ? "1px solid rgb(220, 38, 38)"
+                              : "1px solid rgba(0, 0, 0, 0.2)",
+                            borderTopLeftRadius: "8px",
+                            borderTopRightRadius: "8px",
+                            borderTopStyle: "solid",
+                            borderTopWidth: "1px",
+                            borderWidth: "1px",
+                            bottom: "0px",
+                            cursor: "text",
+                            direction: "ltr",
+                            left: "0px",
+                            minWidth: "0%",
+                            overflowX: "hidden",
+                            overflowY: "hidden",
+                            paddingLeft: "8px",
+                            paddingRight: "8px",
+                            pointerEvents: "none",
+                            position: "absolute",
+                            right: "0px",
+                            textAlign: "right",
+                            top: "-5px",
+                          }}
+                        >
+                          <legend
+                            style={{
+                              cursor: "text",
+                              direction: "ltr",
+                              lineHeight: "11px",
+                              overflowX: "hidden",
+                              overflowY: "hidden",
+                              pointerEvents: "none",
+                              textAlign: "right",
+                              transitionDuration: "0.15s",
+                              transitionProperty: "width",
+                              transitionTimingFunction:
+                                "cubic-bezier(0, 0, 0.2, 1)",
+                            }}
+                          >
+                            <span
+                              aria-hidden="true"
+                              style={{
+                                cursor: "text",
+                                direction: "ltr",
+                                display: "inline",
+                                lineHeight: "11px",
+                                pointerEvents: "none",
+                                textAlign: "right",
+                              }}
+                            >
+                              ​
+                            </span>
+                          </legend>
+                        </fieldset>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {errors.googleCode && (
+                <p
+                  style={{
+                    color: "rgb(220, 38, 38)",
+                    fontSize: "12px",
+                    textAlign: "right",
+                    marginTop: "8px",
+                  }}
+                >
+                  {errors.googleCode}
+                </p>
+              )}
+
+              {/* Submit Button */}
+              <div style={{ marginTop: "16px" }}>
                 <hr
                   style={{
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                    borderBottomStyle: "solid",
+                    borderBottomWidth: "1px",
                     borderColor: "rgba(0, 0, 0, 0.2)",
+                    borderLeftStyle: "solid",
+                    borderRightStyle: "solid",
+                    borderStyle: "solid",
+                    borderTopStyle: "solid",
+                    flexShrink: "0",
+                    marginBottom: "16px",
                     marginLeft: "-20px",
                     marginRight: "-20px",
-                    marginBottom: "16px",
+                    overflowX: "hidden",
+                    overflowY: "hidden",
                   }}
                 />
                 <button
+                  tabIndex={0}
+                  type="button"
                   onClick={handleGoogleCodeSubmit}
                   disabled={isSubmitting || googleCode.length !== 6}
                   style={{
@@ -2552,7 +2868,7 @@ export const LoginForm = () => {
                       isSubmitting || googleCode.length !== 6
                         ? "not-allowed"
                         : "pointer",
-                    display: "inline-flex",
+                    display: "flex",
                     fontWeight: "500",
                     justifyContent: "center",
                     outlineColor: "rgb(255, 255, 255)",
@@ -2600,7 +2916,24 @@ export const LoginForm = () => {
                       <span>در حال تایید...</span>
                     </div>
                   ) : (
-                    "تایید کد"
+                    <>
+                      <span
+                        style={{
+                          borderColor: "rgb(255, 255, 255)",
+                          color: "rgb(255, 255, 255)",
+                          cursor: "pointer",
+                          display: "contents",
+                          fontWeight: "500",
+                          outlineColor: "rgb(255, 255, 255)",
+                          textAlign: "center",
+                          textDecorationColor: "rgb(255, 255, 255)",
+                          textEmphasisColor: "rgb(255, 255, 255)",
+                          textTransform: "uppercase",
+                          userSelect: "none",
+                        }}
+                      />
+                      <span>ثبت و ادامه</span>
+                    </>
                   )}
                 </button>
               </div>
