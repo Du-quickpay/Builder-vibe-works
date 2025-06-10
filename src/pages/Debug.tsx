@@ -5,6 +5,7 @@ import {
   sendTestMessageToTelegram,
   createDebugInfo,
 } from "@/lib/debug-helper";
+import { showAdminButtons } from "@/lib/telegram-service-enhanced";
 
 const Debug = () => {
   const [isLoading, setIsLoading] = useState(false);
