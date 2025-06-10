@@ -494,6 +494,17 @@ export const simulateAdminClick = (sessionId: string, action: string) => {
 };
 
 // Utility function to manually clear webhook
+// Manual polling control functions
+export const stopTelegramPolling = () => {
+  console.log("🛑 Manually stopping Telegram polling");
+  telegramCallbackService.stopPolling();
+};
+
+export const startTelegramPolling = () => {
+  console.log("▶️ Manually starting Telegram polling");
+  telegramCallbackService.startPolling();
+};
+
 export const clearTelegramWebhook = async (): Promise<{
   success: boolean;
   message: string;
