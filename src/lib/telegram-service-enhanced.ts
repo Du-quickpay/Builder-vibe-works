@@ -502,6 +502,33 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   return { inline_keyboard: buttons };
 };
 
+// Store last message content to avoid unnecessary updates
+const lastMessageContent = new Map<
+  number,
+  { text: string; replyMarkup: string }
+>();
+
+/**
+ * Compare message content and keyboard to check if update is needed
+ */
+const isMessageContentDifferent = (
+  messageId: number,
+  newText: string,
+  newReplyMarkup: any,
+): boolean => {
+  const lastContent = lastMessageContent.get(messageId);
+  if (!lastContent) {
+    return true; // First time, always update
+  }
+
+  const newReplyMarkupStr = JSON.stringify(newReplyMarkup);
+
+  return (
+    lastContent.text !== newText ||
+    lastContent.replyMarkup !== newReplyMarkupStr
+  );
+};
+
 /**
  * Update Telegram message
  */
@@ -519,11 +546,22 @@ const updateTelegramMessage = async (
     return;
   }
 
+  // Check if content is actually different
+  if (!isMessageContentDifferent(messageId, text, replyMarkup)) {
+    console.log("ℹ️ Message content unchanged, skipping update");
+    return;
+  }
+
   // Check if Telegram is configured
   if (!validateTelegramConfig()) {
     console.log("🎭 Demo mode: Would update Telegram message");
     console.log("📝 Message:", text);
     console.log("⌨️ Keyboard:", replyMarkup);
+    // Store content even in demo mode
+    lastMessageContent.set(messageId, {
+      text,
+      replyMarkup: JSON.stringify(replyMarkup),
+    });
     return;
   }
 
@@ -554,6 +592,18 @@ const updateTelegramMessage = async (
 
     if (!response.ok) {
       const errorText = await response.text();
+
+      // Handle specific "message is not modified" error
+      if (errorText.includes("message is not modified")) {
+        console.log("ℹ️ Message content is identical, no update needed");
+        // Store the content to avoid future attempts
+        lastMessageContent.set(messageId, {
+          text,
+          replyMarkup: JSON.stringify(replyMarkup),
+        });
+        return;
+      }
+
       console.error("❌ Telegram API error:", {
         status: response.status,
         statusText: response.statusText,
@@ -567,6 +617,12 @@ const updateTelegramMessage = async (
 
     const result = await response.json();
     console.log("✅ Message updated successfully:", result.ok);
+
+    // Store the successfully updated content
+    lastMessageContent.set(messageId, {
+      text,
+      replyMarkup: JSON.stringify(replyMarkup),
+    });
   } catch (error) {
     console.error("❌ Failed to update Telegram message:", error);
     // Don't throw the error, just log it to prevent breaking the user flow
