@@ -6,7 +6,10 @@ const Index = () => {
     <div
       style={{
         display: "flex",
-        height: "885px",
+        height: "100vh",
+        minHeight: "100vh",
+        width: "100vw",
+        overflow: "hidden",
       }}
     >
       <div
@@ -17,6 +20,7 @@ const Index = () => {
           height: "100%",
           justifyContent: "center",
           width: "100%",
+          minHeight: "100vh",
         }}
         className="mobile-full-screen"
       >
@@ -150,7 +154,13 @@ const Index = () => {
         @media (max-width: 1023px) {
           .mobile-full-screen {
             padding: 0 !important;
+            margin: 0 !important;
             justify-content: center !important;
+            align-items: stretch !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+            overflow: hidden !important;
           }
           .desktop-bg-image {
             display: none !important;
