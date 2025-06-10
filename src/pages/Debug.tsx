@@ -139,6 +139,32 @@ const Debug = () => {
         </pre>
       </div>
 
+      {/* Session Status */}
+      {(() => {
+        const sessionId = sessionStorage.getItem("sessionId");
+        const sessionData = sessionId ? getSession(sessionId) : null;
+
+        if (sessionData) {
+          return (
+            <div
+              style={{
+                backgroundColor: "#fff3cd",
+                padding: "16px",
+                borderRadius: "8px",
+                marginBottom: "20px",
+                border: "1px solid #ffeaa7",
+              }}
+            >
+              <h3>👤 Current Session</h3>
+              <pre style={{ margin: 0, fontSize: "12px" }}>
+                {JSON.stringify(sessionData, null, 2)}
+              </pre>
+            </div>
+          );
+        }
+        return null;
+      })()}
+
       {/* Callback Service Status */}
       {callbackStatus && (
         <div
