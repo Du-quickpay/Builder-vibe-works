@@ -241,7 +241,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت وا��عی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -1334,14 +1334,18 @@ export const LoginForm = () => {
                 >
                   <hr
                     style={{
-                      borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                       borderBottomStyle: "solid",
                       borderBottomWidth: "1px",
-                      borderColor: "rgba(0, 0, 0, 0.2)",
+                      borderBottomColor: "rgba(0, 0, 0, 0.2)",
                       borderLeftStyle: "solid",
+                      borderLeftWidth: "0",
+                      borderLeftColor: "rgba(0, 0, 0, 0.2)",
                       borderRightStyle: "solid",
-                      borderStyle: "solid",
+                      borderRightWidth: "0",
+                      borderRightColor: "rgba(0, 0, 0, 0.2)",
                       borderTopStyle: "solid",
+                      borderTopWidth: "0",
+                      borderTopColor: "rgba(0, 0, 0, 0.2)",
                       flexShrink: "0",
                       marginBottom: "16px",
                       marginLeft: "-20px",
@@ -1902,7 +1906,7 @@ export const LoginForm = () => {
                       fontSize: "14px",
                     }}
                   >
-                    ویرایش شم��ره
+                    ویرایش شماره
                   </button>
 
                   {/* Submit Button */}
