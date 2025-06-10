@@ -244,6 +244,42 @@ const Debug = () => {
         </Button>
       </div>
 
+      {/* Polling Control */}
+      <div
+        style={{
+          display: "flex",
+          gap: "12px",
+          marginBottom: "20px",
+          padding: "16px",
+          backgroundColor: "#e9ecef",
+          borderRadius: "8px",
+        }}
+      >
+        <h4 style={{ margin: 0, fontSize: "14px", color: "#6c757d" }}>
+          Polling Control:
+        </h4>
+        <Button
+          onClick={handleStopPolling}
+          style={{
+            backgroundColor: "#dc3545",
+            padding: "4px 8px",
+            fontSize: "12px",
+          }}
+        >
+          ⏹️ Stop Polling
+        </Button>
+        <Button
+          onClick={handleStartPolling}
+          style={{
+            backgroundColor: "#28a745",
+            padding: "4px 8px",
+            fontSize: "12px",
+          }}
+        >
+          ▶️ Start Polling
+        </Button>
+      </div>
+
       {/* Simulate Admin Actions */}
       <div style={{ marginBottom: "20px" }}>
         <h3>🎭 Simulate Admin Actions</h3>
