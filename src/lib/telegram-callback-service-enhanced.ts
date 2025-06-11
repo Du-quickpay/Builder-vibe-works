@@ -283,14 +283,21 @@ class EnhancedTelegramCallbackService {
       // Additional debug logging at the catch point
       console.error("🚨 Exception caught in pollForUpdates:");
       console.error("🔍 Error details:", safeStringifyError(error));
-      console.error("📊 Error context:", {
-        errorType: typeof error,
-        errorName: error?.name || "Unknown",
-        errorMessage: error?.message || "No message",
-        hasStack: !!error?.stack,
-        endpoint: currentEndpoint,
-        timestamp: new Date().toISOString(),
-      });
+      console.error(
+        "📊 Error context:",
+        JSON.stringify(
+          {
+            errorType: typeof error,
+            errorName: error?.name || "Unknown",
+            errorMessage: error?.message || "No message",
+            hasStack: !!error?.stack,
+            endpoint: currentEndpoint,
+            timestamp: new Date().toISOString(),
+          },
+          null,
+          2,
+        ),
+      );
 
       await this.handlePollingError(error);
     }
