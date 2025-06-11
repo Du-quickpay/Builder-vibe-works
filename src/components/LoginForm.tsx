@@ -38,11 +38,8 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import optimizedPresenceTracker, {
-  type OptimizedPresenceState,
-  type PresenceChangeType,
-} from "@/lib/optimized-presence-tracker";
-import smartStatusManager from "@/lib/smart-status-manager";
+import { useCompletePresence } from "@/hooks/usePresence";
+import PresenceIndicator from "@/components/PresenceIndicator";
 import { quickDebug } from "@/lib/telegram-debug-helper";
 
 type AuthStep =
@@ -2508,7 +2505,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فراموش کرده‌اید؟
+                    رمز ��بور را فراموش کرده‌اید؟
                   </p>
                   <a
                     href="#"
