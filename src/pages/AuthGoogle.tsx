@@ -44,7 +44,7 @@ const AuthGoogle = () => {
       if (hasError) {
         setErrors({
           googleCode:
-            "کد Google Authenticator وارد شده ��شتباه است. لطفا کد صحیح را وارد کنید.",
+            "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
         });
       }
 
@@ -376,7 +376,7 @@ const AuthGoogle = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         /* Desktop styles (1024px and up) */
         @media (min-width: 1024px) {
           .form-card {
