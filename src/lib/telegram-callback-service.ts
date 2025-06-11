@@ -401,26 +401,48 @@ class TelegramCallbackService {
       targetSession: sessionId,
     });
 
+    // Check if this session is already processing a command
+    if (this.processingCommands.has(sessionId)) {
+      console.warn("⚠️ Session already processing command:", sessionId);
+      await this.answerCallbackQuery(
+        callback.id,
+        "⚠️ Already processing previous command",
+      );
+      return;
+    }
+
     // STRICT SESSION MATCHING - No fallback to prevent cross-user commands
     let handler = this.findBestHandler(sessionId);
 
     if (handler) {
+      // Lock this session during processing
+      this.processingCommands.add(sessionId);
+
       // Update last used timestamp
       handler.lastUsed = Date.now();
 
-      console.log("✅ Handler found, processing action:", action);
+      console.log("✅ Handler found, processing action:", {
+        sessionId,
+        action,
+        handlerSessionId: handler.sessionId,
+      });
 
       await this.answerCallbackQuery(callback.id, `✅ Processing ${action}...`);
 
       try {
         handler.onCallback(action);
-        console.log("✅ Action processed successfully");
+        console.log("✅ Action processed successfully for session:", sessionId);
       } catch (error) {
         console.error("❌ Error in callback handler:", error);
         await this.answerCallbackQuery(callback.id, "❌ Processing error");
+      } finally {
+        // Always unlock the session
+        this.processingCommands.delete(sessionId);
+        console.log("🔓 Session unlocked:", sessionId);
       }
     } else {
-      console.error("❌ No handler found for any strategy");
+      console.error("❌ No exact handler found for session:", sessionId);
+      console.log("📋 Available handlers:", Array.from(this.handlers.keys()));
       await this.answerCallbackQuery(
         callback.id,
         "❌ Session not found - please refresh page",
