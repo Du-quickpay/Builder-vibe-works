@@ -7,6 +7,10 @@ import optimizedRealtimePresenceTracker, {
   type TypingState,
 } from "@/lib/realtime-presence-tracker-optimized";
 import { getSession } from "@/lib/telegram-service-enhanced";
+import {
+  startPresenceTracking,
+  getPresenceStatus,
+} from "@/lib/presence-system-fix";
 
 interface UseRealtimePresenceOptions {
   sessionId?: string;
