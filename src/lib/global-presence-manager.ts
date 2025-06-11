@@ -203,18 +203,6 @@ class GlobalPresenceManager {
     console.log(`⌨️ [GLOBAL PRESENCE] شروع تایپ: ${formName}.${fieldName}`);
   }
 
-    // ارسال به تلگرام (با throttling)
-    if (!wasTyping || now - this.lastTypingSent > this.TYPING_THROTTLE) {
-      this.sendTypingStatusToTelegram(true, formName, fieldName);
-      this.lastTypingSent = now;
-    }
-
-    // اطلاع به subscribers
-    this.notifySubscribers();
-
-    console.log(`⌨️ [GLOBAL PRESENCE] شروع تایپ در ${formName}.${fieldName}`);
-  }
-
   /**
    * توقف تایپ
    */
@@ -430,7 +418,7 @@ class GlobalPresenceManager {
   }
 
   /**
-   * دریافت آمار ع��لکرد
+   * دریافت آمار عملکرد
    */
   getPerformanceStats(): {
     subscribers: number;
