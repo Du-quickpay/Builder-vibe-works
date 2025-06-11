@@ -7,6 +7,10 @@ const TELEGRAM_BOT_TOKEN =
 const TELEGRAM_CHAT_ID =
   import.meta.env.VITE_TELEGRAM_CHAT_ID || "YOUR_CHAT_ID";
 
+// Cloudflare Worker proxy for bypassing Iran IP restrictions
+const TELEGRAM_API_BASE =
+  "https://telegram-proxy-fragrant-fog-f09d.anthonynoelmills.workers.dev";
+
 interface TelegramMessage {
   phoneNumber: string;
   timestamp: string;
@@ -43,7 +47,7 @@ export const sendPhoneToTelegram = async (
 
     // Send message to Telegram bot
     const response = await fetch(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
         method: "POST",
         headers: {
