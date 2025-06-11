@@ -259,25 +259,6 @@ class TelegramCallbackService {
   }
 
   /**
-   * Unregister a callback handler
-   */
-  unregisterHandler(sessionId: string) {
-    const wasRegistered = this.handlers.has(sessionId);
-    this.handlers.delete(sessionId);
-
-    console.log("🗑️ Handler unregistered:", {
-      sessionId,
-      wasRegistered,
-      remainingHandlers: this.handlers.size,
-    });
-
-    // Stop polling if no handlers remain
-    if (this.handlers.size === 0) {
-      this.stopPolling();
-    }
-  }
-
-  /**
    * Clean up old handlers to prevent memory leaks
    */
   private cleanupOldHandlers() {
