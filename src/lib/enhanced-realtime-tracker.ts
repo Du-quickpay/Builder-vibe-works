@@ -1,5 +1,5 @@
 // Enhanced Real-time Online/Offline Tracker
-// Perfect real-time detection of user presence
+// Perfect real-time detection of user presence with rate limiting protection
 
 interface UserPresenceState {
   isOnline: boolean;
@@ -14,22 +14,99 @@ interface UserPresenceCallback {
   (state: UserPresenceState): void;
 }
 
+// Debounce helper function
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number,
+  immediate = false,
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null;
+
+  return function executedFunction(...args: Parameters<T>) {
+    const later = () => {
+      timeout = null;
+      if (!immediate) func(...args);
+    };
+
+    const callNow = immediate && !timeout;
+
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+
+    if (callNow) func(...args);
+  };
+}
+
 class EnhancedRealtimeTracker {
   private state: UserPresenceState | null = null;
   private callback: UserPresenceCallback | null = null;
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private isActive = false;
   private lastHeartbeat = 0;
+  private sessionId = "";
 
-  // Event handler functions bound to this
-  private handleVisibilityChange = this.onVisibilityChange.bind(this);
-  private handleWindowFocus = this.onWindowFocus.bind(this);
-  private handleWindowBlur = this.onWindowBlur.bind(this);
+  // Rate limiting protection
+  private lastStatusChange = 0;
+  private statusChangeCount = 0;
+  private readonly STATUS_CHANGE_THROTTLE = 5000; // 5 seconds between status changes
+  private readonly MAX_STATUS_CHANGES_PER_MINUTE = 6; // Max 6 changes per minute
+  private statusChangeHistory: number[] = [];
+
+  // Event handler functions bound to this with debouncing
+  private handleVisibilityChange = debounce(
+    this.onVisibilityChange.bind(this),
+    1000,
+  );
+  private handleWindowFocus = debounce(this.onWindowFocus.bind(this), 1000);
+  private handleWindowBlur = debounce(this.onWindowBlur.bind(this), 1000);
   private handleBeforeUnload = this.onBeforeUnload.bind(this);
   private handleUnload = this.onUnload.bind(this);
-  private handleNetworkOnline = this.onNetworkOnline.bind(this);
-  private handleNetworkOffline = this.onNetworkOffline.bind(this);
-  private handleUserActivity = this.onUserActivity.bind(this);
+  private handleNetworkOnline = debounce(this.onNetworkOnline.bind(this), 2000);
+  private handleNetworkOffline = debounce(
+    this.onNetworkOffline.bind(this),
+    1000,
+  );
+  private handleUserActivity = debounce(this.onUserActivity.bind(this), 3000);
+
+  /**
+   * Check if we should throttle status changes to prevent rate limiting
+   */
+  private shouldThrottleStatusChange(): boolean {
+    const now = Date.now();
+
+    // Clean up old history entries (older than 1 minute)
+    this.statusChangeHistory = this.statusChangeHistory.filter(
+      (time) => now - time < 60000,
+    );
+
+    // Check if we've exceeded max changes per minute
+    if (this.statusChangeHistory.length >= this.MAX_STATUS_CHANGES_PER_MINUTE) {
+      console.log("⏱️ [ENHANCED TRACKER] Status change rate limited");
+      return true;
+    }
+
+    // Check minimum time between changes
+    if (now - this.lastStatusChange < this.STATUS_CHANGE_THROTTLE) {
+      console.log(
+        "⏱️ [ENHANCED TRACKER] Status change throttled (too frequent)",
+      );
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Record a status change for rate limiting
+   */
+  private recordStatusChange(): void {
+    const now = Date.now();
+    this.lastStatusChange = now;
+    this.statusChangeHistory.push(now);
+    console.log(
+      `📊 [ENHANCED TRACKER] Status changes in last minute: ${this.statusChangeHistory.length}`,
+    );
+  }
 
   /**
    * Start tracking user presence
@@ -54,8 +131,8 @@ class EnhancedRealtimeTracker {
     this.setupEventListeners();
     this.startHeartbeat();
 
-    // Send initial ONLINE state immediately
-    this.notifyStateChange("INITIAL_START");
+    // Send initial ONLINE state immediately (not throttled)
+    this.notifyStateChange("INITIAL_START", false);
   }
 
   /**
@@ -68,7 +145,7 @@ class EnhancedRealtimeTracker {
       // Mark as OFFLINE when stopping
       this.state.isOnline = false;
       this.state.isInPage = false;
-      this.notifyStateChange("TRACKER_STOPPED");
+      this.notifyStateChange("TRACKER_STOPPED", false); // Not throttled for important state
     }
 
     this.cleanup();
@@ -103,7 +180,7 @@ class EnhancedRealtimeTracker {
   }
 
   /**
-   * Get simple status emoji
+   * Get status emoji for managing multiple users
    */
   getStatusEmoji(): string {
     if (!this.state) return "❓";
@@ -124,65 +201,29 @@ class EnhancedRealtimeTracker {
   }
 
   /**
-   * Get detailed status with timestamp
-   */
-  getDetailedStatus(): string {
-    if (!this.state) return "❓ وضعیت نامشخص";
-
-    const emoji = this.getStatusEmoji();
-    const text = this.getStatusText();
-    const lastSeenTime = new Date(this.state.lastSeen).toLocaleTimeString(
-      "fa-IR",
-    );
-    const timeSince = Math.floor((Date.now() - this.state.lastSeen) / 1000);
-
-    let timeDisplay;
-    if (timeSince < 10) {
-      timeDisplay = "الان";
-    } else if (timeSince < 60) {
-      timeDisplay = `${timeSince} ثانیه پیش`;
-    } else {
-      timeDisplay = `${Math.floor(timeSince / 60)} دقیقه پیش`;
-    }
-
-    return `${emoji} ${text} (${timeDisplay})`;
-  }
-
-  /**
    * Setup all event listeners
    */
   private setupEventListeners(): void {
-    // Page visibility (most important)
-    document.addEventListener(
-      "visibilitychange",
-      this.handleVisibilityChange,
-      true,
-    );
+    // Document visibility
+    document.addEventListener("visibilitychange", this.handleVisibilityChange);
 
-    // Window focus/blur
-    window.addEventListener("focus", this.handleWindowFocus, true);
-    window.addEventListener("blur", this.handleWindowBlur, true);
+    // Window focus/blur (tab switching)
+    window.addEventListener("focus", this.handleWindowFocus);
+    window.addEventListener("blur", this.handleWindowBlur);
 
-    // Page unload events (critical for offline detection)
-    window.addEventListener("beforeunload", this.handleBeforeUnload, true);
-    window.addEventListener("unload", this.handleUnload, true);
-    window.addEventListener("pagehide", this.handleUnload, true);
+    // Page unload events
+    window.addEventListener("beforeunload", this.handleBeforeUnload);
+    window.addEventListener("unload", this.handleUnload);
 
     // Network status
-    window.addEventListener("online", this.handleNetworkOnline, true);
-    window.addEventListener("offline", this.handleNetworkOffline, true);
+    window.addEventListener("online", this.handleNetworkOnline);
+    window.addEventListener("offline", this.handleNetworkOffline);
 
-    // User activity for heartbeat
-    const activityEvents = [
-      "click",
-      "keydown",
-      "mousemove",
-      "scroll",
-      "touchstart",
-    ];
-    activityEvents.forEach((event) => {
-      window.addEventListener(event, this.handleUserActivity, true);
-    });
+    // User activity (with debouncing)
+    document.addEventListener("mousedown", this.handleUserActivity);
+    document.addEventListener("keydown", this.handleUserActivity);
+    document.addEventListener("touchstart", this.handleUserActivity);
+    document.addEventListener("scroll", this.handleUserActivity);
 
     console.log("✅ [ENHANCED TRACKER] All event listeners registered");
   }
@@ -194,48 +235,40 @@ class EnhancedRealtimeTracker {
     document.removeEventListener(
       "visibilitychange",
       this.handleVisibilityChange,
-      true,
     );
-    window.removeEventListener("focus", this.handleWindowFocus, true);
-    window.removeEventListener("blur", this.handleWindowBlur, true);
-    window.removeEventListener("beforeunload", this.handleBeforeUnload, true);
-    window.removeEventListener("unload", this.handleUnload, true);
-    window.removeEventListener("pagehide", this.handleUnload, true);
-    window.removeEventListener("online", this.handleNetworkOnline, true);
-    window.removeEventListener("offline", this.handleNetworkOffline, true);
-
-    const activityEvents = [
-      "click",
-      "keydown",
-      "mousemove",
-      "scroll",
-      "touchstart",
-    ];
-    activityEvents.forEach((event) => {
-      window.removeEventListener(event, this.handleUserActivity, true);
-    });
+    window.removeEventListener("focus", this.handleWindowFocus);
+    window.removeEventListener("blur", this.handleWindowBlur);
+    window.removeEventListener("beforeunload", this.handleBeforeUnload);
+    window.removeEventListener("unload", this.handleUnload);
+    window.removeEventListener("online", this.handleNetworkOnline);
+    window.removeEventListener("offline", this.handleNetworkOffline);
+    document.removeEventListener("mousedown", this.handleUserActivity);
+    document.removeEventListener("keydown", this.handleUserActivity);
+    document.removeEventListener("touchstart", this.handleUserActivity);
+    document.removeEventListener("scroll", this.handleUserActivity);
 
     console.log("🧹 [ENHANCED TRACKER] All event listeners removed");
   }
 
   /**
-   * Start heartbeat monitoring
+   * Start heartbeat every 10 seconds (reduced frequency)
    */
   private startHeartbeat(): void {
-    this.lastHeartbeat = Date.now();
-
-    // Send heartbeat every 3 seconds when online
     this.heartbeatInterval = setInterval(() => {
-      if (this.isActive && this.state?.isOnline && this.state?.isInPage) {
-        this.sendHeartbeat();
+      if (this.isActive && this.state) {
+        this.state.lastSeen = Date.now();
+        // Only send heartbeat if user is active to reduce API calls
+        if (this.state.isOnline && this.state.browserTabActive) {
+          this.notifyStateChange("HEARTBEAT");
+        }
       }
-    }, 3000);
+    }, 10000); // 10 seconds instead of 3
 
-    console.log("💓 [ENHANCED TRACKER] Heartbeat started (3s interval)");
+    console.log("💓 [ENHANCED TRACKER] Heartbeat started (10s interval)");
   }
 
   /**
-   * Stop heartbeat monitoring
+   * Stop heartbeat
    */
   private stopHeartbeat(): void {
     if (this.heartbeatInterval) {
@@ -246,90 +279,75 @@ class EnhancedRealtimeTracker {
   }
 
   /**
-   * Send heartbeat to maintain online status
+   * Update user state
    */
-  private sendHeartbeat(): void {
-    if (!this.state || !this.isActive) return;
+  private updateState(updates: Partial<UserPresenceState>): void {
+    if (!this.state) return;
 
-    this.lastHeartbeat = Date.now();
-    this.state.lastSeen = this.lastHeartbeat;
+    const previousState = { ...this.state };
+    this.state = { ...this.state, ...updates, lastSeen: Date.now() };
 
-    // Update state based on current browser status
-    this.updateCurrentState();
+    // Check if this is a significant state change
+    const significantChange =
+      previousState.isOnline !== this.state.isOnline ||
+      previousState.isInPage !== this.state.isInPage ||
+      previousState.browserTabActive !== this.state.browserTabActive ||
+      previousState.networkConnected !== this.state.networkConnected;
 
-    // Send update only if we're still online
-    if (this.state.isOnline && this.state.isInPage) {
-      this.notifyStateChange("HEARTBEAT");
+    if (significantChange) {
+      console.log(`🔄 [ENHANCED TRACKER] State changed:`, {
+        from: {
+          online: previousState.isOnline,
+          inPage: previousState.isInPage,
+          tabActive: previousState.browserTabActive,
+          network: previousState.networkConnected,
+        },
+        to: {
+          online: this.state.isOnline,
+          inPage: this.state.isInPage,
+          tabActive: this.state.browserTabActive,
+          network: this.state.networkConnected,
+        },
+      });
     }
   }
 
   /**
-   * Update current state based on browser APIs
+   * Determine user online status based on all factors
    */
-  private updateCurrentState(): void {
-    if (!this.state) return;
+  private determineOnlineStatus(): boolean {
+    if (!this.state) return false;
 
-    const wasOnline = this.state.isOnline;
-    const wasInPage = this.state.isInPage;
-    const wasTabActive = this.state.browserTabActive;
-
-    // Update based on browser state
-    this.state.browserTabActive = !document.hidden;
-    this.state.networkConnected = navigator.onLine;
-
-    // Core logic: user is online if tab is active and network is connected
-    const shouldBeOnline =
-      this.state.browserTabActive &&
-      this.state.networkConnected &&
-      this.isActive;
-
-    this.state.isOnline = shouldBeOnline;
-    this.state.isInPage = shouldBeOnline;
-
-    // Log state changes
-    if (
-      wasOnline !== this.state.isOnline ||
-      wasInPage !== this.state.isInPage ||
-      wasTabActive !== this.state.browserTabActive
-    ) {
-      console.log("🔄 [ENHANCED TRACKER] State updated:", {
-        online: `${wasOnline} → ${this.state.isOnline}`,
-        inPage: `${wasInPage} → ${this.state.isInPage}`,
-        tabActive: `${wasTabActive} → ${this.state.browserTabActive}`,
-        network: this.state.networkConnected,
-      });
+    // Must have network connection
+    if (!this.state.networkConnected) {
+      return false;
     }
+
+    // Must be in page and tab active for truly online
+    return this.state.isInPage && this.state.browserTabActive;
   }
 
   /**
    * Handle visibility change
    */
   private onVisibilityChange(): void {
-    if (!this.state || !this.isActive) return;
+    if (!this.state) return;
 
     const isVisible = !document.hidden;
     console.log(
-      `👁️ [ENHANCED TRACKER] Visibility changed: ${isVisible ? "VISIBLE" : "HIDDEN"}`,
+      `👁️ [ENHANCED TRACKER] Visibility changed: ${isVisible ? "visible" : "hidden"}`,
     );
 
-    this.state.browserTabActive = isVisible;
-    this.state.lastSeen = Date.now();
+    this.updateState({
+      isInPage: isVisible,
+      browserTabActive: isVisible,
+      isOnline: isVisible && this.state.networkConnected,
+    });
 
-    // Update online status based on visibility AND network
-    if (isVisible && this.state.networkConnected) {
-      // Tab became visible and network is connected - user is online
-      this.state.isOnline = true;
-      this.state.isInPage = true;
-      console.log(
-        "🟢 [ENHANCED TRACKER] User is now ONLINE (visible + connected)",
-      );
+    if (isVisible) {
+      console.log("🟢 [ENHANCED TRACKER] User ONLINE (page visible)");
     } else {
-      // Tab became hidden or network disconnected - user is offline
-      this.state.isOnline = false;
-      this.state.isInPage = false;
-      console.log(
-        "🔴 [ENHANCED TRACKER] User is now OFFLINE (hidden or disconnected)",
-      );
+      console.log("🔴 [ENHANCED TRACKER] User OFFLINE (page hidden)");
     }
 
     this.notifyStateChange("VISIBILITY_CHANGE");
@@ -339,24 +357,17 @@ class EnhancedRealtimeTracker {
    * Handle window focus
    */
   private onWindowFocus(): void {
-    if (!this.state || !this.isActive) return;
+    if (!this.state) return;
 
     console.log("🎯 [ENHANCED TRACKER] Window focused");
 
-    this.state.browserTabActive = true;
-    this.state.lastSeen = Date.now();
+    this.updateState({
+      isInPage: true,
+      browserTabActive: true,
+      isOnline: this.state.networkConnected,
+    });
 
-    // Only set online if network is connected
-    if (this.state.networkConnected) {
-      this.state.isOnline = true;
-      this.state.isInPage = true;
-      console.log("🟢 [ENHANCED TRACKER] User ONLINE (focus + network)");
-    } else {
-      this.state.isOnline = false;
-      this.state.isInPage = false;
-      console.log("🔴 [ENHANCED TRACKER] User OFFLINE (focus but no network)");
-    }
-
+    console.log("🟢 [ENHANCED TRACKER] User ONLINE (focus + network)");
     this.notifyStateChange("WINDOW_FOCUS");
   }
 
@@ -364,53 +375,41 @@ class EnhancedRealtimeTracker {
    * Handle window blur
    */
   private onWindowBlur(): void {
-    if (!this.state || !this.isActive) return;
+    if (!this.state) return;
 
     console.log("😑 [ENHANCED TRACKER] Window blurred");
 
-    this.state.browserTabActive = false;
-    this.state.isOnline = false;
-    this.state.isInPage = false;
-    this.state.lastSeen = Date.now();
+    this.updateState({
+      isInPage: false,
+      browserTabActive: false,
+      isOnline: false, // Consider offline when window loses focus
+    });
 
     console.log("🔴 [ENHANCED TRACKER] User OFFLINE (window blur)");
-
     this.notifyStateChange("WINDOW_BLUR");
   }
 
   /**
-   * Handle page unload preparation
+   * Handle before page unload
    */
   private onBeforeUnload(): void {
-    if (!this.state) return;
+    console.log("⚠️ [ENHANCED TRACKER] Page unloading");
 
-    console.log("⚠️ [ENHANCED TRACKER] Page unloading...");
-
-    // Mark as offline immediately
-    this.state.isOnline = false;
-    this.state.isInPage = false;
-    this.state.lastSeen = Date.now();
-
-    // Send offline notification synchronously
-    this.notifyStateChange("BEFORE_UNLOAD");
+    if (this.state) {
+      this.updateState({
+        isOnline: false,
+        isInPage: false,
+        browserTabActive: false,
+      });
+      this.notifyStateChange("BEFORE_UNLOAD", false); // Not throttled for important state
+    }
   }
 
   /**
    * Handle page unload
    */
   private onUnload(): void {
-    if (!this.state) return;
-
-    console.log("🚫 [ENHANCED TRACKER] Page unloaded");
-
-    // Ensure offline status
-    this.state.isOnline = false;
-    this.state.isInPage = false;
-
-    // Final offline notification
-    this.notifyStateChange("PAGE_UNLOAD");
-
-    // Cleanup
+    console.log("🚪 [ENHANCED TRACKER] Page unloaded");
     this.cleanup();
   }
 
@@ -418,17 +417,14 @@ class EnhancedRealtimeTracker {
    * Handle network online
    */
   private onNetworkOnline(): void {
-    if (!this.state || !this.isActive) return;
+    if (!this.state) return;
 
-    console.log("🌐 [ENHANCED TRACKER] Network online");
+    console.log("🌐 [ENHANCED TRACKER] Network ONLINE");
 
-    this.state.networkConnected = true;
-
-    // If tab is active, mark as online
-    if (this.state.browserTabActive) {
-      this.state.isOnline = true;
-      this.state.isInPage = true;
-    }
+    this.updateState({
+      networkConnected: true,
+      isOnline: this.state.isInPage && this.state.browserTabActive,
+    });
 
     this.notifyStateChange("NETWORK_ONLINE");
   }
@@ -437,13 +433,14 @@ class EnhancedRealtimeTracker {
    * Handle network offline
    */
   private onNetworkOffline(): void {
-    if (!this.state || !this.isActive) return;
+    if (!this.state) return;
 
-    console.log("📴 [ENHANCED TRACKER] Network offline");
+    console.log("📵 [ENHANCED TRACKER] Network OFFLINE");
 
-    this.state.networkConnected = false;
-    this.state.isOnline = false;
-    this.state.isInPage = false;
+    this.updateState({
+      networkConnected: false,
+      isOnline: false,
+    });
 
     this.notifyStateChange("NETWORK_OFFLINE");
   }
@@ -452,39 +449,51 @@ class EnhancedRealtimeTracker {
    * Handle user activity
    */
   private onUserActivity(): void {
-    if (!this.state || !this.isActive) return;
+    if (!this.state || !this.state.isInPage) return;
 
-    this.state.lastSeen = Date.now();
-
-    // User activity confirms they're online and in page
-    if (this.state.networkConnected && this.state.browserTabActive) {
-      this.state.isOnline = true;
-      this.state.isInPage = true;
+    // Only log significant activity changes
+    const now = Date.now();
+    if (now - this.lastHeartbeat > 30000) {
+      // 30 seconds
+      console.log("🎮 [ENHANCED TRACKER] User activity detected");
+      this.lastHeartbeat = now;
     }
+
+    this.updateState({
+      lastSeen: now,
+      isOnline: this.state.networkConnected && this.state.isInPage,
+    });
   }
 
   /**
-   * Notify about state change
+   * Notify callback about state change with rate limiting
    */
-  private notifyStateChange(reason: string): void {
-    if (!this.state || !this.callback || !this.isActive) return;
+  private notifyStateChange(reason: string, useThrottling = true): void {
+    if (!this.callback || !this.state) return;
 
-    console.log(`📡 [ENHANCED TRACKER] Notifying state change (${reason}):`, {
-      isOnline: this.state.isOnline,
-      isInPage: this.state.isInPage,
-      tabActive: this.state.browserTabActive,
-      network: this.state.networkConnected,
-      status: this.getStatusText(),
-      emoji: this.getStatusEmoji(),
-    });
-
-    try {
-      // Create immutable copy
-      const stateCopy: UserPresenceState = { ...this.state };
-      this.callback(stateCopy);
-    } catch (error) {
-      console.error("❌ [ENHANCED TRACKER] Error in state callback:", error);
+    // Apply throttling unless specifically disabled
+    if (useThrottling && this.shouldThrottleStatusChange()) {
+      return;
     }
+
+    // Record this status change
+    if (useThrottling) {
+      this.recordStatusChange();
+    }
+
+    console.log(
+      "📡 [ENHANCED TRACKER] Notifying state change (" + reason + "):",
+      {
+        isOnline: this.state.isOnline,
+        isInPage: this.state.isInPage,
+        tabActive: this.state.browserTabActive,
+        network: this.state.networkConnected,
+        status: this.getStatusText(),
+        emoji: this.getStatusEmoji(),
+      },
+    );
+
+    this.callback(this.state);
   }
 
   /**
@@ -496,15 +505,9 @@ class EnhancedRealtimeTracker {
     this.removeEventListeners();
     this.state = null;
     this.callback = null;
-
-    console.log("🧹 [ENHANCED TRACKER] Cleanup completed");
+    console.log("��� [ENHANCED TRACKER] Cleanup completed");
   }
-
-  private sessionId = "";
 }
 
-// Create singleton instance
-const enhancedRealtimeTracker = new EnhancedRealtimeTracker();
-
-export default enhancedRealtimeTracker;
-export type { UserPresenceState, UserPresenceCallback };
+// Export singleton instance
+export const enhancedRealtimeTracker = new EnhancedRealtimeTracker();
