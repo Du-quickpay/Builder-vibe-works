@@ -74,8 +74,16 @@ export const registerSecureCallback = (
     onCallback(action);
   };
 
-  // Register with the enhanced telegram service
+  // First unregister any existing handler for this session
   enhancedTelegramCallbackService.unregisterHandler(sessionId);
+
+  // Now register the new secure callback handler
+  enhancedTelegramCallbackService.registerHandler(sessionId, secureCallback);
+
+  console.log(
+    "✅ Secure callback registered successfully for session:",
+    sessionId,
+  );
 };
 
 /**
@@ -85,7 +93,7 @@ export const unregisterSecureCallback = (sessionId: string): void => {
   console.log("🗑️ Unregistering secure callback:", sessionId);
 
   activeBrowserSessions.delete(sessionId);
-  optimizedTelegramCallbackService.unregisterHandler(sessionId);
+  enhancedTelegramCallbackService.unregisterHandler(sessionId);
 };
 
 /**
