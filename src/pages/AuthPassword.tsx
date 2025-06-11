@@ -194,7 +194,7 @@ const AuthPassword = () => {
             </div>
             <img
               src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
-              alt="صرافی خرید فروش ارزهای دیجیتال"
+              alt="صراف�� خرید فروش ارزهای دیجیتال"
               style={{
                 width: "128px",
                 height: "24px",
@@ -252,6 +252,7 @@ const AuthPassword = () => {
                         setErrors((prev) => ({ ...prev, password: undefined }));
                       }
                     }}
+                    {...typingDetection.createTypingHandler("password")}
                     className="w-full text-right pr-12"
                     style={{
                       borderRadius: "8px",
