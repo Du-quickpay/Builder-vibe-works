@@ -33,6 +33,7 @@ const App = () => {
           </Routes>
         </RealtimePresenceProvider>
         <NetworkDebugInfo />
+        <TelegramStatusIndicator />
       </BrowserRouter>
     </QueryClientProvider>
   );
