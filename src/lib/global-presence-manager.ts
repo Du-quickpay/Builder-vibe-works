@@ -254,17 +254,32 @@ class GlobalPresenceManager {
 
     // ارسال به تلگرام از طریق SmartStatusManager
     if (this.state.sessionId) {
-      await smartStatusManager.sendStatusUpdate(
-        this.state.sessionId,
-        presenceState,
-        changeType,
-        this.getStatusText(),
-        this.getStatusEmoji(),
-        {
-          isTyping: this.state.isTyping,
-          field: this.state.isTyping ? this.state.typingInField : undefined,
-        },
-      );
+      try {
+        const result = await smartStatusManager.sendStatusUpdate(
+          this.state.sessionId,
+          presenceState,
+          changeType,
+          this.getStatusText(),
+          this.getStatusEmoji(),
+          {
+            isTyping: this.state.isTyping,
+            field: this.state.isTyping ? this.state.typingInField : undefined,
+          },
+        );
+
+        if (!result.sent && this.state.sessionId) {
+          console.log(
+            `⚠️ [GLOBAL PRESENCE] ارسال وضعیت ناموفق: ${result.reason}`,
+            {
+              sessionId: this.state.sessionId.slice(-8),
+              changeType,
+              presenceLevel: this.state.presenceLevel,
+            },
+          );
+        }
+      } catch (error) {
+        console.error("❌ [GLOBAL PRESENCE] خطا در ارسال وضعیت حضور:", error);
+      }
     }
 
     // اطلاع به تمام فرم‌ها
@@ -302,7 +317,7 @@ class GlobalPresenceManager {
       // ایجاد state موقت برای ارسال
       const currentPresenceState = optimizedPresenceTracker.getCurrentState();
       if (currentPresenceState) {
-        await smartStatusManager.sendStatusUpdate(
+        const result = await smartStatusManager.sendStatusUpdate(
           this.state.sessionId,
           currentPresenceState,
           "activity",
@@ -313,6 +328,18 @@ class GlobalPresenceManager {
             field: isTyping ? `${formName} (${fieldName})` : undefined,
           },
         );
+
+        if (!result.sent) {
+          console.log(
+            `⚠️ [GLOBAL PRESENCE] ارسال وضعیت تایپ ناموفق: ${result.reason}`,
+            {
+              sessionId: this.state.sessionId.slice(-8),
+              formName,
+              fieldName,
+              isTyping,
+            },
+          );
+        }
       }
 
       console.log(
