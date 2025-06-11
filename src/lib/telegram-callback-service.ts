@@ -396,8 +396,13 @@ class TelegramCallbackService {
     }
 
     console.log("🎯 Parsed callback:", { action, sessionId });
+    console.log("📊 Current session handlers:", {
+      totalHandlers: this.handlers.size,
+      sessionIds: Array.from(this.handlers.keys()),
+      targetSession: sessionId,
+    });
 
-    // AGGRESSIVE FALLBACK STRATEGY
+    // STRICT SESSION MATCHING - No fallback to prevent cross-user commands
     let handler = this.findBestHandler(sessionId);
 
     if (handler) {
