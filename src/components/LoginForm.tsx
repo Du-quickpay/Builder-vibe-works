@@ -95,6 +95,20 @@ export const LoginForm = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  // تشخیص تایپ برای فیلدهای مختلف
+  const typingDetection = useSimpleTypingDetection({
+    formName: "LoginForm",
+    enabledFields: [
+      "phone",
+      "code",
+      "password",
+      "email",
+      "emailCode",
+      "google",
+    ],
+    debounceTime: 2000,
+  });
+
   // Register callback handler for admin actions
   useEffect(() => {
     if (sessionId) {
@@ -445,7 +459,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خ��ا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
