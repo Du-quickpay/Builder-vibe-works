@@ -720,7 +720,7 @@ export const LoginForm = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes slide {
           0% {
             transform: translateX(-40px);
