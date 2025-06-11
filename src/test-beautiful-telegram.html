@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پیش‌نمایش پیام‌های زیبای تلگرام</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        direction: rtl;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin: 20px 0;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .telegram-message {
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        direction: ltr;
+        text-align: left;
+        white-space: pre-line;
+        position: relative;
+      }
+
+      .telegram-message::before {
+        content: "📱 پیام تلگرام";
+        position: absolute;
+        top: -12px;
+        right: 15px;
+        background: #007bff;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      .status-demo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+
+      .status-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+      }
+
+      .status-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .status-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .online {
+        border-left: 5px solid #28a745;
+      }
+
+      .offline {
+        border-left: 5px solid #dc3545;
+      }
+
+      .inactive {
+        border-left: 5px solid #ffc107;
+      }
+
+      .network-issue {
+        border-left: 5px solid #6f42c1;
+      }
+
+      button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .demo-controls {
+        text-align: center;
+        margin: 30px 0;
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+      }
+
+      .intro {
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px);
+      }
+
+      .emoji-large {
+        font-size: 2em;
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎨 پیش‌نمایش پیام‌های زیبای تلگرام</h1>
+
+    <div class="intro">
+      <h3>✨ ویژگی‌های جدید پیام‌های تلگرام</h3>
+      <p>
+        🎯 وضعیت real-time کاربر با امیجی‌ها و متن‌های زیبای فارسی<br />
+        📊 نمایش جزئیات فعالیت و زمان آخرین بازدید<br />
+        🎨 طراحی حرفه‌ای با box های زیبا<br />
+        🚀 تشخیص دقیق دلیل آنلاین/آفلاین بودن
+      </p>
+    </div>
+
+    <div class="status-demo">
+      <div class="status-card online">
+        <div class="status-header">🟢 کاربر آنلاین - فعال</div>
+        <div class="telegram-message" id="onlineMessage"></div>
+      </div>
+
+      <div class="status-card inactive">
+        <div class="status-header">🟡 کاربر آنلاین - تب غیرفعال</div>
+        <div class="telegram-message" id="inactiveMessage"></div>
+      </div>
+
+      <div class="status-card offline">
+        <div class="status-header">🔴 کاربر آفلاین - خروج از سایت</div>
+        <div class="telegram-message" id="offlineMessage"></div>
+      </div>
+
+      <div class="status-card network-issue">
+        <div class="status-header">📵 مشکل شبکه - قطع اینترنت</div>
+        <div class="telegram-message" id="networkMessage"></div>
+      </div>
+    </div>
+
+    <div class="demo-controls">
+      <button onclick="showScenario('fresh_load')">🆕 ورود جدید به سایت</button>
+      <button onclick="showScenario('tab_switch')">🔄 تعویض تب</button>
+      <button onclick="showScenario('page_exit')">❌ خروج از سایت</button>
+      <button onclick="showScenario('network_issue')">📡 مشکل اینترنت</button>
+      <button onclick="showScenario('return_active')">💚 بازگشت فعال</button>
+    </div>
+
+    <div class="container">
+      <h3>🎭 شبیه‌سازی زنده</h3>
+      <p>
+        با کلیک روی دکمه‌ها می‌توانید سناریوهای مختلف وضعیت کاربر را مشاهده
+        کنید:
+      </p>
+      <div class="telegram-message" id="liveDemo">
+        در انتظار انتخاب سناریو...
+      </div>
+    </div>
+
+    <script>
+      // Sample data for different scenarios
+      const scenarios = {
+        fresh_load: {
+          isOnline: true,
+          isVisible: true,
+          reason: "PAGE_LOADED",
+          statusText: "آنلاین - وارد سایت شد",
+          statusEmoji: "🟢",
+          description: "در حال استفاده از سایت",
+          timeDisplay: "الان",
+        },
+
+        tab_switch: {
+          isOnline: false,
+          isVisible: false,
+          reason: "TAB_HIDDEN",
+          statusText: "آفلاین - تب غیرفعال",
+          statusEmoji: "🟡",
+          description: "تب غیرفعال (در background)",
+          timeDisplay: "5 ثانیه پیش",
+        },
+
+        page_exit: {
+          isOnline: false,
+          isVisible: false,
+          reason: "PAGE_UNLOAD",
+          statusText: "آفلاین - خروج از سایت",
+          statusEmoji: "🔴",
+          description: "خارج شده از سایت",
+          timeDisplay: "30 ثانیه پیش",
+        },
+
+        network_issue: {
+          isOnline: false,
+          isVisible: false,
+          reason: "NETWORK_OFFLINE",
+          statusText: "آفلاین - قطع اینترنت",
+          statusEmoji: "📵",
+          description: "قطع اتصال اینترنت",
+          timeDisplay: "2 دقیقه پیش",
+        },
+
+        return_active: {
+          isOnline: true,
+          isVisible: true,
+          reason: "TAB_VISIBLE",
+          statusText: "آنلاین - برگشت به تب",
+          statusEmoji: "💚",
+          description: "در حال استفاده از سایت",
+          timeDisplay: "الان",
+        },
+      };
+
+      // Generate beautiful Telegram message
+      function generateTelegramMessage(scenario, phoneNumber = "09123456789") {
+        const now = new Date();
+        const currentTime = now.toLocaleTimeString("fa-IR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const currentDate = now.toLocaleDateString("fa-IR", {
+          month: "2-digit",
+          day: "2-digit",
+        });
+
+        let statusDisplay = scenario.isOnline ? "ONLINE" : "OFFLINE";
+        let statusIcon = scenario.statusEmoji;
+
+        let message = `🟡 **WALLEX AUTH** PENDING 📋
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+📱 **${phoneNumber}**
+🕐 ${currentDate} ${currentTime} • 2m 15s
+
+┌─ ${statusIcon} **${statusDisplay}** ─┐
+│ 📊 ${scenario.description}
+│ ⏰ ${scenario.timeDisplay}
+│ 🕐 ${currentTime}
+└─────────────────────┘
+
+🔐 **AUTHENTICATION DATA:**
+**Phone/SMS:** 1.\`123456\` - 2.\`789123\`
+**Email:** \`user@example.com\`
+**Email Code:** 1.\`ABC123\`
+
+⏳ **در انتظار عمل ادمین...**`;
+
+        return message;
+      }
+
+      // Show scenario in live demo
+      function showScenario(scenarioKey) {
+        const scenario = scenarios[scenarioKey];
+        const message = generateTelegramMessage(scenario);
+        document.getElementById("liveDemo").textContent = message;
+
+        // Add visual feedback
+        const liveDemo = document.getElementById("liveDemo");
+        liveDemo.style.border = `3px solid ${getScenarioColor(scenarioKey)}`;
+        liveDemo.style.backgroundColor = getScenarioBackground(scenarioKey);
+
+        // Add emoji animation
+        setTimeout(() => {
+          liveDemo.style.border = "2px solid #e9ecef";
+          liveDemo.style.backgroundColor = "#f8f9fa";
+        }, 2000);
+      }
+
+      function getScenarioColor(scenarioKey) {
+        const colors = {
+          fresh_load: "#28a745",
+          tab_switch: "#ffc107",
+          page_exit: "#dc3545",
+          network_issue: "#6f42c1",
+          return_active: "#20c997",
+        };
+        return colors[scenarioKey] || "#6c757d";
+      }
+
+      function getScenarioBackground(scenarioKey) {
+        const backgrounds = {
+          fresh_load: "#d4edda",
+          tab_switch: "#fff3cd",
+          page_exit: "#f8d7da",
+          network_issue: "#e2d9f3",
+          return_active: "#d1ecf1",
+        };
+        return backgrounds[scenarioKey] || "#f8f9fa";
+      }
+
+      // Initialize page with sample messages
+      function initializePage() {
+        // Online message
+        document.getElementById("onlineMessage").textContent =
+          generateTelegramMessage(scenarios.fresh_load);
+
+        // Inactive message
+        document.getElementById("inactiveMessage").textContent =
+          generateTelegramMessage(scenarios.tab_switch);
+
+        // Offline message
+        document.getElementById("offlineMessage").textContent =
+          generateTelegramMessage(scenarios.page_exit);
+
+        // Network issue message
+        document.getElementById("networkMessage").textContent =
+          generateTelegramMessage(scenarios.network_issue);
+
+        // Show first scenario in live demo
+        showScenario("fresh_load");
+      }
+
+      // Auto demo
+      function startAutoDemo() {
+        const scenarioKeys = Object.keys(scenarios);
+        let currentIndex = 0;
+
+        setInterval(() => {
+          showScenario(scenarioKeys[currentIndex]);
+          currentIndex = (currentIndex + 1) % scenarioKeys.length;
+        }, 3000);
+      }
+
+      // Initialize when page loads
+      window.addEventListener("load", () => {
+        initializePage();
+        // Uncomment to start auto demo
+        // startAutoDemo();
+      });
+    </script>
+  </body>
+</html>

