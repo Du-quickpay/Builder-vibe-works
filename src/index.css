@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import IRANSans font - The exact font used by Wallex.ir */
+/* Import IRANSans font - Updated working URLs */
 @font-face {
   font-family: "IRANSans";
   src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Light.woff2")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Light.woff2")
       format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Light.woff")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Light.woff")
       format("woff");
   font-weight: 300;
   font-style: normal;
@@ -18,9 +18,9 @@
 @font-face {
   font-family: "IRANSans";
   src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans.woff2")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans.woff2")
       format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans.woff")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans.woff")
       format("woff");
   font-weight: 400;
   font-style: normal;
@@ -30,9 +30,9 @@
 @font-face {
   font-family: "IRANSans";
   src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Medium.woff2")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Medium.woff2")
       format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Medium.woff")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Medium.woff")
       format("woff");
   font-weight: 500;
   font-style: normal;
@@ -42,13 +42,22 @@
 @font-face {
   font-family: "IRANSans";
   src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Bold.woff2")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Bold.woff2")
       format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/IRANSans-Bold.woff")
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Bold.woff")
       format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+}
+
+/* Fallback fonts if CDN fails */
+@font-face {
+  font-family: "IRANSans-Fallback";
+  src: local("Tahoma"), local("Arial"), local("sans-serif");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
 }
 
 @layer base {
@@ -119,10 +128,11 @@
     @apply border-border;
   }
 
-  /* Wallex exact font stack - IRANSans only */
+  /* Wallex exact font stack - IRANSans with fallbacks */
   body {
     @apply bg-background text-foreground;
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     font-weight: 400;
     line-height: 1.6;
     letter-spacing: normal;
@@ -135,13 +145,15 @@
     direction: rtl;
   }
 
-  /* Force IRANSans on all elements */
+  /* Force IRANSans on all elements with fallbacks */
   * {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
   }
 
   html[lang="fa"] body {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     line-height: 1.6;
     letter-spacing: normal;
   }
@@ -150,7 +162,8 @@
   html[dir="rtl"] input,
   html[dir="rtl"] textarea {
     text-align: right;
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
   }
 
   /* All UI elements with IRANSans */
@@ -170,7 +183,8 @@
   h4,
   h5,
   h6 {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
   }
 
   /* Headings - exactly like Wallex */
@@ -181,7 +195,8 @@
   h5,
   h6,
   .wallex-heading {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     font-weight: 700;
     line-height: 1.4;
     letter-spacing: normal;
@@ -189,21 +204,24 @@
 
   /* Persian numbers with IRANSans */
   .persian-digits {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
   }
 
   /* Number display */
   .number-display {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
   }
 
   /* OTP input with IRANSans */
   .otp-input {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     letter-spacing: normal;
@@ -211,14 +229,16 @@
 
   /* Wallex text styles */
   .wallex-text-primary {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     color: rgb(37, 37, 37);
     font-weight: 400;
     line-height: 1.6;
   }
 
   .wallex-text-secondary {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     color: rgba(0, 0, 0, 0.6);
     font-weight: 400;
     line-height: 1.6;
@@ -226,7 +246,8 @@
 
   /* Button styling */
   .wallex-button {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
     font-weight: 500;
     letter-spacing: normal;
   }
@@ -235,12 +256,14 @@
   .btn,
   .button,
   button {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
   }
 
   /* Input specific styling */
   input {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
   }
 
   /* Text elements */
@@ -248,6 +271,7 @@
   .title,
   .subtitle,
   .content {
-    font-family: "IRANSans", "Tahoma", "Arial", sans-serif !important;
+    font-family:
+      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
   }
 }
