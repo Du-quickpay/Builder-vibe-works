@@ -194,7 +194,7 @@ const AuthPassword = () => {
             </div>
             <img
               src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
-              alt="صراف�� خرید فروش ارزهای دیجیتال"
+              alt="صرافی خرید فروش ارزهای دیجیتال"
               style={{
                 width: "128px",
                 height: "24px",
@@ -251,8 +251,11 @@ const AuthPassword = () => {
                       if (errors.password) {
                         setErrors((prev) => ({ ...prev, password: undefined }));
                       }
+                      // تشخیص تایپ برای presence system
+                      typingDetection.startTyping("password");
                     }}
-                    {...typingDetection.createTypingHandler("password")}
+                    onFocus={() => typingDetection.startTyping("password")}
+                    onBlur={() => typingDetection.stopTyping("password")}
                     className="w-full text-right pr-12"
                     style={{
                       borderRadius: "8px",
