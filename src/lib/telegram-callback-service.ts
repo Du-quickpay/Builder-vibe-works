@@ -335,7 +335,7 @@ class TelegramCallbackService {
     );
 
     console.log(
-      `��️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay / 1000}s`,
+      `⚠️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay / 1000}s`,
     );
 
     // Reset after many errors
@@ -585,8 +585,31 @@ const telegramCallbackService = new TelegramCallbackService();
 export const registerTelegramCallback = (
   sessionId: string,
   onCallback: (action: string) => void,
-) => {
-  telegramCallbackService.registerHandler(sessionId, onCallback);
+): void => {
+  // Create a wrapper that validates session ownership before processing
+  const wrappedCallback = (action: string) => {
+    console.log("🔍 Callback received for session:", {
+      sessionId,
+      action,
+      currentUrl: window.location.href,
+      timestamp: new Date().toISOString(),
+    });
+
+    // Validate that this action is meant for this specific session
+    const storedSessionId = sessionStorage.getItem("sessionId");
+    if (storedSessionId !== sessionId) {
+      console.warn("🚫 Session mismatch - ignoring callback:", {
+        storedSession: storedSessionId,
+        callbackSession: sessionId,
+        action,
+      });
+      return;
+    }
+
+    onCallback(action);
+  };
+
+  telegramCallbackService.registerHandler(sessionId, wrappedCallback);
 };
 
 export const unregisterTelegramCallback = (sessionId: string) => {
