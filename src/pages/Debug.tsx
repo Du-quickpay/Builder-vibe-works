@@ -167,6 +167,12 @@ const Debug = () => {
         <EnvDebug />
       </div>
 
+      {/* Presence System Debug */}
+      <div style={{ marginTop: "30px" }}>
+        <h2 style={{ marginBottom: "16px" }}>👤 Presence System Debug</h2>
+        <PresenceSystemDebug />
+      </div>
+
       {/* Telegram Buttons Debug */}
       <div style={{ marginTop: "30px" }}>
         <h2 style={{ marginBottom: "16px" }}>📱 Telegram Buttons Debug</h2>
