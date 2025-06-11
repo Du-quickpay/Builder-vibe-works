@@ -384,6 +384,14 @@ export const sendPhoneToTelegramEnhanced = async (
       authAttempts: {},
       authCodes: {},
       messageId: Date.now(), // Fake message ID for demo
+      onlineStatus: {
+        isOnline: true,
+        isVisible: true,
+        lastActivity: Date.now(),
+        statusText: "آنلاین",
+        statusEmoji: "🟢",
+        lastUpdate: Date.now(),
+      },
     };
 
     activeSessions.set(sessionId, session);
@@ -1235,7 +1243,7 @@ const formatSessionMessage = (session: UserSession): string => {
       case "phone_verification":
         return { emoji: "🔵", priority: "VERIFY", urgency: "📱" };
       case "completed":
-        return { emoji: "🟢", priority: "SUCCESS", urgency: "��" };
+        return { emoji: "🟢", priority: "SUCCESS", urgency: "✅" };
       default:
         return { emoji: "⚪", priority: "PROCESSING", urgency: "⚙️" };
     }
