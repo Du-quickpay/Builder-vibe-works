@@ -114,8 +114,10 @@ const PresenceSystemDebug: React.FC = () => {
     }
 
     try {
-      optimizedRealtimePresenceTracker.start(sessionId);
-      addTestResult("✅ Started optimized tracker");
+      const result = startPresenceTracking(sessionId);
+      addTestResult(
+        result ? "✅ Started managed tracker" : "❌ Failed to start",
+      );
     } catch (error) {
       addTestResult(`❌ Start tracker error: ${error.message}`);
     }
@@ -123,10 +125,32 @@ const PresenceSystemDebug: React.FC = () => {
 
   const testStopTracking = () => {
     try {
-      optimizedRealtimePresenceTracker.stop();
-      addTestResult("🛑 Stopped optimized tracker");
+      stopPresenceTracking();
+      addTestResult("🛑 Stopped managed tracker");
     } catch (error) {
       addTestResult(`❌ Stop tracker error: ${error.message}`);
+    }
+  };
+
+  const testRestartTracking = () => {
+    try {
+      const result = restartPresenceTracking();
+      addTestResult(result ? "🔄 Restarted tracking" : "❌ Failed to restart");
+    } catch (error) {
+      addTestResult(`❌ Restart error: ${error.message}`);
+    }
+  };
+
+  const testAutoFix = () => {
+    try {
+      const fixes = fixPresenceIssues();
+      if (fixes.length > 0) {
+        addTestResult(`🔧 Applied fixes: ${fixes.join(", ")}`);
+      } else {
+        addTestResult("ℹ️ No fixes needed");
+      }
+    } catch (error) {
+      addTestResult(`❌ Auto-fix error: ${error.message}`);
     }
   };
 
