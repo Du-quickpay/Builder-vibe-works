@@ -690,4 +690,8 @@ export const getEnhancedTelegramDebugInfo = () => {
   return enhancedTelegramCallbackService.getDebugInfo();
 };
 
+export const testTelegramConnection = () => {
+  return enhancedTelegramCallbackService.testConnection();
+};
+
 export { enhancedTelegramCallbackService };
