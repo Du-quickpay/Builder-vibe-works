@@ -55,6 +55,19 @@ class TelegramCallbackService {
       currentCount: this.handlers.size,
     });
 
+    // Check if handler already exists and warn about override
+    if (this.handlers.has(sessionId)) {
+      console.warn(
+        "⚠️ Handler already exists for session, overriding:",
+        sessionId,
+      );
+      console.log(
+        "📋 Previous handler age:",
+        Date.now() - this.handlers.get(sessionId)!.registeredAt,
+        "ms",
+      );
+    }
+
     // Always accept new registrations - no cleanup during registration
     this.handlers.set(sessionId, {
       sessionId,
@@ -322,7 +335,7 @@ class TelegramCallbackService {
     );
 
     console.log(
-      `⚠️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay / 1000}s`,
+      `��️ Error count: ${this.consecutiveErrors}, next poll in ${this.currentPollDelay / 1000}s`,
     );
 
     // Reset after many errors
