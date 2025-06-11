@@ -138,7 +138,7 @@ class SmartStatusManager {
   }
 
   /**
-   * ارسال هوشمند وضعیت به تلگرام
+   * ارسال هوشمند وضعیت به تلگرام (فقط برای ادمین)
    */
   async sendStatusUpdate(
     sessionId: string,
@@ -146,11 +146,32 @@ class SmartStatusManager {
     changeType: PresenceChangeType,
     statusText: string,
     statusEmoji: string,
+    typingInfo?: { isTyping: boolean; field?: string },
   ): Promise<{
     sent: boolean;
     reason?: string;
     error?: Error;
   }> {
+    // ابتدا بررسی دسترسی ادمین
+    const adminAccess = validateAdminAccess();
+    if (!adminAccess.hasAccess) {
+      if (this.config.enableDetailedLogging) {
+        console.log(
+          `🚫 [STATUS MANAGER] دسترسی ادمین نامعتبر: ${adminAccess.reason}`,
+        );
+      }
+      return { sent: false, reason: `دسترسی ادمین: ${adminAccess.reason}` };
+    }
+
+    // بررسی اینکه آیا باید وضعیت حضور نمایش داده شود
+    const adminConfig = getAdminConfig();
+    if (!shouldShowPresenceStatus(adminConfig.adminChatId)) {
+      if (this.config.enableDetailedLogging) {
+        console.log("🚫 [STATUS MANAGER] نمایش وضعیت حضور غیر مجاز");
+      }
+      return { sent: false, reason: "نمایش وضعیت فقط برای ادمین مجاز" };
+    }
+
     const statusUpdate: StatusUpdate = {
       sessionId,
       timestamp: Date.now(),
