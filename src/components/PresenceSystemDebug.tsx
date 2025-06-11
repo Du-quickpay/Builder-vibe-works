@@ -10,6 +10,14 @@ import optimizedRealtimePresenceTracker from "@/lib/realtime-presence-tracker-op
 import realtimePresenceTracker from "@/lib/realtime-presence-tracker";
 import { validateCurrentSession } from "@/lib/session-cleanup";
 import { getSession } from "@/lib/telegram-service-enhanced";
+import {
+  getPresenceStatus,
+  checkPresenceHealth,
+  fixPresenceIssues,
+  startPresenceTracking,
+  stopPresenceTracking,
+  restartPresenceTracking,
+} from "@/lib/presence-system-fix";
 
 const PresenceSystemDebug: React.FC = () => {
   const [debugInfo, setDebugInfo] = useState<any>(null);
