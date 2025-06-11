@@ -1,63 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Import IRANSans font - Updated working URLs */
+/* Font fallbacks to prevent 404 errors */
 @font-face {
   font-family: "IRANSans";
-  src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Light.woff2")
-      format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Light.woff")
-      format("woff");
-  font-weight: 300;
+  src: local("Tahoma"), local("Arial"), sans-serif;
+  font-weight: normal;
   font-style: normal;
-  font-display: swap;
 }
 
 @font-face {
-  font-family: "IRANSans";
-  src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans.woff2")
-      format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans.woff")
-      format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "IRANSans";
-  src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Medium.woff2")
-      format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Medium.woff")
-      format("woff");
+  font-family: "IRANSans-Medium";
+  src: local("Tahoma"), local("Arial"), sans-serif;
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
 }
 
 @font-face {
-  font-family: "IRANSans";
-  src:
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Bold.woff2")
-      format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans@v5.0.0/dist/webfonts/IRANSans-Bold.woff")
-      format("woff");
-  font-weight: 700;
+  font-family: "IRANSans-Bold";
+  src: local("Tahoma"), local("Arial"), sans-serif;
+  font-weight: bold;
   font-style: normal;
-  font-display: swap;
-}
-
-/* Fallback fonts if CDN fails */
-@font-face {
-  font-family: "IRANSans-Fallback";
-  src: local("Tahoma"), local("Arial"), local("sans-serif");
-  font-weight: 400;
-  font-style: normal;
-  font-display: block;
 }
 
 @layer base {
@@ -70,26 +35,23 @@
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -112,14 +74,11 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
@@ -127,151 +86,35 @@
   * {
     @apply border-border;
   }
-
-  /* Wallex exact font stack - IRANSans with fallbacks */
   body {
     @apply bg-background text-foreground;
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    font-weight: 400;
-    line-height: 1.6;
-    letter-spacing: normal;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: "Inter", "IRANSans", "Tahoma", "Arial", sans-serif;
   }
+}
 
-  html[dir="rtl"] {
-    direction: rtl;
-  }
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
 
-  /* Force IRANSans on all elements with fallbacks */
-  * {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-  }
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
 
-  html[lang="fa"] body {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    line-height: 1.6;
-    letter-spacing: normal;
-  }
+/* Optimize image loading */
+img {
+  max-width: 100%;
+  height: auto;
+}
 
-  /* Form elements with IRANSans */
-  html[dir="rtl"] input,
-  html[dir="rtl"] textarea {
-    text-align: right;
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-  }
-
-  /* All UI elements with IRANSans */
-  input[type="text"],
-  input[type="tel"],
-  input[type="number"],
-  textarea,
-  select,
-  button,
-  label,
-  span,
-  p,
-  div,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-  }
-
-  /* Headings - exactly like Wallex */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .wallex-heading {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    font-weight: 700;
-    line-height: 1.4;
-    letter-spacing: normal;
-  }
-
-  /* Persian numbers with IRANSans */
-  .persian-digits {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1;
-  }
-
-  /* Number display */
-  .number-display {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
-  }
-
-  /* OTP input with IRANSans */
-  .otp-input {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: normal;
-  }
-
-  /* Wallex text styles */
-  .wallex-text-primary {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    color: rgb(37, 37, 37);
-    font-weight: 400;
-    line-height: 1.6;
-  }
-
-  .wallex-text-secondary {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    color: rgba(0, 0, 0, 0.6);
-    font-weight: 400;
-    line-height: 1.6;
-  }
-
-  /* Button styling */
-  .wallex-button {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-    font-weight: 500;
-    letter-spacing: normal;
-  }
-
-  /* Specific selectors for better targeting */
-  .btn,
-  .button,
-  button {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-  }
-
-  /* Input specific styling */
-  input {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
-  }
-
-  /* Text elements */
-  .text,
-  .title,
-  .subtitle,
-  .content {
-    font-family:
-      "IRANSans", "IRANSans-Fallback", "Tahoma", "Arial", sans-serif !important;
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
