@@ -87,7 +87,7 @@ export const RealtimePresenceProvider: React.FC<
     return stopMonitoring;
   }, []);
 
-  // مدیریت ردیابی global
+  // مدیریت ردیابی global با سیستم مدیریت شده
   useEffect(() => {
     // اعتبارسنجی session
     const validation = validateCurrentSession();
@@ -96,18 +96,26 @@ export const RealtimePresenceProvider: React.FC<
       console.log(
         "🌍 [GLOBAL PRESENCE] Session معتبر نیست، منتظر session جدید...",
       );
+      stopPresenceTracking(); // اطمینان از توقف tracker
       return;
     }
 
     const sessionId = validation.sessionId!;
 
-    console.log("🌍 [GLOBAL PRESENCE] شروع ردیابی global:", {
+    console.log("🌍 [GLOBAL PRESENCE] شروع ردیابی managed:", {
       sessionId: sessionId.slice(-8),
       currentPage,
     });
 
-    // شروع tracker
-    optimizedRealtimePresenceTracker.stop();
+    // بررسی سلامت سیستم و تعمیر خودکار
+    const health = checkPresenceHealth();
+    if (!health.isHealthy) {
+      console.log("⚠️ [GLOBAL PRESENCE] مشکلات سیستم:", health.issues);
+      const fixes = fixPresenceIssues();
+      if (fixes.length > 0) {
+        console.log("🔧 [GLOBAL PRESENCE] تعمیرات انجام شده:", fixes);
+      }
+    }
 
     // به‌روزرسانی state
     const updateState = () => {
@@ -121,13 +129,16 @@ export const RealtimePresenceProvider: React.FC<
     const unsubscribe =
       optimizedRealtimePresenceTracker.addListener(updateState);
 
-    // شروع ردیابی
-    optimizedRealtimePresenceTracker.start(sessionId);
+    // شروع ردیابی managed
+    const started = startPresenceTracking(sessionId);
+    if (!started) {
+      console.error("❌ [GLOBAL PRESENCE] نتوانست شروع کند");
+    }
 
     return () => {
       console.log("🌍 [GLOBAL PRESENCE] پایان ردیابی global");
       unsubscribe();
-      optimizedRealtimePresenceTracker.stop();
+      stopPresenceTracking();
     };
   }, [currentPage]);
 
