@@ -2,7 +2,7 @@
 // Shows real-time network and polling status
 
 import React, { useState, useEffect } from "react";
-import { getEnhancedTelegramDebugInfo } from "@/lib/telegram-callback-service-enhanced";
+import { getEnhancedTelegramDebugInfo } from "@/lib/telegram-callback-service-enhanced-fixed";
 
 interface NetworkDebugProps {
   show?: boolean;
