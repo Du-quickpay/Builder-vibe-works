@@ -40,6 +40,7 @@ import {
 } from "@/lib/telegram-callback-service";
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
+import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
 
 type AuthStep =
   | "phone"
@@ -444,7 +445,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خ��ا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
