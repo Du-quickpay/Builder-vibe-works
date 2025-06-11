@@ -30,6 +30,16 @@ const AuthSMS = () => {
   const hasError = location.state?.hasError || false;
   const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
 
+  // سیستم حضور برای AuthSMS
+  const presence = usePresence({
+    formName: "AuthSMS",
+    enableTypingDetection: true,
+    typingConfig: {
+      enabledFields: ["smsCode", "code"], // فقط فیلد کد SMS
+      debounceTime: 1000, // 1 ثانیه برای کد SMS
+    },
+  });
+
   useEffect(() => {
     const checkAccess = async () => {
       if (!sessionId) {
