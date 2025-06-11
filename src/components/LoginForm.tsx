@@ -149,36 +149,39 @@ export const LoginForm = () => {
           presenceLevel: state.presenceLevel,
         });
 
-        try {
-          // ارسال به‌روزرسانی حضور به تلگرام
-          const result = await updateUserOnlineStatus(
-            sessionId,
-            state.isOnline,
-            state.isVisible,
-            state.lastActivity,
-            optimizedPresenceTracker.getStatusText(),
-            optimizedPresenceTracker.getStatusEmoji(),
-          );
+        // استفاده از Smart Status Manager برای ارسال بهینه
+        const result = await smartStatusManager.sendStatusUpdate(
+          sessionId,
+          state,
+          changeType,
+          optimizedPresenceTracker.getStatusText(),
+          optimizedPresenceTracker.getStatusEmoji(),
+        );
 
+        if (result.sent) {
           console.log("✅ به‌روزرسانی حضور با موفقیت ارسال شد");
 
-          // نمایش آمار عملکرد (فقط برای debugging)
+          // نمایش آمار عملکرد (فقط برای heartbeat)
           if (changeType === "heartbeat") {
-            const stats = optimizedPresenceTracker.getPerformanceStats();
-            console.log("📊 آمار عملکرد:", {
-              rateLimiterStats: stats.rateLimiter,
-              currentLevel: stats.currentLevel,
-              timeSinceActivity: `${Math.round(stats.timeSinceLastActivity / 1000)}s`,
+            const trackerStats = optimizedPresenceTracker.getPerformanceStats();
+            const managerStats = smartStatusManager.getPerformanceStats();
+            console.log("📊 آمار عملکرد کامل:", {
+              tracker: {
+                currentLevel: trackerStats.currentLevel,
+                timeSinceActivity: `${Math.round(trackerStats.timeSinceLastActivity / 1000)}s`,
+                rateLimiter: trackerStats.rateLimiter,
+              },
+              statusManager: {
+                updatesInLastMinute: managerStats.updatesInLastMinute,
+                totalSessions: managerStats.totalSessions,
+              },
             });
           }
-        } catch (error) {
-          console.error("❌ خطا در ارسال به‌روزرسانی حضور:", error);
+        } else if (result.error) {
+          console.error("❌ خطا در ارسال به‌روزرسانی حضور:", result.error);
 
           // تشخیص خطا و اجرای diagnostic در صورت لزوم
-          if (
-            error instanceof Error &&
-            error.message.includes("Failed to fetch")
-          ) {
+          if (result.error.message.includes("Failed to fetch")) {
             console.log("🔍 اجرای تشخیص تلگرام به دلیل خطای fetch...");
             setTimeout(() => {
               quickDebug().then((diagnostic) => {
@@ -190,6 +193,9 @@ export const LoginForm = () => {
               });
             }, 1000);
           }
+        } else {
+          // ارسال رد شده (به دلیل throttling یا تکراری بودن)
+          console.log(`⏭️ ارسال رد شد: ${result.reason}`);
         }
       };
 
@@ -505,7 +511,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وار�� کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -3128,7 +3134,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
+                    ایمیل خود را وارد کنید ت�� کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
