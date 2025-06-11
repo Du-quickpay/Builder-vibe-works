@@ -197,13 +197,22 @@ class SmartStatusManager {
     }
 
     try {
-      // ارسال به تلگرام
+      // ایجاد پیام ویژه ادمین با اطلاعات تایپ
+      const adminMessage = createPresenceStatusMessage(
+        statusText,
+        statusEmoji,
+        typingInfo?.isTyping,
+        typingInfo?.field,
+        sessionId,
+      );
+
+      // ارسال به تلگرام برای ادمین
       await updateUserOnlineStatus(
         sessionId,
         state.isOnline,
         state.isVisible,
         state.lastActivity,
-        statusText,
+        adminMessage, // پیام ویژه ادمین
         statusEmoji,
       );
 
@@ -211,12 +220,14 @@ class SmartStatusManager {
       this.recordSuccessfulUpdate(sessionId, changeType, statusUpdate);
 
       if (this.config.enableDetailedLogging) {
-        console.log("✅ [STATUS MANAGER] وضعیت با موفقیت ارسال شد:", {
+        console.log("✅ [STATUS MANAGER] وضعیت ادمین با موفقیت ارسال شد:", {
           sessionId: sessionId.slice(-8),
           changeType,
           statusText,
           statusEmoji,
           presenceLevel: state.presenceLevel,
+          typingInfo,
+          adminMessage,
         });
       }
 
@@ -277,7 +288,7 @@ class SmartStatusManager {
   }
 
   /**
-   * پاکسازی تاریخچه برای جلسه خاص
+   * پا��سازی تاریخچه برای جلسه خاص
    */
   clearSessionHistory(sessionId: string): void {
     // حذف آخرین وضعیت
