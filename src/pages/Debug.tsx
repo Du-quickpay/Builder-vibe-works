@@ -160,6 +160,12 @@ const Debug = () => {
         </ul>
       </div>
 
+      {/* Environment Debug */}
+      <div style={{ marginTop: "30px" }}>
+        <h2 style={{ marginBottom: "16px" }}>🔧 Environment Configuration</h2>
+        <EnvDebug />
+      </div>
+
       {/* Telegram Buttons Debug */}
       <div style={{ marginTop: "30px" }}>
         <h2 style={{ marginBottom: "16px" }}>📱 Telegram Buttons Debug</h2>
