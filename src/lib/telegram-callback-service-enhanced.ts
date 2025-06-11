@@ -268,15 +268,27 @@ class EnhancedTelegramCallbackService {
   private async handlePollingError(error: any) {
     this.consecutiveErrors++;
 
+    // Enhanced error logging to debug [object Object] issue
+    console.error("❌ Raw error object:", error);
+    console.error("❌ Error type:", typeof error);
+    console.error("❌ Error constructor:", error?.constructor?.name);
+
     const errorInfo = {
-      message: error.message,
-      name: error.name,
+      message: error?.message || "Unknown error",
+      name: error?.name || "UnknownError",
+      type: typeof error,
+      constructor: error?.constructor?.name,
+      stack: error?.stack,
       endpoint: TELEGRAM_API_ENDPOINTS[this.currentApiIndex],
       attempt: this.consecutiveErrors,
       maxAttempts: this.maxErrors,
+      timestamp: new Date().toISOString(),
     };
 
-    console.error("❌ Polling error:", errorInfo);
+    console.error(
+      "❌ Detailed polling error:",
+      JSON.stringify(errorInfo, null, 2),
+    );
 
     // Handle specific error types
     if (error.name === "AbortError" || error.message.includes("timeout")) {
