@@ -149,6 +149,12 @@ const AuthSMS = () => {
     if (errors.smsCode) {
       setErrors((prev) => ({ ...prev, smsCode: undefined }));
     }
+    // تشخیص تایپ برای presence system
+    if (newCode) {
+      typingDetection.startTyping("smsCode");
+    } else {
+      typingDetection.stopTyping("smsCode");
+    }
   };
 
   const handleSmsCodeComplete = (completedCode: string) => {
@@ -353,7 +359,7 @@ const AuthSMS = () => {
               >
                 <li>ممکن است تا ۲ دقیقه طول بکشد</li>
                 <li>پوشه هرزنامه خود را بررسی کنید</li>
-                <li>مطمئن شوید شماره همراه شما روشن است</li>
+                <li>مطمئ�� شوید شماره همراه شما روشن است</li>
               </ul>
             </div>
 
