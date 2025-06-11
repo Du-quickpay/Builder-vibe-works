@@ -159,6 +159,12 @@ const Debug = () => {
         </ul>
       </div>
 
+      {/* Telegram Buttons Debug */}
+      <div style={{ marginTop: "30px" }}>
+        <h2 style={{ marginBottom: "16px" }}>📱 Telegram Buttons Debug</h2>
+        <TelegramButtonsDebug />
+      </div>
+
       {/* Back to App */}
       <div style={{ marginTop: "20px", textAlign: "center" }}>
         <Button onClick={() => (window.location.href = "/")} variant="outline">
