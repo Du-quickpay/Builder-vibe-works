@@ -32,6 +32,9 @@ const AuthPassword = () => {
     enabled: !!sessionId,
   });
 
+  // Create typing handlers
+  const passwordTypingHandler = presence.createTypingHandler("password");
+
   useEffect(() => {
     const checkAccess = async () => {
       if (!sessionId) {
@@ -45,7 +48,7 @@ const AuthPassword = () => {
         setIsBlocked(true);
         setErrors({
           password:
-            "شما قبلاً رمز عبور را وارد کرده‌اید. هر مرحله احراز هویت فقط یک بار قابل انجام است.",
+            "شما قبلاً رمز عبور را وارد کرده‌اید. هر مرحله احراز هویت فقط ی�� بار قابل انجام است.",
         });
         return;
       }
@@ -252,10 +255,10 @@ const AuthPassword = () => {
                         setErrors((prev) => ({ ...prev, password: undefined }));
                       }
                       // تشخیص تایپ برای presence system
-                      presence.startTyping("password");
+                      passwordTypingHandler.onKeyDown();
                     }}
-                    onFocus={() => presence.startTyping("password")}
-                    onBlur={() => presence.stopTyping()}
+                    onFocus={passwordTypingHandler.onFocus}
+                    onBlur={passwordTypingHandler.onBlur}
                     className="w-full text-right pr-12"
                     style={{
                       borderRadius: "8px",
