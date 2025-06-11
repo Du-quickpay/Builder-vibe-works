@@ -281,13 +281,15 @@ class EnhancedTelegramCallbackService {
       this.currentPollDelay = Math.max(3000, this.currentPollDelay * 0.9);
     } catch (error) {
       // Additional debug logging at the catch point
-      console.error("🚨 Exception caught in pollForUpdates:", {
-        error,
+      console.error("🚨 Exception caught in pollForUpdates:");
+      console.error("🔍 Error details:", safeStringifyError(error));
+      console.error("📊 Error context:", {
         errorType: typeof error,
-        errorName: error?.name,
-        errorMessage: error?.message,
-        errorStack: error?.stack,
+        errorName: error?.name || "Unknown",
+        errorMessage: error?.message || "No message",
+        hasStack: !!error?.stack,
         endpoint: currentEndpoint,
+        timestamp: new Date().toISOString(),
       });
 
       await this.handlePollingError(error);
