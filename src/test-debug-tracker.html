@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تست سیستم آنلاین/آفلاین</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        direction: rtl;
+        background: #f0f2f5;
+      }
+
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .status-display {
+        font-size: 32px;
+        text-align: center;
+        padding: 30px;
+        border-radius: 12px;
+        margin: 20px 0;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+
+      .online {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        color: #155724;
+        border: 3px solid #28a745;
+      }
+
+      .offline {
+        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+        color: #721c24;
+        border: 3px solid #dc3545;
+      }
+
+      .log-container {
+        max-height: 400px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+      }
+
+      .log-entry {
+        padding: 8px;
+        margin: 4px 0;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+      }
+
+      .log-online {
+        background: #d4edda;
+        border-left: 4px solid #28a745;
+      }
+
+      .log-offline {
+        background: #f8d7da;
+        border-left: 4px solid #dc3545;
+      }
+
+      .log-info {
+        background: #d1ecf1;
+        border-left: 4px solid #17a2b8;
+      }
+
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 8px;
+        font-size: 14px;
+        transition: background 0.2s;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+
+      .instructions {
+        background: #fff3cd;
+        color: #856404;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #ffeaa7;
+        margin: 20px 0;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .stat {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #495057;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #6c757d;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 تست سیستم تشخیص آنلاین/آفلاین</h1>
+
+    <div class="instructions">
+      <h3>📋 راهنمای آزمایش</h3>
+      <p>برای تست سی��تم، عملیات زیر را انجام دهید:</p>
+      <ul>
+        <li>🔁 <strong>تب عوض کنید</strong> - باید فوراً آفلاین شود</li>
+        <li>🔄 <strong>صفحه ریلود کنید</strong> - آفلاین → آنلاین</li>
+        <li>❌ <strong>صفحه را ببندید</strong> - قبل از بسته شدن آفلاین</li>
+        <li>📡 <strong>اینترنت قطع کنید</strong> - باید آفلاین شود</li>
+        <li>🎯 <strong>روی این تب کلیک کنید</strong> - باید آنلاین شود</li>
+      </ul>
+    </div>
+
+    <div class="container">
+      <h3>📊 وضعیت فعلی</h3>
+      <div id="statusDisplay" class="status-display offline">
+        ❓ در حال بارگذاری...
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div id="onlineCount" class="stat-value">0</div>
+          <div class="stat-label">بار آنلاین</div>
+        </div>
+        <div class="stat">
+          <div id="offlineCount" class="stat-value">0</div>
+          <div class="stat-label">بار آفلاین</div>
+        </div>
+        <div class="stat">
+          <div id="totalChanges" class="stat-value">0</div>
+          <div class="stat-label">تعداد تغییرات</div>
+        </div>
+        <div class="stat">
+          <div id="lastChange" class="stat-value">-</div>
+          <div class="stat-label">آخرین تغییر</div>
+        </div>
+      </div>
+
+      <div>
+        <button onclick="startTest()">🚀 شروع تست</button>
+        <button onclick="stopTest()">🛑 توقف تست</button>
+        <button onclick="clearLogs()">🧹 پاک کردن لاگ</button>
+        <button onclick="simulateActions()">⚡ شبیه‌سازی</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h3>📋 لاگ تغییرات</h3>
+      <div id="logContainer" class="log-container">
+        <div class="log-entry log-info">
+          [شروع] آماده برای تست سیستم آنلاین/آفلاین
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Test Implementation
+      let isTracking = false;
+      let onlineCount = 0;
+      let offlineCount = 0;
+      let totalChanges = 0;
+      let currentStatus = null;
+
+      // DOM elements
+      const statusDisplay = document.getElementById("statusDisplay");
+      const logContainer = document.getElementById("logContainer");
+
+      function startTest() {
+        if (isTracking) return;
+
+        log("🚀 شروع تست سیستم", "info");
+        isTracking = true;
+
+        // Setup event listeners
+        setupEventListeners();
+
+        // Initial state
+        updateStatus(true, "شروع تست");
+      }
+
+      function stopTest() {
+        if (!isTracking) return;
+
+        log("🛑 توقف تست سیستم", "info");
+        updateStatus(false, "توقف تست");
+        isTracking = false;
+      }
+
+      function clearLogs() {
+        logContainer.innerHTML =
+          '<div class="log-entry log-info">[پاک شد] لاگ‌ها پاک شدند</div>';
+      }
+
+      function simulateActions() {
+        log("⚡ شبیه‌سازی اقدامات مختلف", "info");
+
+        // Simulate tab hidden
+        setTimeout(() => {
+          updateStatus(false, "شبیه‌سازی: تب مخفی");
+        }, 1000);
+
+        // Simulate tab visible
+        setTimeout(() => {
+          updateStatus(true, "شبیه‌سازی: تب نمایان");
+        }, 3000);
+
+        // Simulate offline
+        setTimeout(() => {
+          updateStatus(false, "شبیه‌سازی: قطع اینترنت");
+        }, 5000);
+
+        // Simulate online
+        setTimeout(() => {
+          updateStatus(true, "شبیه‌سازی: وصل اینترنت");
+        }, 7000);
+      }
+
+      function setupEventListeners() {
+        // Visibility change
+        document.addEventListener("visibilitychange", () => {
+          if (!isTracking) return;
+          const isVisible = !document.hidden;
+          updateStatus(isVisible, isVisible ? "تب نمایان شد" : "تب مخفی شد");
+        });
+
+        // Window focus/blur
+        window.addEventListener("focus", () => {
+          if (!isTracking) return;
+          updateStatus(true, "فوکوس روی پنجره");
+        });
+
+        window.addEventListener("blur", () => {
+          if (!isTracking) return;
+          updateStatus(false, "خروج فوکوس از پنجره");
+        });
+
+        // Page unload
+        window.addEventListener("beforeunload", () => {
+          if (!isTracking) return;
+          updateStatus(false, "در حال خروج از صفحه");
+        });
+
+        // Network status
+        window.addEventListener("online", () => {
+          if (!isTracking) return;
+          updateStatus(true, "اتصال اینترنت برقرار");
+        });
+
+        window.addEventListener("offline", () => {
+          if (!isTracking) return;
+          updateStatus(false, "قطع اتصال اینترنت");
+        });
+
+        log("✅ Event listeners متصل شدند", "info");
+      }
+
+      function updateStatus(isOnline, reason) {
+        const timestamp = new Date().toLocaleTimeString("fa-IR");
+        const statusText = isOnline ? "آنلاین" : "آفلاین";
+        const statusEmoji = isOnline ? "🟢" : "🔴";
+
+        // Update display
+        statusDisplay.textContent = `${statusEmoji} ${statusText}`;
+        statusDisplay.className = `status-display ${
+          isOnline ? "online" : "offline"
+        }`;
+
+        // Update stats
+        if (currentStatus !== isOnline) {
+          totalChanges++;
+          currentStatus = isOnline;
+
+          if (isOnline) {
+            onlineCount++;
+          } else {
+            offlineCount++;
+          }
+
+          // Update stats display
+          document.getElementById("onlineCount").textContent =
+            onlineCount.toString();
+          document.getElementById("offlineCount").textContent =
+            offlineCount.toString();
+          document.getElementById("totalChanges").textContent =
+            totalChanges.toString();
+          document.getElementById("lastChange").textContent = timestamp;
+        }
+
+        // Log the change
+        log(
+          `${statusEmoji} ${statusText} - ${reason}`,
+          isOnline ? "online" : "offline",
+        );
+
+        // Simulate Telegram API call
+        simulateTelegramAPI(isOnline, reason, timestamp);
+      }
+
+      function simulateTelegramAPI(isOnline, reason, timestamp) {
+        // Simulate API call to Telegram
+        const apiData = {
+          isOnline,
+          reason,
+          timestamp,
+          statusText: isOnline ? "آنلاین" : "آفلاین",
+          statusEmoji: isOnline ? "🟢" : "🔴",
+        };
+
+        console.log("📤 [SIMULATED API CALL] Sending to Telegram:", apiData);
+
+        // Simulate API response
+        setTimeout(() => {
+          console.log("✅ [SIMULATED API RESPONSE] Success");
+          log(
+            `📤 ارسال به تلگرام: ${apiData.statusEmoji} ${apiData.statusText}`,
+            "info",
+          );
+        }, 200);
+      }
+
+      function log(message, type = "info") {
+        const timestamp = new Date().toLocaleTimeString("fa-IR");
+        const logEntry = document.createElement("div");
+        logEntry.className = `log-entry log-${type}`;
+        logEntry.textContent = `[${timestamp}] ${message}`;
+
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+
+        // Keep only last 50 logs
+        if (logContainer.children.length > 50) {
+          logContainer.removeChild(logContainer.children[0]);
+        }
+      }
+
+      // Auto-start when page loads
+      window.addEventListener("load", () => {
+        startTest();
+      });
+    </script>
+  </body>
+</html>
