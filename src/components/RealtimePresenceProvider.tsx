@@ -24,7 +24,7 @@ interface RealtimePresenceContextType {
 const RealtimePresenceContext = createContext<RealtimePresenceContextType>({
   presenceState: null,
   typingState: { isTyping: false, field: null, form: null, lastTyping: 0 },
-  statusText: "آفلاین",
+  statusText: "offline",
   statusEmoji: "🔴",
   isOnline: false,
   currentPage: "unknown",
@@ -105,18 +105,23 @@ export const RealtimePresenceProvider: React.FC<
 
     // به‌روزرسانی state
     const updateState = () => {
-      setPresenceState(realtimePresenceTracker.getState());
-      setTypingState(realtimePresenceTracker.getTypingState());
+      setPresenceState(optimizedRealtimePresenceTracker.getState());
+      setTypingState(optimizedRealtimePresenceTracker.getTypingState());
     };
 
     updateState();
 
     // listener برای تغییرات
-    const unsubscribe = realtimePresenceTracker.addListener(updateState);
+    const unsubscribe =
+      optimizedRealtimePresenceTracker.addListener(updateState);
+
+    // شروع ردیابی
+    optimizedRealtimePresenceTracker.start(sessionId);
 
     return () => {
       console.log("🌍 [GLOBAL PRESENCE] پایان ردیابی global");
       unsubscribe();
+      optimizedRealtimePresenceTracker.stop();
     };
   }, [currentPage]);
 

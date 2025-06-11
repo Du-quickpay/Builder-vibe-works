@@ -1,35 +1,41 @@
-// Hook ساده برای استفاده Real-time Presence Tracker
-// Simple Hook for Real-time Presence Tracker
+// React Hook برای Real-time Presence Tracking
+// Simplified hook for form presence tracking
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import optimizedRealtimePresenceTracker, {
   type PresenceState,
   type TypingState,
 } from "@/lib/realtime-presence-tracker-optimized";
 import { getSession } from "@/lib/telegram-service-enhanced";
 
-export interface UseRealtimePresenceProps {
-  sessionId: string;
+interface UseRealtimePresenceOptions {
+  sessionId?: string;
   formName: string;
   enabled?: boolean;
 }
 
-export interface UseRealtimePresenceReturn {
+interface UseRealtimePresenceReturn {
   presenceState: PresenceState | null;
   typingState: TypingState;
-  startTyping: (field: string) => void;
-  stopTyping: () => void;
   statusText: string;
   statusEmoji: string;
   isOnline: boolean;
   isTracking: boolean;
+  createTypingHandler: (fieldName: string) => {
+    onKeyDown: () => void;
+    onFocus: () => void;
+    onBlur: () => void;
+  };
 }
 
+/**
+ * Hook برای ردیابی Real-time حضور در فرم‌ها
+ */
 export const useRealtimePresence = ({
   sessionId,
   formName,
   enabled = true,
-}: UseRealtimePresenceProps): UseRealtimePresenceReturn => {
+}: UseRealtimePresenceOptions): UseRealtimePresenceReturn => {
   const [presenceState, setPresenceState] = useState<PresenceState | null>(
     null,
   );
@@ -57,85 +63,86 @@ export const useRealtimePresence = ({
     console.log(`🔗 [${formName}] شروع ردیابی حضور:`, sessionId.slice(-8));
 
     // شروع tracker
-    realtimePresenceTracker.start(sessionId);
     setIsTracking(true);
 
-    // به‌روزرسانی وضعیت اولیه
-    setPresenceState(realtimePresenceTracker.getState());
-    setTypingState(realtimePresenceTracker.getTypingState());
+    // به‌روزرسانی state
+    const updateState = () => {
+      setPresenceState(optimizedRealtimePresenceTracker.getState());
+      setTypingState(optimizedRealtimePresenceTracker.getTypingState());
+    };
 
-    // ثبت listener برای تغییرات
-    const unsubscribe = realtimePresenceTracker.addListener(() => {
-      setPresenceState(realtimePresenceTracker.getState());
-      setTypingState(realtimePresenceTracker.getTypingState());
-    });
+    // listener برای تغییرات
+    const unsubscribe =
+      optimizedRealtimePresenceTracker.addListener(updateState);
 
-    // cleanup
+    // شروع ردیابی
+    optimizedRealtimePresenceTracker.start(sessionId);
+    updateState();
+
     return () => {
-      console.log(`🔌 [${formName}] قطع ردیابی حضور`);
+      console.log(`🔗 [${formName}] پایان ردیابی حضور`);
       unsubscribe();
-      realtimePresenceTracker.stop();
       setIsTracking(false);
     };
   }, [sessionId, formName, enabled]);
-
-  // شروع تایپ
-  const startTyping = useCallback(
-    (field: string) => {
-      if (!isTracking) return;
-      realtimePresenceTracker.startTyping(formName, field);
-    },
-    [formName, isTracking],
-  );
-
-  // توقف تایپ
-  const stopTyping = useCallback(() => {
-    if (!isTracking) return;
-    realtimePresenceTracker.stopTyping();
-  }, [isTracking]);
 
   // محاسبه مقادیر
   const statusText = optimizedRealtimePresenceTracker.getStatusText();
   const statusEmoji = optimizedRealtimePresenceTracker.getStatusEmoji();
   const isOnline = presenceState?.status === "online";
 
+  // ایجاد handler برای تایپ
+  const createTypingHandler = (fieldName: string) => ({
+    onKeyDown: () =>
+      optimizedRealtimePresenceTracker.startTyping(formName, fieldName),
+    onFocus: () =>
+      optimizedRealtimePresenceTracker.startTyping(formName, fieldName),
+    onBlur: () => optimizedRealtimePresenceTracker.stopTyping(),
+  });
+
   return {
     presenceState,
     typingState,
-    startTyping,
-    stopTyping,
     statusText,
     statusEmoji,
     isOnline,
     isTracking,
+    createTypingHandler,
   };
 };
 
 /**
- * Hook ساده‌تر فقط برای نمایش وضعیت
+ * Hook ساده برای دریافت وضعیت فعلی
  */
-export const usePresenceStatus = (sessionId: string) => {
-  const [statusText, setStatusText] = useState("آفلاین");
+export const usePresenceStatus = () => {
+  const [statusText, setStatusText] = useState("offline");
   const [statusEmoji, setStatusEmoji] = useState("🔴");
+  const [isOnline, setIsOnline] = useState(false);
 
   useEffect(() => {
-    if (!sessionId) return;
-
     const updateStatus = () => {
-      setStatusText(realtimePresenceTracker.getStatusText());
-      setStatusEmoji(realtimePresenceTracker.getStatusEmoji());
+      setStatusText(optimizedRealtimePresenceTracker.getStatusText());
+      setStatusEmoji(optimizedRealtimePresenceTracker.getStatusEmoji());
+
+      const state = optimizedRealtimePresenceTracker.getState();
+      setIsOnline(state?.status === "online");
     };
 
     // به‌روزرسانی اولیه
     updateStatus();
 
     // listener برای تغییرات
-    const unsubscribe = realtimePresenceTracker.addListener(updateStatus);
+    const unsubscribe =
+      optimizedRealtimePresenceTracker.addListener(updateStatus);
 
     return unsubscribe;
-  }, [sessionId]);
+  }, []);
 
-  return { statusText, statusEmoji };
+  return {
+    statusText,
+    statusEmoji,
+    isOnline,
+  };
 };
 
 export default useRealtimePresence;
