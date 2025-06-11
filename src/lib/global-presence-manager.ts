@@ -60,8 +60,8 @@ class GlobalPresenceManager {
 
   constructor() {
     this.state = {
-      isOnline: false,
-      presenceLevel: "offline",
+      isOnline: true, // تنظیم اولیه بهتر: کاربر آنلاین فرض می‌شود
+      presenceLevel: "online", // وضعیت اولیه آنل��ین
       lastActivity: Date.now(),
       lastSeen: Date.now(),
       isTyping: false,
@@ -480,7 +480,7 @@ class GlobalPresenceManager {
   }
 }
 
-// ایج��د instance واحد
+// ایجاد instance واحد
 const globalPresenceManager = new GlobalPresenceManager();
 
 export default globalPresenceManager;
