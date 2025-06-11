@@ -35,11 +35,10 @@ interface CallbackHandler {
 
 class TelegramCallbackService {
   private handlers = new Map<string, CallbackHandler>();
-  private lastUpdateId = 0;
   private isPolling = false;
   private pollInterval: NodeJS.Timeout | null = null;
-  private consecutiveErrors = 0;
-  private currentPollDelay = 3000; // Optimized polling - 3 seconds
+  private currentPollDelay = 500;
+  private processingCommands = new Set<string>(); // Track which sessions are processing commands
   private maxPollDelay = 10000; // Max 10 seconds
   private isOnline = true;
 
