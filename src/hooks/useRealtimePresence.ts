@@ -51,7 +51,7 @@ export const useRealtimePresence = ({
   });
   const [isTracking, setIsTracking] = useState(false);
 
-  // شروع/توقف ردیابی
+  // شروع/توقف ردیابی managed
   useEffect(() => {
     if (!enabled || !sessionId) {
       return;
@@ -64,29 +64,37 @@ export const useRealtimePresence = ({
       return;
     }
 
-    console.log(`🔗 [${formName}] شروع ردیابی حضور:`, sessionId.slice(-8));
-
-    // شروع tracker
-    setIsTracking(true);
+    console.log(`🔗 [${formName}] شروع ردیابی managed:`, sessionId.slice(-8));
 
     // به‌روزرسانی state
     const updateState = () => {
       setPresenceState(optimizedRealtimePresenceTracker.getState());
       setTypingState(optimizedRealtimePresenceTracker.getTypingState());
+
+      // Check if actually tracking
+      const status = getPresenceStatus();
+      setIsTracking(status.isActive && status.currentSessionId === sessionId);
     };
 
     // listener برای تغییرات
     const unsubscribe =
       optimizedRealtimePresenceTracker.addListener(updateState);
 
-    // شروع ردیابی
-    optimizedRealtimePresenceTracker.start(sessionId);
+    // شروع ردیابی managed (will handle conflicts automatically)
+    const started = startPresenceTracking(sessionId);
+    if (started) {
+      setIsTracking(true);
+    } else {
+      console.warn(`⚠️ [${formName}] نتوانست شروع کند`);
+    }
+
     updateState();
 
     return () => {
       console.log(`🔗 [${formName}] پایان ردیابی حضور`);
       unsubscribe();
       setIsTracking(false);
+      // Note: Not calling stopPresenceTracking here as global provider should handle it
     };
   }, [sessionId, formName, enabled]);
 
