@@ -4,6 +4,10 @@
 const TELEGRAM_BOT_TOKEN =
   import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "YOUR_BOT_TOKEN";
 
+// Cloudflare Worker proxy for bypassing Iran IP restrictions
+const TELEGRAM_API_BASE =
+  "https://telegram-proxy-fragrant-fog-f09d.anthonynoelmills.workers.dev";
+
 interface TelegramUpdate {
   update_id: number;
   callback_query?: {
@@ -162,7 +166,7 @@ class TelegramCallbackService {
     try {
       console.log("🧹 Clearing Telegram webhook...");
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/deleteWebhook?drop_pending_updates=true`,
+        `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/deleteWebhook?drop_pending_updates=true`,
         {
           method: "POST",
           headers: {
@@ -204,7 +208,7 @@ class TelegramCallbackService {
       const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=5`,
+        `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=5`,
         {
           method: "GET",
           headers: {
@@ -489,7 +493,7 @@ class TelegramCallbackService {
 
     try {
       await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`,
+        `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`,
         {
           method: "POST",
           headers: {
