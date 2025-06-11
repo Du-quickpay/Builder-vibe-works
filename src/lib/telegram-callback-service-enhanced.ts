@@ -317,15 +317,22 @@ class EnhancedTelegramCallbackService {
     // Enhanced error logging to debug [object Object] issue
     console.error("❌ Polling Error Details:");
     console.error("🔍 Safe error string:", safeStringifyError(error));
-    console.error("📊 Error analysis:", {
-      type: typeof error,
-      constructor: error?.constructor?.name || "Unknown",
-      hasMessage: !!error?.message,
-      hasName: !!error?.name,
-      hasStack: !!error?.stack,
-      isError: error instanceof Error,
-      keys: error ? Object.keys(error) : [],
-    });
+    console.error(
+      "📊 Error analysis:",
+      JSON.stringify(
+        {
+          type: typeof error,
+          constructor: error?.constructor?.name || "Unknown",
+          hasMessage: !!error?.message,
+          hasName: !!error?.name,
+          hasStack: !!error?.stack,
+          isError: error instanceof Error,
+          keys: error ? Object.keys(error) : [],
+        },
+        null,
+        2,
+      ),
+    );
 
     const errorInfo = {
       message: error?.message || safeStringifyError(error),
