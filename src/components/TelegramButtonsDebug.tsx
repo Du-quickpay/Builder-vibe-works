@@ -14,7 +14,7 @@ import {
 import {
   getEnhancedTelegramDebugInfo,
   testTelegramConnection,
-} from "@/lib/telegram-callback-service-enhanced";
+} from "@/lib/telegram-callback-service-enhanced-fixed";
 import { getSessionDebugInfo } from "@/lib/callback-session-fix";
 
 const TelegramButtonsDebug: React.FC = () => {
