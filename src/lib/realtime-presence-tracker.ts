@@ -178,21 +178,21 @@ class RealtimePresenceTracker {
    * دریافت متن وضعیت
    */
   getStatusText(): string {
-    if (!this.state) return "آفلاین";
+    if (!this.state) return "offline";
 
     if (this.typingState.isTyping && this.typingState.form) {
-      return `در حال تایپ در ${this.typingState.form}`;
+      return `typing in ${this.typingState.form}`;
     }
 
     switch (this.state.status) {
       case "online":
-        return "آنلاین";
+        return "online";
       case "away":
-        return "غیرفعال";
+        return "away";
       case "offline":
-        return "آفلاین";
+        return "offline";
       default:
-        return "آفلاین";
+        return "offline";
     }
   }
 
