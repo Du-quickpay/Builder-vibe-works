@@ -1,7 +1,7 @@
 // Enhanced Real-time Online/Offline Tracker
 // Perfect real-time detection of user presence with rate limiting protection
 
-interface UserPresenceState {
+export interface UserPresenceState {
   isOnline: boolean;
   isInPage: boolean;
   lastSeen: number;
