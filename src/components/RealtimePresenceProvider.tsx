@@ -7,7 +7,10 @@ import realtimePresenceTracker, {
   type PresenceState,
   type TypingState,
 } from "@/lib/realtime-presence-tracker";
-import { getSession } from "@/lib/telegram-service-enhanced";
+import {
+  validateCurrentSession,
+  startSessionCleanupMonitoring,
+} from "@/lib/session-cleanup";
 
 interface RealtimePresenceContextType {
   presenceState: PresenceState | null;
@@ -72,23 +75,25 @@ export const RealtimePresenceProvider: React.FC<
 
   const currentPage = getCurrentPage(location.pathname);
 
+  // شروع نظارت بر session ها
+  useEffect(() => {
+    const stopMonitoring = startSessionCleanupMonitoring();
+    return stopMonitoring;
+  }, []);
+
   // مدیریت ردیابی global
   useEffect(() => {
-    const sessionId = sessionStorage.getItem("sessionId");
+    // اعتبارسنجی session
+    const validation = validateCurrentSession();
 
-    if (!sessionId) {
-      console.log("🌍 [GLOBAL PRESENCE] منتظر sessionId...");
+    if (!validation.isValid) {
+      console.log(
+        "🌍 [GLOBAL PRESENCE] Session معتبر نیست، منتظر session جدید...",
+      );
       return;
     }
 
-    // بررسی وجود session
-    const session = getSession(sessionId);
-    if (!session) {
-      console.warn("🌍 [GLOBAL PRESENCE] Session یافت نشد:", sessionId);
-      // پاک کردن sessionId منقضی از storage
-      sessionStorage.removeItem("sessionId");
-      return;
-    }
+    const sessionId = validation.sessionId!;
 
     console.log("🌍 [GLOBAL PRESENCE] شروع ردیابی global:", {
       sessionId: sessionId.slice(-8),
