@@ -698,18 +698,15 @@ class EnhancedTelegramCallbackService {
   }
 
   /**
-   * Test connection manually for debugging
+   * Test connection manually for debugging with smart network handling
    */
   async testConnection(): Promise<{
     success: boolean;
     error?: string;
     details?: any;
   }> {
-    const currentEndpoint = TELEGRAM_API_ENDPOINTS[this.currentApiIndex];
-
     try {
-      console.log("🔍 Manual connection test starting...");
-      console.log("🔗 Testing endpoint:", currentEndpoint);
+      console.log("🔍 Manual connection test starting with smart network handling...");
       console.log(
         "🔑 Bot token available:",
         !!TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN",
@@ -719,16 +716,30 @@ class EnhancedTelegramCallbackService {
         return { success: false, error: "Configuration invalid" };
       }
 
-      const response = await fetch(
-        `${currentEndpoint}/bot${TELEGRAM_BOT_TOKEN}/getMe`,
+      // First run network diagnostics
+      console.log("🌐 Running network diagnostics...");
+      const diagnostics = await testNetworkConnectivity();
+      console.log("📊 Network diagnostics:", diagnostics);
+
+      if (!diagnostics.canReachInternet) {
+        return {
+          success: false,
+          error: "No internet connectivity",
+          details: { diagnostics },
+        };
+      }
+
+      // Get recommended endpoint
+      const recommendation = await getRecommendedEndpoint();
+      console.log("🎯 Recommended endpoint:", recommendation);
+
+      // Use smart fetch for the connection test
+      const response = await smartFetch(
+        "getMe",
         {
           method: "GET",
-          signal: AbortSignal.timeout(10000),
-          headers: {
-            Accept: "application/json",
-            "Cache-Control": "no-cache",
-          },
         },
+        TELEGRAM_BOT_TOKEN,
       );
 
       console.log("📡 Response status:", response.status);
@@ -744,6 +755,8 @@ class EnhancedTelegramCallbackService {
             status: response.status,
             statusText: response.statusText,
             body: errorText,
+            diagnostics,
+            recommendation,
           },
         };
       }
@@ -755,20 +768,32 @@ class EnhancedTelegramCallbackService {
         success: true,
         details: {
           botInfo: data.result,
-          endpoint: currentEndpoint,
+          endpoint: recommendation.endpoint,
           status: response.status,
+          diagnostics,
+          recommendation,
         },
       };
-    } catch (error) {
-      console.error("❌ Connection test failed:", error);
+    } catch (error: any) {
+      console.error("❌ Connection test failed:", safeStringifyError(error));
+
+      // Try to get network diagnostics even if the main test failed
+      let diagnostics = null;
+      try {
+        diagnostics = await testNetworkConnectivity();
+      } catch (diagError) {
+        console.warn("⚠️ Could not run diagnostics:", diagError);
+      }
+
       return {
         success: false,
         error: error.message || "Unknown connection error",
         details: {
           name: error.name,
           message: error.message,
-          stack: error.stack,
-          endpoint: currentEndpoint,
+          type: typeof error,
+          diagnostics,
+          safeString: safeStringifyError(error),
         },
       };
     }
