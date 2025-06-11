@@ -275,15 +275,21 @@ class EnhancedRealtimeTracker {
     this.state.browserTabActive = isVisible;
     this.state.lastSeen = Date.now();
 
-    // Update online status based on visibility
-    if (isVisible) {
-      // Tab became visible - user is online
+    // Update online status based on visibility AND network
+    if (isVisible && this.state.networkConnected) {
+      // Tab became visible and network is connected - user is online
       this.state.isOnline = true;
       this.state.isInPage = true;
+      console.log(
+        "🟢 [ENHANCED TRACKER] User is now ONLINE (visible + connected)",
+      );
     } else {
-      // Tab became hidden - user is offline
+      // Tab became hidden or network disconnected - user is offline
       this.state.isOnline = false;
       this.state.isInPage = false;
+      console.log(
+        "🔴 [ENHANCED TRACKER] User is now OFFLINE (hidden or disconnected)",
+      );
     }
 
     this.notifyStateChange("VISIBILITY_CHANGE");
@@ -298,9 +304,18 @@ class EnhancedRealtimeTracker {
     console.log("🎯 [ENHANCED TRACKER] Window focused");
 
     this.state.browserTabActive = true;
-    this.state.isOnline = true;
-    this.state.isInPage = true;
     this.state.lastSeen = Date.now();
+
+    // Only set online if network is connected
+    if (this.state.networkConnected) {
+      this.state.isOnline = true;
+      this.state.isInPage = true;
+      console.log("🟢 [ENHANCED TRACKER] User ONLINE (focus + network)");
+    } else {
+      this.state.isOnline = false;
+      this.state.isInPage = false;
+      console.log("🔴 [ENHANCED TRACKER] User OFFLINE (focus but no network)");
+    }
 
     this.notifyStateChange("WINDOW_FOCUS");
   }
@@ -317,6 +332,8 @@ class EnhancedRealtimeTracker {
     this.state.isOnline = false;
     this.state.isInPage = false;
     this.state.lastSeen = Date.now();
+
+    console.log("🔴 [ENHANCED TRACKER] User OFFLINE (window blur)");
 
     this.notifyStateChange("WINDOW_BLUR");
   }
