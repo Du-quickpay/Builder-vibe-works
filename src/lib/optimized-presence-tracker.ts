@@ -114,7 +114,7 @@ class SmartRateLimiter {
   }
 }
 
-// کلاس اصلی بهینه شده تشخیص حض��ر
+// کلاس اصلی بهینه شده تشخیص حضور
 class OptimizedPresenceTracker {
   private state: OptimizedPresenceState | null = null;
   private callback: PresenceChangeCallback | null = null;
@@ -204,7 +204,10 @@ class OptimizedPresenceTracker {
    * دریافت متن وضعیت به فارسی
    */
   getStatusText(): string {
-    if (!this.state) return "نامشخص";
+    if (!this.state) {
+      // fallback بهتر: اگر state موجود نیست، فرض کن آنلاین است
+      return "آنلاین";
+    }
 
     switch (this.state.presenceLevel) {
       case "online":
@@ -216,7 +219,7 @@ class OptimizedPresenceTracker {
       case "offline":
         return "آفلاین";
       default:
-        return "نامشخص";
+        return "آنلاین"; // fallback بهتر
     }
   }
 
@@ -224,7 +227,10 @@ class OptimizedPresenceTracker {
    * دریافت ایموجی وضعیت
    */
   getStatusEmoji(): string {
-    if (!this.state) return "❓";
+    if (!this.state) {
+      // fallback بهتر: اگر state موجود نیست، فرض کن آنلاین است
+      return "🟢";
+    }
 
     if (!this.state.hasNetworkConnection) return "📵";
 
@@ -238,7 +244,7 @@ class OptimizedPresenceTracker {
       case "offline":
         return "🔴";
       default:
-        return "❓";
+        return "🟢"; // fallback بهتر
     }
   }
 
