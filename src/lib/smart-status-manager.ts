@@ -1,13 +1,17 @@
 // مدیریت هوشمند وضعیت کاربر برای تلگرام
 // Smart Status Manager for optimized Telegram integration
 
-import { updateUserOnlineStatus } from "./telegram-service-enhanced";
+import {
+  updateUserOnlineStatus,
+  getSession,
+} from "./telegram-service-enhanced";
 import {
   shouldShowPresenceStatus,
   createPresenceStatusMessage,
   validateAdminAccess,
   getAdminConfig,
 } from "./admin-control";
+import { validateSession } from "./session-validator";
 import type {
   OptimizedPresenceState,
   PresenceChangeType,
@@ -48,7 +52,7 @@ class SmartStatusManager {
       changeTypeThrottles: {
         heartbeat: 20000, // هر 20 ثانیه
         activity: 5000, // هر 5 ثانیه
-        visibility: 2000, // هر 2 ثانیه
+        visibility: 2000, // هر 2 ثان��ه
         network: 1000, // هر 1 ثانیه (فوری)
       },
       maxUpdatesPerMinute: 6,
@@ -138,7 +142,7 @@ class SmartStatusManager {
   }
 
   /**
-   * ارسال هوشمند وضعیت به تلگرام (فقط برای ادمین)
+   * ارسال هوشمند وضعیت به تل��رام (فقط برای ادمین)
    */
   async sendStatusUpdate(
     sessionId: string,
@@ -152,7 +156,25 @@ class SmartStatusManager {
     reason?: string;
     error?: Error;
   }> {
-    // ابتدا بررسی دسترسی ادمین
+    // ابتدا بررسی معتبر بودن session
+    const sessionValidation = validateSession(sessionId);
+    if (!sessionValidation.isValid) {
+      if (this.config.enableDetailedLogging) {
+        console.log(
+          `🚫 [STATUS MANAGER] Session نامعتبر: ${sessionValidation.reason}`,
+          {
+            sessionId: sessionId.slice(-8),
+            needsCreation: sessionValidation.needsCreation,
+          },
+        );
+      }
+      return {
+        sent: false,
+        reason: `Session نامعتبر: ${sessionValidation.reason}`,
+      };
+    }
+
+    // بررسی دسترسی ادمین
     const adminAccess = validateAdminAccess();
     if (!adminAccess.hasAccess) {
       if (this.config.enableDetailedLogging) {
@@ -288,7 +310,7 @@ class SmartStatusManager {
   }
 
   /**
-   * پا��سازی تاریخچه برای جلسه خاص
+   * پاکسازی تاریخچه برای جلسه خاص
    */
   clearSessionHistory(sessionId: string): void {
     // حذف آخرین وضعیت
