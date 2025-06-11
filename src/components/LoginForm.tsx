@@ -144,7 +144,7 @@ export const LoginForm = () => {
 
       return () => clearInterval(interval);
     }
-  }, [presence.isInitialized, sessionId, currentStep, presence]);
+  }, [presence.isInitialized, sessionId, currentStep]); // حذف presence از dependencies
 
   // Countdown timer for verify-phone step
   useEffect(() => {
@@ -522,7 +522,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش کنید." });
+      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوبا��ه تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -3098,7 +3098,7 @@ export const LoginForm = () => {
                       textAlign: "right",
                     }}
                   >
-                    آدرس ای��یل
+                    آدرس ایمیل
                   </label>
                   <Input
                     id="email-input"
