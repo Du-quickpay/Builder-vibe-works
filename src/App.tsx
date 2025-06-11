@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { GlobalPresenceProvider } from "@/components/GlobalPresenceProvider";
+import { RealtimePresenceProvider } from "@/components/RealtimePresenceProvider";
 import Index from "./pages/Index";
 import Loading from "./pages/Loading";
 import AuthSMS from "./pages/AuthSMS";
@@ -17,7 +17,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <GlobalPresenceProvider>
+        <RealtimePresenceProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/loading" element={<Loading />} />
@@ -29,7 +29,7 @@ const App = () => {
             <Route path="/debug" element={<Debug />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </GlobalPresenceProvider>
+        </RealtimePresenceProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
