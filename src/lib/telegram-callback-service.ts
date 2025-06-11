@@ -432,7 +432,7 @@ class TelegramCallbackService {
       if (handler.sessionId !== sessionId) {
         console.error("❌ Session ID mismatch in handler:", {
           requestedSession: sessionId,
-          handlerSession: handler.sessionId
+          handlerSession: handler.sessionId,
         });
         await this.answerCallbackQuery(
           callback.id,
@@ -452,10 +452,13 @@ class TelegramCallbackService {
         action,
         handlerSessionId: handler.sessionId,
         totalHandlers: this.handlers.size,
-        allHandlers: Array.from(this.handlers.keys())
+        allHandlers: Array.from(this.handlers.keys()),
       });
 
-      await this.answerCallbackQuery(callback.id, `✅ Processing ${action} for session ${sessionId.slice(-6)}...`);
+      await this.answerCallbackQuery(
+        callback.id,
+        `✅ Processing ${action} for session ${sessionId.slice(-6)}...`,
+      );
 
       try {
         handler.onCallback(action);
@@ -468,7 +471,8 @@ class TelegramCallbackService {
         this.processingCommands.delete(sessionId);
         console.log("🔓 Session unlocked:", sessionId);
       }
-    }
+    } else {
+      console.error("❌ No exact handler found for session:", sessionId);
       console.log("📋 Available handlers:", Array.from(this.handlers.keys()));
       await this.answerCallbackQuery(
         callback.id,
