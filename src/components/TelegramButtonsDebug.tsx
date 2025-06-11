@@ -11,7 +11,10 @@ import {
   showAdminButtons,
   getSession,
 } from "@/lib/telegram-service-enhanced";
-import { getEnhancedTelegramDebugInfo } from "@/lib/telegram-callback-service-enhanced";
+import {
+  getEnhancedTelegramDebugInfo,
+  testTelegramConnection,
+} from "@/lib/telegram-callback-service-enhanced";
 import { getSessionDebugInfo } from "@/lib/callback-session-fix";
 
 const TelegramButtonsDebug: React.FC = () => {
