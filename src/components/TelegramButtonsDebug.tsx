@@ -88,6 +88,28 @@ const TelegramButtonsDebug: React.FC = () => {
     }
   };
 
+  const testConnection = async () => {
+    addTestResult("🔍 Testing Telegram connection...");
+    try {
+      const result = await testTelegramConnection();
+      if (result.success) {
+        addTestResult("✅ Connection test successful");
+        addTestResult(
+          `🤖 Bot: ${result.details?.botInfo?.first_name || "Unknown"}`,
+        );
+      } else {
+        addTestResult(`❌ Connection failed: ${result.error}`);
+        if (result.details) {
+          addTestResult(
+            `📋 Details: ${JSON.stringify(result.details).substring(0, 100)}...`,
+          );
+        }
+      }
+    } catch (error) {
+      addTestResult(`❌ Connection test error: ${error.message}`);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "working":
