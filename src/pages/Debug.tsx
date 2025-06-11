@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getSession } from "@/lib/telegram-service-enhanced";
+import TelegramButtonsDebug from "@/components/TelegramButtonsDebug";
 
 const Debug = () => {
   const [results, setResults] = useState<any>(null);
