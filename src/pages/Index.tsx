@@ -139,7 +139,7 @@ const Index = () => {
         <span>پشتیبانی وا��کس</span>
       </button>
 
-      <style jsx>{`
+      <style>{`
         /* Desktop styles (1024px and up) */
         @media (min-width: 1024px) {
           .mobile-full-screen {
