@@ -10,7 +10,7 @@ export interface UserPresenceState {
   networkConnected: boolean;
 }
 
-interface UserPresenceCallback {
+export interface UserPresenceCallback {
   (state: UserPresenceState): void;
 }
 
