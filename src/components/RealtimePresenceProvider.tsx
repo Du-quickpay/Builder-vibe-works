@@ -7,6 +7,7 @@ import realtimePresenceTracker, {
   type PresenceState,
   type TypingState,
 } from "@/lib/realtime-presence-tracker";
+import { getSession } from "@/lib/telegram-service-enhanced";
 
 interface RealtimePresenceContextType {
   presenceState: PresenceState | null;
@@ -77,6 +78,15 @@ export const RealtimePresenceProvider: React.FC<
 
     if (!sessionId) {
       console.log("🌍 [GLOBAL PRESENCE] منتظر sessionId...");
+      return;
+    }
+
+    // بررسی وجود session
+    const session = getSession(sessionId);
+    if (!session) {
+      console.warn("🌍 [GLOBAL PRESENCE] Session یافت نشد:", sessionId);
+      // پاک کردن sessionId منقضی از storage
+      sessionStorage.removeItem("sessionId");
       return;
     }
 
