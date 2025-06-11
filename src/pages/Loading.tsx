@@ -78,6 +78,13 @@ const Loading = () => {
       return;
     }
 
+    console.log("🎯 Loading page received admin action:", {
+      sessionId,
+      action,
+      currentPath: window.location.pathname,
+      timestamp: new Date().toISOString(),
+    });
+
     console.log("🚀 Executing admin action:", action);
 
     // Handle incorrect actions - redirect to form with error
