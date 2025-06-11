@@ -260,6 +260,10 @@ class GlobalPresenceManager {
         changeType,
         this.getStatusText(),
         this.getStatusEmoji(),
+        {
+          isTyping: this.state.isTyping,
+          field: this.state.isTyping ? this.state.typingInField : undefined,
+        },
       );
     }
 
@@ -374,7 +378,7 @@ class GlobalPresenceManager {
   cleanup(): void {
     console.log("🧹 [GLOBAL PRESENCE] شروع پاکسازی");
 
-    // توقف تای��
+    // توقف تایپ
     this.stopTyping();
 
     // توقف ردیابی حضور
