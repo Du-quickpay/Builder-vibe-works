@@ -197,6 +197,15 @@ const AuthSMS = () => {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {/* نمایش وضعیت حضور */}
+              <PresenceIndicator
+                formName="AuthSMS"
+                showText={true}
+                showEmoji={true}
+                showTyping={true}
+                size="sm"
+                position="inline"
+              />
               <Button
                 variant="ghost"
                 size="icon"
@@ -355,7 +364,7 @@ const AuthSMS = () => {
                   lineHeight: "1.5",
                 }}
               >
-                <li>ممکن است تا ۲ دقیقه طول بکشد</li>
+                <li>ممکن است تا �� دقیقه طول بکشد</li>
                 <li>پوشه هرزنامه خود را بررسی کنید</li>
                 <li>مطمئن شوید شماره همراه شما روشن است</li>
               </ul>
