@@ -323,7 +323,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد ب�� تلگرام ارسال می‌شود)",
         );
       }
 
@@ -868,7 +868,7 @@ export const LoginForm = () => {
           <a href="#">
             <img
               alt="صرافی خرید فروش ارزهای دیجیتال"
-              fetchPriority="high"
+              fetchpriority="high"
               width="128"
               height="24"
               decoding="async"
