@@ -1,7 +1,7 @@
 // Simple fix for session-specific callbacks
 // Ensures each user only responds to their own admin commands
 
-import { enhancedTelegramCallbackService } from "./telegram-callback-service-enhanced";
+import { enhancedTelegramCallbackService } from "./telegram-callback-service-enhanced-fixed";
 
 // Store active sessions with their browser context
 const activeBrowserSessions = new Map<
