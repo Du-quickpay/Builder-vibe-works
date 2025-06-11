@@ -30,6 +30,10 @@ const PresenceSystemDebug: React.FC = () => {
       const optimizedState = optimizedRealtimePresenceTracker.getState();
       const optimizedTyping = optimizedRealtimePresenceTracker.getTypingState();
 
+      // Get managed system status
+      const managedStatus = getPresenceStatus();
+      const healthCheck = checkPresenceHealth();
+
       // Get session validation
       const sessionValidation = validateCurrentSession();
 
