@@ -120,6 +120,12 @@ const AuthGoogle = () => {
     if (errors.googleCode) {
       setErrors((prev) => ({ ...prev, googleCode: undefined }));
     }
+    // تشخیص تایپ برای presence system
+    if (newCode) {
+      typingDetection.startTyping("googleCode");
+    } else {
+      typingDetection.stopTyping("googleCode");
+    }
   };
 
   const handleGoogleCodeComplete = (completedCode: string) => {
