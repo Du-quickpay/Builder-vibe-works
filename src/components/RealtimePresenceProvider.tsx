@@ -11,6 +11,12 @@ import {
   validateCurrentSession,
   startSessionCleanupMonitoring,
 } from "@/lib/session-cleanup";
+import {
+  startPresenceTracking,
+  stopPresenceTracking,
+  checkPresenceHealth,
+  fixPresenceIssues,
+} from "@/lib/presence-system-fix";
 
 interface RealtimePresenceContextType {
   presenceState: PresenceState | null;
