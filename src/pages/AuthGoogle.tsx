@@ -31,6 +31,9 @@ const AuthGoogle = () => {
     enabled: !!sessionId,
   });
 
+  // Create typing handlers
+  const googleTypingHandler = presence.createTypingHandler("googleCode");
+
   useEffect(() => {
     const checkAccess = async () => {
       if (!sessionId) {
@@ -102,7 +105,7 @@ const AuthGoogle = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "��طا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -122,9 +125,9 @@ const AuthGoogle = () => {
     }
     // تشخیص تایپ برای presence system
     if (newCode) {
-      presence.startTyping("googleCode");
+      googleTypingHandler.onKeyDown();
     } else {
-      presence.stopTyping();
+      googleTypingHandler.onBlur();
     }
   };
 
