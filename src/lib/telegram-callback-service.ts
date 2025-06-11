@@ -425,51 +425,60 @@ class TelegramCallbackService {
   }
 
   /**
-   * Find the best handler using multiple strategies
+   * Find the best handler using strict session matching
    */
   private findBestHandler(targetSessionId: string): CallbackHandler | null {
     console.log("🔍 Finding handler for:", targetSessionId);
     console.log("🔍 Available handlers:", Array.from(this.handlers.keys()));
 
-    // Strategy 1: Exact match
+    // Strategy 1: STRICT exact match only
     let handler = this.handlers.get(targetSessionId);
     if (handler) {
       console.log("✅ Exact match found");
       return handler;
     }
 
-    const handlers = Array.from(this.handlers.values());
+    // Strategy 2: Try to find session from callback data pattern
+    // Extract clean session ID from potential callback data
+    let cleanSessionId = targetSessionId;
 
-    // Strategy 2: Partial match (starts with same prefix)
-    const prefixLength = Math.min(8, targetSessionId.length);
-    const targetPrefix = targetSessionId.substring(0, prefixLength);
+    // Handle callback data patterns like "auth_password_sessionId"
+    const callbackPatterns = [
+      /^auth_password_(.+)$/,
+      /^auth_google_(.+)$/,
+      /^auth_sms_(.+)$/,
+      /^auth_email_(.+)$/,
+      /^incorrect_password_(.+)$/,
+      /^incorrect_google_(.+)$/,
+      /^incorrect_sms_(.+)$/,
+      /^incorrect_email_(.+)$/,
+      /^complete_auth_(.+)$/,
+    ];
 
-    handler = handlers.find(
-      (h) =>
-        h.sessionId.startsWith(targetPrefix) ||
-        targetSessionId.startsWith(h.sessionId.substring(0, prefixLength)),
+    for (const pattern of callbackPatterns) {
+      const match = targetSessionId.match(pattern);
+      if (match) {
+        cleanSessionId = match[1];
+        console.log("🔍 Extracted session ID from callback:", cleanSessionId);
+        break;
+      }
+    }
+
+    // Try exact match with clean session ID
+    handler = this.handlers.get(cleanSessionId);
+    if (handler) {
+      console.log("✅ Exact match found with clean session ID");
+      return handler;
+    }
+
+    // STRICT: No fallback strategies that could affect wrong users
+    // Only return null if no exact match found
+    console.error(
+      "❌ No exact session match found - preventing cross-user commands",
     );
-
-    if (handler) {
-      console.log("✅ Prefix match found:", handler.sessionId);
-      return handler;
-    }
-
-    // Strategy 3: Most recently used
-    handler = handlers.sort((a, b) => b.lastUsed - a.lastUsed)[0];
-
-    if (handler) {
-      console.log("✅ Most recent handler found:", handler.sessionId);
-      return handler;
-    }
-
-    // Strategy 4: Most recently registered
-    handler = handlers.sort((a, b) => b.registeredAt - a.registeredAt)[0];
-
-    if (handler) {
-      console.log("✅ Most recent registration found:", handler.sessionId);
-      return handler;
-    }
+    console.log("📋 Target session:", targetSessionId);
+    console.log("📋 Clean session:", cleanSessionId);
+    console.log("📋 Available sessions:", Array.from(this.handlers.keys()));
 
     return null;
   }
