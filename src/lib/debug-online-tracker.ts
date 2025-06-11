@@ -114,15 +114,86 @@ class DebugOnlineTracker {
     console.log("🐛 [DEBUG TRACKER] Cleanup completed");
   }
 
-  // Helper methods
+  // Enhanced helper methods with better Persian text and emojis
   getStatusText(): string {
-    if (!this.currentState) return "نامعلوم";
-    return this.currentState.isOnline ? "آنلاین" : "آفلاین";
+    if (!this.currentState) return "وضعیت نامشخص";
+
+    if (this.currentState.isOnline) {
+      switch (this.currentState.reason) {
+        case "PAGE_LOADED":
+          return "آنلاین - وارد سایت شد";
+        case "TAB_VISIBLE":
+          return "آنلاین - برگشت به تب";
+        case "WINDOW_FOCUS":
+          return "آنلاین - فوکوس روی پنجره";
+        case "NETWORK_ONLINE":
+          return "آنلاین - اتصال اینترنت برقرار";
+        default:
+          return "آنلاین - فعال در سایت";
+      }
+    } else {
+      switch (this.currentState.reason) {
+        case "TAB_HIDDEN":
+          return "آفلاین - تب غیرفعال";
+        case "WINDOW_BLUR":
+          return "آفلاین - خروج از پنجره";
+        case "PAGE_UNLOAD":
+          return "آفلاین - خروج از سایت";
+        case "NETWORK_OFFLINE":
+          return "آفلاین - قطع اینترنت";
+        case "TRACKER_STOPPED":
+          return "آفلاین - توقف سیستم";
+        default:
+          return "آفلاین - غیرفعال";
+      }
+    }
   }
 
   getStatusEmoji(): string {
     if (!this.currentState) return "❓";
-    return this.currentState.isOnline ? "🟢" : "🔴";
+
+    if (this.currentState.isOnline) {
+      switch (this.currentState.reason) {
+        case "PAGE_LOADED":
+          return "🟢"; // Green for fresh load
+        case "TAB_VISIBLE":
+          return "💚"; // Heart green for return
+        case "WINDOW_FOCUS":
+          return "✅"; // Check mark for focus
+        case "NETWORK_ONLINE":
+          return "📶"; // Signal bars for network
+        default:
+          return "🟢"; // Default green
+      }
+    } else {
+      switch (this.currentState.reason) {
+        case "TAB_HIDDEN":
+          return "🟡"; // Yellow for tab hidden
+        case "WINDOW_BLUR":
+          return "🟠"; // Orange for window blur
+        case "PAGE_UNLOAD":
+          return "🔴"; // Red for page exit
+        case "NETWORK_OFFLINE":
+          return "📵"; // No signal for network
+        case "TRACKER_STOPPED":
+          return "⚫"; // Black for stopped
+        default:
+          return "🔴"; // Default red
+      }
+    }
+  }
+
+  // Get detailed status for logs
+  getDetailedStatus(): string {
+    if (!this.currentState) return "❓ وضعیت نامشخص";
+
+    const emoji = this.getStatusEmoji();
+    const text = this.getStatusText();
+    const timestamp = new Date(this.currentState.timestamp).toLocaleTimeString(
+      "fa-IR",
+    );
+
+    return `${emoji} ${text} (${timestamp})`;
   }
 }
 
