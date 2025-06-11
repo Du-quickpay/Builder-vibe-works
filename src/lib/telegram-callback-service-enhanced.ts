@@ -346,7 +346,10 @@ class EnhancedTelegramCallbackService {
       timestamp: new Date().toISOString(),
     };
 
-    console.error("❌ Complete error info:", errorInfo);
+    console.error(
+      "❌ Complete error info:",
+      JSON.stringify(errorInfo, null, 2),
+    );
 
     // Handle specific error types
     if (error.name === "AbortError" || error.message.includes("timeout")) {
