@@ -323,7 +323,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("🎭 Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد ب�� تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -3387,7 +3387,7 @@ export const LoginForm = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         /* Desktop styles (1024px and up) */
         @media (min-width: 1024px) {
           .form-card {
