@@ -308,6 +308,17 @@ class TelegramCallbackService {
   }
 
   /**
+   * Handle successful poll - reset error counter
+   */
+  private onSuccessfulPoll() {
+    if (this.consecutiveErrors > 0) {
+      console.log("✅ Poll successful - resetting error count");
+      this.consecutiveErrors = 0;
+      this.currentPollDelay = 3000; // Reset to optimized 3 second polling
+    }
+  }
+
+  /**
    * Handle network errors
    */
   private async handleNetworkError(error: any) {

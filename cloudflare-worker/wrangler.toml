@@ -1,0 +1,24 @@
+name = "telegram-proxy-fragrant-fog-f09d"
+main = "telegram-proxy.js"
+compatibility_date = "2024-01-01"
+
+# Worker settings
+[env.production]
+name = "telegram-proxy-fragrant-fog-f09d"
+routes = [
+  { pattern = "telegram-proxy-fragrant-fog-f09d.anthonynoelmills.workers.dev/*", zone_name = "anthonynoelmills.workers.dev" }
+]
+
+# Development settings
+[env.development]
+name = "telegram-proxy-fragrant-fog-f09d-dev"
+
+# Build configuration
+[build]
+command = ""
+cwd = "."
+watch_dir = "."
+
+# TypeScript configuration (optional)
+[build.upload]
+format = "service-worker"
