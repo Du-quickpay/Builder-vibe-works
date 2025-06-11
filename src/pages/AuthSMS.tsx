@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { AlertMessage } from "@/components/AlertMessage";
 import { OTPInput } from "@/components/OTPInput";
 import { toPersianDigits, maskPhoneNumber } from "@/lib/persian-utils";
+import { usePresence } from "@/hooks/usePresence";
+import PresenceIndicator from "@/components/PresenceIndicator";
 
 const AuthSMS = () => {
   const location = useLocation();
