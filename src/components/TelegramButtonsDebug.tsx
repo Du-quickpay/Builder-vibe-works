@@ -275,6 +275,9 @@ const TelegramButtonsDebug: React.FC = () => {
           <div>
             <h3 className="font-semibold mb-2">Test Actions</h3>
             <div className="flex gap-2 flex-wrap">
+              <Button onClick={testNetworkBasics} size="sm" variant="secondary">
+                Test Network
+              </Button>
               <Button
                 onClick={testConnection}
                 size="sm"
