@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { getSession } from "@/lib/telegram-service-enhanced";
 import TelegramButtonsDebug from "@/components/TelegramButtonsDebug";
 import EnvDebug from "@/components/EnvDebug";
+import PresenceSystemDebug from "@/components/PresenceSystemDebug";
 
 const Debug = () => {
   const [results, setResults] = useState<any>(null);
