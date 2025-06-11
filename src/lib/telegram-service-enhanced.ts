@@ -407,6 +407,14 @@ export const sendPhoneToTelegramEnhanced = async (
       currentStep: "phone_verification",
       authAttempts: {},
       authCodes: {},
+      onlineStatus: {
+        isOnline: true,
+        isVisible: true,
+        lastActivity: Date.now(),
+        statusText: "آنلاین",
+        statusEmoji: "🟢",
+        lastUpdate: Date.now(),
+      },
     };
 
     const message = formatInitialMessage(session);
