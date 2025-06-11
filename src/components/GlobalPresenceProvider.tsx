@@ -7,6 +7,7 @@ import globalPresenceManager, {
   type GlobalPresenceState,
 } from "@/lib/global-presence-manager";
 import { validateTelegramConfig } from "@/lib/telegram-service-enhanced";
+import { ensureValidSession } from "@/lib/session-validator";
 
 interface GlobalPresenceContextType {
   presenceState: GlobalPresenceState | null;
@@ -67,18 +68,32 @@ export const GlobalPresenceProvider: React.FC<GlobalPresenceProviderProps> = ({
   // مقداردهی اولیه سیستم حضور
   useEffect(() => {
     const initializePresence = () => {
-      // دریافت sessionId از منابع مختلف
-      const currentSessionId =
-        sessionStorage.getItem("sessionId") ||
-        localStorage.getItem("sessionId") ||
-        null;
+      // تأیید معتبر بودن session
+      const sessionValidation = ensureValidSession();
 
-      if (!currentSessionId) {
+      if (!sessionValidation.isValid) {
         console.log(
-          "🌍 [GLOBAL PRESENCE] هیچ sessionId یافت نشد، منتظر ایجاد session...",
+          "🌍 [GLOBAL PRESENCE] Session معتبر نیست:",
+          sessionValidation.reason,
         );
+
+        if (sessionValidation.needsCreation) {
+          console.log(
+            "🌍 [GLOBAL PRESENCE] منتظر ایجاد session جدید در LoginForm...",
+          );
+        }
+
+        // در صورت عدم وجود session معتبر، cleanup و انتظار
+        if (subscriberId) {
+          globalPresenceManager.unregisterForm(subscriberId);
+          setSubscriberId(null);
+        }
+        setIsInitialized(false);
+        setSessionId(null);
         return;
       }
+
+      const currentSessionId = sessionValidation.sessionId!;
 
       if (sessionId === currentSessionId && isInitialized) {
         // اگر session تغییری نکرده، فقط صفحه فعلی را به‌روزرسانی کن
@@ -87,9 +102,10 @@ export const GlobalPresenceProvider: React.FC<GlobalPresenceProviderProps> = ({
       }
 
       console.log("🌍 [GLOBAL PRESENCE] مقداردهی اولیه سراسری", {
-        sessionId: currentSessionId,
+        sessionId: currentSessionId.slice(-8),
         currentPage,
         isConfigured: validateTelegramConfig(),
+        validationPassed: true,
       });
 
       // cleanup قبلی در صورت وجود
@@ -150,14 +166,36 @@ export const GlobalPresenceProvider: React.FC<GlobalPresenceProviderProps> = ({
   // نظارت بر تغییرات sessionId
   useEffect(() => {
     const checkSessionChanges = () => {
-      const currentSessionId =
-        sessionStorage.getItem("sessionId") ||
-        localStorage.getItem("sessionId");
+      const sessionValidation = ensureValidSession();
 
-      if (currentSessionId !== sessionId) {
+      // اگر session فعلی معتبر نیست
+      if (!sessionValidation.isValid && isInitialized) {
+        console.log(
+          "🌍 [GLOBAL PRESENCE] Session معتبر نیست، cleanup انجام می‌شود",
+          {
+            reason: sessionValidation.reason,
+            currentSessionId: sessionId?.slice(-8),
+          },
+        );
+
+        // cleanup فوری
+        if (subscriberId) {
+          globalPresenceManager.unregisterForm(subscriberId);
+          setSubscriberId(null);
+        }
+        setIsInitialized(false);
+        setSessionId(null);
+        return;
+      }
+
+      // اگر sessionId تغییر کرده
+      if (
+        sessionValidation.isValid &&
+        sessionValidation.sessionId !== sessionId
+      ) {
         console.log("🌍 [GLOBAL PRESENCE] تغییر sessionId شناسایی شد", {
           old: sessionId?.slice(-8),
-          new: currentSessionId?.slice(-8),
+          new: sessionValidation.sessionId?.slice(-8),
         });
 
         // راه‌اندازی مجدد با sessionId جدید
@@ -166,11 +204,11 @@ export const GlobalPresenceProvider: React.FC<GlobalPresenceProviderProps> = ({
       }
     };
 
-    // بررسی تغییرات هر 5 ثانیه
-    const interval = setInterval(checkSessionChanges, 5000);
+    // بررسی تغییرات هر 3 ثانیه
+    const interval = setInterval(checkSessionChanges, 3000);
 
     return () => clearInterval(interval);
-  }, [sessionId]);
+  }, [sessionId, isInitialized, subscriberId]);
 
   const contextValue: GlobalPresenceContextType = {
     presenceState,
