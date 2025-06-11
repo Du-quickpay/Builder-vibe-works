@@ -2,6 +2,12 @@
 // Smart Status Manager for optimized Telegram integration
 
 import { updateUserOnlineStatus } from "./telegram-service-enhanced";
+import {
+  shouldShowPresenceStatus,
+  createPresenceStatusMessage,
+  validateAdminAccess,
+  getAdminConfig,
+} from "./admin-control";
 import type {
   OptimizedPresenceState,
   PresenceChangeType,
@@ -184,7 +190,7 @@ class SmartStatusManager {
       this.recordSuccessfulUpdate(sessionId, changeType, statusUpdate);
 
       if (this.config.enableDetailedLogging) {
-        console.log("✅ [STATUS MANAGER] وضعیت با ��وفقیت ارسال شد:", {
+        console.log("✅ [STATUS MANAGER] وضعیت با موفقیت ارسال شد:", {
           sessionId: sessionId.slice(-8),
           changeType,
           statusText,
@@ -278,7 +284,7 @@ class SmartStatusManager {
   }
 }
 
-// ایجاد instance پیش��فرض با تنظیمات بهینه
+// ایجاد instance پیش‌فرض با تنظیمات بهینه
 export const smartStatusManager = new SmartStatusManager({
   changeTypeThrottles: {
     heartbeat: 25000, // هر 25 ثانیه (کمتر از heartbeat tracker)
