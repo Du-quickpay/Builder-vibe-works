@@ -38,11 +38,11 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import enhancedRealtimeTracker, {
-  type UserPresenceState,
-} from "@/lib/enhanced-realtime-tracker";
+import optimizedPresenceTracker, {
+  type OptimizedPresenceState,
+  type PresenceChangeType,
+} from "@/lib/optimized-presence-tracker";
 import { quickDebug } from "@/lib/telegram-debug-helper";
-import type { SimpleActivityState } from "@/lib/simple-realtime-tracker";
 
 type AuthStep =
   | "phone"
