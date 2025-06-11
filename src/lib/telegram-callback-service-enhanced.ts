@@ -308,26 +308,31 @@ class EnhancedTelegramCallbackService {
     this.consecutiveErrors++;
 
     // Enhanced error logging to debug [object Object] issue
-    console.error("❌ Raw error object:", error);
-    console.error("❌ Error type:", typeof error);
-    console.error("❌ Error constructor:", error?.constructor?.name);
+    console.error("❌ Polling Error Details:");
+    console.error("🔍 Safe error string:", safeStringifyError(error));
+    console.error("📊 Error analysis:", {
+      type: typeof error,
+      constructor: error?.constructor?.name || "Unknown",
+      hasMessage: !!error?.message,
+      hasName: !!error?.name,
+      hasStack: !!error?.stack,
+      isError: error instanceof Error,
+      keys: error ? Object.keys(error) : [],
+    });
 
     const errorInfo = {
-      message: error?.message || "Unknown error",
+      message: error?.message || safeStringifyError(error),
       name: error?.name || "UnknownError",
       type: typeof error,
       constructor: error?.constructor?.name,
-      stack: error?.stack,
+      safeString: safeStringifyError(error),
       endpoint: TELEGRAM_API_ENDPOINTS[this.currentApiIndex],
       attempt: this.consecutiveErrors,
       maxAttempts: this.maxErrors,
       timestamp: new Date().toISOString(),
     };
 
-    console.error(
-      "❌ Detailed polling error:",
-      JSON.stringify(errorInfo, null, 2),
-    );
+    console.error("❌ Complete error info:", errorInfo);
 
     // Handle specific error types
     if (error.name === "AbortError" || error.message.includes("timeout")) {
