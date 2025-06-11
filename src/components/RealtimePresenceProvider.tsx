@@ -123,7 +123,7 @@ export const RealtimePresenceProvider: React.FC<
   // محاسبه مقادیر
   const statusText = realtimePresenceTracker.getStatusText();
   const statusEmoji = realtimePresenceTracker.getStatusEmoji();
-  const isOnline = presenceState?.status === "online" ?? false;
+  const isOnline = presenceState?.status === "online";
 
   const contextValue: RealtimePresenceContextType = {
     presenceState,
