@@ -21,6 +21,33 @@ interface CallbackHandler {
   lastUsed: number;
 }
 
+/**
+ * Safely stringify error objects for logging
+ */
+const safeStringifyError = (error: any): string => {
+  try {
+    if (error === null || error === undefined) {
+      return "null/undefined error";
+    }
+
+    if (typeof error === "string") {
+      return error;
+    }
+
+    if (error instanceof Error) {
+      return `${error.name}: ${error.message}`;
+    }
+
+    if (typeof error === "object") {
+      return JSON.stringify(error, Object.getOwnPropertyNames(error));
+    }
+
+    return String(error);
+  } catch (stringifyError) {
+    return `Error stringification failed: ${stringifyError.message}`;
+  }
+};
+
 class EnhancedTelegramCallbackService {
   private handlers = new Map<string, CallbackHandler>();
   private isPolling = false;
