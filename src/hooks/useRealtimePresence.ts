@@ -6,6 +6,7 @@ import realtimePresenceTracker, {
   type PresenceState,
   type TypingState,
 } from "@/lib/realtime-presence-tracker";
+import { getSession } from "@/lib/telegram-service-enhanced";
 
 export interface UseRealtimePresenceProps {
   sessionId: string;
@@ -43,6 +44,13 @@ export const useRealtimePresence = ({
   // شروع/توقف ردیابی
   useEffect(() => {
     if (!enabled || !sessionId) {
+      return;
+    }
+
+    // بررسی وجود session
+    const session = getSession(sessionId);
+    if (!session) {
+      console.warn(`🔗 [${formName}] Session یافت نشد:`, sessionId);
       return;
     }
 
