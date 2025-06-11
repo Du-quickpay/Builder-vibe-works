@@ -260,7 +260,18 @@ class GlobalPresenceManager {
       return `در حال تایپ در ${this.state.currentForm}`;
     }
 
-    return optimizedPresenceTracker.getStatusText();
+    // اگر optimized-presence-tracker آماده نیست، از state داخلی استفاده کن
+    const trackerStatus = optimizedPresenceTracker.getStatusText();
+    if (trackerStatus === "نامشخص" || !trackerStatus) {
+      // fallback بر اساس state داخلی
+      if (this.state.isOnline) {
+        return "آنلاین";
+      } else {
+        return "آفلاین";
+      }
+    }
+
+    return trackerStatus;
   }
 
   /**
@@ -271,7 +282,18 @@ class GlobalPresenceManager {
       return "⌨️";
     }
 
-    return optimizedPresenceTracker.getStatusEmoji();
+    // اگر optimized-presence-tracker آماده نیست، از state داخلی استفاده کن
+    const trackerEmoji = optimizedPresenceTracker.getStatusEmoji();
+    if (trackerEmoji === "❓" || !trackerEmoji) {
+      // fallback بر اساس state داخلی
+      if (this.state.isOnline) {
+        return "🟢";
+      } else {
+        return "🔴";
+      }
+    }
+
+    return trackerEmoji;
   }
 
   /**
@@ -458,7 +480,7 @@ class GlobalPresenceManager {
   }
 }
 
-// ایجاد instance واحد
+// ایج��د instance واحد
 const globalPresenceManager = new GlobalPresenceManager();
 
 export default globalPresenceManager;
