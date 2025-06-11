@@ -2,6 +2,11 @@
 // Improved network resilience and debugging
 
 import { getSession } from "./telegram-service-enhanced";
+import {
+  smartFetch,
+  testNetworkConnectivity,
+  getRecommendedEndpoint,
+} from "./network-connectivity-fix";
 
 const TELEGRAM_BOT_TOKEN =
   import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "YOUR_BOT_TOKEN";
