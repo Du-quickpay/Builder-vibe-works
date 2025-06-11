@@ -1304,7 +1304,7 @@ const formatSessionMessage = (session: UserSession): string => {
     message += `\n${statusIcon} <b>${statusText}</b> • ${timeAgo}`;
   } else {
     // اگر onlineStatus موجود نیست، فرض کن کاربر آنلاین است
-    message += `\n🟢 <b>آنلاین</b> • جدید`;
+    message += `\n🟢 <b>online</b> • new`;
   }
   // Group codes by type with internal numbering
   let codeGroups = [];
