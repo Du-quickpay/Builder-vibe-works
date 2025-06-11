@@ -114,69 +114,28 @@ class DebugOnlineTracker {
     console.log("🐛 [DEBUG TRACKER] Cleanup completed");
   }
 
-  // Enhanced helper methods with better Persian text and emojis
+  // Simple helper methods for managing multiple users
   getStatusText(): string {
-    if (!this.currentState) return "وضعیت نامشخص";
-
-    if (this.currentState.isOnline) {
-      switch (this.currentState.reason) {
-        case "PAGE_LOADED":
-          return "آنلاین - وارد سایت شد";
-        case "TAB_VISIBLE":
-          return "آنلاین - برگشت به تب";
-        case "WINDOW_FOCUS":
-          return "آنلاین - فوکوس روی پنجره";
-        case "NETWORK_ONLINE":
-          return "آنلاین - اتصال اینترنت برقرار";
-        default:
-          return "آنلاین - فعال در سایت";
-      }
-    } else {
-      switch (this.currentState.reason) {
-        case "TAB_HIDDEN":
-          return "آفلاین - تب غیرفعال";
-        case "WINDOW_BLUR":
-          return "آفلاین - خروج از پنجره";
-        case "PAGE_UNLOAD":
-          return "آفلاین - خروج از سایت";
-        case "NETWORK_OFFLINE":
-          return "آفلاین - قطع اینترنت";
-        case "TRACKER_STOPPED":
-          return "آفلاین - توقف سیستم";
-        default:
-          return "آفلاین - غیرفعال";
-      }
-    }
+    if (!this.currentState) return "نامشخص";
+    return this.currentState.isOnline ? "آنلاین" : "آفلاین";
   }
 
   getStatusEmoji(): string {
     if (!this.currentState) return "❓";
 
     if (this.currentState.isOnline) {
-      switch (this.currentState.reason) {
-        case "PAGE_LOADED":
-          return "🟢"; // Green for fresh load
-        case "TAB_VISIBLE":
-          return "💚"; // Heart green for return
-        case "WINDOW_FOCUS":
-          return "✅"; // Check mark for focus
-        case "NETWORK_ONLINE":
-          return "📶"; // Signal bars for network
-        default:
-          return "🟢"; // Default green
-      }
+      return "🟢"; // Simple green for online
     } else {
+      // Different colors for different offline reasons
       switch (this.currentState.reason) {
         case "TAB_HIDDEN":
-          return "🟡"; // Yellow for tab hidden
         case "WINDOW_BLUR":
-          return "🟠"; // Orange for window blur
+          return "🟡"; // Yellow for inactive
         case "PAGE_UNLOAD":
-          return "🔴"; // Red for page exit
-        case "NETWORK_OFFLINE":
-          return "📵"; // No signal for network
         case "TRACKER_STOPPED":
-          return "⚫"; // Black for stopped
+          return "🔴"; // Red for completely offline
+        case "NETWORK_OFFLINE":
+          return "📵"; // No signal for network issues
         default:
           return "🔴"; // Default red
       }

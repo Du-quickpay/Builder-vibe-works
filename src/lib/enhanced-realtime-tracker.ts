@@ -82,53 +82,45 @@ class EnhancedRealtimeTracker {
   }
 
   /**
-   * Get enhanced status text in Persian
+   * Get simple status text for managing multiple users
    */
   getStatusText(): string {
-    if (!this.state) return "وضعیت نامشخص";
+    if (!this.state) return "نامشخص";
 
-    // Network disconnected
     if (!this.state.networkConnected) {
-      return "آفلاین - قطع اتصال اینترنت";
+      return "آفلاین";
     }
 
-    // User completely offline
     if (!this.state.isOnline || !this.state.isInPage) {
-      return "آفلاین - خارج از سایت";
+      return "آفلاین";
     }
 
-    // User online but tab inactive
     if (!this.state.browserTabActive) {
-      return "آنلاین - تب در background";
+      return "غیرفعال";
     }
 
-    // User fully active
-    return "آنلاین - فعال در سایت";
+    return "آنلاین";
   }
 
   /**
-   * Get enhanced status emoji
+   * Get simple status emoji
    */
   getStatusEmoji(): string {
     if (!this.state) return "❓";
 
-    // Network disconnected
     if (!this.state.networkConnected) {
-      return "📵"; // No signal icon
+      return "📵";
     }
 
-    // User completely offline
     if (!this.state.isOnline || !this.state.isInPage) {
-      return "🔴"; // Red circle
+      return "🔴";
     }
 
-    // User online but tab inactive
     if (!this.state.browserTabActive) {
-      return "🟡"; // Yellow circle
+      return "🟡";
     }
 
-    // User fully active
-    return "🟢"; // Green circle
+    return "🟢";
   }
 
   /**
