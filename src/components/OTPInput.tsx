@@ -191,7 +191,7 @@ export const OTPInput = ({
                 onFocus={() => handleFocus(index)}
                 onPaste={handlePaste}
                 disabled={disabled}
-                className="otp-input"
+                className="otp-input sm:h-[56px] sm:text-[20px] focus:border-blue-500"
                 style={{
                   animation:
                     "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
@@ -218,7 +218,6 @@ export const OTPInput = ({
                   fontVariantNumeric: "tabular-nums",
                   letterSpacing: "normal",
                 }}
-                className="sm:h-[56px] sm:text-[20px] focus:border-blue-500"
                 autoComplete={index === 0 ? "one-time-code" : "off"}
               />
               <fieldset
