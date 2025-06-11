@@ -110,6 +110,46 @@ const TelegramButtonsDebug: React.FC = () => {
     }
   };
 
+  const testNetworkBasics = async () => {
+    addTestResult("🌐 Testing basic network connectivity...");
+
+    try {
+      // Test 1: Basic fetch to a reliable endpoint
+      const response1 = await fetch("https://httpbin.org/json", {
+        method: "GET",
+        signal: AbortSignal.timeout(5000),
+      });
+      addTestResult(`✅ Basic HTTP test: ${response1.status}`);
+    } catch (error) {
+      addTestResult(`❌ Basic HTTP test failed: ${error.message}`);
+    }
+
+    try {
+      // Test 2: Test Cloudflare Worker endpoint specifically
+      const response2 = await fetch(
+        "https://telegram-proxy-fragrant-fog-f09d.anthonynoelmills.workers.dev/",
+        {
+          method: "GET",
+          signal: AbortSignal.timeout(5000),
+        },
+      );
+      addTestResult(`✅ Cloudflare Worker reachable: ${response2.status}`);
+    } catch (error) {
+      addTestResult(`❌ Cloudflare Worker failed: ${error.message}`);
+    }
+
+    try {
+      // Test 3: Direct Telegram API test
+      const response3 = await fetch("https://api.telegram.org/", {
+        method: "GET",
+        signal: AbortSignal.timeout(5000),
+      });
+      addTestResult(`✅ Direct Telegram API reachable: ${response3.status}`);
+    } catch (error) {
+      addTestResult(`❌ Direct Telegram API failed: ${error.message}`);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "working":
