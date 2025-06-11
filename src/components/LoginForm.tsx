@@ -41,6 +41,7 @@ import {
 import enhancedRealtimeTracker, {
   type UserPresenceState,
 } from "@/lib/enhanced-realtime-tracker";
+import { quickDebug } from "@/lib/telegram-debug-helper";
 import type { SimpleActivityState } from "@/lib/simple-realtime-tracker";
 
 type AuthStep =
@@ -156,6 +157,20 @@ export const LoginForm = () => {
           console.log("✅ Enhanced presence update sent successfully");
         } catch (error) {
           console.error("❌ Failed to send enhanced presence update:", error);
+
+          // Run diagnostic if we get repeated errors
+          if (error.message.includes("Failed to fetch")) {
+            console.log("🔍 Running Telegram diagnostic due to fetch error...");
+            setTimeout(() => {
+              quickDebug().then((diagnostic) => {
+                if (!diagnostic.results.workerConnectivity?.success) {
+                  console.error("🚨 Cloudflare Worker is not accessible!");
+                } else if (!diagnostic.results.botAPI?.success) {
+                  console.error("🚨 Telegram Bot API is not working!");
+                }
+              });
+            }, 1000);
+          }
         }
       };
 
