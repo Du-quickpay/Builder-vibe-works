@@ -388,7 +388,7 @@ export const sendPhoneToTelegramEnhanced = async (
         isOnline: true,
         isVisible: true,
         lastActivity: Date.now(),
-        statusText: "آنلاین",
+        statusText: "online",
         statusEmoji: "🟢",
         lastUpdate: Date.now(),
       },
