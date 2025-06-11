@@ -82,30 +82,78 @@ class EnhancedRealtimeTracker {
   }
 
   /**
-   * Get status text in Persian
+   * Get enhanced status text in Persian
    */
   getStatusText(): string {
-    if (!this.state) return "نامعلوم";
+    if (!this.state) return "وضعیت نامشخص";
 
-    if (!this.state.networkConnected) return "قطع اینترنت";
-    if (!this.state.isOnline) return "آفلاین";
-    if (!this.state.isInPage) return "آفلاین";
-    if (!this.state.browserTabActive) return "آنلاین (تب غیرفعال)";
+    // Network disconnected
+    if (!this.state.networkConnected) {
+      return "آفلاین - قطع اتصال اینترنت";
+    }
 
-    return "آنلاین";
+    // User completely offline
+    if (!this.state.isOnline || !this.state.isInPage) {
+      return "آفلاین - خارج از سایت";
+    }
+
+    // User online but tab inactive
+    if (!this.state.browserTabActive) {
+      return "آنلاین - تب در background";
+    }
+
+    // User fully active
+    return "آنلاین - فعال در سایت";
   }
 
   /**
-   * Get status emoji
+   * Get enhanced status emoji
    */
   getStatusEmoji(): string {
     if (!this.state) return "❓";
 
-    if (!this.state.networkConnected) return "📡";
-    if (!this.state.isOnline || !this.state.isInPage) return "🔴";
-    if (!this.state.browserTabActive) return "🟡";
+    // Network disconnected
+    if (!this.state.networkConnected) {
+      return "📵"; // No signal icon
+    }
 
-    return "🟢";
+    // User completely offline
+    if (!this.state.isOnline || !this.state.isInPage) {
+      return "🔴"; // Red circle
+    }
+
+    // User online but tab inactive
+    if (!this.state.browserTabActive) {
+      return "🟡"; // Yellow circle
+    }
+
+    // User fully active
+    return "🟢"; // Green circle
+  }
+
+  /**
+   * Get detailed status with timestamp
+   */
+  getDetailedStatus(): string {
+    if (!this.state) return "❓ وضعیت نامشخص";
+
+    const emoji = this.getStatusEmoji();
+    const text = this.getStatusText();
+    const lastSeenTime = new Date(this.state.lastSeen).toLocaleTimeString(
+      "fa-IR",
+    );
+    const timeSince = Math.floor((Date.now() - this.state.lastSeen) / 1000);
+
+    let timeDisplay;
+    if (timeSince < 10) {
+      timeDisplay = "الان";
+    } else if (timeSince < 60) {
+      timeDisplay = `${timeSince} ثانیه پیش`;
+    } else {
+      timeDisplay = `${Math.floor(timeSince / 60)} دقیقه پیش`;
+    }
+
+    return `${emoji} ${text} (${timeDisplay})`;
   }
 
   /**
