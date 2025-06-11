@@ -577,6 +577,83 @@ class EnhancedTelegramCallbackService {
   }
 
   /**
+   * Test connection manually for debugging
+   */
+  async testConnection(): Promise<{
+    success: boolean;
+    error?: string;
+    details?: any;
+  }> {
+    const currentEndpoint = TELEGRAM_API_ENDPOINTS[this.currentApiIndex];
+
+    try {
+      console.log("🔍 Manual connection test starting...");
+      console.log("🔗 Testing endpoint:", currentEndpoint);
+      console.log(
+        "🔑 Bot token available:",
+        !!TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN",
+      );
+
+      if (!this.validateConfiguration()) {
+        return { success: false, error: "Configuration invalid" };
+      }
+
+      const response = await fetch(
+        `${currentEndpoint}/bot${TELEGRAM_BOT_TOKEN}/getMe`,
+        {
+          method: "GET",
+          signal: AbortSignal.timeout(10000),
+          headers: {
+            Accept: "application/json",
+            "Cache-Control": "no-cache",
+          },
+        },
+      );
+
+      console.log("📡 Response status:", response.status);
+      console.log("📡 Response ok:", response.ok);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ HTTP Error Response:", errorText);
+        return {
+          success: false,
+          error: `HTTP ${response.status}: ${response.statusText}`,
+          details: {
+            status: response.status,
+            statusText: response.statusText,
+            body: errorText,
+          },
+        };
+      }
+
+      const data = await response.json();
+      console.log("✅ Connection test successful:", data);
+
+      return {
+        success: true,
+        details: {
+          botInfo: data.result,
+          endpoint: currentEndpoint,
+          status: response.status,
+        },
+      };
+    } catch (error) {
+      console.error("❌ Connection test failed:", error);
+      return {
+        success: false,
+        error: error.message || "Unknown connection error",
+        details: {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+          endpoint: currentEndpoint,
+        },
+      };
+    }
+  }
+
+  /**
    * Get debug info
    */
   getDebugInfo() {
