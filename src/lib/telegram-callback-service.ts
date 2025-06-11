@@ -599,6 +599,9 @@ class TelegramCallbackService {
 // Create singleton instance
 const telegramCallbackService = new TelegramCallbackService();
 
+// Export the service instance for advanced usage
+export { telegramCallbackService };
+
 // Export functions
 export const registerTelegramCallback = (
   sessionId: string,
