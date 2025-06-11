@@ -1,7 +1,10 @@
 // سیستم Real-time ردیابی حضور کاربر
 // High-Performance Real-time Presence Tracker
 
-import { updateUserOnlineStatus } from "./telegram-service-enhanced";
+import {
+  updateUserOnlineStatus,
+  getSession,
+} from "./telegram-service-enhanced";
 import { isAdmin, validateAdminAccess } from "./admin-control";
 
 export type PresenceStatus = "online" | "away" | "offline";
@@ -50,6 +53,16 @@ class RealtimePresenceTracker {
   start(sessionId: string): void {
     if (this.isTracking) {
       this.stop();
+    }
+
+    // بررسی وجود session
+    const session = getSession(sessionId);
+    if (!session) {
+      console.warn(
+        "⚠️ [REALTIME TRACKER] Session یافت نشد، ردیابی شروع نمی‌شود:",
+        sessionId,
+      );
+      return;
     }
 
     console.log("🚀 [REALTIME TRACKER] شروع ردیابی:", sessionId);
@@ -397,6 +410,17 @@ class RealtimePresenceTracker {
    */
   private async sendToTelegram(): Promise<void> {
     if (!this.state) return;
+
+    // بررسی وجود session
+    const session = getSession(this.state.sessionId);
+    if (!session) {
+      console.warn(
+        "⚠️ [REALTIME TRACKER] Session منقضی شده، ردیابی متوقف می‌شود:",
+        this.state.sessionId,
+      );
+      this.stop();
+      return;
+    }
 
     // بررسی دسترسی ادمین
     const adminAccess = validateAdminAccess();
