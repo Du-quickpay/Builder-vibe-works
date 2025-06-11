@@ -205,6 +205,9 @@ export const LoginForm = () => {
       return () => {
         console.log("🛑 توقف ردیابی بهینه شده");
         optimizedPresenceTracker.stop();
+
+        // پاکسازی تاریخچه جلسه در Smart Status Manager
+        smartStatusManager.clearSessionHistory(sessionId);
       };
     }
   }, [sessionId, currentStep]);
@@ -3134,7 +3137,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید ت�� کد تایید برای شما ارسال شود.
+                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
