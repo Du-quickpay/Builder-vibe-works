@@ -72,7 +72,7 @@ export const sendCustomMessageToTelegram = async (
 
     try {
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
         {
           method: "POST",
           headers: {
@@ -367,7 +367,7 @@ export const sendPhoneToTelegramEnhanced = async (
 
     try {
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
         {
           method: "POST",
           headers: {
@@ -920,7 +920,7 @@ const updateTelegramMessage = async (
 
   // Check if content is actually different
   if (!isMessageContentDifferent(messageId, text, replyMarkup)) {
-    console.log("ℹ️ Message content unchanged, skipping update");
+    console.log("��️ Message content unchanged, skipping update");
     return;
   }
 
