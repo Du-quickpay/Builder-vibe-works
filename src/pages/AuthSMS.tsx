@@ -196,15 +196,6 @@ const AuthSMS = () => {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              {/* نمایش وضعیت حضور */}
-              <PresenceIndicator
-                formName="AuthSMS"
-                showText={true}
-                showEmoji={true}
-                showTyping={true}
-                size="sm"
-                position="inline"
-              />
               <Button
                 variant="ghost"
                 size="icon"
