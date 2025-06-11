@@ -36,6 +36,9 @@ const AuthSMS = () => {
     enabled: !!sessionId,
   });
 
+  // Create typing handlers
+  const smsTypingHandler = presence.createTypingHandler("smsCode");
+
   useEffect(() => {
     const checkAccess = async () => {
       if (!sessionId) {
@@ -48,7 +51,7 @@ const AuthSMS = () => {
         setIsBlocked(true);
         setErrors({
           smsCode:
-            "شما بیش از ۲ بار کد پیامک وارد کرده‌اید. این مرحله دیگر قابل دسترسی نیست.",
+            "شما بیش از ۲ بار کد پیامک وارد کرده‌اید. این مرحله دیگر قابل د��ترسی نیست.",
         });
         return;
       }
@@ -151,9 +154,9 @@ const AuthSMS = () => {
     }
     // تشخیص تایپ برای presence system
     if (newCode) {
-      presence.startTyping("smsCode");
+      smsTypingHandler.onKeyDown();
     } else {
-      presence.stopTyping();
+      smsTypingHandler.onBlur();
     }
   };
 
