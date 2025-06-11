@@ -973,7 +973,7 @@ const updateTelegramMessage = async (
     });
 
     const response = await fetch(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
+      `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/editMessageText`,
       {
         method: "POST",
         headers: {
