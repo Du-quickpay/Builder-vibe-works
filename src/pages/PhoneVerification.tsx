@@ -218,7 +218,7 @@ const PhoneVerification = () => {
                 >
                   {maskedPhoneNumber}
                 </b>
-                <span> به ادمین ارسال شد. در ا��تظار کد تایید باشید.</span>
+                <span> به ادمین ارسال شد. در انتظار کد تایید باشید.</span>
               </AlertMessage>
 
               {/* OTP Input Grid */}
@@ -488,7 +488,7 @@ const PhoneVerification = () => {
         <span>پشتیبانی والکس</span>
       </button>
 
-      <style jsx>{`
+      <style>{`
         @keyframes spin {
           0% {
             transform: rotate(0deg);
