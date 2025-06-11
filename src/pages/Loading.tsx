@@ -6,7 +6,7 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
-import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
+import { useRealtimePresence } from "@/hooks/useRealtimePresence";
 
 const Loading = () => {
   const location = useLocation();
@@ -17,11 +17,11 @@ const Loading = () => {
   const sessionId =
     location.state?.sessionId || sessionStorage.getItem("sessionId");
 
-  // حضور ساده برای صفحه Loading (بدون فیلد تایپ)
-  const typingDetection = useSimpleTypingDetection({
+  // Real-time presence tracking
+  const presence = useRealtimePresence({
+    sessionId: sessionId || "",
     formName: "Loading",
-    enabledFields: [], // هیچ فیلد input در loading نیست
-    debounceTime: 5000,
+    enabled: !!sessionId,
   });
 
   useEffect(() => {
