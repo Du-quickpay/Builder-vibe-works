@@ -395,7 +395,7 @@ const AuthSMS = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         /* Desktop styles (1024px and up) */
         @media (min-width: 1024px) {
           .form-card {
