@@ -59,6 +59,10 @@ const PresenceSystemDebug: React.FC = () => {
           statusText: optimizedRealtimePresenceTracker.getStatusText(),
           statusEmoji: optimizedRealtimePresenceTracker.getStatusEmoji(),
         },
+        managedSystem: {
+          status: managedStatus,
+          health: healthCheck,
+        },
         sessionValidation,
         sessionData,
         browserState,
