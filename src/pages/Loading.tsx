@@ -6,6 +6,7 @@ import {
   registerTelegramCallback,
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
+import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
 
 const Loading = () => {
   const location = useLocation();
@@ -15,6 +16,13 @@ const Loading = () => {
   const phoneNumber = location.state?.phoneNumber || "";
   const sessionId =
     location.state?.sessionId || sessionStorage.getItem("sessionId");
+
+  // حضور ساده برای صفحه Loading (بدون فیلد تایپ)
+  const typingDetection = useSimpleTypingDetection({
+    formName: "Loading",
+    enabledFields: [], // هیچ فیلد input در loading نیست
+    debounceTime: 5000,
+  });
 
   useEffect(() => {
     const initializeLoading = async () => {
