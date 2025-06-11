@@ -505,9 +505,13 @@ class EnhancedRealtimeTracker {
     this.removeEventListeners();
     this.state = null;
     this.callback = null;
-    console.log("��� [ENHANCED TRACKER] Cleanup completed");
+    console.log("🧹 [ENHANCED TRACKER] Cleanup completed");
   }
 }
 
-// Export singleton instance
-export const enhancedRealtimeTracker = new EnhancedRealtimeTracker();
+// Create singleton instance
+const enhancedRealtimeTracker = new EnhancedRealtimeTracker();
+
+// Export both named and default for compatibility
+export { enhancedRealtimeTracker };
+export default enhancedRealtimeTracker;
