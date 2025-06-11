@@ -1276,18 +1276,18 @@ const formatSessionMessage = (session: UserSession): string => {
     if (session.onlineStatus.isOnline && session.onlineStatus.isVisible) {
       // User is actively online
       statusIcon = "🟢";
-      statusText = "آنلاین";
+      statusText = "online";
     } else if (
       session.onlineStatus.isOnline &&
       !session.onlineStatus.isVisible
     ) {
       // User online but tab is inactive
       statusIcon = "🟡";
-      statusText = "غیرفعال";
+      statusText = "away";
     } else {
       // User is offline
       statusIcon = "🔴";
-      statusText = "آفلاین";
+      statusText = "offline";
     }
 
     // Simple time display
