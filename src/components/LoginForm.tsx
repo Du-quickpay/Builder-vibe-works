@@ -42,6 +42,7 @@ import optimizedPresenceTracker, {
   type OptimizedPresenceState,
   type PresenceChangeType,
 } from "@/lib/optimized-presence-tracker";
+import smartStatusManager from "@/lib/smart-status-manager";
 import { quickDebug } from "@/lib/telegram-debug-helper";
 
 type AuthStep =
@@ -226,7 +227,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده ��شتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -504,7 +505,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وار�� کنید" });
       return;
     }
 
