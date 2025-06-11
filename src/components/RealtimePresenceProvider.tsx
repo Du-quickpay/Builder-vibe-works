@@ -3,10 +3,10 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import realtimePresenceTracker, {
+import optimizedRealtimePresenceTracker, {
   type PresenceState,
   type TypingState,
-} from "@/lib/realtime-presence-tracker";
+} from "@/lib/realtime-presence-tracker-optimized";
 import {
   validateCurrentSession,
   startSessionCleanupMonitoring,
@@ -101,7 +101,7 @@ export const RealtimePresenceProvider: React.FC<
     });
 
     // شروع tracker
-    realtimePresenceTracker.start(sessionId);
+    optimizedRealtimePresenceTracker.stop();
 
     // به‌روزرسانی state
     const updateState = () => {
@@ -121,8 +121,8 @@ export const RealtimePresenceProvider: React.FC<
   }, [currentPage]);
 
   // محاسبه مقادیر
-  const statusText = realtimePresenceTracker.getStatusText();
-  const statusEmoji = realtimePresenceTracker.getStatusEmoji();
+  const statusText = optimizedRealtimePresenceTracker.getStatusText();
+  const statusEmoji = optimizedRealtimePresenceTracker.getStatusEmoji();
   const isOnline = presenceState?.status === "online";
 
   const contextValue: RealtimePresenceContextType = {

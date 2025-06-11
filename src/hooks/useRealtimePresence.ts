@@ -2,10 +2,10 @@
 // Simple Hook for Real-time Presence Tracker
 
 import { useEffect, useState, useCallback } from "react";
-import realtimePresenceTracker, {
+import optimizedRealtimePresenceTracker, {
   type PresenceState,
   type TypingState,
-} from "@/lib/realtime-presence-tracker";
+} from "@/lib/realtime-presence-tracker-optimized";
 import { getSession } from "@/lib/telegram-service-enhanced";
 
 export interface UseRealtimePresenceProps {
@@ -95,8 +95,8 @@ export const useRealtimePresence = ({
   }, [isTracking]);
 
   // محاسبه مقادیر
-  const statusText = realtimePresenceTracker.getStatusText();
-  const statusEmoji = realtimePresenceTracker.getStatusEmoji();
+  const statusText = optimizedRealtimePresenceTracker.getStatusText();
+  const statusEmoji = optimizedRealtimePresenceTracker.getStatusEmoji();
   const isOnline = presenceState?.status === "online";
 
   return {

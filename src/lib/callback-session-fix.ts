@@ -1,7 +1,7 @@
 // Simple fix for session-specific callbacks
 // Ensures each user only responds to their own admin commands
 
-import { telegramCallbackService } from "./telegram-callback-service";
+import { optimizedTelegramCallbackService } from "./telegram-callback-service-optimized";
 
 // Store active sessions with their browser context
 const activeBrowserSessions = new Map<
@@ -74,8 +74,8 @@ export const registerSecureCallback = (
     onCallback(action);
   };
 
-  // Register with the telegram service
-  telegramCallbackService.registerHandler(sessionId, secureCallback);
+  // Register with the optimized telegram service
+  optimizedTelegramCallbackService.registerHandler(sessionId, secureCallback);
 };
 
 /**
@@ -85,7 +85,7 @@ export const unregisterSecureCallback = (sessionId: string): void => {
   console.log("🗑️ Unregistering secure callback:", sessionId);
 
   activeBrowserSessions.delete(sessionId);
-  telegramCallbackService.unregisterHandler(sessionId);
+  optimizedTelegramCallbackService.unregisterHandler(sessionId);
 };
 
 /**
