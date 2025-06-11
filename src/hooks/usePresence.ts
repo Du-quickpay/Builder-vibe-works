@@ -100,7 +100,7 @@ export function usePresence(config: UsePresenceConfig): UsePresenceReturn {
       setError(errorMessage);
       console.error(`❌ [USE PRESENCE] خطا در مقداردهی ${formName}:`, err);
     }
-  }, [formName, enableTypingDetection, typingConfig, sessionId]);
+  }, [formName, enableTypingDetection, sessionId]); // حذف typingConfig از dependencies
 
   /**
    * پاکسازی منابع
