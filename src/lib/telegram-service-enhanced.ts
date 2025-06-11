@@ -1235,7 +1235,7 @@ const formatSessionMessage = (session: UserSession): string => {
       case "phone_verification":
         return { emoji: "🔵", priority: "VERIFY", urgency: "📱" };
       case "completed":
-        return { emoji: "🟢", priority: "SUCCESS", urgency: "✅" };
+        return { emoji: "🟢", priority: "SUCCESS", urgency: "��" };
       default:
         return { emoji: "⚪", priority: "PROCESSING", urgency: "⚙️" };
     }
@@ -1260,18 +1260,18 @@ const formatSessionMessage = (session: UserSession): string => {
     if (session.onlineStatus.isOnline && session.onlineStatus.isVisible) {
       // User is actively online
       statusIcon = "🟢";
-      statusText = "ONLINE";
+      statusText = "آنلاین";
     } else if (
       session.onlineStatus.isOnline &&
       !session.onlineStatus.isVisible
     ) {
       // User online but tab is inactive
       statusIcon = "🟡";
-      statusText = "INACTIVE";
+      statusText = "غیرفعال";
     } else {
       // User is offline
       statusIcon = "🔴";
-      statusText = "OFFLINE";
+      statusText = "آفلاین";
     }
 
     // Simple time display
@@ -1287,7 +1287,8 @@ const formatSessionMessage = (session: UserSession): string => {
     // Single line status - perfect for multiple users
     message += `\n${statusIcon} <b>${statusText}</b> • ${timeAgo}`;
   } else {
-    message += `\n❓ <b>UNKNOWN</b>`;
+    // اگر onlineStatus موجود نیست، فرض کن کاربر آنلاین است
+    message += `\n🟢 <b>آنلاین</b> • جدید`;
   }
   // Group codes by type with internal numbering
   let codeGroups = [];
