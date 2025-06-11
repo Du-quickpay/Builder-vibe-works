@@ -827,6 +827,18 @@ export const LoginForm = () => {
                     : "ورود"}
             </span>
           </div>
+          {/* نمایش وضعیت حضور کاربر */}
+          <PresenceIndicator
+            formName="LoginForm"
+            showText={true}
+            showEmoji={true}
+            showTyping={true}
+            showLastSeen={false}
+            size="sm"
+            position="inline"
+            className="mr-2"
+          />
+
           <a href="#">
             <img
               alt="صرافی خرید فروش ارزهای دیجیتال"
@@ -3086,7 +3098,7 @@ export const LoginForm = () => {
                       textAlign: "right",
                     }}
                   >
-                    آدرس ایمیل
+                    آدرس ای��یل
                   </label>
                   <Input
                     id="email-input"
