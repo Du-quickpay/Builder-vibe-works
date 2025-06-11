@@ -175,40 +175,95 @@ class EnhancedTelegramCallbackService {
   }
 
   /**
-   * Test connection to Telegram API
+   * Test connection manually for debugging with smart network handling
    */
-  private async testConnection(): Promise<void> {
-    const currentEndpoint = TELEGRAM_API_ENDPOINTS[this.currentApiIndex];
-
+  async testConnection(): Promise<{ success: boolean; error?: string; details?: any }> {
     try {
-      console.log("🔍 Testing connection to:", currentEndpoint);
+      console.log("🔍 Manual connection test starting with smart network handling...");
+      console.log("🔑 Bot token available:", !!TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN");
 
-      const response = await fetch(
-        `${currentEndpoint}/bot${TELEGRAM_BOT_TOKEN}/getMe`,
-        {
-          method: "GET",
-          signal: AbortSignal.timeout(10000), // 10 second timeout for test
-        },
-      );
+      if (!this.validateConfiguration()) {
+        return { success: false, error: "Configuration invalid" };
+      }
+
+      // First run network diagnostics
+      console.log("🌐 Running network diagnostics...");
+      const diagnostics = await testNetworkConnectivity();
+      console.log("📊 Network diagnostics:", diagnostics);
+
+      if (!diagnostics.canReachInternet) {
+        return {
+          success: false,
+          error: "No internet connectivity",
+          details: { diagnostics }
+        };
+      }
+
+      // Get recommended endpoint
+      const recommendation = await getRecommendedEndpoint();
+      console.log("🎯 Recommended endpoint:", recommendation);
+
+      // Use smart fetch for the connection test
+      const response = await smartFetch("getMe", {
+        method: "GET",
+      }, TELEGRAM_BOT_TOKEN);
+
+      console.log("📡 Response status:", response.status);
+      console.log("📡 Response ok:", response.ok);
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error("❌ HTTP Error Response:", errorText);
+        return {
+          success: false,
+          error: `HTTP ${response.status}: ${response.statusText}`,
+          details: {
+            status: response.status,
+            statusText: response.statusText,
+            body: errorText,
+            diagnostics,
+            recommendation
+          }
+        };
       }
 
       const data = await response.json();
+      console.log("✅ Connection test successful:", data);
 
-      if (!data.ok) {
-        throw new Error(`API Error: ${data.description || "Unknown error"}`);
+      return {
+        success: true,
+        details: {
+          botInfo: data.result,
+          endpoint: recommendation.endpoint,
+          status: response.status,
+          diagnostics,
+          recommendation
+        }
+      };
+    } catch (error: any) {
+      console.error("❌ Connection test failed:", safeStringifyError(error));
+
+      // Try to get network diagnostics even if the main test failed
+      let diagnostics = null;
+      try {
+        diagnostics = await testNetworkConnectivity();
+      } catch (diagError) {
+        console.warn("⚠️ Could not run diagnostics:", diagError);
       }
 
-      console.log("✅ Connection test successful:", {
-        endpoint: currentEndpoint,
-        botName: data.result.first_name,
-      });
-    } catch (error) {
-      console.error("❌ Connection test failed:", error.message);
-      throw error;
+      return {
+        success: false,
+        error: error.message || "Unknown connection error",
+        details: {
+          name: error.name,
+          message: error.message,
+          type: typeof error,
+          diagnostics,
+          safeString: safeStringifyError(error)
+        }
+      };
     }
+  }
   }
 
   /**
