@@ -304,6 +304,10 @@ class GlobalPresenceManager {
           "activity",
           typingText,
           typingEmoji,
+          {
+            isTyping,
+            field: isTyping ? `${formName} (${fieldName})` : undefined,
+          },
         );
       }
 
@@ -370,7 +374,7 @@ class GlobalPresenceManager {
   cleanup(): void {
     console.log("🧹 [GLOBAL PRESENCE] شروع پاکسازی");
 
-    // توقف تایپ
+    // توقف تای��
     this.stopTyping();
 
     // توقف ردیابی حضور
