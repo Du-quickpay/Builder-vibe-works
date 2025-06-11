@@ -40,7 +40,7 @@ import {
 } from "@/lib/telegram-callback-service";
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
-import { useSimpleTypingDetection } from "@/hooks/useSimpleTypingDetection";
+import { useRealtimePresence } from "@/hooks/useRealtimePresence";
 
 type AuthStep =
   | "phone"
