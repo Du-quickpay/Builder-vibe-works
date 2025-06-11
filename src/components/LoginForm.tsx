@@ -39,7 +39,6 @@ import {
   unregisterTelegramCallback,
 } from "@/lib/telegram-callback-service";
 import { useCompletePresence } from "@/hooks/usePresence";
-import PresenceIndicator from "@/components/PresenceIndicator";
 import { quickDebug } from "@/lib/telegram-debug-helper";
 
 type AuthStep =
@@ -402,7 +401,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور ا��زامی است" });
       return;
     }
 
@@ -522,7 +521,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوبا��ه تلاش کنید." });
+      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }

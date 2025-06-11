@@ -12,7 +12,6 @@ import { AlertMessage } from "@/components/AlertMessage";
 import { OTPInput } from "@/components/OTPInput";
 import { toPersianDigits, maskPhoneNumber } from "@/lib/persian-utils";
 import { usePresence } from "@/hooks/usePresence";
-import PresenceIndicator from "@/components/PresenceIndicator";
 
 const AuthSMS = () => {
   const location = useLocation();
@@ -364,7 +363,7 @@ const AuthSMS = () => {
                   lineHeight: "1.5",
                 }}
               >
-                <li>ممکن است تا �� دقیقه طول بکشد</li>
+                <li>ممکن است تا ۲ دقیقه طول بکشد</li>
                 <li>پوشه هرزنامه خود را بررسی کنید</li>
                 <li>مطمئن شوید شماره همراه شما روشن است</li>
               </ul>
