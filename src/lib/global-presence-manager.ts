@@ -133,14 +133,17 @@ class GlobalPresenceManager {
   }
 
   /**
-   * لغو ثبت فرم
+   * حذف فرم
    */
   unregisterForm(subscriberId: string): void {
     const subscriber = this.subscribers.get(subscriberId);
     if (subscriber) {
       this.subscribers.delete(subscriberId);
       this.updateFormStats();
-      console.log(`📋 [GLOBAL PRESENCE] فرم ${subscriber.formName} لغو ثبت شد`);
+
+      console.log(
+        `📋 [GLOBAL PRESENCE] فرم ${subscriber.formName} حذف شد (ID: ${subscriberId.slice(-8)})`,
+      );
     }
   }
 
@@ -148,11 +151,8 @@ class GlobalPresenceManager {
    * تنظیم فرم فعلی
    */
   setCurrentForm(formName: string): void {
-    if (this.state.currentForm !== formName) {
-      this.state.currentForm = formName;
-      console.log(`📋 [GLOBAL PRESENCE] فرم فعلی: ${formName}`);
-      this.notifySubscribers();
-    }
+    this.state.currentForm = formName;
+    console.log(`📋 [GLOBAL PRESENCE] فرم فعلی: ${formName}`);
   }
 
   /**
@@ -160,8 +160,13 @@ class GlobalPresenceManager {
    */
   startTyping(formName: string, fieldName: string): void {
     // بررسی آمادگی session
-    if (!this.state.sessionId || !isPresenceTrackingReady(this.state.sessionId)) {
-      console.log("⚠️ [GLOBAL PRESENCE] شروع تایپ متوقف شد: session آماده نیست");
+    if (
+      !this.state.sessionId ||
+      !isPresenceTrackingReady(this.state.sessionId)
+    ) {
+      console.log(
+        "⚠️ [GLOBAL PRESENCE] شروع تایپ متوقف شد: session آماده نیست",
+      );
       return;
     }
 
@@ -180,12 +185,8 @@ class GlobalPresenceManager {
     this.state.currentForm = formName;
 
     // ارسال ایمن به تلگرام
-    safeTypingOperation(
-      this.state.sessionId,
-      formName,
-      fieldName,
-      true,
-      () => this.sendTypingStatusToTelegram(true, formName, fieldName),
+    safeTypingOperation(this.state.sessionId, formName, fieldName, true, () =>
+      this.sendTypingStatusToTelegram(true, formName, fieldName),
     );
 
     // ریست timer
@@ -201,42 +202,6 @@ class GlobalPresenceManager {
     this.notifySubscribers();
 
     console.log(`⌨️ [GLOBAL PRESENCE] شروع تایپ: ${formName}.${fieldName}`);
-  }
-
-  /**
-   * توقف تایپ
-   */
-  stopTyping(): void {
-    if (!this.state.isTyping) return;
-
-    console.log("⌨️ [GLOBAL PRESENCE] توقف تایپ");
-
-    const formName = this.state.currentForm;
-    const fieldName = this.state.typingInField;
-
-    this.state.isTyping = false;
-    this.state.typingInField = null;
-
-    // پاک کردن تایمر
-    if (this.typingTimer) {
-      clearTimeout(this.typingTimer);
-      this.typingTimer = null;
-    }
-
-    // ارسال به تلگرام
-    if (formName && fieldName) {
-      this.sendTypingStatusToTelegram(false, formName, fieldName);
-    }
-
-    // اطلاع به subscribers
-    this.notifySubscribers();
-  }
-
-  /**
-   * دریافت وضعیت فعلی
-   */
-  getCurrentState(): GlobalPresenceState {
-    return { ...this.state };
   }
 
   /**
@@ -274,6 +239,28 @@ class GlobalPresenceManager {
 
     // اطلاع به subscribers
     this.notifySubscribers();
+  }
+
+  /**
+   * دریافت وضعیت فعلی
+   */
+  getCurrentState(): GlobalPresenceState {
+    return { ...this.state };
+  }
+
+  /**
+   * دریافت متن وضعیت به فارسی
+   */
+  getStatusText(): string {
+    if (
+      this.state.isTyping &&
+      this.state.currentForm &&
+      this.state.typingInField
+    ) {
+      return `در حال تایپ در ${this.state.currentForm}`;
+    }
+
+    return optimizedPresenceTracker.getStatusText();
   }
 
   /**
@@ -318,7 +305,6 @@ class GlobalPresenceManager {
           ),
         changeType,
       );
-    }
     }
 
     // اطلاع به تمام فرم‌ها
@@ -421,20 +407,22 @@ class GlobalPresenceManager {
    * دریافت آمار عملکرد
    */
   getPerformanceStats(): {
-    subscribers: number;
+    totalForms: number;
     activeForms: string[];
     isTyping: boolean;
+    typingInField: string | null;
     currentForm: string | null;
-    presenceLevel: string;
-    lastActivity: string;
+    sessionId: string | null;
+    isInitialized: boolean;
   } {
     return {
-      subscribers: this.subscribers.size,
-      activeForms: this.state.activeForms,
+      totalForms: this.state.totalForms,
+      activeForms: [...this.state.activeForms],
       isTyping: this.state.isTyping,
+      typingInField: this.state.typingInField,
       currentForm: this.state.currentForm,
-      presenceLevel: this.state.presenceLevel,
-      lastActivity: new Date(this.state.lastActivity).toLocaleString("fa-IR"),
+      sessionId: this.state.sessionId,
+      isInitialized: this.isInitialized,
     };
   }
 
@@ -442,23 +430,16 @@ class GlobalPresenceManager {
    * پاکسازی منابع
    */
   cleanup(): void {
-    console.log("🧹 [GLOBAL PRESENCE] شروع پاکسازی");
+    console.log("🧹 [GLOBAL PRESENCE] پاکسازی منابع...");
 
-    // توقف تایپ
-    this.stopTyping();
-
-    // توقف ردیابی حضور
-    optimizedPresenceTracker.stop();
-
-    // پاکسازی subscribers
-    this.subscribers.clear();
-
-    // پاکسازی تاریخچه
-    if (this.state.sessionId) {
-      smartStatusManager.clearSessionHistory(this.state.sessionId);
+    if (this.typingTimer) {
+      clearTimeout(this.typingTimer);
+      this.typingTimer = null;
     }
 
-    // بازنشانی وضعیت
+    this.subscribers.clear();
+    this.isInitialized = false;
+
     this.state = {
       isOnline: false,
       presenceLevel: "offline",
@@ -473,14 +454,11 @@ class GlobalPresenceManager {
       activeForms: [],
     };
 
-    this.isInitialized = false;
-
-    console.log("🧹 [GLOBAL PRESENCE] پاکسازی کامل شد");
+    optimizedPresenceTracker.stop();
   }
 }
 
-// ایجاد instance singleton
-export const globalPresenceManager = new GlobalPresenceManager();
+// ایجاد instance واحد
+const globalPresenceManager = new GlobalPresenceManager();
 
-// Export
 export default globalPresenceManager;
