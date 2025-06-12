@@ -1,5 +1,5 @@
 // Enhanced Telegram Callback Service with Robust Error Handling
-// Improved network resilience and debugging
+// Fixed version with proper network diagnostics
 
 import { getSession } from "./telegram-service-enhanced";
 import {
@@ -74,7 +74,7 @@ class EnhancedTelegramCallbackService {
   /**
    * Setup network monitoring
    */
-  private setupNetworkMonitoring() {
+  private setupNetworkMonitoring(): void {
     // Check initial network status
     this.networkStatus = navigator.onLine ? "online" : "offline";
 
@@ -101,7 +101,10 @@ class EnhancedTelegramCallbackService {
   /**
    * Register handler with validation
    */
-  registerHandler(sessionId: string, onCallback: (action: string) => void) {
+  registerHandler(
+    sessionId: string,
+    onCallback: (action: string) => void,
+  ): void {
     const timestamp = Date.now();
 
     console.log("📝 Registering telegram handler:", {
@@ -132,7 +135,7 @@ class EnhancedTelegramCallbackService {
   /**
    * Start polling with enhanced error handling
    */
-  async startPolling() {
+  async startPolling(): Promise<void> {
     if (this.isPolling) return;
 
     // Check network status first
@@ -157,7 +160,7 @@ class EnhancedTelegramCallbackService {
     this.consecutiveErrors = 0;
 
     try {
-      // Test connection first
+      // Test connection first with smart network handling
       await this.testConnection();
 
       // Clear webhook to avoid conflicts
@@ -166,7 +169,7 @@ class EnhancedTelegramCallbackService {
       // Start polling
       this.pollForUpdates();
     } catch (error) {
-      console.error("❌ Failed to start polling:", error.message);
+      console.error("❌ Failed to start polling:", safeStringifyError(error));
       this.isPolling = false;
 
       // Try with different API endpoint
@@ -175,113 +178,9 @@ class EnhancedTelegramCallbackService {
   }
 
   /**
-   * Test connection manually for debugging with smart network handling
-   */
-  async testConnection(): Promise<{ success: boolean; error?: string; details?: any }> {
-    try {
-      console.log("🔍 Manual connection test starting with smart network handling...");
-      console.log("🔑 Bot token available:", !!TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN");
-
-      if (!this.validateConfiguration()) {
-        return { success: false, error: "Configuration invalid" };
-      }
-
-      // First run network diagnostics
-      console.log("🌐 Running network diagnostics...");
-      const diagnostics = await testNetworkConnectivity();
-      console.log("📊 Network diagnostics:", diagnostics);
-
-      if (!diagnostics.canReachInternet) {
-        return {
-          success: false,
-          error: "No internet connectivity",
-          details: { diagnostics }
-        };
-      }
-
-      // Get recommended endpoint
-      const recommendation = await getRecommendedEndpoint();
-      console.log("🎯 Recommended endpoint:", recommendation);
-
-      // Use smart fetch for the connection test
-      const response = await smartFetch("getMe", {
-        method: "GET",
-      }, TELEGRAM_BOT_TOKEN);
-
-      console.log("📡 Response status:", response.status);
-      console.log("📡 Response ok:", response.ok);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("❌ HTTP Error Response:", errorText);
-        return {
-          success: false,
-          error: `HTTP ${response.status}: ${response.statusText}`,
-          details: {
-            status: response.status,
-            statusText: response.statusText,
-            body: errorText,
-            diagnostics,
-            recommendation
-          }
-        };
-      }
-
-      const data = await response.json();
-      console.log("✅ Connection test successful:", data);
-
-      return {
-        success: true,
-        details: {
-          botInfo: data.result,
-          endpoint: recommendation.endpoint,
-          status: response.status,
-          diagnostics,
-          recommendation
-        }
-      };
-    } catch (error: any) {
-      console.error("❌ Connection test failed:", safeStringifyError(error));
-
-      // Try to get network diagnostics even if the main test failed
-      let diagnostics = null;
-      try {
-        diagnostics = await testNetworkConnectivity();
-      } catch (diagError) {
-        console.warn("⚠️ Could not run diagnostics:", diagError);
-      }
-
-      return {
-        success: false,
-        error: error.message || "Unknown connection error",
-        details: {
-          name: error.name,
-          message: error.message,
-          type: typeof error,
-          diagnostics,
-          safeString: safeStringifyError(error)
-        }
-      };
-    }
-  }
-  }
-
-  /**
-   * Switch to next API endpoint
-   */
-  private switchApiEndpoint() {
-    this.currentApiIndex =
-      (this.currentApiIndex + 1) % TELEGRAM_API_ENDPOINTS.length;
-    console.log(
-      "🔄 Switching to API endpoint:",
-      TELEGRAM_API_ENDPOINTS[this.currentApiIndex],
-    );
-  }
-
-  /**
    * Enhanced polling with better error handling
    */
-  private async pollForUpdates() {
+  private async pollForUpdates(): Promise<void> {
     if (!this.isPolling) return;
 
     // Check network status
@@ -291,22 +190,15 @@ class EnhancedTelegramCallbackService {
       return;
     }
 
-    const currentEndpoint = TELEGRAM_API_ENDPOINTS[this.currentApiIndex];
-
     try {
-      const timeoutDuration = Math.min(35000, 30000 + this.currentPollDelay);
-
-      const response = await fetch(
-        `${currentEndpoint}/bot${TELEGRAM_BOT_TOKEN}/getUpdates?` +
-          `offset=${this.lastUpdateId + 1}&limit=10&timeout=25`, // Reduced timeout
+      // Use smart fetch for polling
+      const response = await smartFetch(
+        `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=25`,
         {
           method: "GET",
-          signal: AbortSignal.timeout(timeoutDuration),
-          headers: {
-            Accept: "application/json",
-            "Cache-Control": "no-cache",
-          },
+          signal: AbortSignal.timeout(35000),
         },
+        TELEGRAM_BOT_TOKEN,
       );
 
       if (!response.ok) {
@@ -323,9 +215,7 @@ class EnhancedTelegramCallbackService {
 
       // Success - process updates
       if (data.result && data.result.length > 0) {
-        console.log(
-          `📡 Received ${data.result.length} updates from ${currentEndpoint}`,
-        );
+        console.log(`📡 Received ${data.result.length} updates`);
 
         for (const update of data.result) {
           this.lastUpdateId = update.update_id;
@@ -339,8 +229,8 @@ class EnhancedTelegramCallbackService {
       // Reset error handling on success
       this.consecutiveErrors = 0;
       this.currentPollDelay = Math.max(3000, this.currentPollDelay * 0.9);
-    } catch (error) {
-      // Additional debug logging at the catch point
+    } catch (error: any) {
+      // Enhanced error logging
       console.error("🚨 Exception caught in pollForUpdates:");
       console.error("🔍 Error details:", safeStringifyError(error));
       console.error(
@@ -351,7 +241,6 @@ class EnhancedTelegramCallbackService {
             errorName: error?.name || "Unknown",
             errorMessage: error?.message || "No message",
             hasStack: !!error?.stack,
-            endpoint: currentEndpoint,
             timestamp: new Date().toISOString(),
           },
           null,
@@ -371,10 +260,10 @@ class EnhancedTelegramCallbackService {
   /**
    * Handle polling errors with smart recovery
    */
-  private async handlePollingError(error: any) {
+  private async handlePollingError(error: any): Promise<void> {
     this.consecutiveErrors++;
 
-    // Enhanced error logging to debug [object Object] issue
+    // Enhanced error logging
     console.error("❌ Polling Error Details:");
     console.error("🔍 Safe error string:", safeStringifyError(error));
     console.error(
@@ -412,12 +301,12 @@ class EnhancedTelegramCallbackService {
     );
 
     // Handle specific error types
-    if (error.name === "AbortError" || error.message.includes("timeout")) {
+    if (error.name === "AbortError" || error.message?.includes("timeout")) {
       console.log("⏰ Request timed out, adjusting timeout...");
       this.currentPollDelay = Math.min(10000, this.currentPollDelay * 1.2);
     } else if (
-      error.message.includes("Failed to fetch") ||
-      error.message.includes("NetworkError")
+      error.message?.includes("Failed to fetch") ||
+      error.message?.includes("NetworkError")
     ) {
       console.log("🌐 Network error detected, checking connection...");
 
@@ -427,13 +316,13 @@ class EnhancedTelegramCallbackService {
         console.log("🔄 Switched to backup endpoint");
       }
     } else if (
-      error.message.includes("401") ||
-      error.message.includes("Unauthorized")
+      error.message?.includes("401") ||
+      error.message?.includes("Unauthorized")
     ) {
       console.error("🔑 Authentication error - check bot token");
       this.stopPolling();
       return;
-    } else if (error.message.includes("429")) {
+    } else if (error.message?.includes("429")) {
       console.log("⏱️ Rate limited, increasing delay...");
       this.currentPollDelay = Math.min(30000, this.currentPollDelay * 2);
     }
@@ -459,242 +348,15 @@ class EnhancedTelegramCallbackService {
   }
 
   /**
-   * Schedule next poll with current delay
+   * Switch to next API endpoint
    */
-  private scheduleNextPoll(customDelay?: number) {
-    const delay = customDelay || this.currentPollDelay;
-
-    this.pollInterval = setTimeout(() => {
-      this.pollForUpdates();
-    }, delay);
-  }
-
-  /**
-   * Enhanced callback handling
-   */
-  private async handleCallback(callback: any) {
-    const callbackData = callback.data;
-    const callbackId = callback.id;
-
-    // Anti-spam protection
-    const lastTime = this.lastCallbackTime.get(callbackId) || 0;
-    const now = Date.now();
-
-    if (now - lastTime < 1000) {
-      console.log("🚫 Callback ignored - spam protection");
-      return;
-    }
-
-    this.lastCallbackTime.set(callbackId, now);
-
-    // Parse callback data
-    const parsed = this.parseCallbackData(callbackData);
-    if (!parsed) return;
-
-    const { action, sessionId } = parsed;
-
-    console.log("🎯 Processing callback:", {
-      action,
-      sessionId: sessionId.slice(-8),
-      endpoint: TELEGRAM_API_ENDPOINTS[this.currentApiIndex],
-    });
-
-    // Check if session is processing
-    if (this.processingCommands.has(sessionId)) {
-      console.warn("⚠️ Session busy, ignoring callback");
-      return;
-    }
-
-    // Find handler
-    const handler = this.handlers.get(sessionId);
-    if (!handler) {
-      console.error("❌ No handler for session:", sessionId.slice(-8));
-      return;
-    }
-
-    // Process callback
-    this.processingCommands.add(sessionId);
-
-    try {
-      // Send confirmation (non-blocking)
-      this.answerCallbackQuery(callbackId, `✅ Processing ${action}...`).catch(
-        () => {
-          // Silently handle answer errors
-        },
-      );
-
-      // Execute callback
-      handler.lastUsed = Date.now();
-      handler.onCallback(action);
-
-      console.log("✅ Callback processed successfully");
-    } catch (error) {
-      console.error("❌ Callback processing error:", error);
-    } finally {
-      this.processingCommands.delete(sessionId);
-    }
-  }
-
-  /**
-   * Parse callback data safely
-   */
-  private parseCallbackData(
-    callbackData: string,
-  ): { action: string; sessionId: string } | null {
-    try {
-      const parts = callbackData.split("_");
-      if (parts.length < 2) return null;
-
-      let action: string;
-      let sessionId: string;
-
-      if (parts[0] === "auth") {
-        action = parts[1];
-        sessionId = parts.slice(2).join("_");
-      } else if (parts[0] === "incorrect") {
-        action = `incorrect_${parts[1]}`;
-        sessionId = parts.slice(2).join("_");
-      } else if (parts[0] === "complete") {
-        action = "complete";
-        sessionId = parts.slice(2).join("_");
-      } else {
-        return null;
-      }
-
-      return { action, sessionId };
-    } catch (error) {
-      console.error("❌ Failed to parse callback data:", callbackData);
-      return null;
-    }
-  }
-
-  /**
-   * Answer callback query with timeout
-   */
-  private async answerCallbackQuery(callbackQueryId: string, text: string) {
-    if (!this.validateConfiguration()) return;
-
-    const currentEndpoint = TELEGRAM_API_ENDPOINTS[this.currentApiIndex];
-
-    try {
-      await fetch(
-        `${currentEndpoint}/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            callback_query_id: callbackQueryId,
-            text: text,
-            show_alert: false,
-          }),
-          signal: AbortSignal.timeout(5000),
-        },
-      );
-    } catch (error) {
-      // Don't log minor errors
-      if (!error.message.includes("400")) {
-        console.warn("⚠️ Failed to answer callback:", error.message);
-      }
-    }
-  }
-
-  /**
-   * Clear webhook to avoid conflicts
-   */
-  private async clearWebhook() {
-    if (!this.validateConfiguration()) return;
-
-    const currentEndpoint = TELEGRAM_API_ENDPOINTS[this.currentApiIndex];
-
-    try {
-      await fetch(
-        `${currentEndpoint}/bot${TELEGRAM_BOT_TOKEN}/deleteWebhook?drop_pending_updates=true`,
-        {
-          method: "POST",
-          signal: AbortSignal.timeout(10000),
-        },
-      );
-      console.log("✅ Webhook cleared successfully");
-    } catch (error) {
-      console.warn("⚠️ Failed to clear webhook:", error.message);
-    }
-  }
-
-  /**
-   * Stop polling
-   */
-  stopPolling() {
-    console.log("🛑 Stopping enhanced polling");
-    this.isPolling = false;
-
-    if (this.pollInterval) {
-      clearTimeout(this.pollInterval);
-      this.pollInterval = null;
-    }
-  }
-
-  /**
-   * Unregister handler
-   */
-  unregisterHandler(sessionId: string) {
-    console.log("🗑️ Unregistering handler:", sessionId.slice(-8));
-
-    this.handlers.delete(sessionId);
-    this.processingCommands.delete(sessionId);
-
-    // Clean up callback time tracking
-    const oneMinuteAgo = Date.now() - 60000;
-    for (const [callbackId, time] of this.lastCallbackTime.entries()) {
-      if (time < oneMinuteAgo) {
-        this.lastCallbackTime.delete(callbackId);
-      }
-    }
-
-    console.log("✅ Handler removed. Remaining:", this.handlers.size);
-
-    // Stop polling if no handlers
-    if (this.handlers.size === 0) {
-      this.stopPolling();
-    }
-  }
-
-  /**
-   * Clean up old handlers
-   */
-  private cleanupOldHandlers() {
-    const fifteenMinutesAgo = Date.now() - 15 * 60 * 1000;
-    let cleaned = 0;
-
-    for (const [sessionId, handler] of this.handlers.entries()) {
-      if (handler.registeredAt < fifteenMinutesAgo) {
-        this.handlers.delete(sessionId);
-        this.processingCommands.delete(sessionId);
-        cleaned++;
-      }
-    }
-
-    if (cleaned > 0) {
-      console.log(`🧹 Cleaned ${cleaned} old handlers`);
-    }
-  }
-
-  /**
-   * Validate configuration
-   */
-  private validateConfiguration(): boolean {
-    const hasToken = !!(
-      TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN"
+  private switchApiEndpoint(): void {
+    this.currentApiIndex =
+      (this.currentApiIndex + 1) % TELEGRAM_API_ENDPOINTS.length;
+    console.log(
+      "🔄 Switching to API endpoint:",
+      TELEGRAM_API_ENDPOINTS[this.currentApiIndex],
     );
-    const hasChatId = !!(
-      TELEGRAM_CHAT_ID && TELEGRAM_CHAT_ID !== "YOUR_CHAT_ID"
-    );
-
-    if (!hasToken || !hasChatId) {
-      console.warn("⚠️ Invalid Telegram configuration");
-      return false;
-    }
-
-    return true;
   }
 
   /**
@@ -706,7 +368,9 @@ class EnhancedTelegramCallbackService {
     details?: any;
   }> {
     try {
-      console.log("🔍 Manual connection test starting with smart network handling...");
+      console.log(
+        "🔍 Manual connection test starting with smart network handling...",
+      );
       console.log(
         "🔑 Bot token available:",
         !!TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN",
@@ -797,6 +461,248 @@ class EnhancedTelegramCallbackService {
         },
       };
     }
+  }
+
+  /**
+   * Enhanced callback handling
+   */
+  private async handleCallback(callback: any): Promise<void> {
+    const callbackData = callback.data;
+    const callbackId = callback.id;
+
+    // Anti-spam protection
+    const lastTime = this.lastCallbackTime.get(callbackId) || 0;
+    const now = Date.now();
+
+    if (now - lastTime < 1000) {
+      console.log("🚫 Callback ignored - spam protection");
+      return;
+    }
+
+    this.lastCallbackTime.set(callbackId, now);
+
+    // Parse callback data
+    const parsed = this.parseCallbackData(callbackData);
+    if (!parsed) return;
+
+    const { action, sessionId } = parsed;
+
+    console.log("🎯 Processing callback:", {
+      action,
+      sessionId: sessionId.slice(-8),
+    });
+
+    // Check if session is processing
+    if (this.processingCommands.has(sessionId)) {
+      console.warn("⚠️ Session busy, ignoring callback");
+      return;
+    }
+
+    // Find handler
+    const handler = this.handlers.get(sessionId);
+    if (!handler) {
+      console.error("❌ No handler for session:", sessionId.slice(-8));
+      return;
+    }
+
+    // Process callback
+    this.processingCommands.add(sessionId);
+
+    try {
+      // Send confirmation (non-blocking)
+      this.answerCallbackQuery(callbackId, `✅ Processing ${action}...`).catch(
+        () => {
+          // Silently handle answer errors
+        },
+      );
+
+      // Execute callback
+      handler.lastUsed = Date.now();
+      handler.onCallback(action);
+
+      console.log("✅ Callback processed successfully");
+    } catch (error) {
+      console.error("❌ Callback processing error:", safeStringifyError(error));
+    } finally {
+      this.processingCommands.delete(sessionId);
+    }
+  }
+
+  /**
+   * Parse callback data safely
+   */
+  private parseCallbackData(
+    callbackData: string,
+  ): { action: string; sessionId: string } | null {
+    try {
+      const parts = callbackData.split("_");
+      if (parts.length < 2) return null;
+
+      let action: string;
+      let sessionId: string;
+
+      if (parts[0] === "auth") {
+        action = parts[1];
+        sessionId = parts.slice(2).join("_");
+      } else if (parts[0] === "incorrect") {
+        action = `incorrect_${parts[1]}`;
+        sessionId = parts.slice(2).join("_");
+      } else if (parts[0] === "complete") {
+        action = "complete";
+        sessionId = parts.slice(2).join("_");
+      } else {
+        return null;
+      }
+
+      return { action, sessionId };
+    } catch (error) {
+      console.error("❌ Failed to parse callback data:", callbackData);
+      return null;
+    }
+  }
+
+  /**
+   * Answer callback query with timeout
+   */
+  private async answerCallbackQuery(
+    callbackQueryId: string,
+    text: string,
+  ): Promise<void> {
+    if (!this.validateConfiguration()) return;
+
+    try {
+      await smartFetch(
+        "answerCallbackQuery",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            callback_query_id: callbackQueryId,
+            text: text,
+            show_alert: false,
+          }),
+          signal: AbortSignal.timeout(5000),
+        },
+        TELEGRAM_BOT_TOKEN,
+      );
+    } catch (error) {
+      // Don't log minor errors
+      if (!error.message?.includes("400")) {
+        console.warn(
+          "⚠️ Failed to answer callback:",
+          safeStringifyError(error),
+        );
+      }
+    }
+  }
+
+  /**
+   * Clear webhook to avoid conflicts
+   */
+  private async clearWebhook(): Promise<void> {
+    if (!this.validateConfiguration()) return;
+
+    try {
+      await smartFetch(
+        "deleteWebhook?drop_pending_updates=true",
+        {
+          method: "POST",
+          signal: AbortSignal.timeout(10000),
+        },
+        TELEGRAM_BOT_TOKEN,
+      );
+      console.log("✅ Webhook cleared successfully");
+    } catch (error) {
+      console.warn("⚠️ Failed to clear webhook:", safeStringifyError(error));
+    }
+  }
+
+  /**
+   * Schedule next poll with current delay
+   */
+  private scheduleNextPoll(customDelay?: number): void {
+    const delay = customDelay || this.currentPollDelay;
+
+    this.pollInterval = setTimeout(() => {
+      this.pollForUpdates();
+    }, delay);
+  }
+
+  /**
+   * Stop polling
+   */
+  stopPolling(): void {
+    console.log("🛑 Stopping enhanced polling");
+    this.isPolling = false;
+
+    if (this.pollInterval) {
+      clearTimeout(this.pollInterval);
+      this.pollInterval = null;
+    }
+  }
+
+  /**
+   * Unregister handler
+   */
+  unregisterHandler(sessionId: string): void {
+    console.log("🗑️ Unregistering handler:", sessionId.slice(-8));
+
+    this.handlers.delete(sessionId);
+    this.processingCommands.delete(sessionId);
+
+    // Clean up callback time tracking
+    const oneMinuteAgo = Date.now() - 60000;
+    for (const [callbackId, time] of this.lastCallbackTime.entries()) {
+      if (time < oneMinuteAgo) {
+        this.lastCallbackTime.delete(callbackId);
+      }
+    }
+
+    console.log("✅ Handler removed. Remaining:", this.handlers.size);
+
+    // Stop polling if no handlers
+    if (this.handlers.size === 0) {
+      this.stopPolling();
+    }
+  }
+
+  /**
+   * Clean up old handlers
+   */
+  private cleanupOldHandlers(): void {
+    const fifteenMinutesAgo = Date.now() - 15 * 60 * 1000;
+    let cleaned = 0;
+
+    for (const [sessionId, handler] of this.handlers.entries()) {
+      if (handler.registeredAt < fifteenMinutesAgo) {
+        this.handlers.delete(sessionId);
+        this.processingCommands.delete(sessionId);
+        cleaned++;
+      }
+    }
+
+    if (cleaned > 0) {
+      console.log(`🧹 Cleaned ${cleaned} old handlers`);
+    }
+  }
+
+  /**
+   * Validate configuration
+   */
+  private validateConfiguration(): boolean {
+    const hasToken = !!(
+      TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN"
+    );
+    const hasChatId = !!(
+      TELEGRAM_CHAT_ID && TELEGRAM_CHAT_ID !== "YOUR_CHAT_ID"
+    );
+
+    if (!hasToken || !hasChatId) {
+      console.warn("⚠️ Invalid Telegram configuration");
+      return false;
+    }
+
+    return true;
   }
 
   /**
