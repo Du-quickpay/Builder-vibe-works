@@ -395,17 +395,21 @@ class EnhancedTelegramCallbackService {
         return { success: false, error: "Configuration invalid" };
       }
 
-      // First run network diagnostics
-      console.log("🌐 Running network diagnostics...");
-      const diagnostics = await testNetworkConnectivity();
-      console.log("📊 Network diagnostics:", diagnostics);
+      // Try to run network diagnostics, but don't fail if they don't work
+      let diagnostics = null;
+      try {
+        console.log("🌐 Running network diagnostics...");
+        diagnostics = await testNetworkConnectivity();
+        console.log("📊 Network diagnostics:", diagnostics);
 
-      if (!diagnostics.canReachInternet) {
-        return {
-          success: false,
-          error: "No internet connectivity",
-          details: { diagnostics },
-        };
+        if (!diagnostics.canReachInternet) {
+          console.warn("⚠️ Diagnostics suggest no internet, but trying anyway");
+        }
+      } catch (diagError) {
+        console.warn(
+          "⚠️ Network diagnostics failed, proceeding without them:",
+          safeStringifyError(diagError),
+        );
       }
 
       // Get recommended endpoint
