@@ -160,11 +160,26 @@ class EnhancedTelegramCallbackService {
     this.consecutiveErrors = 0;
 
     try {
-      // Test connection first with smart network handling
-      await this.testConnection();
+      // Try connection test but don't fail if it doesn't work
+      try {
+        await this.testConnection();
+        console.log("✅ Connection test passed");
+      } catch (testError) {
+        console.warn(
+          "⚠️ Connection test failed, but continuing anyway:",
+          safeStringifyError(testError),
+        );
+      }
 
-      // Clear webhook to avoid conflicts
-      await this.clearWebhook();
+      // Clear webhook to avoid conflicts (also optional)
+      try {
+        await this.clearWebhook();
+      } catch (webhookError) {
+        console.warn(
+          "⚠️ Failed to clear webhook, but continuing:",
+          safeStringifyError(webhookError),
+        );
+      }
 
       // Start polling
       this.pollForUpdates();
@@ -231,7 +246,7 @@ class EnhancedTelegramCallbackService {
       this.currentPollDelay = Math.max(3000, this.currentPollDelay * 0.9);
     } catch (error: any) {
       // Enhanced error logging
-      console.error("���� Exception caught in pollForUpdates:");
+      console.error("🚨 Exception caught in pollForUpdates:");
       console.error("🔍 Error details:", safeStringifyError(error));
       console.error(
         "📊 Error context:",
