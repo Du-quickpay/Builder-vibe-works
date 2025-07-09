@@ -412,9 +412,22 @@ class EnhancedTelegramCallbackService {
         );
       }
 
-      // Get recommended endpoint
-      const recommendation = await getRecommendedEndpoint();
-      console.log("🎯 Recommended endpoint:", recommendation);
+      // Try to get recommended endpoint, fallback to default if failed
+      let recommendation;
+      try {
+        recommendation = await getRecommendedEndpoint();
+        console.log("🎯 Recommended endpoint:", recommendation);
+      } catch (recError) {
+        console.warn(
+          "⚠️ Failed to get recommendation, using default:",
+          safeStringifyError(recError),
+        );
+        recommendation = {
+          endpoint: TELEGRAM_API_ENDPOINTS[this.currentApiIndex],
+          fallbacks: TELEGRAM_API_ENDPOINTS,
+          reasoning: "Default fallback due to recommendation failure",
+        };
+      }
 
       // Use smart fetch for the connection test
       const response = await smartFetch(
