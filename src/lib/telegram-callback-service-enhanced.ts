@@ -6,7 +6,7 @@ import {
   smartFetch,
   testNetworkConnectivity,
   getRecommendedEndpoint,
-} from "./network-connectivity-fix";
+} from "./network-connectivity-fix-resilient";
 
 const TELEGRAM_BOT_TOKEN =
   import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "YOUR_BOT_TOKEN";
@@ -231,7 +231,7 @@ class EnhancedTelegramCallbackService {
       this.currentPollDelay = Math.max(3000, this.currentPollDelay * 0.9);
     } catch (error: any) {
       // Enhanced error logging
-      console.error("🚨 Exception caught in pollForUpdates:");
+      console.error("���� Exception caught in pollForUpdates:");
       console.error("🔍 Error details:", safeStringifyError(error));
       console.error(
         "📊 Error context:",
