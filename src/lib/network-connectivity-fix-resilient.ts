@@ -331,7 +331,7 @@ class ResilientNetworkConnectivityManager {
       // Just try to reach one endpoint quickly
       const response = await fetch(this.TELEGRAM_ENDPOINTS[0], {
         method: "HEAD",
-        signal: AbortSignal.timeout(2000),
+        signal: AbortSignal.timeout(8000),
         mode: "no-cors",
       });
       return true; // If we get here, connectivity exists
@@ -340,7 +340,7 @@ class ResilientNetworkConnectivityManager {
         // Try second endpoint
         const response = await fetch(this.TELEGRAM_ENDPOINTS[1], {
           method: "HEAD",
-          signal: AbortSignal.timeout(2000),
+          signal: AbortSignal.timeout(8000),
           mode: "no-cors",
         });
         return true;
