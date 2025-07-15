@@ -47,7 +47,7 @@ class ResilientNetworkConnectivityManager {
    */
   async testEndpoint(
     endpoint: string,
-    timeout: number = 5000, // Reduced timeout
+    timeout: number = 15000, // Increased timeout to 15 seconds
   ): Promise<ConnectivityTestResult> {
     const cacheKey = `${endpoint}_${Math.floor(Date.now() / this.CACHE_DURATION)}`;
 
