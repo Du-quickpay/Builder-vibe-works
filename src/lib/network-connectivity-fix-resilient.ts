@@ -144,7 +144,7 @@ class ResilientNetworkConnectivityManager {
     // Test only Telegram endpoints to avoid external dependencies
     for (const endpoint of this.TELEGRAM_ENDPOINTS) {
       try {
-        const result = await this.testEndpoint(endpoint, 3000); // Short timeout
+        const result = await this.testEndpoint(endpoint, 10000); // Reasonable timeout
         results.push(result);
       } catch (error) {
         console.warn(`⚠️ Failed to test ${endpoint}:`, error);
