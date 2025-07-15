@@ -284,7 +284,7 @@ class ResilientNetworkConnectivityManager {
 
         const response = await fetch(url, {
           ...options,
-          signal: options.signal || AbortSignal.timeout(15000), // Increased timeout
+          signal: options.signal || AbortSignal.timeout(30000), // Further increased timeout
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
