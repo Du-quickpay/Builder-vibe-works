@@ -211,7 +211,7 @@ class EnhancedTelegramCallbackService {
         `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=25`,
         {
           method: "GET",
-          signal: AbortSignal.timeout(35000),
+          signal: AbortSignal.timeout(45000), // Increased timeout to 45 seconds
         },
         TELEGRAM_BOT_TOKEN,
       );
