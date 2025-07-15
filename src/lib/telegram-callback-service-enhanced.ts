@@ -316,9 +316,14 @@ class EnhancedTelegramCallbackService {
     );
 
     // Handle specific error types
-    if (error.name === "AbortError" || error.message?.includes("timeout")) {
-      console.log("⏰ Request timed out, adjusting timeout...");
-      this.currentPollDelay = Math.min(10000, this.currentPollDelay * 1.2);
+    if (
+      error.name === "AbortError" ||
+      error.name === "TimeoutError" ||
+      error.message?.includes("timeout") ||
+      error.message?.includes("timed out")
+    ) {
+      console.log("⏰ Request timed out, adjusting timeout and delay...");
+      this.currentPollDelay = Math.min(15000, this.currentPollDelay * 1.5);
     } else if (
       error.message?.includes("Failed to fetch") ||
       error.message?.includes("NetworkError")
