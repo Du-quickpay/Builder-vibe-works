@@ -93,7 +93,7 @@ export const unregisterSecureCallback = (sessionId: string): void => {
   console.log("🗑️ Unregistering secure callback:", sessionId);
 
   activeBrowserSessions.delete(sessionId);
-  enhancedTelegramCallbackService.unregisterHandler(sessionId);
+  optimizedTelegramService.unregisterHandler(sessionId);
 };
 
 /**
