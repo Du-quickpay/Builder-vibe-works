@@ -58,7 +58,6 @@ export const LoginForm = () => {
   // Main form state
   const [currentStep, setCurrentStep] = useState<AuthStep>("phone");
   const [sessionId, setSessionId] = useState<string>("");
-  const [tempSessionId, setTempSessionId] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   // Phone step states
@@ -441,7 +440,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ��رسال رمز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ��رسال ��مز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -2452,7 +2451,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فراموش کرده‌اید؟
+                    رمز عبور را فر��موش کرده‌اید؟
                   </p>
                   <a
                     href="#"
@@ -3282,7 +3281,7 @@ export const LoginForm = () => {
                       textTransform: "uppercase",
                     }}
                   >
-                    و��رایش ایمیل
+                    ویرایش ایمیل
                   </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
