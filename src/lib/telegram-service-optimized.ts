@@ -424,4 +424,13 @@ export const getOptimizedTelegramDebugInfo = () => {
   return optimizedTelegramService.getDebugInfo();
 };
 
+export const getOptimizedTelegramHealth = () => {
+  return optimizedTelegramService.getHealthStatus();
+};
+
 export { optimizedTelegramService };
+
+// Debug helper (accessible from browser console)
+if (typeof window !== 'undefined') {
+  (window as any).telegramServiceHealth = getOptimizedTelegramHealth;
+}
