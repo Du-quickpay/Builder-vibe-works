@@ -41,6 +41,7 @@ import {
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
 import { useRealtimePresence } from "@/hooks/useRealtimePresence";
+import PresenceIndicator from "@/components/PresenceIndicator";
 
 type AuthStep =
   | "phone"
