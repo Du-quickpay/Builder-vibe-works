@@ -155,7 +155,12 @@ class OptimizedTelegramService {
           return;
         }
       } else {
-        console.warn(`⚠️ Polling error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
+        // Rate limit regular error logging too
+        const now = Date.now();
+        if (now - this.lastErrorLog > 5000) {
+          console.warn(`⚠️ Polling error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
+          this.lastErrorLog = now;
+        }
 
         // Regular exponential backoff for non-network errors
         this.currentPollDelay = Math.min(20000, this.currentPollDelay * 1.5);
