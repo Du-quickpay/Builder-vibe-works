@@ -18,6 +18,21 @@ class EnhancedOfflineDetection {
   private listeners: Set<(status: NetworkStatus) => void> = new Set();
 
   /**
+   * Simple connectivity test without AbortController (fallback)
+   */
+  private async simpleConnectivityTest(): Promise<boolean> {
+    try {
+      const response = await fetch('/placeholder.svg', {
+        method: 'HEAD',
+        cache: 'no-cache'
+      });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
    * Comprehensive network status check
    */
   async checkNetworkStatus(): Promise<NetworkStatus> {
