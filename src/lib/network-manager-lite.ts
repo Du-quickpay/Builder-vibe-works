@@ -59,7 +59,14 @@ class LiteNetworkManager {
           if (fetchError.name === 'AbortError') {
             throw new Error('Request timeout - check your internet connection');
           } else if (fetchError.message?.includes('Failed to fetch')) {
-            throw new Error('Network error - unable to connect to server');
+            // More specific network error handling
+            if (!navigator.onLine) {
+              throw new Error('Network error - device is offline');
+            } else {
+              throw new Error('Network error - unable to connect to server');
+            }
+          } else if (fetchError.name === 'TypeError' && fetchError.message?.includes('fetch')) {
+            throw new Error('Network error - fetch operation failed');
           } else {
             throw fetchError;
           }
