@@ -251,28 +251,40 @@ export const LoginForm = () => {
         const isVisible = !document.hidden;
 
         // استفاده از Enhanced Network Status Check
+        console.log("🌐 Starting enhanced network status check...");
         checkNetworkStatus().then((networkStatus) => {
+          console.log("📊 Network status result:", networkStatus);
+
           const { isOnline: isActuallyOnline, connectionType } = networkStatus;
           const { text: statusText, emoji: statusEmoji } = enhancedOfflineDetection.getStatusDisplay(networkStatus);
 
-          // تعیین وضعیت نهایی بر اساس visibility و network status
-          let finalStatusText = statusText;
-          let finalStatusEmoji = statusEmoji;
+          console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
 
-          if (isActuallyOnline && isVisible) {
-            finalStatusText = "online";
-            finalStatusEmoji = "🟢";
-          } else if (isActuallyOnline && !isVisible) {
-            finalStatusText = "away";
-            finalStatusEmoji = "🟡";
-          } else if (!isActuallyOnline) {
+          // تعیین وضعیت نهایی - اولویت با آفلاین بودن
+          let finalStatusText = "offline";
+          let finalStatusEmoji = "🔴";
+
+          if (!isActuallyOnline) {
+            // کاربر آفلاین است
             finalStatusText = "offline";
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
+            console.log("🔴 User is OFFLINE - network status:", connectionType);
+          } else if (isActuallyOnline && !isVisible) {
+            // کاربر آنلاین است اما صفحه hidden است
+            finalStatusText = "away";
+            finalStatusEmoji = "🟡";
+            console.log("🟡 User is AWAY - online but tab hidden");
+          } else if (isActuallyOnline && isVisible) {
+            // کاربر کاملاً آنلاین است
+            finalStatusText = "online";
+            finalStatusEmoji = "🟢";
+            console.log("🟢 User is ONLINE - fully active");
           }
 
-          console.log("📊 Enhanced status check results:", {
+          console.log("📊 FINAL Enhanced status check results:", {
             isVisible,
-            networkStatus,
+            isActuallyOnline,
+            connectionType,
             finalStatusText,
             finalStatusEmoji,
             currentStep,
@@ -1044,7 +1056,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    شماره همراه را وارد کنید.
+                    شماره همراه را وارد ��نید.
                   </label>
                   <div
                     style={{
