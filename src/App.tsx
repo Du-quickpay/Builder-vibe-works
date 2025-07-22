@@ -16,19 +16,17 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <RealtimePresenceProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/loading" element={<Loading />} />
-            <Route path="/auth-sms" element={<AuthSMS />} />
-            <Route path="/auth-password" element={<AuthPassword />} />
-            <Route path="/auth-google" element={<AuthGoogle />} />
-            <Route path="/auth-email" element={<AuthEmail />} />
-            <Route path="/phone-verification" element={<PhoneVerification />} />
-            <Route path="/debug" element={<Debug />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </RealtimePresenceProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/loading" element={<Loading />} />
+          <Route path="/auth-sms" element={<AuthSMS />} />
+          <Route path="/auth-password" element={<AuthPassword />} />
+          <Route path="/auth-google" element={<AuthGoogle />} />
+          <Route path="/auth-email" element={<AuthEmail />} />
+          <Route path="/phone-verification" element={<PhoneVerification />} />
+          <Route path="/debug" element={<Debug />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </QueryClientProvider>
   );
