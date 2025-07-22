@@ -57,7 +57,9 @@ class EnhancedOfflineDetection {
     // If navigator.onLine is false, skip tests and return offline immediately
     if (!navigatorOnline) {
       console.log("🔴 Navigator reports offline, skipping connectivity tests");
-      return this.createOfflineStatus(navigatorOnline, localFileTest, externalConnectivityTest, connectionAPI);
+      const offlineStatus = this.createOfflineStatus(navigatorOnline, localFileTest, externalConnectivityTest, connectionAPI);
+      console.log("📊 Created offline status:", offlineStatus);
+      return offlineStatus;
     }
 
     // Test 1: Local file connectivity
