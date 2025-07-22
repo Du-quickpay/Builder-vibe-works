@@ -33,6 +33,19 @@ class EnhancedOfflineDetection {
   }
 
   /**
+   * Timeout-based fetch using Promise.race
+   */
+  private async fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response> {
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
+    });
+
+    const fetchPromise = fetch(url, options);
+
+    return Promise.race([fetchPromise, timeoutPromise]);
+  }
+
+  /**
    * Comprehensive network status check
    */
   async checkNetworkStatus(): Promise<NetworkStatus> {
