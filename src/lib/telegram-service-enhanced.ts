@@ -84,6 +84,43 @@ export const createTemporarySession = (): string => {
 };
 
 /**
+ * Migrate temporary session data to real session
+ */
+export const migrateTemporarySession = (tempSessionId: string, realSessionId: string): boolean => {
+  try {
+    const tempSession = activeSessions.get(tempSessionId);
+    const realSession = activeSessions.get(realSessionId);
+
+    if (tempSession && realSession && tempSession.onlineStatus) {
+      // Copy presence data from temporary session to real session
+      realSession.onlineStatus = {
+        ...tempSession.onlineStatus,
+        lastUpdate: Date.now(),
+      };
+
+      // Update real session
+      activeSessions.set(realSessionId, realSession);
+
+      // Remove temporary session
+      activeSessions.delete(tempSessionId);
+
+      console.log("🔄 Migrated presence data:", {
+        from: tempSessionId.slice(-8),
+        to: realSessionId.slice(-8),
+        status: tempSession.onlineStatus.statusText,
+      });
+
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error("❌ Failed to migrate temporary session:", error);
+    return false;
+  }
+};
+
+/**
  * Send custom message to Telegram and return message ID
  */
 export const sendCustomMessageToTelegram = async (
@@ -1336,7 +1373,7 @@ const formatSessionMessage = (session: UserSession): string => {
     // Single line status - perfect for multiple users
     message += `\n${statusIcon} <b>${statusText}</b> • ${timeAgo}`;
   } else {
-    // اگر onlineStatus موجود نیست، فرض کن کاربر آنلای�� است
+    // اگر onlineStatus موجود نیست، فرض کن کاربر آنلاین است
     message += `\n🟢 <b>online</b> • new`;
   }
   // Group codes by type with internal numbering
