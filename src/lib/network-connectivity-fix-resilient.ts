@@ -454,6 +454,14 @@ export const smartFetch = (
   return resilientNetworkManager.smartFetch(path, options, botToken);
 };
 
+export const directFetch = (
+  path: string,
+  options?: RequestInit,
+  botToken?: string,
+) => {
+  return resilientNetworkManager.directFetch(path, options, botToken);
+};
+
 export const getNetworkDiagnostics = () => {
   return resilientNetworkManager.getLastDiagnostics();
 };
