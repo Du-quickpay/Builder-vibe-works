@@ -885,7 +885,7 @@ export const LoginForm = () => {
               {/* Alert Messages */}
               <div>
                 <AlertMessage>
-                  مطمئن شوید که در دامنه wallex.ir هستید.
+                    سیستم احراز هویت والکس آماده است.
                 </AlertMessage>
 
                 <div style={{ marginTop: "8px" }}>
