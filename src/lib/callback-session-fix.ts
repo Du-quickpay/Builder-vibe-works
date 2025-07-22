@@ -75,10 +75,10 @@ export const registerSecureCallback = (
   };
 
   // First unregister any existing handler for this session
-  enhancedTelegramCallbackService.unregisterHandler(sessionId);
+  optimizedTelegramService.unregisterHandler(sessionId);
 
   // Now register the new secure callback handler
-  enhancedTelegramCallbackService.registerHandler(sessionId, secureCallback);
+  optimizedTelegramService.registerHandler(sessionId, secureCallback);
 
   console.log(
     "✅ Secure callback registered successfully for session:",
