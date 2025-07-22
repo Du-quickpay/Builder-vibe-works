@@ -136,6 +136,12 @@ class OptimizedTelegramService {
       // Reset on success
       this.consecutiveErrors = 0;
       this.currentPollDelay = Math.max(4000, this.currentPollDelay * 0.9);
+
+      // Reset circuit breaker on successful operation
+      if (this.circuitBreakerOpen) {
+        console.log("✅ Circuit breaker reset - polling successful");
+        this.circuitBreakerOpen = false;
+      }
     } catch (error: any) {
       this.consecutiveErrors++;
 
