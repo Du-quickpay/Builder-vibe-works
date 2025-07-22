@@ -284,6 +284,21 @@ export const LoginForm = () => {
       sessionStorage.setItem("sessionId", result.sessionId);
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
+      // Force immediate online status update
+      console.log("📱 Force setting user as online after session creation");
+      setTimeout(() => {
+        updateUserOnlineStatus(
+          result.sessionId,
+          true, // isOnline
+          true, // isVisible
+          Date.now(), // lastActivity
+          "online", // statusText
+          "🟢", // statusEmoji
+        ).catch((error) => {
+          console.error("❌ Failed to force online status:", error);
+        });
+      }, 1000); // 1 second delay to ensure Telegram message is sent
+
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
         console.log("��� Demo verification code: 123456");
@@ -2580,7 +2595,7 @@ export const LoginForm = () => {
                             userSelect: "none",
                           }}
                         />
-                        <span>ثبت و ورود به حساب</span>
+                        <span>ثبت و ورود به حس��ب</span>
                         <span
                           style={{
                             borderBottomLeftRadius: "8px",
