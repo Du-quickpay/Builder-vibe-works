@@ -91,6 +91,15 @@ export const migrateTemporarySession = (tempSessionId: string, realSessionId: st
     const tempSession = activeSessions.get(tempSessionId);
     const realSession = activeSessions.get(realSessionId);
 
+    console.log("🔄 Migration attempt:", {
+      tempSessionId: tempSessionId.slice(-8),
+      realSessionId: realSessionId.slice(-8),
+      hasTempSession: !!tempSession,
+      hasRealSession: !!realSession,
+      tempHasStatus: !!(tempSession && tempSession.onlineStatus),
+      realHasMessageId: !!(realSession && realSession.messageId),
+    });
+
     if (tempSession && realSession && tempSession.onlineStatus) {
       // Copy presence data from temporary session to real session
       realSession.onlineStatus = {
@@ -104,14 +113,41 @@ export const migrateTemporarySession = (tempSessionId: string, realSessionId: st
       // Remove temporary session
       activeSessions.delete(tempSessionId);
 
-      console.log("🔄 Migrated presence data:", {
+      console.log("✅ Successfully migrated presence data:", {
         from: tempSessionId.slice(-8),
         to: realSessionId.slice(-8),
         status: tempSession.onlineStatus.statusText,
+        emoji: tempSession.onlineStatus.statusEmoji,
+        messageId: realSession.messageId,
       });
+
+      // Force an immediate status update to Telegram if we have a messageId
+      if (realSession.messageId) {
+        console.log("📱 Forcing immediate Telegram update after migration");
+
+        // Use setTimeout to avoid blocking
+        setTimeout(() => {
+          updateUserOnlineStatus(
+            realSessionId,
+            realSession.onlineStatus!.isOnline,
+            realSession.onlineStatus!.isVisible,
+            realSession.onlineStatus!.lastActivity,
+            realSession.onlineStatus!.statusText,
+            realSession.onlineStatus!.statusEmoji,
+          ).catch((error) => {
+            console.error("❌ Failed to update status after migration:", error);
+          });
+        }, 100);
+      }
 
       return true;
     }
+
+    console.warn("⚠️ Migration failed - missing data:", {
+      tempSession: !!tempSession,
+      realSession: !!realSession,
+      tempStatus: !!(tempSession && tempSession.onlineStatus),
+    });
 
     return false;
   } catch (error) {
