@@ -58,6 +58,7 @@ export const LoginForm = () => {
   // Main form state
   const [currentStep, setCurrentStep] = useState<AuthStep>("phone");
   const [sessionId, setSessionId] = useState<string>("");
+  const [tempSessionId, setTempSessionId] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   // Phone step states
