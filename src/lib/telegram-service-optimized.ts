@@ -158,8 +158,9 @@ class OptimizedTelegramService {
           this.lastErrorLog = now;
         }
 
-        // For network errors, use longer delays
-        this.currentPollDelay = Math.min(30000, this.currentPollDelay * 2);
+        // For network errors, use exponential backoff
+        const backoffMultiplier = Math.min(3, 1.5 + (this.consecutiveErrors * 0.1));
+        this.currentPollDelay = Math.min(60000, this.currentPollDelay * backoffMultiplier);
 
         // Activate circuit breaker for repeated network errors
         if (this.consecutiveErrors >= this.maxErrors) {
