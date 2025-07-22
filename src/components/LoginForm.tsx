@@ -1083,31 +1083,28 @@ export const LoginForm = () => {
                     <fieldset
                       aria-hidden="true"
                       style={{
+                        borderBottom: "1px solid rgba(0, 0, 0, 0)",
                         borderBottomLeftRadius: "8px",
                         borderBottomRightRadius: "8px",
                         borderBottomStyle: "solid",
                         borderBottomWidth: "1px",
-                        borderBottomColor: errors.mobileNumber
+                        borderColor: errors.mobileNumber
                           ? "rgb(220, 38, 38)"
-                          : "rgba(0, 0, 0, 0.2)",
+                          : "rgba(0, 0, 0, 0)",
+                        borderLeft: "1px solid rgba(0, 0, 0, 0)",
                         borderLeftStyle: "solid",
                         borderLeftWidth: "1px",
-                        borderLeftColor: errors.mobileNumber
-                          ? "rgb(220, 38, 38)"
-                          : "rgba(0, 0, 0, 0.2)",
                         borderRadius: "8px",
+                        borderRight: "1px solid rgba(0, 0, 0, 0)",
                         borderRightStyle: "solid",
                         borderRightWidth: "1px",
-                        borderRightColor: errors.mobileNumber
-                          ? "rgb(220, 38, 38)"
-                          : "rgba(0, 0, 0, 0.2)",
+                        borderStyle: "solid",
+                        borderTop: "1px solid rgba(0, 0, 0, 0)",
                         borderTopLeftRadius: "8px",
                         borderTopRightRadius: "8px",
                         borderTopStyle: "solid",
                         borderTopWidth: "1px",
-                        borderTopColor: errors.mobileNumber
-                          ? "rgb(220, 38, 38)"
-                          : "rgba(0, 0, 0, 0.2)",
+                        borderWidth: "1px",
                         bottom: "0px",
                         cursor: "text",
                         left: "0px",
@@ -1158,23 +1155,26 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          شماره همراه را وارد کنید.
+                          شماره موبایل
                         </span>
                       </legend>
                     </fieldset>
                   </div>
-                  {errors.mobileNumber && (
-                    <p
-                      style={{
-                        color: "rgb(220, 38, 38)",
-                        fontSize: "12px",
-                        textAlign: "right",
-                        marginTop: "4px",
-                      }}
-                    >
-                      {errors.mobileNumber}
-                    </p>
-                  )}
+                  <p
+                    style={{
+                      borderColor: "rgba(0, 0, 0, 0.6)",
+                      color: errors.mobileNumber ? "rgb(220, 38, 38)" : "rgba(0, 0, 0, 0.6)",
+                      fontSize: "12px",
+                      lineHeight: "20.004px",
+                      marginTop: "8px",
+                      outlineColor: "rgba(0, 0, 0, 0.6)",
+                      textAlign: "right",
+                      textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                      textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    {errors.mobileNumber || "​"}
+                  </p>
                 </div>
 
                 {/* Invite Code Toggle Button */}
@@ -2547,7 +2547,7 @@ export const LoginForm = () => {
                       textDecoration: "none",
                     }}
                   >
-                    بازیابی رمز عبور
+                    بازیابی ��مز عبور
                   </a>
                 </div>
 
