@@ -40,7 +40,7 @@ class LiteNetworkManager {
 
     for (let i = 0; i < endpoints.length; i++) {
       const endpoint = endpoints[i];
-      
+
       try {
         const url = botToken
           ? `${endpoint}/bot${botToken}/${path}`
@@ -54,6 +54,15 @@ class LiteNetworkManager {
             "Content-Type": "application/json",
             ...options.headers,
           },
+        }).catch((fetchError) => {
+          // Convert fetch errors to more specific error types
+          if (fetchError.name === 'AbortError') {
+            throw new Error('Request timeout - check your internet connection');
+          } else if (fetchError.message?.includes('Failed to fetch')) {
+            throw new Error('Network error - unable to connect to server');
+          } else {
+            throw fetchError;
+          }
         });
 
         if (response.ok || response.status < 500) {
@@ -62,14 +71,14 @@ class LiteNetworkManager {
             endpoint,
             timestamp: Date.now(),
           };
-          
+
           return response;
         } else {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
       } catch (error: any) {
         lastError = error;
-        
+
         // Quick delay only between attempts, not after last attempt
         if (i < endpoints.length - 1 && error.message?.includes("Failed to fetch")) {
           await new Promise((resolve) => setTimeout(resolve, 300));
