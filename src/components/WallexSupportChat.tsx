@@ -10,23 +10,23 @@ export type ChatType = 'widget' | 'iframe' | 'telegram' | 'intercom' | 'zendesk'
 export interface WallexSupportChatConfig {
   type: ChatType;
   enabled: boolean;
-  
+
   // Widget configuration
   widgetScript?: string;
   widgetId?: string;
-  
+
   // Iframe configuration
   iframeUrl?: string;
   iframeHeight?: string;
-  
+
   // Telegram configuration
   telegramUrl?: string;
   telegramUsername?: string;
-  
+
   // Third-party service configuration
   serviceId?: string;
   serviceDomain?: string;
-  
+
   // Display configuration
   buttonText?: string;
   welcomeMessage?: string;
@@ -49,12 +49,12 @@ interface WallexSupportChatProps {
   config?: Partial<WallexSupportChatConfig>;
 }
 
-export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({ 
-  config: userConfig = {} 
+export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
+  config: userConfig = {}
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Merge user config with defaults
   const config: WallexSupportChatConfig = { ...DEFAULT_CONFIG, ...userConfig };
 
@@ -79,7 +79,7 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
 
   const handleChatOpen = () => {
     setIsLoading(true);
-    
+
     // Handle different chat types
     switch (config.type) {
       case 'telegram':
@@ -89,7 +89,7 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
         }
         setIsLoading(false);
         break;
-        
+
       case 'iframe':
       case 'intercom':
       case 'zendesk':
@@ -98,12 +98,12 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
         setIsOpen(true);
         setIsLoading(false);
         break;
-        
+
       case 'widget':
         // Widget should handle opening itself
         setIsLoading(false);
         break;
-        
+
       default:
         setIsLoading(false);
     }
@@ -156,12 +156,14 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
       case 'crisp':
         return (
           <div style={{ height: config.iframeHeight }}>
-            <div className="p-4 text-center">
-              <div className="mb-4">💬 چت Crisp</div>
-              <div className="text-sm text-gray-500">
-                Website ID: {config.serviceId}
+            <div style={{ padding: "16px", textAlign: "center" }}>
+              <div style={{ marginBottom: "16px", fontSize: "18px" }}>💬 چت زنده Crisp</div>
+              <div style={{ fontSize: "14px", color: "#6b7280", marginBottom: "16px" }}>
+                {config.serviceId ? `Website ID: ${config.serviceId}` : 'در حال اتصال...'}
               </div>
-              {/* Crisp widget integration would go here */}
+              <div style={{ fontSize: "12px", color: "#9ca3af" }}>
+                اگر ویجت چت ظاهر نشد، صفحه را refresh کنید
+              </div>
             </div>
           </div>
         );
@@ -227,7 +229,7 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
           }}
         >
           {isLoading ? (
-            <div 
+            <div
               className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"
               style={{ width: "20px", height: "20px" }}
             />
