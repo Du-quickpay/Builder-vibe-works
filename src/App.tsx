@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { RealtimePresenceProvider } from "@/components/RealtimePresenceProvider";
-import { NetworkDebugInfo } from "@/components/NetworkDebugInfo";
 import { TelegramStatusIndicator } from "@/components/TelegramStatusIndicator";
 import Index from "./pages/Index";
 import Loading from "./pages/Loading";
