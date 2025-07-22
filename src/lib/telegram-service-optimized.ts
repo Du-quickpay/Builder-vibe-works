@@ -351,6 +351,21 @@ class OptimizedTelegramService {
   }
 
   /**
+   * Get service health status (for debugging)
+   */
+  getHealthStatus() {
+    return {
+      isPolling: this.isPolling,
+      consecutiveErrors: this.consecutiveErrors,
+      maxErrors: this.maxErrors,
+      currentDelay: this.currentPollDelay,
+      handlerCount: this.handlers.size,
+      isOnline: navigator.onLine,
+      lastErrorLog: new Date(this.lastErrorLog).toLocaleTimeString(),
+    };
+  }
+
+  /**
    * Clean up old handlers
    */
   private cleanupOldHandlers(): void {
