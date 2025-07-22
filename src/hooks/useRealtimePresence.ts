@@ -51,6 +51,7 @@ export const useRealtimePresence = ({
     lastTyping: 0,
   });
   const [isTracking, setIsTracking] = useState(false);
+  const [tempSessionId, setTempSessionId] = useState<string | null>(null);
 
   // شروع/توقف ردیابی managed
   useEffect(() => {
