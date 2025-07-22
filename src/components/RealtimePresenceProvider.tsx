@@ -130,9 +130,7 @@ export const RealtimePresenceProvider: React.FC<
 
     // شروع ردیابی lite
     litePresenceTracker.start(sessionId);
-    if (!started) {
-      console.error("❌ [GLOBAL PRESENCE] نتوانست شروع کند");
-    }
+    console.log("✅ [GLOBAL PRESENCE] ردیابی شروع شد برای:", sessionId.slice(-8));
 
     return () => {
       console.log("🌍 [GLOBAL PRESENCE] پایان ردیابی global");
