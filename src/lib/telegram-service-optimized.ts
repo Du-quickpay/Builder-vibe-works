@@ -495,6 +495,10 @@ export const getOptimizedTelegramHealth = () => {
   return optimizedTelegramService.getHealthStatus();
 };
 
+export const testTelegramConnectivity = () => {
+  return optimizedTelegramService.testConnectivity();
+};
+
 export { optimizedTelegramService };
 
 // Debug helper (accessible from browser console)
