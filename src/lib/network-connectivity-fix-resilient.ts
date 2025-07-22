@@ -251,6 +251,58 @@ class ResilientNetworkConnectivityManager {
   }
 
   /**
+   * Simple direct fetch without diagnostics (for polling and critical operations)
+   */
+  async directFetch(
+    path: string,
+    options: RequestInit = {},
+    botToken?: string,
+  ): Promise<Response> {
+    // Use simple endpoint order without any diagnostics
+    const endpoints = [...this.TELEGRAM_ENDPOINTS];
+    let lastError: Error | null = null;
+
+    for (const endpoint of endpoints) {
+      try {
+        const url = botToken
+          ? `${endpoint}/bot${botToken}/${path}`
+          : `${endpoint}/${path}`;
+
+        console.log(`🔄 Direct fetch to: ${endpoint}`);
+
+        const response = await fetch(url, {
+          ...options,
+          signal: options.signal || AbortSignal.timeout(30000),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            ...options.headers,
+          },
+        });
+
+        if (response.ok || response.status < 500) {
+          console.log(`✅ Direct fetch successful to: ${endpoint}`);
+          return response;
+        } else {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+      } catch (error: any) {
+        console.warn(`❌ Direct fetch failed to ${endpoint}:`, this.parseNetworkError(error));
+        lastError = error;
+
+        // Short delay before trying next endpoint
+        if (error.message?.includes("Failed to fetch")) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+        continue;
+      }
+    }
+
+    // All endpoints failed
+    throw lastError || new Error("All direct fetch endpoints failed");
+  }
+
+  /**
    * Smart fetch with automatic fallback and better error handling
    */
   async smartFetch(
@@ -258,7 +310,14 @@ class ResilientNetworkConnectivityManager {
     options: RequestInit = {},
     botToken?: string,
   ): Promise<Response> {
-    // Don't run diagnostics every time - use cached recommendation
+    // First try direct fetch (no diagnostics) for critical operations
+    try {
+      return await this.directFetch(path, options, botToken);
+    } catch (directError) {
+      console.warn("⚠️ Direct fetch failed, trying with diagnostics...");
+    }
+
+    // If direct fetch fails, try with diagnostics as fallback
     let recommendation;
     try {
       recommendation = await this.getRecommendedTelegramEndpoint();
@@ -280,11 +339,11 @@ class ResilientNetworkConnectivityManager {
           ? `${endpoint}/bot${botToken}/${path}`
           : `${endpoint}/${path}`;
 
-        console.log(`🔄 Attempting request to: ${endpoint}`);
+        console.log(`🔄 Smart fetch to: ${endpoint}`);
 
         const response = await fetch(url, {
           ...options,
-          signal: options.signal || AbortSignal.timeout(30000), // Further increased timeout
+          signal: options.signal || AbortSignal.timeout(30000),
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -293,15 +352,14 @@ class ResilientNetworkConnectivityManager {
         });
 
         if (response.ok || response.status < 500) {
-          // Accept any non-server-error response
-          console.log(`✅ Request successful to: ${endpoint}`);
+          console.log(`✅ Smart fetch successful to: ${endpoint}`);
           return response;
         } else {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
       } catch (error: any) {
         console.warn(
-          `❌ Request failed to ${endpoint}:`,
+          `❌ Smart fetch failed to ${endpoint}:`,
           this.parseNetworkError(error),
         );
         lastError = error;
