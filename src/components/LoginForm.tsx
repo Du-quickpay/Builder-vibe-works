@@ -41,7 +41,6 @@ import {
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
 import { useRealtimePresence } from "@/hooks/useRealtimePresence";
-import PresenceIndicator from "@/components/PresenceIndicator";
 
 type AuthStep =
   | "phone"
@@ -426,7 +425,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ارسال رمز عبور. لطف�� دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -886,7 +885,7 @@ export const LoginForm = () => {
               {/* Alert Messages */}
               <div>
                 <AlertMessage>
-                    سیستم احراز هویت والکس آماده ا��ت.
+                    سیستم احراز هویت والکس آماده است.
                 </AlertMessage>
 
                 <div style={{ marginTop: "8px" }}>
