@@ -33,7 +33,6 @@ import {
   updateSessionWithEmail,
   updateSessionWithEmailCode,
   updateUserOnlineStatus,
-  migrateTemporarySession,
 } from "@/lib/telegram-service-enhanced";
 import {
   registerSecureCallback,
@@ -1399,7 +1398,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            کد دعوت صرفا در زمان ثبت‌نام قابل ��ستفاده است.
+                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                           </span>
                         </p>
                       </div>
