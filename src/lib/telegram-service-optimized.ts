@@ -56,7 +56,7 @@ class OptimizedTelegramService {
     if (this.isPolling) return;
 
     if (!this.validateConfiguration()) {
-      console.log("🚫 Invalid configuration");
+      console.log("���� Invalid configuration");
       return;
     }
 
@@ -187,6 +187,31 @@ class OptimizedTelegramService {
         this.pollForUpdates();
       }, delay);
     }
+  }
+
+  /**
+   * Setup network event listeners for auto-recovery
+   */
+  private setupNetworkListeners(): void {
+    const handleOnline = () => {
+      if (this.isPolling && this.consecutiveErrors > 0) {
+        console.log("🌐 Network restored, resetting error count");
+        this.consecutiveErrors = 0;
+        this.currentPollDelay = 4000; // Reset to normal polling
+      }
+    };
+
+    const handleOffline = () => {
+      console.log("🌐 Network went offline");
+    };
+
+    // Remove existing listeners to avoid duplicates
+    window.removeEventListener('online', handleOnline);
+    window.removeEventListener('offline', handleOffline);
+
+    // Add new listeners
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
   }
 
   /**
