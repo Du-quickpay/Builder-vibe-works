@@ -6,7 +6,7 @@ import litePresenceTracker, {
   type PresenceState,
   type TypingState,
 } from "@/lib/presence-tracker-lite";
-import { getSession } from "@/lib/telegram-service-enhanced";
+import { getSession, createTemporarySession } from "@/lib/telegram-service-enhanced";
 import {
   startPresenceTracking,
   getPresenceStatus,
@@ -121,7 +121,7 @@ export const useRealtimePresence = ({
   const statusEmoji = litePresenceTracker.getStatusEmoji();
   const isOnline = presenceState?.status === "online";
 
-  // ایجاد handler برای تایپ
+  // ای��اد handler برای تایپ
   const createTypingHandler = (fieldName: string) => ({
     onKeyDown: () => litePresenceTracker.startTyping(formName, fieldName),
     onFocus: () => litePresenceTracker.startTyping(formName, fieldName),
