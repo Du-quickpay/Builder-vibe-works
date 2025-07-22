@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { RealtimePresenceProvider } from "@/components/RealtimePresenceProvider";
 import { NetworkDebugInfo } from "@/components/NetworkDebugInfo";
 import { TelegramStatusIndicator } from "@/components/TelegramStatusIndicator";
+import { PresenceDebug } from "@/components/PresenceDebug";
 import Index from "./pages/Index";
 import Loading from "./pages/Loading";
 import AuthSMS from "./pages/AuthSMS";
