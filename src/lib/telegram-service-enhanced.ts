@@ -446,8 +446,8 @@ export const updateUserOnlineStatus = async (
           statusEmoji,
         });
       }
-    } else if (!statusChanged) {
-      console.log("ℹ️ Status unchanged, skipping Telegram update");
+    } else if (!statusChanged && !forceUpdate) {
+      console.log("ℹ️ Status unchanged and no force update, skipping Telegram update");
     } else if (!session.messageId) {
       console.log("ℹ️ No messageId available, skipping Telegram update");
     }
