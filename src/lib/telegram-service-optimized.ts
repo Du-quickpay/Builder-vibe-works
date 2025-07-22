@@ -155,6 +155,13 @@ class OptimizedTelegramService {
         // For network errors, use longer delays
         this.currentPollDelay = Math.min(30000, this.currentPollDelay * 2);
 
+        // Activate circuit breaker for repeated network errors
+        if (this.consecutiveErrors >= this.maxErrors) {
+          console.warn("⚡ Activating circuit breaker due to network issues");
+          this.circuitBreakerOpen = true;
+          this.lastCircuitBreakerReset = Date.now();
+        }
+
         // Be more patient with network errors
         if (this.consecutiveErrors >= this.maxErrors * 2) {
           console.error("❌ Persistent network issues, pausing polling");
@@ -166,6 +173,7 @@ class OptimizedTelegramService {
               console.log("🔄 Network restored, restarting polling...");
               this.consecutiveErrors = 0;
               this.currentPollDelay = 4000;
+              this.circuitBreakerOpen = false;
               this.startPolling();
             }
           }, 60000); // Wait 1 minute for network issues
