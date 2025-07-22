@@ -501,7 +501,8 @@ export const testTelegramConnectivity = () => {
 
 export { optimizedTelegramService };
 
-// Debug helper (accessible from browser console)
+// Debug helpers (accessible from browser console)
 if (typeof window !== 'undefined') {
   (window as any).telegramServiceHealth = getOptimizedTelegramHealth;
+  (window as any).testTelegramConnectivity = testTelegramConnectivity;
 }
