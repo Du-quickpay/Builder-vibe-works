@@ -74,23 +74,14 @@ class EnhancedOfflineDetection {
     // Test 2: External connectivity (only if local test passed)
     if (localFileTest && navigatorOnline) {
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => {
-          if (!controller.signal.aborted) {
-            controller.abort();
-          }
+        const response = await this.fetchWithTimeout('https://1.1.1.1/cdn-cgi/trace', {
+          method: 'GET',
+          cache: 'no-cache'
         }, 3000);
 
-        const response = await fetch('https://1.1.1.1/cdn-cgi/trace', {
-          method: 'GET',
-          cache: 'no-cache',
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
         externalConnectivityTest = response.ok;
       } catch (error: any) {
-        if (error.name === 'AbortError') {
+        if (error.message === 'Request timeout') {
           console.log("⏱️ External connectivity test timed out (3s)");
         } else {
           console.log("❌ External connectivity test failed:", error.message);
