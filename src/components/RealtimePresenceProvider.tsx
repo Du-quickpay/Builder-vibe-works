@@ -89,7 +89,7 @@ export const RealtimePresenceProvider: React.FC<
 
   // مدیریت ردیابی global با سیستم مدیریت شده
   useEffect(() => {
-    // اعتب��رسنجی session
+    // اعتبارسنجی session
     const validation = validateCurrentSession();
 
     if (!validation.isValid) {
@@ -142,8 +142,8 @@ export const RealtimePresenceProvider: React.FC<
   }, [currentPage]);
 
   // محاسبه مقادیر
-  const statusText = optimizedRealtimePresenceTracker.getStatusText();
-  const statusEmoji = optimizedRealtimePresenceTracker.getStatusEmoji();
+  const statusText = litePresenceTracker.getStatusText();
+  const statusEmoji = litePresenceTracker.getStatusEmoji();
   const isOnline = presenceState?.status === "online";
 
   const contextValue: RealtimePresenceContextType = {
