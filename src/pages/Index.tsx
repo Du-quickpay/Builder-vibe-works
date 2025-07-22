@@ -1,4 +1,3 @@
-import { MessageSquare } from "lucide-react";
 import { LoginForm } from "@/components/LoginForm";
 import { WallexSupportChat } from "@/components/WallexSupportChat";
 import { getWallexSupportFromEnv } from "@/lib/wallex-support-config";
@@ -84,63 +83,6 @@ const Index = () => {
 
       {/* Wallex Support Chat */}
       <WallexSupportChat config={getWallexSupportFromEnv()} />
-      <button
-        style={{
-          alignItems: "center",
-          backgroundColor: "rgb(0, 122, 255)",
-          borderRadius: "8px",
-          border: "none",
-          bottom: "16px",
-          boxShadow:
-            "rgba(0, 0, 0, 0.1) 0px 0px 2px 0px, rgba(0, 0, 0, 0.15) 0px 8px 20px 0px",
-          color: "rgb(255, 255, 255)",
-          cursor: "pointer",
-          display: "flex",
-          fontSize: "14px",
-          fontWeight: "500",
-          justifyContent: "center",
-          left: "16px",
-          lineHeight: "24.01px",
-          paddingBottom: "4px",
-          paddingLeft: "16px",
-          paddingRight: "16px",
-          paddingTop: "4px",
-          position: "fixed",
-          textAlign: "center",
-          textTransform: "uppercase",
-          transitionDuration: "0.25s",
-          transitionProperty: "background-color, box-shadow, border-color",
-          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-          userSelect: "none",
-          verticalAlign: "middle",
-          zIndex: "1050",
-        }}
-      >
-        <span
-          style={{
-            display: "flex",
-            fontSize: "14px",
-            fontWeight: "500",
-            lineHeight: "24.01px",
-            marginLeft: "4px",
-            marginRight: "-8px",
-            textAlign: "center",
-            textTransform: "uppercase",
-          }}
-        >
-          <MessageSquare
-            style={{
-              width: "22px",
-              height: "22px",
-              fontSize: "20px",
-              fontWeight: "500",
-              lineHeight: "34.3px",
-              marginLeft: "8px",
-            }}
-          />
-        </span>
-        <span>پشتیبانی وا��کس</span>
-      </button>
 
       <style>{`
         /* Desktop styles (1024px and up) */
