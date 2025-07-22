@@ -56,23 +56,14 @@ class EnhancedOfflineDetection {
 
     // Test 1: Local file connectivity
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => {
-        if (!controller.signal.aborted) {
-          controller.abort();
-        }
+      const response = await this.fetchWithTimeout('/placeholder.svg', {
+        method: 'HEAD',
+        cache: 'no-cache'
       }, 2000);
 
-      const response = await fetch('/placeholder.svg', {
-        method: 'HEAD',
-        cache: 'no-cache',
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
       localFileTest = response.ok;
     } catch (error: any) {
-      if (error.name === 'AbortError') {
+      if (error.message === 'Request timeout') {
         console.log("⏱️ Local connectivity test timed out (2s)");
       } else {
         console.log("❌ Local connectivity test failed:", error.message);
