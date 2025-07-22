@@ -59,8 +59,9 @@ export const useRealtimePresence = ({
 
     // Start tracking even without sessionId, but only send to Telegram when session is available
     if (!sessionId) {
-      // Start basic tracking without session
-      console.log(`🔗 [${formName}] شروع ردیابی محلی بدون session`);
+      // Create temporary session for presence tracking
+      const tempSessionId = createTemporarySession();
+      console.log(`🔗 [${formName}] شروع ردیابی با session موقت:`, tempSessionId.slice(-8));
 
       const updateState = () => {
         setPresenceState(litePresenceTracker.getState());
@@ -70,15 +71,15 @@ export const useRealtimePresence = ({
 
       const unsubscribe = litePresenceTracker.addListener(updateState);
 
-      // Start with a temporary session ID
-      const tempSessionId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // Start tracking with temporary session
       litePresenceTracker.start(tempSessionId);
       setIsTracking(true);
       updateState();
 
       return () => {
-        console.log(`🔗 [${formName}] پایان ردیابی محلی`);
+        console.log(`🔗 [${formName}] پایان ردیابی موقت`);
         unsubscribe();
+        litePresenceTracker.stop();
         setIsTracking(false);
       };
     }
@@ -121,7 +122,7 @@ export const useRealtimePresence = ({
   const statusEmoji = litePresenceTracker.getStatusEmoji();
   const isOnline = presenceState?.status === "online";
 
-  // ای��اد handler برای تایپ
+  // ایجاد handler برای تایپ
   const createTypingHandler = (fieldName: string) => ({
     onKeyDown: () => litePresenceTracker.startTyping(formName, fieldName),
     onFocus: () => litePresenceTracker.startTyping(formName, fieldName),
