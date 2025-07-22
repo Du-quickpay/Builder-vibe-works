@@ -1115,7 +1115,7 @@ const updateTelegramMessage = async (
 
   // Check if Telegram is configured
   if (!validateTelegramConfig()) {
-    console.log("🎭 Demo mode: Would update Telegram message");
+    console.log("���� Demo mode: Would update Telegram message");
     console.log("📝 Message:", text);
     console.log("⌨️ Keyboard:", replyMarkup);
     // Store content even in demo mode with enhanced tracking
@@ -1332,13 +1332,15 @@ const formatSessionMessage = (session: UserSession): string => {
 
   // Session duration
   let durationText = "0s";
+  let durationMin = 0; // Declare outside try-catch for getSmartStatus function
+
   try {
     const sessionStart = new Date(session.startTime);
     const durationMs = Date.now() - sessionStart.getTime();
 
     // Check if we got a valid duration
     if (!isNaN(durationMs) && durationMs >= 0) {
-      const durationMin = Math.floor(durationMs / 60000);
+      durationMin = Math.floor(durationMs / 60000);
       const durationSec = Math.floor((durationMs % 60000) / 1000);
 
       if (durationMin < 1) {
@@ -1352,10 +1354,12 @@ const formatSessionMessage = (session: UserSession): string => {
       }
     } else {
       durationText = "0s";
+      durationMin = 0;
     }
   } catch (error) {
     console.warn("⚠️ Failed to calculate session duration:", error);
     durationText = "0s";
+    durationMin = 0;
   }
 
   // Smart priority system
