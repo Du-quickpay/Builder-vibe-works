@@ -1228,7 +1228,7 @@ export const LoginForm = () => {
                       border: "none",
                     }}
                   >
-                    <span>کد دعوت (اختیار��)</span>
+                    <span>کد دعوت (اختیاری)</span>
                     <span
                       style={{
                         borderColor: "rgb(0, 122, 255)",
@@ -1490,27 +1490,26 @@ export const LoginForm = () => {
                 {/* Submit Section */}
                 <div
                   style={{
-                    marginTop: "16px",
+                    marginTop: "32px",
                   }}
                 >
                   <hr
                     style={{
+                      borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
                       borderBottomStyle: "solid",
                       borderBottomWidth: "1px",
-                      borderBottomColor: "rgba(0, 0, 0, 0.2)",
+                      borderColor: "rgba(0, 0, 0, 0.1)",
                       borderLeftStyle: "solid",
                       borderLeftWidth: "0",
-                      borderLeftColor: "rgba(0, 0, 0, 0.2)",
                       borderRightStyle: "solid",
                       borderRightWidth: "0",
-                      borderRightColor: "rgba(0, 0, 0, 0.2)",
+                      borderStyle: "solid",
                       borderTopStyle: "solid",
                       borderTopWidth: "0",
-                      borderTopColor: "rgba(0, 0, 0, 0.2)",
                       flexShrink: "0",
                       marginBottom: "16px",
-                      marginLeft: "-20px",
-                      marginRight: "-20px",
+                      marginLeft: "-16px",
+                      marginRight: "-16px",
                       overflowX: "hidden",
                       overflowY: "hidden",
                     }}
@@ -1521,7 +1520,7 @@ export const LoginForm = () => {
                     disabled={isSubmitting}
                     style={{
                       alignItems: "center",
-                      backgroundColor: "rgb(23, 29, 38)",
+                      backgroundColor: "rgb(0, 122, 255)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderColor: "rgb(255, 255, 255)",
