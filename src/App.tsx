@@ -30,7 +30,6 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </RealtimePresenceProvider>
-        <TelegramStatusIndicator />
       </BrowserRouter>
     </QueryClientProvider>
   );
