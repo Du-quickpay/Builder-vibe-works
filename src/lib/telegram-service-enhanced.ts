@@ -364,6 +364,7 @@ export const updateUserOnlineStatus = async (
   lastActivity: number,
   statusText: string,
   statusEmoji: string,
+  forceUpdate: boolean = false,
 ): Promise<{ success: boolean }> => {
   try {
     const session = activeSessions.get(sessionId);
