@@ -207,8 +207,8 @@ class EnhancedTelegramCallbackService {
     }
 
     try {
-      // Use smart fetch for polling
-      const response = await smartFetch(
+      // Use direct fetch for polling (no diagnostics to avoid circular issues)
+      const response = await directFetch(
         `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=25`,
         {
           method: "GET",
@@ -390,7 +390,7 @@ class EnhancedTelegramCallbackService {
   }> {
     try {
       console.log(
-        "🔍 Manual connection test starting with smart network handling...",
+        "�� Manual connection test starting with smart network handling...",
       );
       console.log(
         "🔑 Bot token available:",
