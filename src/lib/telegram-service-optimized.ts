@@ -171,10 +171,18 @@ class OptimizedTelegramService {
     }
 
     // Schedule next poll
+    this.scheduleNextPoll();
+  }
+
+  /**
+   * Schedule next poll with optional custom delay
+   */
+  private scheduleNextPoll(customDelay?: number): void {
     if (this.isPolling) {
+      const delay = customDelay || this.currentPollDelay;
       this.pollInterval = setTimeout(() => {
         this.pollForUpdates();
-      }, this.currentPollDelay);
+      }, delay);
     }
   }
 
