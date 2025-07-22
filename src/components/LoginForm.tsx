@@ -303,7 +303,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("🔍 Verifying code:", verifyCode, "SMS mode:", isSmsMode);
+      console.log("���� Verifying code:", verifyCode, "SMS mode:", isSmsMode);
 
       // In demo mode, accept any 6-digit code
       if (!validateTelegramConfig()) {
@@ -870,6 +870,27 @@ export const LoginForm = () => {
             overflowY: "hidden",
           }}
         />
+
+        {/* Presence Status Indicator */}
+        {presence.isTracking && (
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "16px",
+            direction: "rtl"
+          }}>
+            <PresenceIndicator
+              formName="LoginForm"
+              showText={true}
+              showEmoji={true}
+              showTyping={true}
+              size="md"
+              position="inline"
+              theme="auto"
+              className="login-presence-indicator"
+            />
+          </div>
+        )}
 
         {/* Content based on current step */}
         <div
