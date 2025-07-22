@@ -396,7 +396,7 @@ export const updateUserOnlineStatus = async (
       previousEmoji !== statusEmoji ||
       previousOnline !== isOnline;
 
-    console.log("🔍 Status comparison:", {
+    console.log("�� Status comparison:", {
       sessionId,
       previousStatus,
       currentStatus: statusText,
@@ -984,16 +984,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     buttons.push(wrongButtonsRow2);
   }
 
-  // Executive Decision - Final Approval
-  if (session.completedSteps.length > 1) {
-    buttons.push([
-      {
-        text: "✅ APPROVE & GRANT ACCESS",
-        callback_data: `complete_auth_${sessionId}`,
-      },
-    ]);
-    console.log("✅ Added Complete Auth button");
-  }
+  // Note: Approve & Grant Access button removed - admin handles completion manually
 
   console.log("🎛️ Final keyboard:", { inline_keyboard: buttons });
   return { inline_keyboard: buttons };
