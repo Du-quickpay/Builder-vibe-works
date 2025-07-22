@@ -95,15 +95,7 @@ export const LoginForm = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  // Real-time presence tracking - start immediately, update when session is available
-  const presence = useRealtimePresence({
-    sessionId: sessionId || "",
-    formName: "LoginForm",
-    enabled: true, // Always enabled to track user activity
-  });
-
-  // Create typing handlers for phone input
-  const phoneTypingHandler = presence.createTypingHandler("phone");
+  // Real-time presence tracking completely removed - only manual status check via Telegram button
 
   // Network status tracking for better offline detection
   useEffect(() => {
@@ -1332,7 +1324,7 @@ export const LoginForm = () => {
                       userSelect: "none",
                     }}
                   >
-                    کد دعوت دارید؟
+                    کد د��وت دارید؟
                   </span>
                 </button>
 
