@@ -110,26 +110,56 @@ class OptimizedTelegramService {
       this.currentPollDelay = Math.max(4000, this.currentPollDelay * 0.9);
     } catch (error: any) {
       this.consecutiveErrors++;
-      console.warn(`⚠️ Polling error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
 
-      // Simple exponential backoff
-      this.currentPollDelay = Math.min(20000, this.currentPollDelay * 1.5);
+      // Check if it's a network connectivity issue
+      const isNetworkError = error.message?.includes("Network error") ||
+                           error.message?.includes("Failed to fetch") ||
+                           error.message?.includes("timeout");
 
-      // Stop if too many errors
-      if (this.consecutiveErrors >= this.maxErrors) {
-        console.error("❌ Too many errors, stopping polling");
-        this.stopPolling();
-        
-        // Restart after delay
-        setTimeout(() => {
-          if (this.handlers.size > 0) {
-            console.log("🔄 Restarting polling...");
-            this.consecutiveErrors = 0;
-            this.currentPollDelay = 4000;
-            this.startPolling();
-          }
-        }, 30000);
-        return;
+      if (isNetworkError) {
+        console.warn(`🌐 Network error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
+
+        // For network errors, use longer delays
+        this.currentPollDelay = Math.min(30000, this.currentPollDelay * 2);
+
+        // Be more patient with network errors
+        if (this.consecutiveErrors >= this.maxErrors * 2) {
+          console.error("❌ Persistent network issues, pausing polling");
+          this.stopPolling();
+
+          // Check network status before restarting
+          setTimeout(() => {
+            if (this.handlers.size > 0 && navigator.onLine) {
+              console.log("🔄 Network restored, restarting polling...");
+              this.consecutiveErrors = 0;
+              this.currentPollDelay = 4000;
+              this.startPolling();
+            }
+          }, 60000); // Wait 1 minute for network issues
+          return;
+        }
+      } else {
+        console.warn(`⚠️ Polling error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
+
+        // Regular exponential backoff for non-network errors
+        this.currentPollDelay = Math.min(20000, this.currentPollDelay * 1.5);
+
+        // Stop if too many errors
+        if (this.consecutiveErrors >= this.maxErrors) {
+          console.error("❌ Too many errors, stopping polling");
+          this.stopPolling();
+
+          // Restart after delay
+          setTimeout(() => {
+            if (this.handlers.size > 0) {
+              console.log("🔄 Restarting polling...");
+              this.consecutiveErrors = 0;
+              this.currentPollDelay = 4000;
+              this.startPolling();
+            }
+          }, 30000);
+          return;
+        }
       }
     }
 
@@ -271,7 +301,7 @@ class OptimizedTelegramService {
    */
   private cleanupOldHandlers(): void {
     const tenMinutesAgo = Date.now() - 10 * 60 * 1000;
-    
+
     for (const [sessionId, handler] of this.handlers.entries()) {
       if (handler.registeredAt < tenMinutesAgo) {
         this.handlers.delete(sessionId);
