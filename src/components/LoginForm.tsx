@@ -1292,18 +1292,17 @@ export const LoginForm = () => {
                       </svg>
                     </span>
                   </button>
-
-                {/* Invite Code Section */}
-                <div
-                  style={{
-                    height: showInviteCode ? "auto" : "0px",
-                    overflowX: "hidden",
-                    overflowY: "hidden",
-                    transitionDuration: "0.3s",
-                    transitionProperty: showInviteCode ? "height" : "height",
-                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-                    visibility: showInviteCode ? "visible" : "hidden",
-                  }}
+                  <div
+                    style={{
+                      height: showInviteCode ? "auto" : "0px",
+                      overflowX: "hidden",
+                      overflowY: "hidden",
+                      transitionDuration: "0.3s",
+                      transitionProperty: "height",
+                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                      visibility: showInviteCode ? "visible" : "hidden",
+                      width: "100%",
+                    }}
                 >
                   {showInviteCode && (
                     <div
