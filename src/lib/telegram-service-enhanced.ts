@@ -409,9 +409,9 @@ export const updateUserOnlineStatus = async (
       currentStep: session.currentStep,
     });
 
-    // Send update to Telegram if status changed and we have a message
-    if (statusChanged && session.messageId) {
-      console.log("📱 Status changed - updating Telegram message");
+    // Send update to Telegram if status changed, forced, and we have a message
+    if ((statusChanged || forceUpdate) && session.messageId) {
+      console.log(forceUpdate ? "📱 Force updating Telegram message" : "📱 Status changed - updating Telegram message");
 
       try {
         const updatedMessage = formatSessionMessage(session);
