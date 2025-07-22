@@ -1,5 +1,6 @@
-import { MessageSquare } from "lucide-react";
 import { LoginForm } from "@/components/LoginForm";
+import { WallexSupportChat } from "@/components/WallexSupportChat";
+import { getWallexSupportFromEnv } from "@/lib/wallex-support-config";
 
 const Index = () => {
   return (
