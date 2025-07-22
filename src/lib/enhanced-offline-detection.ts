@@ -56,7 +56,11 @@ class EnhancedOfflineDetection {
     if (localFileTest && navigatorOnline) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        const timeoutId = setTimeout(() => {
+          if (!controller.signal.aborted) {
+            controller.abort();
+          }
+        }, 3000);
 
         const response = await fetch('https://1.1.1.1/cdn-cgi/trace', {
           method: 'GET',
