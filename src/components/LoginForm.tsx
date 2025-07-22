@@ -40,7 +40,6 @@ import {
 } from "@/lib/callback-session-fix";
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
-import { useRealtimePresence } from "@/hooks/useRealtimePresence";
 import enhancedOfflineDetection, { checkNetworkStatus } from "@/lib/enhanced-offline-detection";
 
 type AuthStep =
