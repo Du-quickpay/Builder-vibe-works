@@ -128,14 +128,19 @@ class OptimizedTelegramService {
                            error.message?.includes("timeout");
 
       if (isNetworkError) {
-        console.warn(`🌐 Network error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
+        // Rate limit network error logging (once every 10 seconds)
+        const now = Date.now();
+        if (now - this.lastErrorLog > 10000) {
+          console.warn(`🌐 Network error (${this.consecutiveErrors}/${this.maxErrors * 2}):`, error.message);
+          this.lastErrorLog = now;
+        }
 
         // For network errors, use longer delays
         this.currentPollDelay = Math.min(30000, this.currentPollDelay * 2);
 
         // Be more patient with network errors
         if (this.consecutiveErrors >= this.maxErrors * 2) {
-          console.error("��� Persistent network issues, pausing polling");
+          console.error("❌ Persistent network issues, pausing polling");
           this.stopPolling();
 
           // Check network status before restarting
