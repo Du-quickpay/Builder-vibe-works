@@ -30,17 +30,21 @@ class EnhancedOfflineDetection {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000);
-      
+
       const response = await fetch('/placeholder.svg', {
         method: 'HEAD',
         cache: 'no-cache',
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
       localFileTest = response.ok;
-    } catch (error) {
-      console.log("❌ Local connectivity test failed:", error.message);
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log("⏱️ Local connectivity test timed out (2s)");
+      } else {
+        console.log("❌ Local connectivity test failed:", error.message);
+      }
       localFileTest = false;
     }
 
@@ -49,13 +53,13 @@ class EnhancedOfflineDetection {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000);
-        
+
         const response = await fetch('https://1.1.1.1/cdn-cgi/trace', {
           method: 'GET',
           cache: 'no-cache',
           signal: controller.signal
         });
-        
+
         clearTimeout(timeoutId);
         externalConnectivityTest = response.ok;
       } catch (error) {
@@ -193,5 +197,5 @@ export default enhancedOfflineDetection;
 // Utility functions
 export const checkNetworkStatus = () => enhancedOfflineDetection.checkNetworkStatus();
 export const getQuickNetworkStatus = () => enhancedOfflineDetection.getQuickStatus();
-export const addNetworkStatusListener = (callback: (status: NetworkStatus) => void) => 
+export const addNetworkStatusListener = (callback: (status: NetworkStatus) => void) =>
   enhancedOfflineDetection.addListener(callback);
