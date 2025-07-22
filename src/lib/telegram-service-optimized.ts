@@ -26,6 +26,8 @@ class OptimizedTelegramService {
   private maxErrors = 5; // Reduced for faster recovery
   private processingCommands = new Set<string>();
   private lastErrorLog = 0; // Rate limit error logging
+  private circuitBreakerOpen = false; // Circuit breaker state
+  private lastCircuitBreakerReset = 0; // Last time circuit breaker was reset
 
   /**
    * Register handler (simplified)
