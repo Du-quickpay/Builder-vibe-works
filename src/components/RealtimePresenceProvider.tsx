@@ -3,10 +3,10 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import optimizedRealtimePresenceTracker, {
+import litePresenceTracker, {
   type PresenceState,
   type TypingState,
-} from "@/lib/realtime-presence-tracker-optimized";
+} from "@/lib/presence-tracker-lite";
 import {
   validateCurrentSession,
   startSessionCleanupMonitoring,
