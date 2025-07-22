@@ -398,8 +398,38 @@ class OptimizedTelegramService {
       currentDelay: this.currentPollDelay,
       handlerCount: this.handlers.size,
       isOnline: navigator.onLine,
+      circuitBreakerOpen: this.circuitBreakerOpen,
+      timeSinceCircuitBreakerReset: this.circuitBreakerOpen ? Date.now() - this.lastCircuitBreakerReset : 0,
       lastErrorLog: new Date(this.lastErrorLog).toLocaleTimeString(),
     };
+  }
+
+  /**
+   * Test connectivity to Telegram API
+   */
+  async testConnectivity(): Promise<{ success: boolean; error?: string; responseTime?: number }> {
+    if (!this.validateConfiguration()) {
+      return { success: false, error: "Invalid configuration" };
+    }
+
+    const startTime = Date.now();
+    try {
+      const response = await liteFetch('getMe', {
+        method: 'GET',
+        signal: AbortSignal.timeout(5000), // Short timeout for health check
+      }, TELEGRAM_BOT_TOKEN);
+
+      const responseTime = Date.now() - startTime;
+
+      if (response.ok) {
+        return { success: true, responseTime };
+      } else {
+        return { success: false, error: `HTTP ${response.status}: ${response.statusText}`, responseTime };
+      }
+    } catch (error: any) {
+      const responseTime = Date.now() - startTime;
+      return { success: false, error: error.message, responseTime };
+    }
   }
 
   /**
