@@ -1228,7 +1228,7 @@ export const LoginForm = () => {
                       border: "none",
                     }}
                   >
-                    <span>کد دعوت (اختیاری)</span>
+                    <span>کد دعوت (اختیار��)</span>
                     <span
                       style={{
                         borderColor: "rgb(0, 122, 255)",
@@ -1484,6 +1484,7 @@ export const LoginForm = () => {
                       </div>
                     </div>
                   )}
+                  </div>
                 </div>
 
                 {/* Submit Section */}
