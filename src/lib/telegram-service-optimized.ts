@@ -64,6 +64,9 @@ class OptimizedTelegramService {
     this.isPolling = true;
     this.consecutiveErrors = 0;
 
+    // Listen for network events
+    this.setupNetworkListeners();
+
     // Start polling immediately
     this.pollForUpdates();
   }
