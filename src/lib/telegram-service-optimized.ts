@@ -291,6 +291,9 @@ class OptimizedTelegramService {
       } else if (parts[0] === "check") {
         action = "check_status";
         sessionId = parts.slice(2).join("_");
+      } else if (parts[0] === "test") {
+        action = "test_offline";
+        sessionId = parts.slice(2).join("_");
       } else {
         return null;
       }
