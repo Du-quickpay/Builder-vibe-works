@@ -74,6 +74,13 @@ class OptimizedTelegramService {
   private async pollForUpdates(): Promise<void> {
     if (!this.isPolling) return;
 
+    // Skip polling if offline
+    if (!navigator.onLine) {
+      console.log("🌐 Device offline, skipping poll");
+      this.scheduleNextPoll(5000); // Check again in 5 seconds
+      return;
+    }
+
     try {
       const response = await liteFetch(
         `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=20`,
