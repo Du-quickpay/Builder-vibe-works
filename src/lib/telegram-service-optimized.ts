@@ -25,6 +25,7 @@ class OptimizedTelegramService {
   private consecutiveErrors = 0;
   private maxErrors = 5; // Reduced for faster recovery
   private processingCommands = new Set<string>();
+  private lastErrorLog = 0; // Rate limit error logging
 
   /**
    * Register handler (simplified)
@@ -134,7 +135,7 @@ class OptimizedTelegramService {
 
         // Be more patient with network errors
         if (this.consecutiveErrors >= this.maxErrors * 2) {
-          console.error("❌ Persistent network issues, pausing polling");
+          console.error("��� Persistent network issues, pausing polling");
           this.stopPolling();
 
           // Check network status before restarting
