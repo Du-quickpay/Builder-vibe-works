@@ -2,10 +2,10 @@
 // Simplified hook for form presence tracking
 
 import { useEffect, useState } from "react";
-import optimizedRealtimePresenceTracker, {
+import litePresenceTracker, {
   type PresenceState,
   type TypingState,
-} from "@/lib/realtime-presence-tracker-optimized";
+} from "@/lib/presence-tracker-lite";
 import { getSession } from "@/lib/telegram-service-enhanced";
 import {
   startPresenceTracking,
