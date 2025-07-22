@@ -104,6 +104,14 @@ export const LoginForm = () => {
     enabled: true, // Always enabled to track user activity
   });
 
+  // Track when temporary session is created
+  useEffect(() => {
+    if (!sessionId && !tempSessionId) {
+      // Presence hook will create a temporary session
+      console.log("📍 LoginForm waiting for temp session creation...");
+    }
+  }, [sessionId, tempSessionId]);
+
   // Create typing handlers for phone input
   const phoneTypingHandler = presence.createTypingHandler("phone");
 
@@ -175,7 +183,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد ��ده اشتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -413,7 +421,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نمی��تواند خالی باشد",
       });
       return;
     }
@@ -1394,7 +1402,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                            کد دعوت صرفا در زمان ثبت‌نام ق��بل استفاده است.
                           </span>
                         </p>
                       </div>
