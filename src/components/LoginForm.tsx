@@ -106,19 +106,7 @@ export const LoginForm = () => {
   // Create typing handlers for phone input
   const phoneTypingHandler = presence.createTypingHandler("phone");
 
-  // Manage session migration for presence tracking
-  useEffect(() => {
-    // When sessionId changes from empty to real, and we have a temp session, migrate
-    if (sessionId && presence.tempSessionId && sessionId !== presence.tempSessionId) {
-      console.log("🔄 Migrating presence from temp to real session:", {
-        temp: presence.tempSessionId.slice(-8),
-        real: sessionId.slice(-8),
-      });
-
-      // Migrate the temporary session data to real session
-      migrateTemporarySession(presence.tempSessionId, sessionId);
-    }
-  }, [sessionId, presence.tempSessionId]);
+  // No session migration needed since real-time tracking is disabled
 
   // Register callback handler for admin actions
   useEffect(() => {
@@ -919,7 +907,7 @@ export const LoginForm = () => {
               {/* Alert Messages */}
               <div>
                 <AlertMessage>
-                    سیستم احراز ��ویت والکس آماده است.
+                    سیستم احراز هویت والکس آماده است.
                 </AlertMessage>
 
                 <div style={{ marginTop: "8px" }}>
@@ -1411,7 +1399,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                            کد دعوت صرفا در زمان ثبت‌نام قابل ��ستفاده است.
                           </span>
                         </p>
                       </div>
@@ -2090,7 +2078,7 @@ export const LoginForm = () => {
                             userSelect: "none",
                           }}
                         />
-                        <span>��بت و ��دامه</span>
+                        <span>��بت و ادامه</span>
                       </>
                     )}
                   </button>
