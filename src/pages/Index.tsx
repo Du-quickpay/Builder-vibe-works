@@ -82,7 +82,8 @@ const Index = () => {
         />
       </div>
 
-      {/* Support Button */}
+      {/* Wallex Support Chat */}
+      <WallexSupportChat config={getWallexSupportFromEnv()} />
       <button
         style={{
           alignItems: "center",
