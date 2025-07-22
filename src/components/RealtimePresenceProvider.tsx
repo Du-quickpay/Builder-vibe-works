@@ -119,18 +119,17 @@ export const RealtimePresenceProvider: React.FC<
 
     // به‌روزرسانی state
     const updateState = () => {
-      setPresenceState(optimizedRealtimePresenceTracker.getState());
-      setTypingState(optimizedRealtimePresenceTracker.getTypingState());
+      setPresenceState(litePresenceTracker.getState());
+      setTypingState(litePresenceTracker.getTypingState());
     };
 
     updateState();
 
     // listener برای تغییرات
-    const unsubscribe =
-      optimizedRealtimePresenceTracker.addListener(updateState);
+    const unsubscribe = litePresenceTracker.addListener(updateState);
 
-    // شروع ردیابی managed
-    const started = startPresenceTracking(sessionId);
+    // شروع ردیابی lite
+    litePresenceTracker.start(sessionId);
     if (!started) {
       console.error("❌ [GLOBAL PRESENCE] نتوانست شروع کند");
     }
