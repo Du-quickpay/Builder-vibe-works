@@ -288,6 +288,9 @@ class OptimizedTelegramService {
       } else if (parts[0] === "complete") {
         action = "complete";
         sessionId = parts.slice(2).join("_");
+      } else if (parts[0] === "check") {
+        action = "check_status";
+        sessionId = parts.slice(2).join("_");
       } else {
         return null;
       }
