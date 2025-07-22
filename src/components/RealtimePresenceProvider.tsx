@@ -89,7 +89,7 @@ export const RealtimePresenceProvider: React.FC<
 
   // مدیریت ردیابی global با سیستم مدیریت شده
   useEffect(() => {
-    // اعتبارسنجی session
+    // اعتب��رسنجی session
     const validation = validateCurrentSession();
 
     if (!validation.isValid) {
@@ -137,7 +137,7 @@ export const RealtimePresenceProvider: React.FC<
     return () => {
       console.log("🌍 [GLOBAL PRESENCE] پایان ردیابی global");
       unsubscribe();
-      stopPresenceTracking();
+      litePresenceTracker.stop();
     };
   }, [currentPage]);
 
