@@ -238,7 +238,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنلاین است اما صفحه hidden است
+            // ��اربر آنلاین است اما صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -584,7 +584,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل الزامی است" });
+      setErrors({ email: "ایمی�� الزامی است" });
       return;
     }
 
@@ -681,8 +681,7 @@ export const LoginForm = () => {
       setErrors((prev) => ({ ...prev, mobileNumber: undefined }));
     }
 
-    // تشخیص تایپ برای presence system
-    phoneTypingHandler.onKeyDown();
+    // Typing detection removed - only manual status check
   };
 
   const handleBack = () => {
