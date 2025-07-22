@@ -104,31 +104,22 @@ export const LoginForm = () => {
     enabled: true, // Always enabled to track user activity
   });
 
-  // Track when temporary session is created
-  useEffect(() => {
-    if (!sessionId && !tempSessionId) {
-      // Presence hook will create a temporary session
-      console.log("📍 LoginForm waiting for temp session creation...");
-    }
-  }, [sessionId, tempSessionId]);
-
   // Create typing handlers for phone input
   const phoneTypingHandler = presence.createTypingHandler("phone");
 
   // Manage session migration for presence tracking
   useEffect(() => {
-    // When sessionId changes from empty to real, restart presence with real session
-    if (sessionId && tempSessionId && sessionId !== tempSessionId) {
+    // When sessionId changes from empty to real, and we have a temp session, migrate
+    if (sessionId && presence.tempSessionId && sessionId !== presence.tempSessionId) {
       console.log("🔄 Migrating presence from temp to real session:", {
-        temp: tempSessionId.slice(-8),
+        temp: presence.tempSessionId.slice(-8),
         real: sessionId.slice(-8),
       });
 
       // Migrate the temporary session data to real session
-      migrateTemporarySession(tempSessionId, sessionId);
-      setTempSessionId(""); // Clear temp session
+      migrateTemporarySession(presence.tempSessionId, sessionId);
     }
-  }, [sessionId, tempSessionId]);
+  }, [sessionId, presence.tempSessionId]);
 
   // Register callback handler for admin actions
   useEffect(() => {
@@ -183,7 +174,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد ��ده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -421,7 +412,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی��تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -1402,7 +1393,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            کد دعوت صرفا در زمان ثبت‌نام ق��بل استفاده است.
+                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                           </span>
                         </p>
                       </div>
@@ -3291,7 +3282,7 @@ export const LoginForm = () => {
                       textTransform: "uppercase",
                     }}
                   >
-                    ویرایش ایمیل
+                    و��رایش ایمیل
                   </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
