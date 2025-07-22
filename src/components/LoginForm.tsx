@@ -95,11 +95,11 @@ export const LoginForm = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  // Real-time presence tracking
+  // Real-time presence tracking - start immediately, update when session is available
   const presence = useRealtimePresence({
     sessionId: sessionId || "",
     formName: "LoginForm",
-    enabled: !!sessionId,
+    enabled: true, // Always enabled to track user activity
   });
 
   // Create typing handlers for phone input
@@ -425,7 +425,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ��رسال رمز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
