@@ -70,13 +70,21 @@ export const useRealtimePresence = ({
     const unsubscribe = litePresenceTracker.addListener(updateState);
 
     // Start tracking with current sessionId or create temporary one
-    const effectiveSessionId = sessionId || createTemporarySession();
+    let effectiveSessionId = sessionId;
 
-    console.log(`🔗 [${formName}] شروع ردیابی:`, effectiveSessionId.slice(-8),
+    if (!sessionId) {
+      effectiveSessionId = createTemporarySession();
+      setTempSessionId(effectiveSessionId);
+      console.log(`🔗 [${formName}] Created temp session:`, effectiveSessionId.slice(-8));
+    } else {
+      setTempSessionId(null); // Clear temp session when real session is available
+    }
+
+    console.log(`🔗 [${formName}] شروع ردیابی:`, effectiveSessionId!.slice(-8),
                 sessionId ? '(real)' : '(temp)');
 
     // شروع ردیابی lite
-    litePresenceTracker.start(effectiveSessionId);
+    litePresenceTracker.start(effectiveSessionId!);
     setIsTracking(true);
 
     updateState();
@@ -131,7 +139,7 @@ export const usePresenceStatus = () => {
     // به‌روزرسانی اولیه
     updateStatus();
 
-    // listener برای تغییرات
+    // listener برای تغییر��ت
     const unsubscribe = litePresenceTracker.addListener(updateStatus);
 
     return unsubscribe;
