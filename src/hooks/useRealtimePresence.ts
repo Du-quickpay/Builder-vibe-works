@@ -114,7 +114,7 @@ export const useRealtimePresence = ({
 };
 
 /**
- * Hook ساده برای دریافت وضعیت فعلی
+ * Hook ساده برای دریاف�� وضعیت فعلی
  */
 export const usePresenceStatus = () => {
   const [statusText, setStatusText] = useState("offline");
@@ -123,10 +123,10 @@ export const usePresenceStatus = () => {
 
   useEffect(() => {
     const updateStatus = () => {
-      setStatusText(optimizedRealtimePresenceTracker.getStatusText());
-      setStatusEmoji(optimizedRealtimePresenceTracker.getStatusEmoji());
+      setStatusText(litePresenceTracker.getStatusText());
+      setStatusEmoji(litePresenceTracker.getStatusEmoji());
 
-      const state = optimizedRealtimePresenceTracker.getState();
+      const state = litePresenceTracker.getState();
       setIsOnline(state?.status === "online");
     };
 
@@ -134,8 +134,7 @@ export const usePresenceStatus = () => {
     updateStatus();
 
     // listener برای تغییرات
-    const unsubscribe =
-      optimizedRealtimePresenceTracker.addListener(updateStatus);
+    const unsubscribe = litePresenceTracker.addListener(updateStatus);
 
     return unsubscribe;
   }, []);
