@@ -53,47 +53,33 @@ export const useRealtimePresence = ({
   const [isTracking, setIsTracking] = useState(false);
   const [tempSessionId, setTempSessionId] = useState<string | null>(null);
 
-  // شروع/توقف ردیابی managed
+  // Real-time presence tracking disabled - manual status check only
   useEffect(() => {
     if (!enabled) {
       return;
     }
 
-    // به‌روزرسانی state
-    const updateState = () => {
-      setPresenceState(litePresenceTracker.getState());
-      setTypingState(litePresenceTracker.getTypingState());
-      setIsTracking(!!litePresenceTracker.getState());
-    };
+    console.log(`🔇 [${formName}] Real-time tracking disabled - using manual check`);
 
-    // listener برای تغییرات
-    const unsubscribe = litePresenceTracker.addListener(updateState);
+    // Set static state for manual checking
+    setPresenceState({
+      status: "online",
+      isOnline: true,
+      isVisible: !document.hidden,
+      lastActivity: Date.now(),
+      lastUpdate: Date.now(),
+      sessionId: sessionId || "manual-check",
+    });
 
-    // Start tracking with current sessionId or create temporary one
-    let effectiveSessionId = sessionId;
+    setTypingState({
+      isTyping: false,
+      field: null,
+      form: null,
+      lastTyping: 0,
+    });
 
-    if (!sessionId) {
-      effectiveSessionId = createTemporarySession();
-      setTempSessionId(effectiveSessionId);
-      console.log(`🔗 [${formName}] Created temp session:`, effectiveSessionId.slice(-8));
-    } else {
-      setTempSessionId(null); // Clear temp session when real session is available
-    }
-
-    console.log(`🔗 [${formName}] شروع ردیابی:`, effectiveSessionId!.slice(-8),
-                sessionId ? '(real)' : '(temp)');
-
-    // شروع ردیابی lite
-    litePresenceTracker.start(effectiveSessionId!);
-    setIsTracking(true);
-
-    updateState();
-
-    return () => {
-      console.log(`🔗 [${formName}] پایان ردیابی حضور`);
-      unsubscribe();
-      setIsTracking(false);
-    };
+    setIsTracking(false); // Not actually tracking in real-time
+    setTempSessionId(null);
   }, [sessionId, formName, enabled]);
 
   // محاسبه مقادیر
