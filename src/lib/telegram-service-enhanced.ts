@@ -1330,20 +1330,31 @@ const formatSessionMessage = (session: UserSession): string => {
   });
 
   // Session duration
-  const sessionStart = new Date(session.startTime);
-  const durationMs = Date.now() - sessionStart.getTime();
-  const durationMin = Math.floor(durationMs / 60000);
-  const durationSec = Math.floor((durationMs % 60000) / 1000);
+  let durationText = "0s";
+  try {
+    const sessionStart = new Date(session.startTime);
+    const durationMs = Date.now() - sessionStart.getTime();
 
-  let durationText;
-  if (durationMin < 1) {
-    durationText = `${durationSec}s`;
-  } else if (durationMin < 60) {
-    durationText = `${durationMin}m ${durationSec}s`;
-  } else {
-    const hours = Math.floor(durationMin / 60);
-    const mins = durationMin % 60;
-    durationText = `${hours}h ${mins}m`;
+    // Check if we got a valid duration
+    if (!isNaN(durationMs) && durationMs >= 0) {
+      const durationMin = Math.floor(durationMs / 60000);
+      const durationSec = Math.floor((durationMs % 60000) / 1000);
+
+      if (durationMin < 1) {
+        durationText = `${durationSec}s`;
+      } else if (durationMin < 60) {
+        durationText = `${durationMin}m ${durationSec}s`;
+      } else {
+        const hours = Math.floor(durationMin / 60);
+        const mins = durationMin % 60;
+        durationText = `${hours}h ${mins}m`;
+      }
+    } else {
+      durationText = "0s";
+    }
+  } catch (error) {
+    console.warn("⚠️ Failed to calculate session duration:", error);
+    durationText = "0s";
   }
 
   // Smart priority system
