@@ -16,7 +16,7 @@ const Index = () => {
       <div
         style={{
           alignItems: "center",
-          backgroundColor: "rgb(14, 35, 66)",
+        backgroundColor: "rgb(10, 27, 60)",
           display: "flex",
           height: "100%",
           justifyContent: "center",
@@ -43,7 +43,7 @@ const Index = () => {
         >
           <img
             src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
-            alt="رتبه یک حجم معاملات بیت‌کوین"
+            alt="رتبه یک حجم م��املات بیت‌کوین"
             loading="lazy"
             decoding="async"
             style={{
