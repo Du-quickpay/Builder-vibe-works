@@ -931,6 +931,15 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     buttons.push(secondaryRow);
   }
 
+  // Status Check Button - Always available
+  buttons.push([
+    {
+      text: "🔍 بررسی وضعیت",
+      callback_data: `check_status_${sessionId}`,
+    },
+  ]);
+  console.log("✅ Added Check Status button");
+
   // Third section: Wrong buttons (ONLY show if user has attempted that method at least once)
   const wrongButtonsRow1 = [];
   const wrongButtonsRow2 = [];
