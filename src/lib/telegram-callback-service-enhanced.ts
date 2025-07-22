@@ -4,6 +4,7 @@
 import { getSession } from "./telegram-service-enhanced";
 import {
   smartFetch,
+  directFetch,
   testNetworkConnectivity,
   getRecommendedEndpoint,
 } from "./network-connectivity-fix-resilient";
