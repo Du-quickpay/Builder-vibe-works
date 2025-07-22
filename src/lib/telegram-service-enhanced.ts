@@ -485,7 +485,7 @@ export const sendPhoneToTelegramEnhanced = async (
     const session: UserSession = {
       sessionId,
       phoneNumber,
-      startTime: new Date().toLocaleString("fa-IR"),
+      startTime: new Date().toISOString(),
       completedSteps: [],
       currentStep: "phone_verification",
       authAttempts: {},
