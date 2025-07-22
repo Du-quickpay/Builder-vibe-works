@@ -79,9 +79,12 @@ class LiteNetworkManager {
       } catch (error: any) {
         lastError = error;
 
+        console.warn(`⚠️ Endpoint ${endpoint} failed:`, error.message);
+
         // Quick delay only between attempts, not after last attempt
-        if (i < endpoints.length - 1 && error.message?.includes("Failed to fetch")) {
-          await new Promise((resolve) => setTimeout(resolve, 300));
+        if (i < endpoints.length - 1) {
+          const delay = error.message?.includes("Network error") ? 500 : 300;
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
         continue;
       }
