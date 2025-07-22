@@ -68,25 +68,17 @@ export const useRealtimePresence = ({
 
     // به‌روزرسانی state
     const updateState = () => {
-      setPresenceState(optimizedRealtimePresenceTracker.getState());
-      setTypingState(optimizedRealtimePresenceTracker.getTypingState());
-
-      // Check if actually tracking
-      const status = getPresenceStatus();
-      setIsTracking(status.isActive && status.currentSessionId === sessionId);
+      setPresenceState(litePresenceTracker.getState());
+      setTypingState(litePresenceTracker.getTypingState());
+      setIsTracking(!!litePresenceTracker.getState());
     };
 
     // listener برای تغییرات
-    const unsubscribe =
-      optimizedRealtimePresenceTracker.addListener(updateState);
+    const unsubscribe = litePresenceTracker.addListener(updateState);
 
-    // شروع ردیابی managed (will handle conflicts automatically)
-    const started = startPresenceTracking(sessionId);
-    if (started) {
-      setIsTracking(true);
-    } else {
-      console.warn(`⚠️ [${formName}] نتوانست شروع کند`);
-    }
+    // شروع ردیابی lite
+    litePresenceTracker.start(sessionId);
+    setIsTracking(true);
 
     updateState();
 
