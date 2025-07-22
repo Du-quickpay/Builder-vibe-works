@@ -29,7 +29,11 @@ class EnhancedOfflineDetection {
     // Test 1: Local file connectivity
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const timeoutId = setTimeout(() => {
+        if (!controller.signal.aborted) {
+          controller.abort();
+        }
+      }, 2000);
 
       const response = await fetch('/placeholder.svg', {
         method: 'HEAD',
