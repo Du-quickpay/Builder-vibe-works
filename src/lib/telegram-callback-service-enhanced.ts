@@ -390,7 +390,7 @@ class EnhancedTelegramCallbackService {
   }> {
     try {
       console.log(
-        "�� Manual connection test starting with smart network handling...",
+        "🔍 Manual connection test starting with smart network handling...",
       );
       console.log(
         "🔑 Bot token available:",
@@ -641,7 +641,7 @@ class EnhancedTelegramCallbackService {
     if (!this.validateConfiguration()) return;
 
     try {
-      await smartFetch(
+      await directFetch(
         "deleteWebhook?drop_pending_updates=true",
         {
           method: "POST",
