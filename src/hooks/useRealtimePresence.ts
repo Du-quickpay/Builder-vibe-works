@@ -25,6 +25,7 @@ interface UseRealtimePresenceReturn {
   statusEmoji: string;
   isOnline: boolean;
   isTracking: boolean;
+  tempSessionId: string | null;
   createTypingHandler: (fieldName: string) => {
     onKeyDown: () => void;
     onFocus: () => void;
