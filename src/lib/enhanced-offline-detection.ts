@@ -215,6 +215,32 @@ class EnhancedOfflineDetection {
       }
     });
   }
+
+  /**
+   * Helper method to create network status object
+   */
+  private createOfflineStatus(
+    navigatorOnline: boolean,
+    localFileTest: boolean,
+    externalConnectivityTest: boolean,
+    connectionAPI: boolean | null
+  ): NetworkStatus {
+    const status: NetworkStatus = {
+      isOnline: false,
+      connectionType: 'offline',
+      timestamp: Date.now(),
+      testResults: {
+        navigatorOnline,
+        localFileTest,
+        externalConnectivityTest,
+        connectionAPI,
+      },
+    };
+
+    this.lastKnownStatus = status;
+    this.notifyListeners(status);
+    return status;
+  }
 }
 
 // Export singleton instance
