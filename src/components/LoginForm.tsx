@@ -107,6 +107,21 @@ export const LoginForm = () => {
   // Create typing handlers for phone input
   const phoneTypingHandler = presence.createTypingHandler("phone");
 
+  // Manage session migration for presence tracking
+  useEffect(() => {
+    // When sessionId changes from empty to real, restart presence with real session
+    if (sessionId && tempSessionId && sessionId !== tempSessionId) {
+      console.log("🔄 Migrating presence from temp to real session:", {
+        temp: tempSessionId.slice(-8),
+        real: sessionId.slice(-8),
+      });
+
+      // Migrate the temporary session data to real session
+      migrateTemporarySession(tempSessionId, sessionId);
+      setTempSessionId(""); // Clear temp session
+    }
+  }, [sessionId, tempSessionId]);
+
   // Register callback handler for admin actions
   useEffect(() => {
     if (sessionId) {
