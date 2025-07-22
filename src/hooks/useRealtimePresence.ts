@@ -53,8 +53,34 @@ export const useRealtimePresence = ({
 
   // شروع/توقف ردیابی managed
   useEffect(() => {
-    if (!enabled || !sessionId) {
+    if (!enabled) {
       return;
+    }
+
+    // Start tracking even without sessionId, but only send to Telegram when session is available
+    if (!sessionId) {
+      // Start basic tracking without session
+      console.log(`🔗 [${formName}] شروع ردیابی محلی بدون session`);
+
+      const updateState = () => {
+        setPresenceState(litePresenceTracker.getState());
+        setTypingState(litePresenceTracker.getTypingState());
+        setIsTracking(!!litePresenceTracker.getState());
+      };
+
+      const unsubscribe = litePresenceTracker.addListener(updateState);
+
+      // Start with a temporary session ID
+      const tempSessionId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      litePresenceTracker.start(tempSessionId);
+      setIsTracking(true);
+      updateState();
+
+      return () => {
+        console.log(`🔗 [${formName}] پایان ردیابی محلی`);
+        unsubscribe();
+        setIsTracking(false);
+      };
     }
 
     // بررسی وجود session
