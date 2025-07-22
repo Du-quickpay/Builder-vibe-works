@@ -752,7 +752,7 @@ export const LoginForm = () => {
               lineHeight: "1.5",
             }}
           >
-            لطفا صبر کنید
+            لطفا صبر کن��د
           </p>
         </div>
 
@@ -1177,107 +1177,121 @@ export const LoginForm = () => {
                   </p>
                 </div>
 
-                {/* Invite Code Toggle Button */}
-                <button
-                  tabIndex={0}
-                  type="button"
-                  onClick={() => setShowInviteCode(!showInviteCode)}
+                {/* Invite Code Section */}
+                <div
                   style={{
-                    alignItems: "center",
-                    borderBottomLeftRadius: "8px",
-                    borderBottomRightRadius: "8px",
-                    borderColor: "rgb(0, 122, 255)",
-                    borderRadius: "8px",
-                    borderTopLeftRadius: "8px",
-                    borderTopRightRadius: "8px",
-                    color: "rgb(0, 122, 255)",
-                    cursor: "pointer",
-                    display: "inline-flex",
-                    fontSize: "12px",
-                    justifyContent: "center",
-                    lineHeight: "20.004px",
-                    marginBottom: "4px",
-                    outlineColor: "rgb(0, 122, 255)",
-                    paddingBottom: "4px",
-                    paddingTop: "4px",
-                    position: "relative",
-                    textAlign: "center",
-                    textDecorationColor: "rgb(0, 122, 255)",
-                    textEmphasisColor: "rgb(0, 122, 255)",
-                    textTransform: "uppercase",
-                    transitionBehavior: "normal, normal, normal",
-                    transitionDelay: "0s, 0s, 0s",
-                    transitionDuration: "0.25s, 0.25s, 0.25s",
-                    transitionProperty:
-                      "background-color, box-shadow, border-color",
-                    transitionTimingFunction:
-                      "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
-                    userSelect: "none",
-                    verticalAlign: "middle",
-                    backgroundColor: "rgba(0, 0, 0, 0)",
-                    border: "none",
+                    alignItems: "flex-start",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px",
+                    gridGap: "4px",
+                    gridRowGap: "4px",
+                    rowGap: "4px",
                   }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    focusable="false"
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
+                  <button
+                    tabIndex={0}
+                    type="button"
+                    onClick={() => setShowInviteCode(!showInviteCode)}
                     style={{
+                      alignItems: "center",
+                      borderBottomLeftRadius: "8px",
+                      borderBottomRightRadius: "8px",
                       borderColor: "rgb(0, 122, 255)",
+                      borderRadius: "8px",
+                      borderTopLeftRadius: "8px",
+                      borderTopRightRadius: "8px",
                       color: "rgb(0, 122, 255)",
                       cursor: "pointer",
-                      fill: "rgb(0, 122, 255)",
-                      flexShrink: "0",
-                      height: "24px",
-                      lineHeight: "26.672px",
-                      marginLeft: "4px",
-                      outlineColor: "rgb(0, 122, 255)",
-                      overflowClipMargin: "content-box",
-                      overflowX: "hidden",
-                      overflowY: "hidden",
-                      textAlign: "center",
-                      textDecorationColor: "rgb(0, 122, 255)",
-                      textEmphasisColor: "rgb(0, 122, 255)",
-                      textTransform: "uppercase",
-                      transitionDuration: "0.2s",
-                      transitionProperty: "fill",
-                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-                      userSelect: "none",
-                      width: "24px",
-                      transform: showInviteCode
-                        ? "rotate(180deg)"
-                        : "rotate(0deg)",
-                      transition: "transform 0.2s",
-                    }}
-                  >
-                    <path
-                      fill="currentColor"
-                      d="m13.98 5.32-3.21 3.21-1.97 1.96a2.13 2.13 0 0 0 0 3.01l5.18 5.18c.68.68 1.84.19 1.84-.76V6.08c0-.96-1.16-1.44-1.84-.76"
-                    ></path>
-                  </svg>
-                  <span
-                    style={{
-                      borderColor: "rgb(0, 122, 255)",
-                      color: "rgb(0, 122, 255)",
-                      cursor: "pointer",
+                      display: "flex",
                       fontSize: "14px",
-                      fontWeight: "500",
+                      fontWeight: "700",
+                      justifyContent: "center",
                       lineHeight: "24.01px",
                       outlineColor: "rgb(0, 122, 255)",
+                      paddingLeft: "0px",
+                      paddingRight: "0px",
+                      position: "relative",
                       textAlign: "center",
                       textDecorationColor: "rgb(0, 122, 255)",
                       textEmphasisColor: "rgb(0, 122, 255)",
                       textTransform: "uppercase",
+                      transitionBehavior: "normal, normal, normal",
+                      transitionDelay: "0s, 0s, 0s",
+                      transitionDuration: "0.25s, 0.25s, 0.25s",
+                      transitionProperty: "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
                       userSelect: "none",
+                      verticalAlign: "middle",
+                      backgroundColor: "rgba(0, 0, 0, 0)",
+                      border: "none",
                     }}
                   >
-                    کد دعوت دارید؟
-                  </span>
-                </button>
+                    <span>کد دعوت (اختیاری)</span>
+                    <span
+                      style={{
+                        borderColor: "rgb(0, 122, 255)",
+                        color: "rgb(0, 122, 255)",
+                        cursor: "pointer",
+                        display: "flex",
+                        fontSize: "14px",
+                        fontWeight: "700",
+                        lineHeight: "24.01px",
+                        marginLeft: "-4px",
+                        marginRight: "2px",
+                        outlineColor: "rgb(0, 122, 255)",
+                        textAlign: "center",
+                        textDecorationColor: "rgb(0, 122, 255)",
+                        textEmphasisColor: "rgb(0, 122, 255)",
+                        textTransform: "uppercase",
+                        userSelect: "none",
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        focusable="false"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        style={{
+                          borderColor: "rgb(0, 122, 255)",
+                          color: "rgb(0, 122, 255)",
+                          cursor: "pointer",
+                          fill: "rgb(0, 122, 255)",
+                          flexShrink: "0",
+                          fontSize: "24px",
+                          fontWeight: "700",
+                          height: "24px",
+                          lineHeight: "41.16px",
+                          outlineColor: "rgb(0, 122, 255)",
+                          overflowClipMargin: "content-box",
+                          overflowX: "hidden",
+                          overflowY: "hidden",
+                          textAlign: "center",
+                          textDecorationColor: "rgb(0, 122, 255)",
+                          textEmphasisColor: "rgb(0, 122, 255)",
+                          textTransform: "uppercase",
+                          transitionDuration: "0.2s",
+                          transitionProperty: "fill",
+                          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                          userSelect: "none",
+                          width: "24px",
+                          transform: showInviteCode ? "rotate(180deg)" : "rotate(0deg)",
+                          transition: "transform 0.2s",
+                        }}
+                      >
+                        <path
+                          fill="currentColor"
+                          fillRule="evenodd"
+                          d="M7.293 9.293a1 1 0 0 1 1.414 0L12 12.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  </button>
 
                 {/* Invite Code Section */}
                 <div
@@ -1954,7 +1968,7 @@ export const LoginForm = () => {
                   {countdown > 0 ? (
                     <>
                       <span>{toPersianDigits(countdown)}</span>
-                      <span> ثانیه تا ارسال مجدد کد</span>
+                      <span> ثان��ه تا ارسال مجدد کد</span>
                     </>
                   ) : (
                     <button
