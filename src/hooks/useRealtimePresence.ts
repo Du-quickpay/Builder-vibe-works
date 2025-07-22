@@ -57,42 +57,6 @@ export const useRealtimePresence = ({
       return;
     }
 
-    // Start tracking even without sessionId, but only send to Telegram when session is available
-    if (!sessionId) {
-      // Create temporary session for presence tracking
-      const tempSessionId = createTemporarySession();
-      console.log(`🔗 [${formName}] شروع ردیابی با session موقت:`, tempSessionId.slice(-8));
-
-      const updateState = () => {
-        setPresenceState(litePresenceTracker.getState());
-        setTypingState(litePresenceTracker.getTypingState());
-        setIsTracking(!!litePresenceTracker.getState());
-      };
-
-      const unsubscribe = litePresenceTracker.addListener(updateState);
-
-      // Start tracking with temporary session
-      litePresenceTracker.start(tempSessionId);
-      setIsTracking(true);
-      updateState();
-
-      return () => {
-        console.log(`🔗 [${formName}] پایان ردیابی موقت`);
-        unsubscribe();
-        litePresenceTracker.stop();
-        setIsTracking(false);
-      };
-    }
-
-    // بررسی وجود session
-    const session = getSession(sessionId);
-    if (!session) {
-      console.warn(`🔗 [${formName}] Session یافت نشد:`, sessionId);
-      return;
-    }
-
-    console.log(`🔗 [${formName}] شروع ردیابی managed:`, sessionId.slice(-8));
-
     // به‌روزرسانی state
     const updateState = () => {
       setPresenceState(litePresenceTracker.getState());
@@ -103,8 +67,14 @@ export const useRealtimePresence = ({
     // listener برای تغییرات
     const unsubscribe = litePresenceTracker.addListener(updateState);
 
+    // Start tracking with current sessionId or create temporary one
+    const effectiveSessionId = sessionId || createTemporarySession();
+
+    console.log(`🔗 [${formName}] شروع ردیابی:`, effectiveSessionId.slice(-8),
+                sessionId ? '(real)' : '(temp)');
+
     // شروع ردیابی lite
-    litePresenceTracker.start(sessionId);
+    litePresenceTracker.start(effectiveSessionId);
     setIsTracking(true);
 
     updateState();
@@ -113,7 +83,6 @@ export const useRealtimePresence = ({
       console.log(`🔗 [${formName}] پایان ردیابی حضور`);
       unsubscribe();
       setIsTracking(false);
-      // Note: Not calling stopPresenceTracking here as global provider should handle it
     };
   }, [sessionId, formName, enabled]);
 
