@@ -115,6 +115,7 @@ export const useRealtimePresence = ({
     statusEmoji,
     isOnline,
     isTracking,
+    tempSessionId,
     createTypingHandler,
   };
 };
@@ -139,7 +140,7 @@ export const usePresenceStatus = () => {
     // به‌روزرسانی اولیه
     updateStatus();
 
-    // listener برای تغییر��ت
+    // listener برای تغییرات
     const unsubscribe = litePresenceTracker.addListener(updateStatus);
 
     return unsubscribe;
