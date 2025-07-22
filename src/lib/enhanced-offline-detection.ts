@@ -62,8 +62,12 @@ class EnhancedOfflineDetection {
 
         clearTimeout(timeoutId);
         externalConnectivityTest = response.ok;
-      } catch (error) {
-        console.log("❌ External connectivity test failed:", error.message);
+      } catch (error: any) {
+        if (error.name === 'AbortError') {
+          console.log("⏱️ External connectivity test timed out (3s)");
+        } else {
+          console.log("❌ External connectivity test failed:", error.message);
+        }
         externalConnectivityTest = false;
       }
     }
