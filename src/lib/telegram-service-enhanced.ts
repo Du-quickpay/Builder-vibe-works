@@ -405,6 +405,7 @@ export const updateUserOnlineStatus = async (
       previousOnline,
       currentOnline: isOnline,
       statusChanged,
+      forceUpdate,
       hasMessageId: !!session.messageId,
       currentStep: session.currentStep,
     });
@@ -478,7 +479,7 @@ export const sendPhoneToTelegramEnhanced = async (
   // Check if Telegram is configured
   if (!validateTelegramConfig()) {
     console.log("🎭 Demo mode: Would send phone to Telegram");
-    console.log("�� Phone:", phoneNumber);
+    console.log("📱 Phone:", phoneNumber);
     console.log("🆔 Session:", sessionId);
 
     // Create session for demo mode
