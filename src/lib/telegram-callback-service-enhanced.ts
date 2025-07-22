@@ -609,7 +609,7 @@ class EnhancedTelegramCallbackService {
     if (!this.validateConfiguration()) return;
 
     try {
-      await smartFetch(
+      await directFetch(
         "answerCallbackQuery",
         {
           method: "POST",
