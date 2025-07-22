@@ -250,6 +250,14 @@ export const LoginForm = () => {
 
         const isVisible = !document.hidden;
 
+        // اول یک simple test کنیم
+        console.log("🧪 Simple status test:", {
+          navigatorOnline: navigator.onLine,
+          documentHidden: document.hidden,
+          isVisible,
+          userAgent: navigator.userAgent.slice(0, 30),
+        });
+
         // استفاده از Enhanced Network Status Check
         console.log("🌐 Starting enhanced network status check...");
         checkNetworkStatus().then((networkStatus) => {
@@ -500,7 +508,7 @@ export const LoginForm = () => {
                   handleAdminAction("google");
                   break;
                 case "3":
-                  console.log("🎭 Demo admin chose: Email");
+                  console.log("�� Demo admin chose: Email");
                   handleAdminAction("email");
                   break;
                 default:
@@ -1609,7 +1617,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ارسال کد...</span>
+                        <span>در حال ارسال ��د...</span>
                       </div>
                     ) : (
                       <span>ثبت و ادامه</span>
@@ -2250,7 +2258,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور حساب را وارد کنید.
+                    رمز ��بور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
@@ -2573,7 +2581,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فر��موش ک��ده‌اید؟
+                    رمز عبور را فر��موش کرده‌اید؟
                   </p>
                   <a
                     href="#"
