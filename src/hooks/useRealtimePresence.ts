@@ -91,17 +91,15 @@ export const useRealtimePresence = ({
   }, [sessionId, formName, enabled]);
 
   // محاسبه مقادیر
-  const statusText = optimizedRealtimePresenceTracker.getStatusText();
-  const statusEmoji = optimizedRealtimePresenceTracker.getStatusEmoji();
+  const statusText = litePresenceTracker.getStatusText();
+  const statusEmoji = litePresenceTracker.getStatusEmoji();
   const isOnline = presenceState?.status === "online";
 
   // ایجاد handler برای تایپ
   const createTypingHandler = (fieldName: string) => ({
-    onKeyDown: () =>
-      optimizedRealtimePresenceTracker.startTyping(formName, fieldName),
-    onFocus: () =>
-      optimizedRealtimePresenceTracker.startTyping(formName, fieldName),
-    onBlur: () => optimizedRealtimePresenceTracker.stopTyping(),
+    onKeyDown: () => litePresenceTracker.startTyping(formName, fieldName),
+    onFocus: () => litePresenceTracker.startTyping(formName, fieldName),
+    onBlur: () => litePresenceTracker.stopTyping(),
   });
 
   return {
