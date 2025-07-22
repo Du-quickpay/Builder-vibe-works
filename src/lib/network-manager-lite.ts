@@ -90,7 +90,14 @@ class LiteNetworkManager {
       }
     }
 
-    throw lastError || new Error("All endpoints failed");
+    // Provide more specific error message based on the last error
+    if (lastError?.message?.includes("Network error")) {
+      throw new Error("Network connectivity issues - all Telegram endpoints unreachable");
+    } else if (lastError?.message?.includes("timeout")) {
+      throw new Error("Connection timeout - check your internet speed");
+    } else {
+      throw lastError || new Error("All Telegram endpoints failed - service may be down");
+    }
   }
 
   /**
