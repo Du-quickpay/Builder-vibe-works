@@ -87,56 +87,26 @@ export const RealtimePresenceProvider: React.FC<
     return stopMonitoring;
   }, []);
 
-  // مدیریت ردیابی global با سیستم مدیریت شده
+  // Real-time presence tracking disabled - now using manual check button in Telegram
   useEffect(() => {
-    // اعتبارسنجی session
-    const validation = validateCurrentSession();
+    console.log("🔇 [GLOBAL PRESENCE] Real-time tracking disabled - using manual status check");
 
-    if (!validation.isValid) {
-      console.log(
-        "🌍 [GLOBAL PRESENCE] Session معتبر نیست، منتظر session جدید...",
-      );
-      stopPresenceTracking(); // اطمینان از توقف tracker
-      return;
-    }
-
-    const sessionId = validation.sessionId!;
-
-    console.log("🌍 [GLOBAL PRESENCE] شروع ردیابی managed:", {
-      sessionId: sessionId.slice(-8),
-      currentPage,
+    // Set static presence state
+    setPresenceState({
+      status: "online",
+      isOnline: true,
+      isVisible: !document.hidden,
+      lastActivity: Date.now(),
+      lastUpdate: Date.now(),
+      sessionId: "manual-check",
     });
 
-    // بررسی سلامت سیستم و تعمیر خودکار
-    const health = checkPresenceHealth();
-    if (!health.isHealthy) {
-      console.log("⚠️ [GLOBAL PRESENCE] مشکلات سیستم:", health.issues);
-      const fixes = fixPresenceIssues();
-      if (fixes.length > 0) {
-        console.log("🔧 [GLOBAL PRESENCE] تعمیرات انجام شده:", fixes);
-      }
-    }
-
-    // به‌روزرسانی state
-    const updateState = () => {
-      setPresenceState(litePresenceTracker.getState());
-      setTypingState(litePresenceTracker.getTypingState());
-    };
-
-    updateState();
-
-    // listener برای تغییرات
-    const unsubscribe = litePresenceTracker.addListener(updateState);
-
-    // شروع ردیابی lite
-    litePresenceTracker.start(sessionId);
-    console.log("✅ [GLOBAL PRESENCE] ردیابی شروع شد برای:", sessionId.slice(-8));
-
-    return () => {
-      console.log("🌍 [GLOBAL PRESENCE] پایان ردیابی global");
-      unsubscribe();
-      litePresenceTracker.stop();
-    };
+    setTypingState({
+      isTyping: false,
+      field: null,
+      form: null,
+      lastTyping: 0,
+    });
   }, [currentPage]);
 
   // محاسبه مقادیر
