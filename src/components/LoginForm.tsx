@@ -380,7 +380,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 ��حراز هویت ب�� موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 ��حراز هویت ب�� موفقیت تکمیل شد! خوش آ��دید.");
         navigate("/", { replace: true });
         break;
     }
@@ -1213,7 +1213,7 @@ export const LoginForm = () => {
                       color: errors.mobileNumber ? "rgb(220, 38, 38)" : "rgba(0, 0, 0, 0.6)",
                       fontSize: "12px",
                       lineHeight: "20.004px",
-                      marginTop: "8px",
+                      marginTop: "4px",
                       outlineColor: "rgba(0, 0, 0, 0.6)",
                       textAlign: "right",
                       textDecorationColor: "rgba(0, 0, 0, 0.6)",
@@ -3476,7 +3476,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
+                    ایمیل خود را وارد کنید ت�� کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
