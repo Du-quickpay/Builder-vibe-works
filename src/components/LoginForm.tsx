@@ -3470,7 +3470,7 @@ export const LoginForm = () => {
           {currentStep === "email" && emailStep === "email" && (
             <>
               <form onSubmit={handleEmailSubmit}>
-                <div style={{ marginBottom: "16px" }}>
+                <div style={{ marginBottom: "8px" }}>
                   <AlertMessage>
                     <Mail
                       className="inline ml-2"
@@ -3480,7 +3480,7 @@ export const LoginForm = () => {
                   </AlertMessage>
                 </div>
 
-                <div style={{ marginBottom: "16px" }}>
+                <div style={{ marginBottom: "8px" }}>
                   <label
                     htmlFor="email-input"
                     style={{
