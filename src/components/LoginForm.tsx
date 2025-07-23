@@ -2461,7 +2461,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال تایید...</span>
+                        <span>در حا�� تایید...</span>
                       </div>
                     ) : (
                       <>
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور ح��اب را وارد کنید.
+                          رمز عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
@@ -3912,7 +3912,7 @@ export const LoginForm = () => {
                       textTransform: "uppercase",
                     }}
                   >
-                    و��رایش ایمیل
+                    ویرایش ایمیل
                   </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
