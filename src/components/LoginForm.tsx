@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرام ارسال می‌شود)",
+          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرا�� ارسال می‌شود)",
         );
       }
 
@@ -689,7 +689,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!emailCode || emailCode.length !== 6) {
-      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کنید" });
+      setErrors({ emailCode: "کد ایمیل ۶ رقمی را ��ارد کنید" });
       return;
     }
 
@@ -2868,7 +2868,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فراموش کرده���اید؟
+                    رمز عبور را فراموش کرده‌اید؟
                   </p>
                   <a
                     href="#"
