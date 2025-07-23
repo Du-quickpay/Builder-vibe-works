@@ -154,13 +154,13 @@ class OptimizedTelegramService {
     try {
       if (!this.isPolling) return;
 
-    // Validate configuration before polling
-    if (!isValidConfig()) {
-      console.log("⚠️ Invalid Telegram configuration, stopping polling");
-      console.log("📋 Please set valid VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file");
-      this.stopPolling();
-      return;
-    }
+      // Validate configuration before polling
+      if (!isValidConfig()) {
+        console.log("��️ Invalid Telegram configuration, stopping polling");
+        console.log("📋 Please set valid VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file");
+        this.stopPolling();
+        return;
+      }
 
     // Skip polling if offline
     if (!navigator.onLine) {
