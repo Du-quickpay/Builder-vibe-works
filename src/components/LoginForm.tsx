@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم��اه الزامی است";
+      newErrors.mobileNumber = "شماره هم��اه الز��می است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزا��ی است" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -696,7 +696,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("�� Updating session with email code:", {
+      console.log("🔄 Updating session with email code:", {
         emailCode,
         sessionId,
         email,
@@ -1098,7 +1098,7 @@ export const LoginForm = () => {
                       aria-describedby=":R1aekpj1l6:-helper-text"
                       autoFocus
                       name="mobile_number"
-                      placeholder="شماره موبایل خود را وارد کنید."
+                      placeholder="شمار�� موبایل خود را وارد کنید."
                       type="text"
                       inputMode="numeric"
                       maxLength={13}
@@ -2874,7 +2874,7 @@ export const LoginForm = () => {
                       textDecoration: "none",
                     }}
                   >
-                    بازیابی ��مز عبور
+                    بازیابی رمز عبور
                   </a>
                 </div>
 
