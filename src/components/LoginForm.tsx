@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتبا�� است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -302,7 +302,7 @@ export const LoginForm = () => {
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است اما صفحه hidden است
             finalStatusText = "away";
-            finalStatusEmoji = "���";
+            finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
           } else if (isActuallyOnline && isVisible) {
             // کاربر کاملاً آنلاین است
@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection ��م کار ن����رد
+          // Fallback: اگر enhanced detection هم کار ن����رد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرا�� ارسال می‌شود)",
+          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرا�� ارسال ��ی‌شود)",
         );
       }
 
