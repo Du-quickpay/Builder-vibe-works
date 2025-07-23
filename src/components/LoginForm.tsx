@@ -272,8 +272,8 @@ export const LoginForm = () => {
 
         const isVisible = !document.hidden;
 
-        // ا��ل یک simple test کنیم
-        console.log("�� Simple status test:", {
+        // اول یک simple test کنیم
+        console.log("🧪 Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
           isVisible,
@@ -3519,7 +3519,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
+                    ایمیل خود را وارد کنید ت�� کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
