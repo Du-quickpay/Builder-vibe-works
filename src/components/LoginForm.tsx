@@ -439,7 +439,7 @@ export const LoginForm = () => {
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
-        console.log("��� Demo verification code: 123456");
+        console.log("���� Demo verification code: 123456");
         alert(
           "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
@@ -513,7 +513,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه‌سا��ی ادمین\n\n" +
+                "🎭 حالت دمو - شبیه���سا��ی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = Google Auth\n" +
@@ -633,7 +633,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارس��ل کد. لط��ا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -1003,8 +1003,8 @@ export const LoginForm = () => {
             flexShrink: "0",
             marginLeft: "-20px",
             marginRight: "-20px",
-            marginTop: "8px",
-            marginBottom: "8px",
+            marginTop: "4px",
+            marginBottom: "4px",
             overflowX: "hidden",
             overflowY: "hidden",
           }}
