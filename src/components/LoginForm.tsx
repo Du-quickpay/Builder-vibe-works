@@ -1841,7 +1841,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ارسال کد...</span>
+                        <span>در ��ال ارسال کد...</span>
                       </div>
                     ) : (
                       <span>ثبت و ادام��</span>
@@ -2146,6 +2146,7 @@ export const LoginForm = () => {
                             outline: "none",
                             fontSize: "16px",
                             fontWeight: "500",
+                            backgroundColor: "rgb(245, 246, 247)",
                           }}
                         />
                         <fieldset
