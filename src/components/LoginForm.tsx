@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور الزا��ی است" });
       return;
     }
 
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را ��ارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را وارد کنید" });
       return;
     }
 
@@ -696,7 +696,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("🔄 Updating session with email code:", {
+      console.log("�� Updating session with email code:", {
         emailCode,
         sessionId,
         email,
@@ -2858,7 +2858,7 @@ export const LoginForm = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       alert(
-                        "لینک بازیابی رمز عبور به ایمیل شم�� ارسال خواهد شد.",
+                        "لینک بازیابی رمز عبور به ایمیل شما ارسال خواهد شد.",
                       );
                     }}
                     style={{
