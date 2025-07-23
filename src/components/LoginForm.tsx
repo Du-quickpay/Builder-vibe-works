@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید ش��اره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -300,7 +300,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنلاین است اما صفحه hidden است
+            // کاربر آنلاین ا��ت اما صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection هم کار نکرد
+          // Fallback: ��گر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را و��رد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را وارد کنید" });
       return;
     }
 
@@ -646,12 +646,12 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل الزامی است" });
+      setErrors({ email: "ایمیل الزام�� است" });
       return;
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل ��عتبر نیست" });
+      setErrors({ email: "ایمیل معتبر نیست" });
       return;
     }
 
@@ -696,7 +696,7 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("🔄 Updating session with email code:", {
+      console.log("��� Updating session with email code:", {
         emailCode,
         sessionId,
         email,
