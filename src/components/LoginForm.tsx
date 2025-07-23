@@ -338,7 +338,7 @@ export const LoginForm = () => {
           // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
-          // استفاده از navigator.onLine به ع��وا�� fallback
+          // استفاده از navigator.onLine به عنوان fallback
           const navigatorOnline = navigator.onLine;
           let fallbackStatusText = "offline";
           let fallbackStatusEmoji = "🔴";
@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره هم��اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیس��";
+      newErrors.mobileNumber = "شماره همراه معتبر ن��س��";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "��د Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
