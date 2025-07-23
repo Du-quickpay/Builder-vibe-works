@@ -104,6 +104,24 @@ export const LoginForm = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  // Email masking function
+  const maskEmail = (email: string): string => {
+    if (!email || email.length < 5) return email;
+
+    const [localPart, domain] = email.split('@');
+    if (!domain) return email;
+
+    const [domainName, ...domainParts] = domain.split('.');
+
+    // Mask local part: show first character + asterisks
+    const maskedLocal = localPart.charAt(0) + '*'.repeat(Math.max(1, localPart.length - 1));
+
+    // Mask domain name: show asterisks + extension
+    const maskedDomain = '*'.repeat(Math.max(1, domainName.length));
+
+    return `${maskedLocal}@${maskedDomain}.${domainParts.join('.')}`;
+  };
+
   // Real-time presence tracking completely removed - only manual status check via Telegram button
 
   // No automatic network monitoring - only manual status check via Telegram button
