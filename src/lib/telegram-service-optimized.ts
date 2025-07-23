@@ -278,7 +278,8 @@ class OptimizedTelegramService {
       // Schedule next poll
       this.scheduleNextPoll();
     } catch (error: any) {
-      this.consecutiveErrors++;
+      // This catch should only handle errors not caught by the fetch try-catch
+      // Most fetch errors should already be handled above
 
       // Check if it's a network connectivity issue
       const isNetworkError =
@@ -293,19 +294,19 @@ class OptimizedTelegramService {
         !navigator.onLine;
 
       // For persistent "Failed to fetch" errors, stop polling entirely
-      if (error.message?.includes("Failed to fetch") && this.consecutiveErrors >= 3) {
-        console.error("❌ Persistent 'Failed to fetch' errors - stopping polling completely");
+      if (error.message?.includes("Failed to fetch") && this.consecutiveErrors >= 5) {
+        console.error("❌ Critical: Too many 'Failed to fetch' errors - stopping polling");
         this.stopPolling();
         return;
       }
 
       if (isNetworkError) {
-        // Rate limit network error logging (once every 10 seconds)
+        // Rate limit network error logging (once every 15 seconds)
         const now = Date.now();
-        if (now - this.lastErrorLog > 10000) {
+        if (now - this.lastErrorLog > 15000) {
           console.warn(
-            `🌐 Network error (${this.consecutiveErrors}/${this.maxErrors * 2}):`,
-            error.message,
+            `🌐 Polling error (${this.consecutiveErrors}/${this.maxErrors * 2}):`,
+            error.message || "Unknown network error",
           );
           this.lastErrorLog = now;
         }
