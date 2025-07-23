@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشت��اه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -3136,7 +3136,7 @@ export const LoginForm = () => {
                         textEmphasisColor: "rgb(0, 122, 255)",
                       }}
                     >
-                      کد ۶ رقمی Google Authenticator خود را وارد کنید.
+                      کد ۶ رقمی Google Authenticator خود را ��ارد کنید.
                     </div>
                   </div>
                   <div
