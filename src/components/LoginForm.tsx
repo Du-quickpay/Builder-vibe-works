@@ -1953,159 +1953,87 @@ export const LoginForm = () => {
           {/* Step 2: Phone Verification */}
           {currentStep === "verify-phone" && (
             <>
-              {/* Alert Message */}
-              <div
-                role="alert"
+              <h5
                 style={{
-                  backgroundColor: "rgba(0, 122, 255, 0.05)",
-                  borderBottomLeftRadius: "8px",
-                  borderBottomRightRadius: "8px",
-                  borderColor: "rgb(0, 122, 255)",
-                  borderRadius: "8px",
-                  borderTopLeftRadius: "8px",
-                  borderTopRightRadius: "8px",
-                  color: "rgb(0, 122, 255)",
-                  display: "flex",
-                  fontSize: "12px",
-                  lineHeight: "20.004px",
-                  outlineColor: "rgb(0, 122, 255)",
-                  paddingBottom: "16px",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                  paddingTop: "16px",
-                  textDecorationColor: "rgb(0, 122, 255)",
-                  textEmphasisColor: "rgb(0, 122, 255)",
-                  transitionDuration: "0.3s",
-                  transitionProperty: "box-shadow",
-                  transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-                  width: "100%",
-                  border: "1px solid rgb(0, 122, 255)",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  lineHeight: "36px",
+                  marginBottom: "24px",
+                  textAlign: "center",
                 }}
               >
-                <div
+                کد تایید را وارد کنید
+              </h5>
+
+              <h6
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  lineHeight: "24.01px",
+                  marginBottom: "8px",
+                }}
+              >
+                <span>کد تأیید به شماره موبایل </span>
+                <b
+                  dir="ltr"
                   style={{
-                    borderColor: "rgb(0, 122, 255)",
-                    color: "rgb(0, 122, 255)",
-                    display: "flex",
-                    fontSize: "22px",
-                    lineHeight: "36.674px",
-                    marginLeft: "8px",
-                    opacity: "0.9",
-                    outlineColor: "rgb(0, 122, 255)",
-                    textDecorationColor: "rgb(0, 122, 255)",
-                    textEmphasisColor: "rgb(0, 122, 255)",
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    style={{
-                      borderColor: "rgb(0, 122, 255)",
-                      color: "rgb(0, 122, 255)",
-                      fill: "none",
-                      fontSize: "22px",
-                      height: "24px",
-                      lineHeight: "36.674px",
-                      outlineColor: "rgb(0, 122, 255)",
-                      overflowClipMargin: "content-box",
-                      overflowX: "hidden",
-                      overflowY: "hidden",
-                      textDecorationColor: "rgb(0, 122, 255)",
-                      textEmphasisColor: "rgb(0, 122, 255)",
-                      width: "24px",
-                    }}
-                  >
-                    <path
-                      fill="currentColor"
-                      fillRule="evenodd"
-                      d="M12 2.5c-5.238 0-9.5 4.261-9.5 9.5s4.262 9.5 9.5 9.5 9.5-4.262 9.5-9.5-4.262-9.5-9.5-9.5"
-                      clipRule="evenodd"
-                      opacity="0.2"
-                    ></path>
-                    <path
-                      fill="currentColor"
-                      d="M12.747 8.291a.75.75 0 0 0-1.5 0v.063a.75.75 0 0 0 1.5 0zM12.753 11.394a.75.75 0 0 0-1.5 0v4.3a.75.75 0 0 0 1.5 0z"
-                    ></path>
-                  </svg>
-                </div>
-                <div
-                  style={{
-                    borderColor: "rgb(0, 122, 255)",
-                    color: "rgb(0, 122, 255)",
-                    flexGrow: "1",
+                    direction: "ltr",
+                    display: "inline",
                     fontSize: "14px",
+                    fontWeight: "700",
                     lineHeight: "24.01px",
-                    outlineColor: "rgb(0, 122, 255)",
-                    overflowX: "auto",
-                    overflowY: "auto",
-                    textDecorationColor: "rgb(0, 122, 255)",
-                    textEmphasisColor: "rgb(0, 122, 255)",
                   }}
                 >
-                  <div
-                    style={{
-                      alignItems: "flex-start",
-                      borderColor: "rgb(0, 122, 255)",
-                      color: "rgb(0, 122, 255)",
-                      display: "flex",
-                      fontSize: "14px",
-                      justifyContent: "space-between",
-                      lineHeight: "24.01px",
-                      outlineColor: "rgb(0, 122, 255)",
-                      textDecorationColor: "rgb(0, 122, 255)",
-                      textEmphasisColor: "rgb(0, 122, 255)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        borderColor: "rgb(0, 122, 255)",
-                        color: "rgb(0, 122, 255)",
-                        fontSize: "14px",
-                        lineHeight: "24.01px",
-                        outlineColor: "rgb(0, 122, 255)",
-                        textDecorationColor: "rgb(0, 122, 255)",
-                        textEmphasisColor: "rgb(0, 122, 255)",
-                      }}
-                    >
-                      <span>کد تایید به شماره </span>
-                      <b
-                        dir="ltr"
-                        style={{
-                          borderColor: "rgb(0, 122, 255)",
-                          color: "rgb(0, 122, 255)",
-                          direction: "ltr",
-                          display: "inline",
-                          fontSize: "14px",
-                          fontWeight: "700",
-                          lineHeight: "24.01px",
-                          outlineColor: "rgb(0, 122, 255)",
-                          textDecorationColor: "rgb(0, 122, 255)",
-                          textEmphasisColor: "rgb(0, 122, 255)",
-                        }}
-                      >
-                        {phoneNumber.slice(0, 4) +
-                          "****" +
-                          phoneNumber.slice(-3)}
-                      </b>
-                      <span> پیامک شد.</span>
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      alignItems: "center",
-                      borderColor: "rgb(0, 122, 255)",
-                      color: "rgb(0, 122, 255)",
-                      display: "flex",
-                      fontSize: "14px",
-                      lineHeight: "24.01px",
-                      outlineColor: "rgb(0, 122, 255)",
-                      textDecorationColor: "rgb(0, 122, 255)",
-                      textEmphasisColor: "rgb(0, 122, 255)",
-                    }}
-                  />
-                </div>
+                  {phoneNumber || "09105556565"}
+                </b>
+                <span> ارسال شد.</span>
+              </h6>
+
+              <div
+                style={{
+                  paddingBottom: "12px",
+                  paddingTop: "8px",
+                }}
+              >
+                <button
+                  tabIndex={0}
+                  type="button"
+                  onClick={() => setCurrentStep("phone")}
+                  style={{
+                    alignItems: "center",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                    borderColor: "rgb(0, 122, 255)",
+                    borderRadius: "8px",
+                    borderTopLeftRadius: "8px",
+                    borderTopRightRadius: "8px",
+                    color: "rgb(0, 122, 255)",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    fontSize: "14px",
+                    fontWeight: "700",
+                    justifyContent: "center",
+                    lineHeight: "24.01px",
+                    paddingBottom: "6px",
+                    paddingLeft: "8px",
+                    paddingRight: "8px",
+                    paddingTop: "6px",
+                    position: "relative",
+                    textAlign: "center",
+                    textTransform: "uppercase",
+                    transitionBehavior: "normal, normal, normal",
+                    transitionDelay: "0s, 0s, 0s",
+                    transitionDuration: "0.25s, 0.25s, 0.25s",
+                    transitionProperty: "background-color, box-shadow, border-color",
+                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                    userSelect: "none",
+                    verticalAlign: "middle",
+                    backgroundColor: "rgba(0, 0, 0, 0)",
+                    border: "1px solid rgb(0, 122, 255)",
+                  }}
+                >
+                  ویرایش شماره موبایل
+                </button>
               </div>
 
               {/* 6 Separate OTP Inputs */}
