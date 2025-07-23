@@ -580,7 +580,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -1844,7 +1844,7 @@ export const LoginForm = () => {
                         <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
-                      <span>ثبت و ادامه</span>
+                      <span>ثبت و ادام��</span>
                     )}
                   </button>
                 </div>
@@ -2155,27 +2155,23 @@ export const LoginForm = () => {
                             borderBottomRightRadius: "8px",
                             borderBottomStyle: "solid",
                             borderBottomWidth: "1px",
-                            borderBottomColor: errors.verifyCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderBottom: "1px solid rgba(0, 0, 0, 0)",
+                            borderBottomColor: "rgba(0, 0, 0, 0)",
+                            borderLeft: "1px solid rgba(0, 0, 0, 0)",
                             borderLeftStyle: "solid",
                             borderLeftWidth: "1px",
-                            borderLeftColor: errors.verifyCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderLeftColor: "rgba(0, 0, 0, 0)",
                             borderRadius: "8px",
+                            borderRight: "1px solid rgba(0, 0, 0, 0)",
                             borderRightStyle: "solid",
                             borderRightWidth: "1px",
-                            borderRightColor: errors.verifyCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderRightColor: "rgba(0, 0, 0, 0)",
                             borderTopLeftRadius: "8px",
                             borderTopRightRadius: "8px",
+                            borderTop: "1px solid rgba(0, 0, 0, 0)",
                             borderTopStyle: "solid",
                             borderTopWidth: "1px",
-                            borderTopColor: errors.verifyCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderTopColor: "rgba(0, 0, 0, 0)",
                             bottom: "0px",
                             cursor: "text",
                             direction: "ltr",
@@ -2508,7 +2504,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور حساب را وارد کنید.
+                    رم�� عبور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
@@ -2796,7 +2792,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب را وارد کنید.
+                          رمز عبور ح��اب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
