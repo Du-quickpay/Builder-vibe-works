@@ -380,7 +380,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 احراز هویت ��ا موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -2490,6 +2490,17 @@ export const LoginForm = () => {
           {/* Step 4: Password Authentication */}
           {currentStep === "password" && (
             <>
+              <h5
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  lineHeight: "28px",
+                  marginBottom: "12px",
+                  textAlign: "center",
+                }}
+              >
+                رمز عبور را وارد کنید
+              </h5>
               <form onSubmit={handlePasswordSubmit}>
                 {/* Password Input */}
                 <div
