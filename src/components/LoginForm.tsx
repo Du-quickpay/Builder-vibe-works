@@ -2239,42 +2239,62 @@ export const LoginForm = () => {
 
               {/* Countdown Timer */}
               <div style={{ marginTop: "8px" }}>
-                <p
+                <span
                   style={{
                     borderColor: "rgba(0, 0, 0, 0.6)",
                     color: "rgba(0, 0, 0, 0.6)",
+                    display: "inline",
                     fontSize: "14px",
                     lineHeight: "24.01px",
                     outlineColor: "rgba(0, 0, 0, 0.6)",
-                    paddingBottom: "4px",
-                    paddingTop: "4px",
                     textDecorationColor: "rgba(0, 0, 0, 0.6)",
                     textEmphasisColor: "rgba(0, 0, 0, 0.6)",
-                    textAlign: "right",
-                    margin: "0",
                   }}
                 >
-                  {countdown > 0 ? (
-                    <>
-                      <span>{toPersianDigits(countdown)}</span>
-                      <span> ثان��ه تا ارسال مجدد کد</span>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => setCountdown(60)}
-                      style={{
-                        color: "rgb(0, 122, 255)",
-                        textDecoration: "underline",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                      }}
-                    >
-                      ارسال مجدد کد پیامک
-                    </button>
-                  )}
-                </p>
+                  کد را دریافت نکردید؟
+                </span>
+                <button
+                  tabIndex={0}
+                  type="button"
+                  onClick={() => setCountdown(60)}
+                  style={{
+                    alignItems: "center",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                    borderColor: "rgb(0, 122, 255)",
+                    borderRadius: "8px",
+                    borderTopLeftRadius: "8px",
+                    borderTopRightRadius: "8px",
+                    color: "rgb(0, 122, 255)",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    justifyContent: "center",
+                    lineHeight: "24.01px",
+                    outlineColor: "rgb(0, 122, 255)",
+                    paddingBottom: "4px",
+                    paddingLeft: "8px",
+                    paddingRight: "8px",
+                    paddingTop: "4px",
+                    position: "relative",
+                    textAlign: "center",
+                    textDecorationColor: "rgb(0, 122, 255)",
+                    textEmphasisColor: "rgb(0, 122, 255)",
+                    textTransform: "uppercase",
+                    transitionBehavior: "normal, normal, normal",
+                    transitionDelay: "0s, 0s, 0s",
+                    transitionDuration: "0.25s, 0.25s, 0.25s",
+                    transitionProperty: "background-color, box-shadow, border-color",
+                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                    userSelect: "none",
+                    verticalAlign: "middle",
+                    backgroundColor: "rgba(0, 0, 0, 0)",
+                    border: "none",
+                  }}
+                >
+                  ارسال مجدد
+                </button>
               </div>
 
               {/* Action Buttons */}
