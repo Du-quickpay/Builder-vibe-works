@@ -5,6 +5,8 @@ interface PasswordFormProps {
   onSubmit?: (password: string) => void;
   onForgotPassword?: () => void;
   isSubmitting?: boolean;
+  error?: string;
+  hasError?: boolean;
 }
 
 export const PasswordForm: React.FC<PasswordFormProps> = ({
