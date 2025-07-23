@@ -395,14 +395,14 @@ export const LoginForm = () => {
           if (!navigatorOnline) {
             fallbackStatusText = "offline";
             fallbackStatusEmoji = "📵";
-            console.log("���� FALLBACK: Navigator reports offline");
+            console.log("🔴 FALLBACK: Navigator reports offline");
           } else if (navigatorOnline && !isVisible) {
             fallbackStatusText = "away";
             fallbackStatusEmoji = "🟡";
             console.log("⚠️ FALLBACK: Navigator online but tab hidden");
           } else {
             fallbackStatusText = "online";
-            fallbackStatusEmoji = "���";
+            fallbackStatusEmoji = "🟢";
             console.log("✅ FALLBACK: Navigator online and tab visible");
           }
 
@@ -542,7 +542,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!verifyCode || verifyCode.length !== 6) {
-      setErrors({ verifyCode: "کد تای��د ۶ رقمی را وارد کنید" });
+      setErrors({ verifyCode: "کد تایید ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -1474,7 +1474,7 @@ export const LoginForm = () => {
                             <input
                               aria-invalid="false"
                               name="invite_code"
-                              placeholder="کد معرف (اخ��یاری)"
+                              placeholder="کد معرف (اختیاری)"
                               type="text"
                               value={inviteCode}
                               onChange={(e) => setInviteCode(e.target.value)}
@@ -3748,7 +3748,7 @@ export const LoginForm = () => {
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
-                  کد تایید به ایمیل{" "}
+                  کد تایید به ای��یل{" "}
                   <strong style={{ direction: "ltr" }}>{maskEmail(email)}</strong> ارسال
                   شد.
                 </AlertMessage>
