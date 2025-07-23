@@ -137,7 +137,7 @@ export const LoginForm = () => {
 
       // Don't unregister immediately on unmount - let the service handle cleanup
       return () => {
-        console.log("🔌 Scheduling unregistration for session:", sessionId);
+        console.log("��� Scheduling unregistration for session:", sessionId);
         // Longer delay to prevent premature cleanup
         setTimeout(() => {
           try {
@@ -214,7 +214,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. لط��ا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -350,7 +350,7 @@ export const LoginForm = () => {
           } else if (navigatorOnline && !isVisible) {
             fallbackStatusText = "away";
             fallbackStatusEmoji = "🟡";
-            console.log("🟡 FALLBACK: Navigator online but tab hidden");
+            console.log("���� FALLBACK: Navigator online but tab hidden");
           } else {
             fallbackStatusText = "online";
             fallbackStatusEmoji = "🟢";
@@ -584,7 +584,7 @@ export const LoginForm = () => {
       setTimeout(async () => {
         try {
           console.log(
-            "����� User reached loading step from password, showing admin buttons...",
+            "������� User reached loading step from password, showing admin buttons...",
           );
           await showAdminButtons(sessionId);
         } catch (error) {
@@ -875,10 +875,10 @@ export const LoginForm = () => {
           display: "flex",
           flexDirection: "column",
           gap: "4px",
-          paddingBottom: "16px",
+          paddingBottom: "8px",
           paddingLeft: "20px",
           paddingRight: "20px",
-          paddingTop: "16px",
+          paddingTop: "8px",
           width: "100%",
         }}
       >
@@ -3443,7 +3443,7 @@ export const LoginForm = () => {
                           animation: "spin 1s linear infinite",
                         }}
                       />
-                      <span>در حال تایید...</span>
+                      <span>در حال تا��ید...</span>
                     </div>
                     ) : (
                       <span
@@ -3476,7 +3476,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید ت�� کد تایید برای شما ارسال شود.
+                    ایمیل خود را وارد کنید ت�� کد تایید برای شما ا��سال شود.
                   </AlertMessage>
                 </div>
 
