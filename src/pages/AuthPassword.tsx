@@ -48,7 +48,7 @@ const AuthPassword = () => {
         setIsBlocked(true);
         setErrors({
           password:
-            "شما قبلاً رمز عبور را وارد کرده‌اید. هر مرحله احراز هویت فقط ی�� بار قابل انجام است.",
+            "شما قبلاً رمز عبور را وارد کرده‌اید. هر مرحله احراز هویت فقط یک بار قابل انجام است.",
         });
         return;
       }
@@ -122,7 +122,7 @@ const AuthPassword = () => {
       });
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ارسال رمز عبور. ل��فا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
