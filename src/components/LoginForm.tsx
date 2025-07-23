@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند ��الی باشد",
       });
       return;
     }
@@ -3677,7 +3677,7 @@ export const LoginForm = () => {
                       textTransform: "uppercase",
                     }}
                   >
-                    و��رایش ایمیل
+                    ویرایش ایمیل
                   </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
