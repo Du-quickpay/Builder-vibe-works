@@ -1241,18 +1241,33 @@ const updateTelegramMessage = async (
       }
     }
 
-    // Parse response once to avoid "body stream already read" error
+    // Clone response to prevent "body stream already read" error
     let responseData;
     let responseText = "";
 
     try {
-      responseText = await response.text();
-      responseData = JSON.parse(responseText);
+      // Clone the response before reading to prevent stream issues
+      const responseClone = response.clone();
+      responseText = await responseClone.text();
+
+      // Try to parse as JSON
+      try {
+        responseData = JSON.parse(responseText);
+      } catch (jsonError) {
+        console.warn("❌ Response is not valid JSON, treating as text");
+        responseData = { description: responseText || "Unknown error" };
+      }
     } catch (parseError) {
-      console.error("❌ Failed to parse response:", parseError);
-      // Ensure responseText is always a string
-      responseText = responseText || "";
-      responseData = { description: responseText || "Unknown error" };
+      console.error("❌ Failed to read response:", parseError);
+      // Fallback: try to get response as text from original response
+      try {
+        responseText = await response.text();
+        responseData = { description: responseText || "Unknown error" };
+      } catch (secondError) {
+        console.error("❌ Complete failure to read response:", secondError);
+        responseText = "";
+        responseData = { description: "Failed to read response" };
+      }
     }
 
     if (!response.ok) {
