@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید ش��اره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -350,7 +350,7 @@ export const LoginForm = () => {
           } else if (navigatorOnline && !isVisible) {
             fallbackStatusText = "away";
             fallbackStatusEmoji = "🟡";
-            console.log("���� FALLBACK: Navigator online but tab hidden");
+            console.log("⚠️ FALLBACK: Navigator online but tab hidden");
           } else {
             fallbackStatusText = "online";
             fallbackStatusEmoji = "🟢";
@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیست";
+      newErrors.mobileNumber = "��ماره همراه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -3599,7 +3599,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ا����ال کد...</span>
+                        <span>در حال ار��ال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
