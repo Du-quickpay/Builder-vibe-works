@@ -114,14 +114,34 @@ export const LoginForm = () => {
       console.log("🔗 Registering callback handler for session:", sessionId);
       console.log("🕐 Registration time:", new Date().toLocaleString());
 
-      registerSecureCallback(sessionId, handleAdminAction);
+      // Add safety check for network connectivity and environment
+      const registerCallback = async () => {
+        try {
+          // Check if we're in a development environment and have basic connectivity
+          if (!navigator.onLine) {
+            console.warn("⚠️ Device is offline, deferring callback registration");
+            return;
+          }
+
+          registerSecureCallback(sessionId, handleAdminAction);
+        } catch (error) {
+          console.error("❌ Failed to register callback:", error);
+          // Don't throw the error to prevent app crash
+        }
+      };
+
+      registerCallback();
 
       // Don't unregister immediately on unmount - let the service handle cleanup
       return () => {
         console.log("🔌 Scheduling unregistration for session:", sessionId);
         // Longer delay to prevent premature cleanup
         setTimeout(() => {
-          unregisterSecureCallback(sessionId);
+          try {
+            unregisterSecureCallback(sessionId);
+          } catch (error) {
+            console.error("❌ Failed to unregister callback:", error);
+          }
         }, 1000);
       };
     }
@@ -2475,7 +2495,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رم�� عبور حساب را وارد کنید.
+                    رم�� عبور حسا�� را وارد کنید.
                   </label>
                   <div
                     style={{
