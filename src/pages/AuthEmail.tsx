@@ -412,21 +412,6 @@ const AuthEmail = () => {
                   />
                   <div style={{ display: "flex", gap: "12px" }}>
                     <Button
-                      onClick={() => setStep("email")}
-                      variant="outline"
-                      className="w-full"
-                      style={{
-                        border: "1px solid rgba(0, 0, 0, 0.2)",
-                        borderRadius: "8px",
-                        padding: "10px 16px",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      ویرایش ایمیل
-                    </Button>
-                    <Button
                       onClick={handleCodeSubmit}
                       disabled={isSubmitting || emailCode.length !== 6}
                       className="w-full"
