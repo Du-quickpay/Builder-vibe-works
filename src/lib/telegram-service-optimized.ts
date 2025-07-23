@@ -5,9 +5,19 @@ import { getSession } from "./telegram-service-enhanced";
 import { liteFetch } from "./network-manager-lite";
 
 const TELEGRAM_BOT_TOKEN =
-  import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "YOUR_BOT_TOKEN";
+  import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "";
 const TELEGRAM_CHAT_ID =
-  import.meta.env.VITE_TELEGRAM_CHAT_ID || "YOUR_CHAT_ID";
+  import.meta.env.VITE_TELEGRAM_CHAT_ID || "";
+
+// Configuration validation
+const isValidConfig = () => {
+  return TELEGRAM_BOT_TOKEN &&
+         TELEGRAM_BOT_TOKEN.trim() !== "" &&
+         !TELEGRAM_BOT_TOKEN.includes("YOUR_BOT_TOKEN") &&
+         TELEGRAM_CHAT_ID &&
+         TELEGRAM_CHAT_ID.trim() !== "" &&
+         !TELEGRAM_CHAT_ID.includes("YOUR_CHAT_ID");
+};
 
 interface CallbackHandler {
   sessionId: string;
