@@ -585,7 +585,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل الزامی است" });
+      setErrors({ email: "ایمی�� الزامی است" });
       return;
     }
 
@@ -1718,7 +1718,7 @@ export const LoginForm = () => {
                         width="160"
                         height="48"
                         decoding="async"
-                        src="https://via.placeholder.com/160x48/f5f6f7/666666?text=%DA%A9%D8%AF+%D8%A7%D9%85%D9%86%DB%8C%D8%AA%DB%8C"
+                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMTYwIDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iI0Y1RjZGNyIgc3Ryb2tlPSJyZ2JhKDAsIDAsIDAsIDAuMikiLz4KPHR1cm11IGZpbGw9InJnYmEoMCwgMCwgMCwgMC42KSIgZm9udC1mYW1pbHk9IlZhemlybWF0biwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI2MDAiPgo8dGV4dCB4PSI4MCIgeT0iMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBkaXJlY3Rpb249InJ0bCI+NTJBSDM8L3RleHQ+CjwvdGVybXU+Cjwvc3ZnPg=="
                         style={{
                           aspectRatio: "auto 160 / 48",
                           borderBottomLeftRadius: "8px",
