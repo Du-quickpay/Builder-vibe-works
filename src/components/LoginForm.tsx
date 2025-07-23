@@ -3919,7 +3919,7 @@ export const LoginForm = () => {
                     disabled={isSubmitting || emailCode.length !== 6}
                     style={{
                       alignItems: "center",
-                      backgroundColor: "rgb(23, 29, 38)",
+                      backgroundColor: "rgb(0, 122, 255)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderColor: "rgb(255, 255, 255)",
