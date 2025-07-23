@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection هم کار نکرد
+          // Fallback: اگر enhanced detection هم کار ن��رد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator �� ��قمی را وارد کنید" });
       return;
     }
 
@@ -2326,7 +2326,7 @@ export const LoginForm = () => {
                         marginLeft: "8px",
                       }}
                     >
-                      کد را ��ریافت نکردید؟
+                      کد ��ا ��ریافت نکردید؟
                     </span>
                     <button
                       tabIndex={0}
@@ -3636,13 +3636,194 @@ export const LoginForm = () => {
                 >
                   کد تایید ایمیل
                 </label>
-                <OTPInput
-                  length={6}
-                  value={emailCode}
-                  onComplete={setEmailCode}
-                  onChange={setEmailCode}
-                  disabled={isSubmitting}
-                />
+                {/* 6 Separate OTP Inputs */}
+                <div
+                  style={{
+                    direction: "ltr",
+                    display: "flex",
+                    flexFlow: "row wrap",
+                    flexWrap: "wrap",
+                    marginRight: "-8px",
+                    marginTop: "4px",
+                    width: "calc(100% + 8px)",
+                  }}
+                >
+                  {[0, 1, 2, 3, 4, 5].map((index) => (
+                    <div
+                      key={index}
+                      style={{
+                        direction: "ltr",
+                        flexBasis: "0px",
+                        flexGrow: "1",
+                        maxWidth: "100%",
+                        paddingRight: "8px",
+                        paddingTop: "8px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          direction: "ltr",
+                          display: "inline-flex",
+                          flexDirection: "column",
+                          flexFlow: "column nowrap",
+                          position: "relative",
+                          verticalAlign: "top",
+                          width: "100%",
+                        }}
+                      >
+                        <div
+                          style={{
+                            alignItems: "center",
+                            backgroundColor: "rgb(245, 246, 247)",
+                            borderBottomLeftRadius: "8px",
+                            borderBottomRightRadius: "8px",
+                            borderRadius: "8px",
+                            borderTopLeftRadius: "8px",
+                            borderTopRightRadius: "8px",
+                            cursor: "text",
+                            direction: "ltr",
+                            display: "flex",
+                            marginBottom: "16px",
+                            position: "relative",
+                            textAlign: "center",
+                            width: "100%",
+                          }}
+                        >
+                          <input
+                            aria-invalid="false"
+                            autoComplete={index === 0 ? "one-time-code" : "off"}
+                            type="tel"
+                            maxLength={1}
+                            value={emailCode[index] || ""}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              if (newValue.match(/^[0-9]*$/)) {
+                                const newCode = emailCode.split("");
+                                newCode[index] = newValue;
+                                setEmailCode(newCode.join(""));
+
+                                // Auto focus next input
+                                if (newValue && index < 5) {
+                                  const nextInput = document.querySelector(
+                                    `input[data-email-index="${index + 1}"]`,
+                                  ) as HTMLInputElement;
+                                  if (nextInput) nextInput.focus();
+                                }
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (
+                                e.key === "Backspace" &&
+                                !emailCode[index] &&
+                                index > 0
+                              ) {
+                                const prevInput = document.querySelector(
+                                  `input[data-email-index="${index - 1}"]`,
+                                ) as HTMLInputElement;
+                                if (prevInput) prevInput.focus();
+                              }
+                            }}
+                            data-email-index={index}
+                            disabled={isSubmitting}
+                            style={{
+                              animation:
+                                "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                              animationDuration: "0.01s",
+                              animationName: "mui-auto-fill-cancel",
+                              appearance: "auto",
+                              boxSizing: "content-box",
+                              cursor: "text",
+                              direction: "ltr",
+                              overflowX: "clip",
+                              overflowY: "clip",
+                              paddingBottom: "10px",
+                              paddingLeft: "12px",
+                              paddingRight: "12px",
+                              paddingTop: "10px",
+                              textAlign: "center",
+                              width: "100%",
+                              border: "none",
+                              outline: "none",
+                              fontSize: "16px",
+                              fontWeight: "500",
+                              backgroundColor: "rgb(245, 246, 247)",
+                            }}
+                          />
+                          <fieldset
+                            aria-hidden="true"
+                            style={{
+                              borderBottomLeftRadius: "8px",
+                              borderBottomRightRadius: "8px",
+                              borderBottomStyle: "solid",
+                              borderBottomWidth: "1px",
+                              borderBottom: "1px solid rgba(0, 0, 0, 0)",
+                              borderBottomColor: "rgba(0, 0, 0, 0)",
+                              borderLeft: "1px solid rgba(0, 0, 0, 0)",
+                              borderLeftStyle: "solid",
+                              borderLeftWidth: "1px",
+                              borderLeftColor: "rgba(0, 0, 0, 0)",
+                              borderRadius: "8px",
+                              borderRight: "1px solid rgba(0, 0, 0, 0)",
+                              borderRightStyle: "solid",
+                              borderRightWidth: "1px",
+                              borderRightColor: "rgba(0, 0, 0, 0)",
+                              borderTopLeftRadius: "8px",
+                              borderTopRightRadius: "8px",
+                              borderTop: "1px solid rgba(0, 0, 0, 0)",
+                              borderTopStyle: "solid",
+                              borderTopWidth: "1px",
+                              borderTopColor: "rgba(0, 0, 0, 0)",
+                              bottom: "0px",
+                              cursor: "text",
+                              direction: "ltr",
+                              left: "0px",
+                              minWidth: "0%",
+                              overflowX: "hidden",
+                              overflowY: "hidden",
+                              paddingLeft: "8px",
+                              paddingRight: "8px",
+                              pointerEvents: "none",
+                              position: "absolute",
+                              right: "0px",
+                              textAlign: "right",
+                              top: "-5px",
+                            }}
+                          >
+                            <legend
+                              style={{
+                                cursor: "text",
+                                direction: "ltr",
+                                lineHeight: "11px",
+                                overflowX: "hidden",
+                                overflowY: "hidden",
+                                pointerEvents: "none",
+                                textAlign: "right",
+                                transitionDuration: "0.15s",
+                                transitionProperty: "width",
+                                transitionTimingFunction:
+                                  "cubic-bezier(0, 0, 0.2, 1)",
+                              }}
+                            >
+                              <span
+                                aria-hidden="true"
+                                style={{
+                                  cursor: "text",
+                                  direction: "ltr",
+                                  display: "inline",
+                                  lineHeight: "11px",
+                                  pointerEvents: "none",
+                                  textAlign: "right",
+                                }}
+                              >
+                                ​
+                              </span>
+                            </legend>
+                          </fieldset>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
                 {errors.emailCode && (
                   <p
                     style={{
