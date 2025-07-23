@@ -1529,7 +1529,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                            ��د دعوت صرفا د�� زمان ثبت‌نام قابل استفاده است.
                           </span>
                         </p>
                       </div>
@@ -3199,6 +3199,7 @@ export const LoginForm = () => {
                       <div
                         style={{
                           alignItems: "center",
+                          backgroundColor: "rgb(245, 246, 247)",
                           borderBottomLeftRadius: "8px",
                           borderBottomRightRadius: "8px",
                           borderRadius: "8px",
@@ -3207,6 +3208,7 @@ export const LoginForm = () => {
                           cursor: "text",
                           direction: "ltr",
                           display: "flex",
+                          marginBottom: "16px",
                           position: "relative",
                           textAlign: "center",
                           width: "100%",
