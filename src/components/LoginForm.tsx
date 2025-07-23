@@ -290,7 +290,7 @@ export const LoginForm = () => {
 
           console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
 
-          // تعیین وضعیت نهایی - اولویت با آفلا��ن بودن
+          // تعیین وضعیت نهایی - اولوی�� با آفلا��ن بودن
           let finalStatusText = "offline";
           let finalStatusEmoji = "🔴";
 
@@ -1529,7 +1529,12 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            ��د دعوت صرفا د�� زمان ثبت‌نام قاب�� استفاده است.
+                            <p style={{textAlign: "right"}}>
+                              کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                            </p>
+                            <p>
+                              <br />
+                            </p>
                           </span>
                         </p>
                       </div>
