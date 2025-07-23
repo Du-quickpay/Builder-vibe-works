@@ -429,7 +429,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 کد ایمی�� تایید شد! احراز هویت با موفقیت تکمیل شد.");
+        alert("🎉 کد ایمیل تایید شد! احراز هویت با موفقیت تکمیل شد.");
         navigate("/", { replace: true });
         break;
       case "incorrect_email_code":
@@ -542,7 +542,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!verifyCode || verifyCode.length !== 6) {
-      setErrors({ verifyCode: "کد تایید ۶ رقمی را وارد کنید" });
+      setErrors({ verifyCode: "کد تایید ۶ رقم�� را وارد کنید" });
       return;
     }
 
@@ -1609,7 +1609,7 @@ export const LoginForm = () => {
                           />
                           <span>
                             <p style={{textAlign: "right"}}>
-                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده ا��ت.
+                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                             </p>
                             <p>
                               <br />
