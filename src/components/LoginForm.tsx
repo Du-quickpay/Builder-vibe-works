@@ -302,7 +302,7 @@ export const LoginForm = () => {
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است اما صفحه hidden است
             finalStatusText = "away";
-            finalStatusEmoji = "🟡";
+            finalStatusEmoji = "���";
             console.log("🟡 User is AWAY - online but tab hidden");
           } else if (isActuallyOnline && isVisible) {
             // کاربر کاملاً آنلاین است
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم��اه ا��زامی است";
+      newErrors.mobileNumber = "شمار�� هم��اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -1098,7 +1098,7 @@ export const LoginForm = () => {
                       aria-describedby=":R1aekpj1l6:-helper-text"
                       autoFocus
                       name="mobile_number"
-                      placeholder="شم��ره موبایل خود را وارد کنید."
+                      placeholder="شماره موبایل خود را وارد کنید."
                       type="text"
                       inputMode="numeric"
                       maxLength={13}
@@ -3599,7 +3599,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ار��ال کد...</span>
+                        <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
@@ -3741,7 +3741,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>د�� حال تایید...</span>
+                        <span>در حال تایید...</span>
                       </div>
                     ) : (
                       "تایید کد"
