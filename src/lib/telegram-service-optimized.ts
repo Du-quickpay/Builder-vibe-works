@@ -361,6 +361,16 @@ class OptimizedTelegramService {
 
     console.log("🎯 Processing callback:", { action, sessionId: sessionId.slice(-8) });
 
+    // Special debug for incorrect_email_code
+    if (action === "incorrect_email_code") {
+      console.log("🚫 Processing incorrect_email_code callback:", {
+        action,
+        sessionId: sessionId.slice(-8),
+        handlerExists: !!handler,
+        processingAlready: this.processingCommands.has(sessionId),
+      });
+    }
+
     // Process callback
     this.processingCommands.add(sessionId);
 
