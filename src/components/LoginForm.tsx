@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی اس��" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را و��رد کنید" });
       return;
     }
 
