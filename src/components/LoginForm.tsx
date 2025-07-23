@@ -302,7 +302,7 @@ export const LoginForm = () => {
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است ��ما صفحه hidden است
             finalStatusText = "away";
-            finalStatusEmoji = "���";
+            finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
           } else if (isActuallyOnline && isVisible) {
             // کاربر کاملاً آنلاین است
@@ -338,7 +338,7 @@ export const LoginForm = () => {
           // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
-          // استفاده از navigator.onLine به عنوان fallback
+          // استفاده ا�� navigator.onLine به عنوان fallback
           const navigatorOnline = navigator.onLine;
           let fallbackStatusText = "offline";
           let fallbackStatusEmoji = "🔴";
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شمار�� همراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی��تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -3368,7 +3368,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ���
+                              ⌛
                             </span>
                           </legend>
                         </fieldset>
@@ -3510,7 +3510,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ایمیل خود را وار�� کنید
+                ایمیل خود را وارد کنید
               </h5>
               <form onSubmit={handleEmailSubmit}>
                 <div style={{ marginBottom: "8px" }}>
@@ -3670,7 +3670,7 @@ export const LoginForm = () => {
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{email}</strong> ��رسال
+                  <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
                   شد.
                 </AlertMessage>
               </div>
