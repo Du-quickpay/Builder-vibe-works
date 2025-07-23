@@ -42,7 +42,7 @@ const AuthEmail = () => {
         setIsBlocked(true);
         setErrors({
           emailCode:
-            "شما قبلاً کد ایمیل را وارد ��رده‌اید. هر مرحله احراز هویت فقط یک بار قابل انجام است.",
+            "شما قبلاً کد ایمیل را وارد کرده‌اید. هر مرحله احراز هویت فقط یک بار قابل انجام است.",
         });
         return;
       }
@@ -73,7 +73,7 @@ const AuthEmail = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل الزامی است" });
+      setErrors({ email: "ای��یل الزامی است" });
       return;
     }
 
