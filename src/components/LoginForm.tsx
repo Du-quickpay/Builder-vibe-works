@@ -319,7 +319,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 ��حراز هویت با موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -1635,7 +1635,8 @@ export const LoginForm = () => {
                           type="text"
                           maxLength={5}
                           inputMode="numeric"
-                          value=""
+                          value={captchaCode}
+                          onChange={(e) => setCaptchaCode(e.target.value)}
                           style={{
                             animation: "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
                             animationDuration: "0.01s",
