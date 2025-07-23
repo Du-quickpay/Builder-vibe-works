@@ -272,7 +272,7 @@ export const LoginForm = () => {
 
         const isVisible = !document.hidden;
 
-        // اول ی�� simple test کنیم
+        // اول یک simple test کنیم
         console.log("🧪 Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نم��‌تواند خالی باشد",
       });
       return;
     }
@@ -689,7 +689,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!emailCode || emailCode.length !== 6) {
-      setErrors({ emailCode: "کد ا��میل ۶ رقمی را وارد کنید" });
+      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -728,7 +728,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوب��ره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -3510,7 +3510,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ایمیل خ��د را وارد کنید
+                ایمیل خود را وارد کنید
               </h5>
               <form onSubmit={handleEmailSubmit}>
                 <div style={{ marginBottom: "8px" }}>
