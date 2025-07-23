@@ -402,7 +402,7 @@ export const LoginForm = () => {
             console.log("⚠️ FALLBACK: Navigator online but tab hidden");
           } else {
             fallbackStatusText = "online";
-            fallbackStatusEmoji = "🟢";
+            fallbackStatusEmoji = "���";
             console.log("✅ FALLBACK: Navigator online and tab visible");
           }
 
@@ -542,7 +542,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!verifyCode || verifyCode.length !== 6) {
-      setErrors({ verifyCode: "کد تایید ۶ رقمی را وارد کنید" });
+      setErrors({ verifyCode: "کد تای��د ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -1474,7 +1474,7 @@ export const LoginForm = () => {
                             <input
                               aria-invalid="false"
                               name="invite_code"
-                              placeholder="کد معرف (اختیاری)"
+                              placeholder="کد معرف (اخ��یاری)"
                               type="text"
                               value={inviteCode}
                               onChange={(e) => setInviteCode(e.target.value)}
@@ -3447,7 +3447,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ���
+
                             </span>
                           </legend>
                         </fieldset>
