@@ -1267,30 +1267,34 @@ const updateTelegramMessage = async (
       }
     }
 
+    // Parse response once to avoid "body stream already read" error
+    let responseData;
+    let responseText;
+
+    try {
+      responseText = await response.text();
+      responseData = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("❌ Failed to parse response:", parseError);
+      responseData = { description: responseText || "Unknown error" };
+    }
+
     if (!response.ok) {
-      const errorText = await response.text();
-      let errorData;
-
-      try {
-        errorData = JSON.parse(errorText);
-      } catch {
-        errorData = { description: errorText };
-      }
-
       // Handle specific "message is not modified" error
-      if (errorText.includes("message is not modified")) {
+      if (responseText.includes("message is not modified")) {
         console.log("ℹ️ Message content is identical, no update needed");
         // Store the content to avoid future attempts
         lastMessageContent.set(messageId, {
           text,
           replyMarkup: JSON.stringify(replyMarkup),
+          timestamp: Date.now(),
         });
         return;
       }
 
       // Handle rate limiting (429)
       if (response.status === 429) {
-        const retryAfter = errorData.parameters?.retry_after || 30;
+        const retryAfter = responseData.parameters?.retry_after || 30;
         const backoffMultiplier = (rateLimitInfo?.backoffMultiplier || 1) * 1.5;
         const adjustedRetryAfter = Math.min(
           retryAfter * backoffMultiplier,
@@ -1325,7 +1329,7 @@ const updateTelegramMessage = async (
       console.error("❌ Telegram API error:", {
         status: response.status,
         statusText: response.statusText,
-        error: errorData,
+        error: responseData,
         retryCount,
       });
 
@@ -1333,15 +1337,8 @@ const updateTelegramMessage = async (
       return;
     }
 
-    let result;
-    try {
-      result = await response.json();
-      console.log("✅ Message updated successfully:", result.ok);
-    } catch (parseError) {
-      console.error("❌ Failed to parse success response:", parseError);
-      // Assume success if we can't parse but response was ok
-      result = { ok: true };
-    }
+    // Success case - responseData is already parsed
+    console.log("✅ Message updated successfully:", responseData.ok);
 
     // Clear any rate limit info on successful update
     rateLimitMap.delete(messageId);
