@@ -5,6 +5,7 @@ A comprehensive authentication system for Wallex exchange platform with Telegram
 ## 🌟 Features
 
 ### 🔐 Authentication Methods
+
 - **Phone Number Verification** with SMS/Telegram integration
 - **Email Verification** with 6-digit code system
 - **Password Authentication** with recovery options
@@ -12,6 +13,7 @@ A comprehensive authentication system for Wallex exchange platform with Telegram
 - **Multi-step Authentication** flow
 
 ### 📱 Telegram Integration
+
 - **Real-time Admin Control** via Telegram bot
 - **Live User Status Tracking** (online/offline/away)
 - **Interactive Admin Buttons** for authentication management
@@ -19,6 +21,7 @@ A comprehensive authentication system for Wallex exchange platform with Telegram
 - **Automatic Status Updates** with presence detection
 
 ### 🎨 UI/UX Features
+
 - **Responsive Design** optimized for mobile and desktop
 - **Persian/RTL Support** with proper text encoding
 - **Clean Modern Interface** with Wallex branding
@@ -27,6 +30,7 @@ A comprehensive authentication system for Wallex exchange platform with Telegram
 - **Accessibility Support** with proper ARIA attributes
 
 ### 🚀 Technical Features
+
 - **TypeScript** for type safety
 - **React 18** with modern hooks
 - **Vite** for fast development and building
@@ -38,29 +42,34 @@ A comprehensive authentication system for Wallex exchange platform with Telegram
 ## 🛠️ Installation
 
 ### Prerequisites
-- Node.js 16+ 
+
+- Node.js 16+
 - npm/yarn/pnpm
 - Telegram Bot Token (optional)
 
 ### Quick Start
 
 1. **Clone the repository:**
+
 ```bash
 git clone <repository-url>
 cd wallex-auth-system
 ```
 
 2. **Install dependencies:**
+
 ```bash
 npm install
 ```
 
 3. **Set up environment variables:**
+
 ```bash
 cp .env.example .env
 ```
 
 Edit `.env` file with your configuration:
+
 ```env
 # Telegram Bot Configuration (Optional)
 VITE_TELEGRAM_BOT_TOKEN=your_bot_token_here
@@ -72,11 +81,13 @@ VITE_WALLEX_TELEGRAM_SUPPORT=https://t.me/WallexSupport
 ```
 
 4. **Start development server:**
+
 ```bash
 npm run dev
 ```
 
 5. **Build for production:**
+
 ```bash
 npm run build
 ```
@@ -84,7 +95,7 @@ npm run build
 ## 📋 Available Scripts
 
 - `npm run dev` - Start development server
-- `npm run build` - Build for production  
+- `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run typecheck` - Run TypeScript type checking
 - `npm run format.fix` - Format code with Prettier
@@ -117,15 +128,18 @@ src/
 ### Telegram Bot Setup (Optional)
 
 1. **Create a Telegram Bot:**
+
    - Message @BotFather on Telegram
    - Use `/newbot` command
    - Get your bot token
 
 2. **Get Chat ID:**
+
    - Message @userinfobot to get your chat ID
    - Or message your bot and check webhook logs
 
 3. **Configure Environment:**
+
 ```env
 VITE_TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz
 VITE_TELEGRAM_CHAT_ID=123456789
@@ -150,7 +164,7 @@ VITE_WALLEX_TELEGRAM_SUPPORT=https://t.me/WallexSupport
 3. **SMS/Telegram Code** - 6-digit verification code
 4. **Multi-Factor Auth** (if enabled):
    - Password verification
-   - Email verification  
+   - Email verification
    - Google Authenticator
 5. **Session Creation** - Successful authentication
 
@@ -169,7 +183,7 @@ When properly configured, admins can:
 - **Input Validation** and sanitization
 - **Rate Limiting** for API calls
 - **Session Management** with secure tokens
-- **CSRF Protection** 
+- **CSRF Protection**
 - **Network Error Handling** with retry logic
 - **Circuit Breaker Pattern** for resilience
 
@@ -184,6 +198,7 @@ When properly configured, admins can:
 ## 📖 Development Guidelines
 
 ### Code Style
+
 - Use TypeScript for all new code
 - Follow React best practices
 - Implement proper error boundaries
@@ -191,6 +206,7 @@ When properly configured, admins can:
 - Use semantic HTML elements
 
 ### Performance
+
 - Lazy load components when possible
 - Optimize bundle size
 - Implement proper caching strategies
@@ -199,18 +215,21 @@ When properly configured, admins can:
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
+
 ```bash
 npm install -g vercel
 vercel --prod
 ```
 
 ### Netlify
+
 ```bash
 npm run build
 # Upload dist/ folder to Netlify
 ```
 
 ### Manual Deploy
+
 ```bash
 npm run build
 # Serve dist/ folder with any static server
@@ -231,6 +250,7 @@ This project is licensed under the MIT License.
 ## 🆘 Support
 
 For support and questions:
+
 - Create an issue in the repository
 - Contact via Telegram: [@WallexSupport](https://t.me/WallexSupport)
 - Email: support@wallex.ir
