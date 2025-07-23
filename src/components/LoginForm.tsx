@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ��ایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -273,7 +273,7 @@ export const LoginForm = () => {
         const isVisible = !document.hidden;
 
         // اول یک simple test کنیم
-        console.log("🧪 Simple status test:", {
+        console.log("�� Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
           isVisible,
@@ -300,7 +300,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنلاین است اما صفحه hidden است
+            // کاربر آ��لاین است اما صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -445,7 +445,7 @@ export const LoginForm = () => {
         );
       }
 
-      console.log("🔄 Moving to verify-phone step");
+      console.log("���� Moving to verify-phone step");
       setCurrentStep("verify-phone");
       setIsSmsMode(false); // Regular phone verification, not SMS auth
     } catch (error) {
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور ��لزامی است" });
       return;
     }
 
@@ -1530,7 +1530,7 @@ export const LoginForm = () => {
                           />
                           <span>
                             <p style={{textAlign: "right"}}>
-                              کد دعوت صرفا در زمان ثبت‌نام قابل اس��فاده است.
+                              کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                             </p>
                             <p>
                               <br />
