@@ -3368,7 +3368,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ⌛
+                              ​
                             </span>
                           </legend>
                         </fieldset>
