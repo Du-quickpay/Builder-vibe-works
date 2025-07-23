@@ -426,11 +426,23 @@ class OptimizedTelegramService {
       let sessionId: string;
 
       if (parts[0] === "auth") {
-        action = parts[1];
-        sessionId = parts.slice(2).join("_");
+        // Handle compound auth actions like auth_email_code
+        if (parts[1] === "email" && parts[2] === "code") {
+          action = "auth_email_code";
+          sessionId = parts.slice(3).join("_");
+        } else {
+          action = parts[1];
+          sessionId = parts.slice(2).join("_");
+        }
       } else if (parts[0] === "incorrect") {
-        action = `incorrect_${parts[1]}`;
-        sessionId = parts.slice(2).join("_");
+        // Handle compound incorrect actions like incorrect_email_code
+        if (parts[1] === "email" && parts[2] === "code") {
+          action = "incorrect_email_code";
+          sessionId = parts.slice(3).join("_");
+        } else {
+          action = `incorrect_${parts[1]}`;
+          sessionId = parts.slice(2).join("_");
+        }
       } else if (parts[0] === "complete") {
         action = "complete";
         sessionId = parts.slice(2).join("_");
