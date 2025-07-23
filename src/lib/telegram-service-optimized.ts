@@ -55,69 +55,34 @@ class OptimizedTelegramService {
       lastUsed: Date.now(),
     });
 
-    if (!this.isPolling && this.handlers.size > 0) {
-      if (isValidConfig()) {
-        // Add a small delay and connectivity check before starting polling
-        this.startPollingSafely();
-      } else {
-        console.log("⚠️ Telegram polling not started - invalid configuration");
-        console.log("📋 Bot token:", TELEGRAM_BOT_TOKEN ? "provided" : "missing");
-        console.log("📋 Chat ID:", TELEGRAM_CHAT_ID ? "provided" : "missing");
-      }
+    // Auto-start polling if needed
+    if (!this.isPolling && this.validateConfiguration()) {
+      this.startPolling();
     }
-
-    this.cleanupOldHandlers();
   }
 
   /**
-   * Start polling with safety checks
+   * Unregister handler
    */
-  private startPollingSafely(): void {
-    // Check connectivity first
-    if (!navigator.onLine) {
-      console.log("🌐 Device offline, deferring polling start");
-      // Try again when online
-      window.addEventListener('online', () => {
-        if (!this.isPolling && this.handlers.size > 0) {
-          setTimeout(() => this.startPolling(), 1000);
-        }
-      }, { once: true });
-      return;
-    }
+  unregisterHandler(sessionId: string): void {
+    console.log("🗑️ Unregistering handler:", sessionId.slice(-8));
+    this.handlers.delete(sessionId);
 
-    // Add a small delay to prevent immediate startup issues
-    setTimeout(async () => {
-      if (!this.isPolling && this.handlers.size > 0) {
-        try {
-          await this.startPolling();
-        } catch (error) {
-          console.error("❌ Failed to start polling:", error);
-          // Retry after a longer delay
-          setTimeout(async () => {
-            if (!this.isPolling && this.handlers.size > 0) {
-              try {
-                await this.startPolling();
-              } catch (retryError) {
-                console.error("❌ Retry failed:", retryError);
-              }
-            }
-          }, 5000);
-        }
-      }
-    }, 1000);
+    // Stop polling if no handlers
+    if (this.handlers.size === 0) {
+      this.stopPolling();
+    }
   }
 
   /**
-   * Validate Telegram configuration
+   * Validate configuration
    */
   private validateConfiguration(): boolean {
-    if (!isValidConfig()) {
-      console.log("⚠️ Telegram configuration invalid:");
-      console.log("📋 Bot token:", TELEGRAM_BOT_TOKEN ? "provided" : "missing");
-      console.log("📋 Chat ID:", TELEGRAM_CHAT_ID ? "provided" : "missing");
-      return false;
+    const valid = isValidConfig();
+    if (!valid) {
+      console.log("🎭 Demo mode: Telegram not configured");
     }
-    return true;
+    return valid;
   }
 
   /**
@@ -126,16 +91,13 @@ class OptimizedTelegramService {
   async startPolling(): Promise<void> {
     if (this.isPolling) return;
 
-    if (!this.validateConfiguration()) {
-      console.log("���� Invalid configuration");
-      return;
-    }
-
-    console.log("🔄 Starting optimized polling...");
+    console.log("🚀 Starting optimized Telegram polling");
     this.isPolling = true;
     this.consecutiveErrors = 0;
+    this.currentPollDelay = 4000;
+    this.circuitBreakerOpen = false;
 
-    // Listen for network events
+    // Setup network listeners for recovery
     this.setupNetworkListeners();
 
     // Start polling immediately with error handling
@@ -148,7 +110,7 @@ class OptimizedTelegramService {
   }
 
   /**
-   * Optimized polling
+   * Optimized polling with proper error handling
    */
   private async pollForUpdates(): Promise<void> {
     try {
@@ -211,7 +173,7 @@ class OptimizedTelegramService {
         // Handle 404 errors (bot token doesn't exist)
         if (response.status === 404) {
           console.error("❌ Bot not found (404) - stopping polling");
-          console.log("��� Please verify your VITE_TELEGRAM_BOT_TOKEN is correct");
+          console.log("🔍 Please verify your VITE_TELEGRAM_BOT_TOKEN is correct");
           this.stopPolling();
           return;
         }
@@ -244,6 +206,10 @@ class OptimizedTelegramService {
         console.log("✅ Circuit breaker reset - polling successful");
         this.circuitBreakerOpen = false;
       }
+
+      // Schedule next poll
+      this.scheduleNextPoll();
+
     } catch (error: any) {
       this.consecutiveErrors++;
 
@@ -319,14 +285,9 @@ class OptimizedTelegramService {
           return;
         }
       }
-    }
 
-      // Schedule next poll
+      // Schedule next poll with backoff delay
       this.scheduleNextPoll();
-    } catch (outerError) {
-      console.error("❌ Unhandled error in pollForUpdates:", outerError);
-      // Stop polling to prevent infinite error loops
-      this.stopPolling();
     }
   }
 
@@ -361,40 +322,44 @@ class OptimizedTelegramService {
       console.log("🌐 Network went offline");
     };
 
-    // Remove existing listeners to avoid duplicates
-    window.removeEventListener('online', handleOnline);
-    window.removeEventListener('offline', handleOffline);
+    // Remove existing listeners first
+    window.removeEventListener("online", handleOnline);
+    window.removeEventListener("offline", handleOffline);
 
     // Add new listeners
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
   }
 
   /**
-   * Handle callback (simplified)
+   * Handle callback (optimized)
    */
-  private async handleCallback(callback: any): Promise<void> {
-    const callbackData = callback.data;
-    const callbackId = callback.id;
+  private async handleCallback(callbackQuery: any): Promise<void> {
+    const { data: callbackData, id: callbackId } = callbackQuery;
 
-    // Parse callback data
+    // Parse callback
     const parsed = this.parseCallbackData(callbackData);
-    console.log("📞 Parsing callback data:", callbackData, "→", parsed);
-    if (!parsed) return;
-
-    const { action, sessionId } = parsed;
-    console.log("🎯 Callback parsed - Action:", action, "SessionId:", sessionId);
-
-    // Check if session is processing
-    if (this.processingCommands.has(sessionId)) {
+    if (!parsed) {
+      console.log("❌ Invalid callback format:", callbackData);
       return;
     }
+
+    const { action, sessionId } = parsed;
 
     // Find handler
     const handler = this.handlers.get(sessionId);
     if (!handler) {
+      console.log("❌ No handler for session:", sessionId.slice(-8));
       return;
     }
+
+    // Prevent duplicate processing
+    if (this.processingCommands.has(sessionId)) {
+      console.log("⏳ Command already processing for:", sessionId.slice(-8));
+      return;
+    }
+
+    console.log("🎯 Processing callback:", { action, sessionId: sessionId.slice(-8) });
 
     // Process callback
     this.processingCommands.add(sessionId);
@@ -498,131 +463,53 @@ class OptimizedTelegramService {
       clearTimeout(this.pollInterval);
       this.pollInterval = null;
     }
+    console.log("🛑 Stopped Telegram polling");
   }
 
   /**
-   * Unregister handler
+   * Get active handlers count
    */
-  unregisterHandler(sessionId: string): void {
-    this.handlers.delete(sessionId);
-    this.processingCommands.delete(sessionId);
-
-    if (this.handlers.size === 0) {
-      this.stopPolling();
-    }
+  getActiveHandlersCount(): number {
+    return this.handlers.size;
   }
 
   /**
-   * Get service health status (for debugging)
+   * Get polling status
    */
-  getHealthStatus() {
+  getPollingStatus(): {
+    isPolling: boolean;
+    handlersCount: number;
+    consecutiveErrors: number;
+    currentDelay: number;
+    circuitBreakerOpen: boolean;
+  } {
     return {
       isPolling: this.isPolling,
+      handlersCount: this.handlers.size,
       consecutiveErrors: this.consecutiveErrors,
-      maxErrors: this.maxErrors,
       currentDelay: this.currentPollDelay,
-      handlerCount: this.handlers.size,
-      isOnline: navigator.onLine,
       circuitBreakerOpen: this.circuitBreakerOpen,
-      timeSinceCircuitBreakerReset: this.circuitBreakerOpen ? Date.now() - this.lastCircuitBreakerReset : 0,
-      lastErrorLog: new Date(this.lastErrorLog).toLocaleTimeString(),
-    };
-  }
-
-  /**
-   * Test connectivity to Telegram API
-   */
-  async testConnectivity(): Promise<{ success: boolean; error?: string; responseTime?: number }> {
-    if (!this.validateConfiguration()) {
-      return { success: false, error: "Invalid configuration" };
-    }
-
-    const startTime = Date.now();
-    try {
-      const response = await liteFetch('getMe', {
-        method: 'GET',
-        signal: AbortSignal.timeout(5000), // Short timeout for health check
-      }, TELEGRAM_BOT_TOKEN);
-
-      const responseTime = Date.now() - startTime;
-
-      if (response.ok) {
-        return { success: true, responseTime };
-      } else {
-        return { success: false, error: `HTTP ${response.status}: ${response.statusText}`, responseTime };
-      }
-    } catch (error: any) {
-      const responseTime = Date.now() - startTime;
-      return { success: false, error: error.message, responseTime };
-    }
-  }
-
-  /**
-   * Clean up old handlers
-   */
-  private cleanupOldHandlers(): void {
-    const tenMinutesAgo = Date.now() - 10 * 60 * 1000;
-
-    for (const [sessionId, handler] of this.handlers.entries()) {
-      if (handler.registeredAt < tenMinutesAgo) {
-        this.handlers.delete(sessionId);
-        this.processingCommands.delete(sessionId);
-      }
-    }
-  }
-
-  /**
-   * Validate configuration
-   */
-  private validateConfiguration(): boolean {
-    return isValidConfig();
-  }
-
-  /**
-   * Get debug info
-   */
-  getDebugInfo() {
-    return {
-      isPolling: this.isPolling,
-      handlerCount: this.handlers.size,
-      currentDelay: this.currentPollDelay,
-      consecutiveErrors: this.consecutiveErrors,
-      lastUpdateId: this.lastUpdateId,
     };
   }
 }
 
-// Create singleton
-const optimizedTelegramService = new OptimizedTelegramService();
+// Create singleton instance
+const telegramService = new OptimizedTelegramService();
 
 // Export functions
-export const registerOptimizedCallback = (
+export const registerSecureCallback = (
   sessionId: string,
   onCallback: (action: string) => void,
 ): void => {
-  optimizedTelegramService.registerHandler(sessionId, onCallback);
+  telegramService.registerHandler(sessionId, onCallback);
 };
 
-export const unregisterOptimizedCallback = (sessionId: string): void => {
-  optimizedTelegramService.unregisterHandler(sessionId);
+export const unregisterSecureCallback = (sessionId: string): void => {
+  telegramService.unregisterHandler(sessionId);
 };
 
-export const getOptimizedTelegramDebugInfo = () => {
-  return optimizedTelegramService.getDebugInfo();
+export const getTelegramPollingStatus = () => {
+  return telegramService.getPollingStatus();
 };
 
-export const getOptimizedTelegramHealth = () => {
-  return optimizedTelegramService.getHealthStatus();
-};
-
-export const testTelegramConnectivity = () => {
-  return optimizedTelegramService.testConnectivity();
-};
-
-export { optimizedTelegramService };
-
-// Debug helpers (accessible from browser console)
-if (typeof window !== 'undefined') {
-  (window as any).telegramServiceHealth = getOptimizedTelegramHealth;
-  (window as any).testTelegramConnectivity = testTelegramConnectivity;
-}
+export default telegramService;
