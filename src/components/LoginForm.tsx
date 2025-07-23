@@ -63,6 +63,7 @@ export const LoginForm = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [showInviteCode, setShowInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
+  const [captchaCode, setCaptchaCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Phone verification states
@@ -245,7 +246,7 @@ export const LoginForm = () => {
           } else if (isActuallyOnline && isVisible) {
             // کاربر کاملاً آنلاین است
             finalStatusText = "online";
-            finalStatusEmoji = "����";
+            finalStatusEmoji = "🟢";
             console.log("🟢 User is ONLINE - fully active");
           }
 
@@ -502,7 +503,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی ��اشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -3680,7 +3681,7 @@ export const LoginForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  کد تایید ��یمیل
+                  کد تایید ایمیل
                 </label>
                 <OTPInput
                   length={6}
