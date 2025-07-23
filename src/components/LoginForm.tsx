@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم����اه الزامی است";
+      newErrors.mobileNumber = "شماره هم��اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را ��ارد کنید" });
       return;
     }
 
@@ -651,7 +651,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتب�� نیست" });
+      setErrors({ email: "ایمیل معتبر نیست" });
       return;
     }
 
@@ -2305,7 +2305,7 @@ export const LoginForm = () => {
                       textEmphasisColor: "rgba(0, 0, 0, 0.6)",
                     }}
                   >
-                    ارسال م��دد پس از {countdown} ثانیه
+                    ارسال مجدد پس از {countdown} ثانیه
                   </span>
                 ) : (
                   <>
@@ -2851,7 +2851,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فر��موش کرده‌اید؟
+                    رمز عبور را فراموش کرده‌اید؟
                   </p>
                   <a
                     href="#"
