@@ -142,7 +142,7 @@ class OptimizedTelegramService {
           // Try to reset circuit breaker
           this.circuitBreakerOpen = false;
           this.consecutiveErrors = Math.floor(this.consecutiveErrors / 2); // Reduce error count
-          console.log("🔄 Circuit breaker reset, attempting to resume polling");
+          console.log("�� Circuit breaker reset, attempting to resume polling");
         }
       }
 
@@ -232,7 +232,10 @@ class OptimizedTelegramService {
                            error.message?.includes("Network error") ||
                            error.message?.includes("Failed to fetch") ||
                            error.message?.includes("timeout") ||
-                           error.message?.includes("fetch");
+                           error.message?.includes("fetch") ||
+                           error.message?.includes("unable to connect") ||
+                           error.code === 'NETWORK_ERROR' ||
+                           !navigator.onLine;
 
       if (isNetworkError) {
         // Rate limit network error logging (once every 10 seconds)
