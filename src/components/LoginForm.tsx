@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وا��د شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -272,7 +272,7 @@ export const LoginForm = () => {
 
         const isVisible = !document.hidden;
 
-        // اول یک simple test ک��یم
+        // اول یک simple test کنیم
         console.log("🧪 Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وا��د کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -2035,7 +2035,7 @@ export const LoginForm = () => {
                   marginBottom: "4px",
                 }}
               >
-                <span>ک�� تأیید به شماره موبایل </span>
+                <span>کد تأیید به شماره موبایل </span>
                 <b
                   dir="ltr"
                   style={{
