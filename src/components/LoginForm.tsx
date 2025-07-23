@@ -336,7 +336,7 @@ export const LoginForm = () => {
           });
         }).catch((error) => {
           // Fallback: اگر enhanced detection هم کار نکرد
-          console.error("�� Enhanced network detection failed:", error);
+          console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به ع��وا�� fallback
           const navigatorOnline = navigator.onLine;
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی اس��" });
+      setErrors({ password: "رمز عبور الز��می اس��" });
       return;
     }
 
@@ -2816,7 +2816,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور ح��اب ر�� وارد کنید.
+                          رمز عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
