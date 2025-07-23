@@ -981,7 +981,11 @@ export const LoginForm = () => {
               textAlign: "center",
             }}
           >
-            {currentStep === "verify-phone" ? "تایید شماره موبایل" : "ورود و ثبت‌نام"}
+            {currentStep === "verify-phone" ? "تایید شماره موبایل" :
+             currentStep === "password" ? "رمز عبور" :
+             currentStep === "google" ? "Google Authenticator" :
+             currentStep === "email" ? "تایید ایمیل" :
+             "ورود و ثبت‌نام"}
           </span>
         </div>
 
