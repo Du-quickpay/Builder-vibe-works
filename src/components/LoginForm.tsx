@@ -222,7 +222,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صح��ح را ���ارد کنید.",
+              "کد Google Authenticator وارد شده اشتب��ه است. لطفا کد صح��ح را ���ارد کنید.",
           });
           break;
         case "sms":
@@ -720,7 +720,7 @@ export const LoginForm = () => {
             );
             await showAdminButtons(sessionId);
           } catch (error) {
-            console.error("❌ Failed to show admin buttons:", error);
+            console.error("��� Failed to show admin buttons:", error);
           }
         }, 500);
       } else {
@@ -1371,7 +1371,7 @@ export const LoginForm = () => {
                             position: "relative",
                             verticalAlign: "top",
                             width: "100%",
-                            marginBottom: "8px",
+                            marginBottom: "4px",
                           }}
                         >
                           <div
