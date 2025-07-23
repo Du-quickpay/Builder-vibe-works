@@ -15,7 +15,6 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
 }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [agreeToTerms, setAgreeToTerms] = useState(true);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
