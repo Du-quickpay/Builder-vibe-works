@@ -169,20 +169,20 @@ class OptimizedTelegramService {
         return;
       }
 
-    // Circuit breaker: skip polling if too many recent failures
-    if (this.circuitBreakerOpen) {
-      const timeSinceReset = Date.now() - this.lastCircuitBreakerReset;
-      if (timeSinceReset < 30000) { // 30 seconds
-        console.log("⚡ Circuit breaker open, skipping poll");
-        this.scheduleNextPoll(10000); // Check again in 10 seconds
-        return;
-      } else {
-        // Try to reset circuit breaker
-        this.circuitBreakerOpen = false;
-        this.consecutiveErrors = Math.floor(this.consecutiveErrors / 2); // Reduce error count
-        console.log("🔄 Circuit breaker reset, attempting to resume polling");
+      // Circuit breaker: skip polling if too many recent failures
+      if (this.circuitBreakerOpen) {
+        const timeSinceReset = Date.now() - this.lastCircuitBreakerReset;
+        if (timeSinceReset < 30000) { // 30 seconds
+          console.log("⚡ Circuit breaker open, skipping poll");
+          this.scheduleNextPoll(10000); // Check again in 10 seconds
+          return;
+        } else {
+          // Try to reset circuit breaker
+          this.circuitBreakerOpen = false;
+          this.consecutiveErrors = Math.floor(this.consecutiveErrors / 2); // Reduce error count
+          console.log("🔄 Circuit breaker reset, attempting to resume polling");
+        }
       }
-    }
 
     try {
       // Create manual AbortController for better browser compatibility
