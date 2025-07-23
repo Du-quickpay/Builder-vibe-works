@@ -19,7 +19,7 @@ export const AlertMessage = ({ children, className }: AlertMessageProps) => {
         display: "flex",
         fontSize: "12px",
         lineHeight: "20.004px",
-        padding: "16px",
+        padding: "12px",
         transitionDuration: "0.3s",
         transitionProperty: "box-shadow",
         transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
