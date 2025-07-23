@@ -651,7 +651,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتبر نیست" });
+      setErrors({ email: "ایمیل معتبر نیس��" });
       return;
     }
 
@@ -2093,7 +2093,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  ویرایش شماره موبایل
+                  ویرایش شماره موبای��
                 </button>
               </div>
 
@@ -2461,7 +2461,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حا�� تایید...</span>
+                        <span>در حال تایید...</span>
                       </div>
                     ) : (
                       <>
@@ -3642,7 +3642,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ارسال کد...</span>
+                        <span>در حال ار��ال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
