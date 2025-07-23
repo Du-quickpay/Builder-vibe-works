@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وا��د شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -541,7 +541,7 @@ export const LoginForm = () => {
             }, 3000);
           }
         } catch (error) {
-          console.warn("⚠��� Could not show admin buttons:", error);
+          console.warn("⚠️ Could not show admin buttons:", error);
         }
       }, 2000);
     } catch (error) {
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ ��قمی را وارد کنید" });
       return;
     }
 
@@ -646,7 +646,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل الزامی اس��" });
+      setErrors({ email: "ایمیل الزامی است" });
       return;
     }
 
@@ -3443,7 +3443,7 @@ export const LoginForm = () => {
                           animation: "spin 1s linear infinite",
                         }}
                       />
-                      <span>در حال تا����ید...</span>
+                      <span>در حال تا��ید...</span>
                     </div>
                     ) : (
                       <span
@@ -3476,7 +3476,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید تا کد تایید برای شما ا��سال شود.
+                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
