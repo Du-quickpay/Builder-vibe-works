@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "��مز عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -689,7 +689,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!emailCode || emailCode.length !== 6) {
-      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کنید" });
+      setErrors({ emailCode: "کد ا��میل ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -728,7 +728,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوب��ره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب را وار�� کنید.
+                          رمز عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
@@ -3510,7 +3510,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ایمیل خود را وارد کنید
+                ایمیل خ��د را وارد کنید
               </h5>
               <form onSubmit={handleEmailSubmit}>
                 <div style={{ marginBottom: "8px" }}>
