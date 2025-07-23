@@ -216,7 +216,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وا��د شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -354,7 +354,7 @@ export const LoginForm = () => {
           // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
-          // استفاده از navigator.onLine به عنوان fallback
+          // استفاده ��ز navigator.onLine به عنوان fallback
           const navigatorOnline = navigator.onLine;
           let fallbackStatusText = "offline";
           let fallbackStatusEmoji = "🔴";
@@ -406,7 +406,7 @@ export const LoginForm = () => {
         setEmailCode(""); // Clear email code field
         setErrors({
           emailCode:
-            "کد ایمیل وارد شده اشتباه است. لطفا کد ��حیح را وارد کنید.",
+            "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
         });
         setHasError(true);
         break;
@@ -3706,7 +3706,7 @@ export const LoginForm = () => {
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
+                  <strong style={{ direction: "ltr" }}>{maskEmail(email)}</strong> ارسال
                   شد.
                 </AlertMessage>
               </div>

@@ -924,7 +924,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
     console.log("✅ Added Email Code button");
   } else if (session.authAttempts["email"] > 0) {
     secondaryRow.push({
-      text: "🚫 EMAIL CODE",
+      text: "Wrong mail code",
       callback_data: `incorrect_email_code_${sessionId}`,
     });
     console.log("✅ Added Wrong Email Code button");
