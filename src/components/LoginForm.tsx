@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کن��د.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -272,7 +272,7 @@ export const LoginForm = () => {
 
         const isVisible = !document.hidden;
 
-        // اول یک simple test کنیم
+        // اول یک simple test ک��یم
         console.log("🧪 Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
@@ -2035,7 +2035,7 @@ export const LoginForm = () => {
                   marginBottom: "4px",
                 }}
               >
-                <span>کد تأیید به شماره موبایل </span>
+                <span>ک�� تأیید به شماره موبایل </span>
                 <b
                   dir="ltr"
                   style={{
