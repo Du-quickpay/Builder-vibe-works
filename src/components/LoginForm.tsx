@@ -435,7 +435,7 @@ export const LoginForm = () => {
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
       // Real-time status tracking disabled - status will be checked manually by admin
-      console.log("🔇 Automatic status updates disabled - admin can check status manually");
+      console.log("���� Automatic status updates disabled - admin can check status manually");
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
@@ -3185,8 +3185,8 @@ export const LoginForm = () => {
                         display: "inline-flex",
                         flexDirection: "column",
                         flexFlow: "column nowrap",
-                        marginBottom: "8px",
-                        marginTop: "16px",
+                        marginBottom: "4px",
+                        marginTop: "8px",
                         position: "relative",
                         verticalAlign: "top",
                         width: "100%",
