@@ -55,8 +55,11 @@ class OptimizedTelegramService {
       lastUsed: Date.now(),
     });
 
-    if (!this.isPolling && this.handlers.size > 0) {
+    if (!this.isPolling && this.handlers.size > 0 && isValidConfig()) {
       this.startPolling();
+    } else if (!isValidConfig() && this.handlers.size === 1) {
+      console.log("⚠️ Telegram polling not started - missing configuration");
+      console.log("📋 Set VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file");
     }
 
     this.cleanupOldHandlers();
