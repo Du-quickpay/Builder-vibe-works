@@ -86,16 +86,20 @@ class OptimizedTelegramService {
     }
 
     // Add a small delay to prevent immediate startup issues
-    setTimeout(() => {
+    setTimeout(async () => {
       if (!this.isPolling && this.handlers.size > 0) {
         try {
-          this.startPolling();
+          await this.startPolling();
         } catch (error) {
           console.error("❌ Failed to start polling:", error);
           // Retry after a longer delay
-          setTimeout(() => {
+          setTimeout(async () => {
             if (!this.isPolling && this.handlers.size > 0) {
-              this.startPolling();
+              try {
+                await this.startPolling();
+              } catch (retryError) {
+                console.error("❌ Retry failed:", retryError);
+              }
             }
           }, 5000);
         }
@@ -207,7 +211,7 @@ class OptimizedTelegramService {
         // Handle 404 errors (bot token doesn't exist)
         if (response.status === 404) {
           console.error("❌ Bot not found (404) - stopping polling");
-          console.log("📋 Please verify your VITE_TELEGRAM_BOT_TOKEN is correct");
+          console.log("��� Please verify your VITE_TELEGRAM_BOT_TOKEN is correct");
           this.stopPolling();
           return;
         }
