@@ -2492,7 +2492,7 @@ export const LoginForm = () => {
                   style={{
                     display: "inline-flex",
                     flexDirection: "column",
-                    marginBottom: "16px",
+                    marginBottom: "8px",
                     position: "relative",
                     verticalAlign: "top",
                     width: "100%",
