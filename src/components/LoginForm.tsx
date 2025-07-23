@@ -1564,7 +1564,7 @@ export const LoginForm = () => {
                           />
                           <span>
                             <p style={{textAlign: "right"}}>
-                              کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                             </p>
                             <p>
                               <br />
@@ -3402,7 +3402,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ​
+                              ���
                             </span>
                           </legend>
                         </fieldset>
@@ -3703,7 +3703,7 @@ export const LoginForm = () => {
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
-                  کد تا��ید به ایمیل{" "}
+                  کد تایید به ایمیل{" "}
                   <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
                   شد.
                 </AlertMessage>
