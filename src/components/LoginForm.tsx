@@ -408,9 +408,9 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه الزامی ��ست";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره هم��اه معتبر نیست";
+      newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرا�� ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می���شود)",
         );
       }
 
