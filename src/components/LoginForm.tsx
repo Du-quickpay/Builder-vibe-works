@@ -272,6 +272,10 @@ export const LoginForm = () => {
         setCurrentStep("email");
         setEmailStep("code");
         setEmailCode(""); // Clear any existing email code
+        // Set a default email if not already set (for display purposes)
+        if (!email) {
+          setEmail("user@email.com"); // Default placeholder email
+        }
         setErrors({});
         setHasError(false);
         setIsSubmitting(false); // Ensure loading state is cleared
