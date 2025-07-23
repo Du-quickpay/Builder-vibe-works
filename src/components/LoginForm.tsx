@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه ��لزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -445,7 +445,7 @@ export const LoginForm = () => {
         );
       }
 
-      console.log("���� Moving to verify-phone step");
+      console.log("📱 Moving to verify-phone step");
       setCurrentStep("verify-phone");
       setIsSmsMode(false); // Regular phone verification, not SMS auth
     } catch (error) {
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "رم�� عبور نمی‌تواند خالی باشد",
       });
       return;
     }
