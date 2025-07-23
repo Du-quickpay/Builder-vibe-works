@@ -361,6 +361,21 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
         </div>
       </div>
 
+      {/* Error Message */}
+      {hasError && error && (
+        <p
+          style={{
+            color: 'rgb(220, 38, 38)',
+            fontSize: '12px',
+            textAlign: 'right',
+            marginTop: '4px',
+            marginBottom: '8px',
+          }}
+        >
+          {error}
+        </p>
+      )}
+
       {/* Forgot Password Link */}
       <a
         onClick={onForgotPassword}
