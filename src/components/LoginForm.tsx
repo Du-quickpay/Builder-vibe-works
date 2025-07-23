@@ -380,7 +380,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش ��مدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -2930,7 +2930,7 @@ export const LoginForm = () => {
                     disabled={isSubmitting}
                     style={{
                       alignItems: "center",
-                      backgroundColor: "rgb(23, 29, 38)",
+                      backgroundColor: "rgb(0, 122, 255)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderColor: "rgb(255, 255, 255)",
@@ -3510,7 +3510,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ایمیل خود را وارد کنید
+                ایمیل خود را وارد کنی��
               </h5>
               <form onSubmit={handleEmailSubmit}>
                 <div style={{ marginBottom: "8px" }}>
