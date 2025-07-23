@@ -187,7 +187,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. ل��فا ��د صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. ل��فا ��د صحیح را وارد ��نید.",
           });
           break;
       }
@@ -1986,7 +1986,7 @@ export const LoginForm = () => {
                 >
                   {phoneNumber || "09105556565"}
                 </b>
-                <span> ارسال شد.</span>
+                <span> ارسا�� شد.</span>
               </h6>
 
               <div
@@ -2724,7 +2724,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور ح��اب را وارد کنید.
+                          رمز عبور ح��اب ر�� وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
@@ -3353,8 +3353,7 @@ export const LoginForm = () => {
                       />
                       <span>در حال تایید...</span>
                     </div>
-                  ) : (
-                    <>
+                    ) : (
                       <span
                         style={{
                           borderColor: "rgb(255, 255, 255)",
@@ -3362,17 +3361,14 @@ export const LoginForm = () => {
                           cursor: "pointer",
                           display: "contents",
                           fontWeight: "500",
-                          outlineColor: "rgb(255, 255, 255)",
                           textAlign: "center",
-                          textDecorationColor: "rgb(255, 255, 255)",
-                          textEmphasisColor: "rgb(255, 255, 255)",
                           textTransform: "uppercase",
                           userSelect: "none",
                         }}
-                      />
-                      <span>ثبت و ادامه</span>
-                    </>
-                  )}
+                      >
+                        ثبت و ادامه
+                      </span>
+                    )}
                 </button>
               </div>
             </>
@@ -3529,7 +3525,7 @@ export const LoginForm = () => {
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
                   <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
-                  شد.
+                  ش��.
                 </AlertMessage>
               </div>
 
