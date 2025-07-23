@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید ��ماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("��� Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می���شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -593,7 +593,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ��رسال ��مز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -689,7 +689,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!emailCode || emailCode.length !== 6) {
-      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کنید" });
+      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کن��د" });
       return;
     }
 
@@ -1032,7 +1032,7 @@ export const LoginForm = () => {
                     textAlign: "center",
                   }}
                 >
-                  به والکس خوش آمدید
+                  ��ه والکس خوش آمدید
                 </h5>
                 {/* Mobile Number Input */}
                 <div
