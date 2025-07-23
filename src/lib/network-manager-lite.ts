@@ -65,6 +65,9 @@ class LiteNetworkManager {
             ...options.headers,
           },
         }).catch((fetchError) => {
+          // Clean up timeout if request failed
+          if (timeoutId) clearTimeout(timeoutId);
+
           // Convert fetch errors to more specific error types
           if (fetchError.name === 'AbortError') {
             throw new Error('Request timeout - check your internet connection');
@@ -81,6 +84,9 @@ class LiteNetworkManager {
             throw fetchError;
           }
         });
+
+        // Clean up timeout on successful response
+        if (timeoutId) clearTimeout(timeoutId);
 
         if (response.ok || response.status < 500) {
           // Cache this successful endpoint
