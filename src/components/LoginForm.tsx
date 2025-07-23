@@ -268,10 +268,13 @@ export const LoginForm = () => {
         break;
       case "auth_email_code":
         // Go directly to email code input step (skip email input)
+        console.log("🎯 Admin action: auth_email_code - transitioning from", currentStep, "to email code");
         setCurrentStep("email");
         setEmailStep("code");
+        setEmailCode(""); // Clear any existing email code
         setErrors({});
         setHasError(false);
+        setIsSubmitting(false); // Ensure loading state is cleared
         break;
       case "check_status":
         // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
@@ -3696,7 +3699,7 @@ export const LoginForm = () => {
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
-                  کد تایید به ایمیل{" "}
+                  کد تا��ید به ایمیل{" "}
                   <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
                   شد.
                 </AlertMessage>
