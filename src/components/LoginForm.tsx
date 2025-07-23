@@ -302,7 +302,7 @@ export const LoginForm = () => {
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است اما صفحه hidden است
             finalStatusText = "away";
-            finalStatusEmoji = "���";
+            finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
           } else if (isActuallyOnline && isVisible) {
             // کاربر کاملاً آنلاین است
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شمار�� هم��اه الزامی است";
+      newErrors.mobileNumber = "شماره هم��اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -3617,7 +3617,7 @@ export const LoginForm = () => {
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
                   <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
-                  ش��.
+                  شد.
                 </AlertMessage>
               </div>
 
