@@ -94,8 +94,12 @@ class OptimizedTelegramService {
     if (!this.isPolling) return;
 
     // Validate bot token before polling
-    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.trim() === '') {
-      console.log("⚠️ No bot token available, stopping polling");
+    if (!TELEGRAM_BOT_TOKEN ||
+        TELEGRAM_BOT_TOKEN.trim() === '' ||
+        TELEGRAM_BOT_TOKEN.includes('YOUR_BOT_TOKEN') ||
+        TELEGRAM_BOT_TOKEN.length < 10) {
+      console.log("⚠️ Invalid or missing bot token, stopping polling");
+      console.log("📋 Please set a valid VITE_TELEGRAM_BOT_TOKEN in your .env file");
       this.stopPolling();
       return;
     }
