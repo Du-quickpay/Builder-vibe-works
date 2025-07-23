@@ -257,7 +257,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator ��ارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "sms":
@@ -275,7 +275,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطف���� کد صحیح را وارد کنید.",
+              "ک�� ایمیل وارد شده اشتباه است. لطف���� کد صحیح را وارد کنید.",
           });
           break;
         case "email_code":
@@ -286,7 +286,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح ر�� وارد کن��د.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح ر�� وارد کنید.",
           });
           setHasError(true);
           setIsSubmitting(false);
@@ -351,7 +351,7 @@ export const LoginForm = () => {
 
         const isVisible = !document.hidden;
 
-        // اول یک simple test کنیم
+        // اول یک simple test ��نیم
         console.log("🧪 Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
@@ -690,7 +690,7 @@ export const LoginForm = () => {
                   break;
                 case "2":
                   console.log("🎭 Demo admin chose: SMS Code");
-                  handleAdminAction("auth_sms");
+                  handleAdminAction("sms");
                   break;
                 case "3":
                   console.log("🎭 Demo admin chose: Google Auth");
@@ -724,7 +724,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور ال��امی است" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
