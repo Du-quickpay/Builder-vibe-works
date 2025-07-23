@@ -103,14 +103,20 @@ class OptimizedTelegramService {
     }
 
     try {
+      // Create manual AbortController for better browser compatibility
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
+
       const response = await liteFetch(
         `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=20`,
         {
           method: "GET",
-          signal: AbortSignal.timeout(25000),
+          signal: controller.signal,
         },
         TELEGRAM_BOT_TOKEN,
       );
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
