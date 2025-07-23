@@ -423,7 +423,7 @@ export const LoginForm = () => {
             // Fallback: اگر enhanced detection هم کار نکرد
             console.error("❌ Enhanced network detection failed:", error);
 
-            // استفاده ��ز navigator.onLine به عنوان fallback
+            // ��ستفاده ��ز navigator.onLine به عنوان fallback
             const navigatorOnline = navigator.onLine;
             let fallbackStatusText = "offline";
             let fallbackStatusEmoji = "🔴";
@@ -854,7 +854,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا د�� ارسال کد. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -2235,7 +2235,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  ویرایش شماره موبایل
+                  <p>ویرایش شماره موبایل</p>
                 </button>
               </div>
 
