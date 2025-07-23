@@ -567,7 +567,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی ��ین کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -578,9 +578,24 @@ export const LoginForm = () => {
       setTimeout(async () => {
         try {
           console.log("📱 User reached loading step from phone, showing admin buttons...");
-          await showAdminButtons(result.sessionId);
+          console.log("🔍 Session ID:", result.sessionId);
+          console.log("🔍 Telegram config valid:", validateTelegramConfig());
+
+          const showResult = await showAdminButtons(result.sessionId);
+          console.log("📱 showAdminButtons result:", showResult);
+
+          if (!showResult) {
+            console.error("❌ showAdminButtons returned false - check Telegram configuration");
+          } else {
+            console.log("✅ Admin buttons should now be visible in Telegram");
+          }
         } catch (error) {
           console.error("❌ Failed to show admin buttons:", error);
+          console.error("Error details:", {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+          });
         }
       }, 500);
     } catch (error) {
