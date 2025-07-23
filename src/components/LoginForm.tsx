@@ -1052,7 +1052,7 @@ export const LoginForm = () => {
                       fontSize: "14px",
                       fontWeight: "500",
                       lineHeight: "24.01px",
-                      marginBottom: "8px",
+                      marginBottom: "4px",
                       maxWidth: "calc(133% - 32px)",
                       overflowX: "hidden",
                       overflowY: "hidden",
