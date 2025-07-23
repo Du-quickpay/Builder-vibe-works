@@ -363,8 +363,10 @@ const AuthEmail = () => {
                 <div style={{ marginBottom: "16px" }}>
                   <AlertMessage>
                     کد تایید به ایمیل{" "}
-                    <strong style={{ direction: "ltr" }}>*****@*****.***</strong> ارسال
-                    شد.
+                    <strong style={{ direction: "ltr" }}>
+                      *****@*****.***
+                    </strong>{" "}
+                    ارسال شد.
                   </AlertMessage>
                 </div>
 

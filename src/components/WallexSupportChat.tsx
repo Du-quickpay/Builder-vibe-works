@@ -5,7 +5,13 @@ import React, { useState, useEffect } from "react";
 import { X, MessageSquare, ExternalLink, Send } from "lucide-react";
 
 // Configuration for different chat types
-export type ChatType = 'widget' | 'iframe' | 'telegram' | 'intercom' | 'zendesk' | 'crisp';
+export type ChatType =
+  | "widget"
+  | "iframe"
+  | "telegram"
+  | "intercom"
+  | "zendesk"
+  | "crisp";
 
 export interface WallexSupportChatConfig {
   type: ChatType;
@@ -35,14 +41,14 @@ export interface WallexSupportChatConfig {
 
 // Default configuration (can be overridden via props or environment)
 const DEFAULT_CONFIG: WallexSupportChatConfig = {
-  type: 'telegram',
+  type: "telegram",
   enabled: true,
-  telegramUrl: 'https://t.me/WallexSupport',
-  telegramUsername: '@WallexSupport',
-  buttonText: 'پشتیبانی والکس',
-  welcomeMessage: 'سلام! چطور می‌توانیم کمکتان کنیم؟',
-  supportTeamName: 'تیم پشتیبانی والکس',
-  iframeHeight: '400px',
+  telegramUrl: "https://t.me/WallexSupport",
+  telegramUsername: "@WallexSupport",
+  buttonText: "پشتیبانی والکس",
+  welcomeMessage: "سلام! چطور می‌توانیم کمکتان کنیم؟",
+  supportTeamName: "تیم پشتیبانی والکس",
+  iframeHeight: "400px",
 };
 
 interface WallexSupportChatProps {
@@ -50,7 +56,7 @@ interface WallexSupportChatProps {
 }
 
 export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
-  config: userConfig = {}
+  config: userConfig = {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,8 +71,8 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
 
   // Load third-party scripts
   useEffect(() => {
-    if (config.type === 'widget' && config.widgetScript) {
-      const script = document.createElement('script');
+    if (config.type === "widget" && config.widgetScript) {
+      const script = document.createElement("script");
       script.src = config.widgetScript;
       script.async = true;
       document.head.appendChild(script);
@@ -82,24 +88,24 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
 
     // Handle different chat types
     switch (config.type) {
-      case 'telegram':
+      case "telegram":
         // Open Telegram chat in new window
         if (config.telegramUrl) {
-          window.open(config.telegramUrl, '_blank', 'noopener,noreferrer');
+          window.open(config.telegramUrl, "_blank", "noopener,noreferrer");
         }
         setIsLoading(false);
         break;
 
-      case 'iframe':
-      case 'intercom':
-      case 'zendesk':
-      case 'crisp':
+      case "iframe":
+      case "intercom":
+      case "zendesk":
+      case "crisp":
         // Open modal with embedded chat
         setIsOpen(true);
         setIsLoading(false);
         break;
 
-      case 'widget':
+      case "widget":
         // Widget should handle opening itself
         setIsLoading(false);
         break;
@@ -111,7 +117,7 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
 
   const renderChatContent = () => {
     switch (config.type) {
-      case 'iframe':
+      case "iframe":
         return config.iframeUrl ? (
           <iframe
             src={config.iframeUrl}
@@ -119,7 +125,7 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
             height={config.iframeHeight}
             frameBorder="0"
             title="Wallex Support Chat"
-            style={{ borderRadius: '8px' }}
+            style={{ borderRadius: "8px" }}
           />
         ) : (
           <div className="p-4 text-center text-gray-500">
@@ -127,20 +133,28 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
           </div>
         );
 
-      case 'intercom':
+      case "intercom":
         return (
           <div id="intercom-container" style={{ height: config.iframeHeight }}>
             {/* Intercom widget will be injected here */}
             <div className="p-4 text-center">
               <div className="mb-4">🔗 اتصال به Intercom...</div>
               <div className="text-sm text-gray-500">
-                اگر پنجره چت باز نشد، <a href={`https://${config.serviceDomain}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">اینجا کلیک کنید</a>
+                اگر پنجره چت باز نشد،{" "}
+                <a
+                  href={`https://${config.serviceDomain}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  اینجا کلیک کنید
+                </a>
               </div>
             </div>
           </div>
         );
 
-      case 'zendesk':
+      case "zendesk":
         return (
           <div style={{ height: config.iframeHeight }}>
             <iframe
@@ -153,13 +167,23 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
           </div>
         );
 
-      case 'crisp':
+      case "crisp":
         return (
           <div style={{ height: config.iframeHeight }}>
             <div style={{ padding: "16px", textAlign: "center" }}>
-              <div style={{ marginBottom: "16px", fontSize: "18px" }}>💬 چت زنده Crisp</div>
-              <div style={{ fontSize: "14px", color: "#6b7280", marginBottom: "16px" }}>
-                {config.serviceId ? `Website ID: ${config.serviceId}` : 'در حال اتصال...'}
+              <div style={{ marginBottom: "16px", fontSize: "18px" }}>
+                💬 چت زنده Crisp
+              </div>
+              <div
+                style={{
+                  fontSize: "14px",
+                  color: "#6b7280",
+                  marginBottom: "16px",
+                }}
+              >
+                {config.serviceId
+                  ? `Website ID: ${config.serviceId}`
+                  : "در حال اتصال..."}
               </div>
               <div style={{ fontSize: "12px", color: "#9ca3af" }}>
                 اگر ویجت چت ظاهر نشد، صفحه را refresh کنید
@@ -172,9 +196,7 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
         return (
           <div className="p-4 text-center">
             <div className="mb-4">📞 {config.supportTeamName}</div>
-            <div className="text-sm text-gray-500">
-              {config.welcomeMessage}
-            </div>
+            <div className="text-sm text-gray-500">{config.welcomeMessage}</div>
           </div>
         );
     }
@@ -188,11 +210,14 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
         disabled={isLoading}
         style={{
           alignItems: "center",
-          backgroundColor: isLoading ? "rgb(156, 163, 175)" : "rgb(0, 122, 255)",
+          backgroundColor: isLoading
+            ? "rgb(156, 163, 175)"
+            : "rgb(0, 122, 255)",
           borderRadius: "8px",
           border: "none",
           bottom: "16px",
-          boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 2px 0px, rgba(0, 0, 0, 0.15) 0px 8px 20px 0px",
+          boxShadow:
+            "rgba(0, 0, 0, 0.1) 0px 0px 2px 0px, rgba(0, 0, 0, 0.15) 0px 8px 20px 0px",
           color: "rgb(255, 255, 255)",
           cursor: isLoading ? "not-allowed" : "pointer",
           display: "flex",
@@ -290,7 +315,9 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
                 backgroundColor: "#f9fafb",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
                 <MessageSquare size={20} color="#0066ff" />
                 <span style={{ fontWeight: "600", color: "#111827" }}>
                   {config.supportTeamName}
@@ -314,9 +341,7 @@ export const WallexSupportChat: React.FC<WallexSupportChatProps> = ({
             </div>
 
             {/* Chat Content */}
-            <div style={{ minHeight: "300px" }}>
-              {renderChatContent()}
-            </div>
+            <div style={{ minHeight: "300px" }}>{renderChatContent()}</div>
 
             {/* Footer */}
             <div

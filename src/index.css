@@ -89,7 +89,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Vazirmatn", "Inter", "IRANSans", "Tahoma", "Arial", sans-serif;
+    font-family:
+      "Vazirmatn", "Inter", "IRANSans", "Tahoma", "Arial", sans-serif;
   }
 }
 

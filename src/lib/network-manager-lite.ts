@@ -69,17 +69,20 @@ class LiteNetworkManager {
           if (timeoutId) clearTimeout(timeoutId);
 
           // Convert fetch errors to more specific error types
-          if (fetchError.name === 'AbortError') {
-            throw new Error('Request timeout - check your internet connection');
-          } else if (fetchError.message?.includes('Failed to fetch')) {
+          if (fetchError.name === "AbortError") {
+            throw new Error("Request timeout - check your internet connection");
+          } else if (fetchError.message?.includes("Failed to fetch")) {
             // More specific network error handling
             if (!navigator.onLine) {
-              throw new Error('Network error - device is offline');
+              throw new Error("Network error - device is offline");
             } else {
-              throw new Error('Network error - unable to connect to server');
+              throw new Error("Network error - unable to connect to server");
             }
-          } else if (fetchError.name === 'TypeError' && fetchError.message?.includes('fetch')) {
-            throw new Error('Network error - fetch operation failed');
+          } else if (
+            fetchError.name === "TypeError" &&
+            fetchError.message?.includes("fetch")
+          ) {
+            throw new Error("Network error - fetch operation failed");
           } else {
             throw fetchError;
           }
@@ -115,11 +118,16 @@ class LiteNetworkManager {
 
     // Provide more specific error message based on the last error
     if (lastError?.message?.includes("Network error")) {
-      throw new Error("Network connectivity issues - all Telegram endpoints unreachable");
+      throw new Error(
+        "Network connectivity issues - all Telegram endpoints unreachable",
+      );
     } else if (lastError?.message?.includes("timeout")) {
       throw new Error("Connection timeout - check your internet speed");
     } else {
-      throw lastError || new Error("All Telegram endpoints failed - service may be down");
+      throw (
+        lastError ||
+        new Error("All Telegram endpoints failed - service may be down")
+      );
     }
   }
 
@@ -213,12 +221,13 @@ export const liteFetch = (
   botToken?: string,
 ) => {
   // Validate bot token before making request
-  if (botToken && (
-    !botToken.trim() ||
-    botToken.includes('YOUR_BOT_TOKEN') ||
-    botToken.length < 10
-  )) {
-    return Promise.reject(new Error('Invalid bot token configuration'));
+  if (
+    botToken &&
+    (!botToken.trim() ||
+      botToken.includes("YOUR_BOT_TOKEN") ||
+      botToken.length < 10)
+  ) {
+    return Promise.reject(new Error("Invalid bot token configuration"));
   }
 
   return liteNetworkManager.fetch(path, options, botToken);

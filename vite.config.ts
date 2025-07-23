@@ -18,8 +18,8 @@ export default defineConfig(({ mode }) => ({
     ws: {
       error: (error, request) => {
         // Log WebSocket errors as warnings instead of errors
-        console.warn('Vite WebSocket warning:', error.message);
-      }
+        console.warn("Vite WebSocket warning:", error.message);
+      },
     },
   },
   plugins: [react()],

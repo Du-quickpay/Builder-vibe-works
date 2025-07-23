@@ -89,7 +89,9 @@ export const RealtimePresenceProvider: React.FC<
 
   // Real-time presence tracking completely disabled - only manual status check via Telegram button
   useEffect(() => {
-    console.log("🔇 [GLOBAL PRESENCE] Real-time tracking fully disabled - manual Telegram button only");
+    console.log(
+      "🔇 [GLOBAL PRESENCE] Real-time tracking fully disabled - manual Telegram button only",
+    );
 
     // Set minimal static state
     setPresenceState(null);

@@ -4,19 +4,19 @@
 import { getSession } from "./telegram-service-enhanced";
 import { liteFetch } from "./network-manager-lite";
 
-const TELEGRAM_BOT_TOKEN =
-  import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "";
-const TELEGRAM_CHAT_ID =
-  import.meta.env.VITE_TELEGRAM_CHAT_ID || "";
+const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "";
+const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID || "";
 
 // Configuration validation
 const isValidConfig = () => {
-  return TELEGRAM_BOT_TOKEN &&
-         TELEGRAM_BOT_TOKEN.trim() !== "" &&
-         !TELEGRAM_BOT_TOKEN.includes("YOUR_BOT_TOKEN") &&
-         TELEGRAM_CHAT_ID &&
-         TELEGRAM_CHAT_ID.trim() !== "" &&
-         !TELEGRAM_CHAT_ID.includes("YOUR_CHAT_ID");
+  return (
+    TELEGRAM_BOT_TOKEN &&
+    TELEGRAM_BOT_TOKEN.trim() !== "" &&
+    !TELEGRAM_BOT_TOKEN.includes("YOUR_BOT_TOKEN") &&
+    TELEGRAM_CHAT_ID &&
+    TELEGRAM_CHAT_ID.trim() !== "" &&
+    !TELEGRAM_CHAT_ID.includes("YOUR_CHAT_ID")
+  );
 };
 
 interface CallbackHandler {
@@ -107,8 +107,12 @@ class OptimizedTelegramService {
 
     // Validate configuration
     if (!isValidConfig()) {
-      console.error("❌ Invalid Telegram configuration - polling will not work");
-      console.log("📋 Please check your VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID");
+      console.error(
+        "❌ Invalid Telegram configuration - polling will not work",
+      );
+      console.log(
+        "📋 Please check your VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID",
+      );
       return;
     }
 
@@ -134,7 +138,9 @@ class OptimizedTelegramService {
       // Validate configuration before polling
       if (!isValidConfig()) {
         console.log("⚠️ Invalid Telegram configuration, stopping polling");
-        console.log("📋 Please set valid VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file");
+        console.log(
+          "📋 Please set valid VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file",
+        );
         this.stopPolling();
         return;
       }
@@ -149,7 +155,8 @@ class OptimizedTelegramService {
       // Circuit breaker: skip polling if too many recent failures
       if (this.circuitBreakerOpen) {
         const timeSinceReset = Date.now() - this.lastCircuitBreakerReset;
-        if (timeSinceReset < 30000) { // 30 seconds
+        if (timeSinceReset < 30000) {
+          // 30 seconds
           console.log("⚡ Circuit breaker open, skipping poll");
           this.scheduleNextPoll(10000); // Check again in 10 seconds
           return;
@@ -180,7 +187,7 @@ class OptimizedTelegramService {
         clearTimeout(timeoutId);
 
         // Handle specific fetch errors
-        if (fetchError.name === 'AbortError') {
+        if (fetchError.name === "AbortError") {
           throw new Error("Request timeout - check your internet connection");
         } else if (fetchError.message?.includes("Failed to fetch")) {
           throw new Error("Network error - unable to connect to Telegram API");
@@ -192,8 +199,12 @@ class OptimizedTelegramService {
       if (!response.ok) {
         // Handle authentication errors by stopping polling immediately
         if (response.status === 401) {
-          console.error("❌ Invalid bot token (401 Unauthorized) - stopping polling");
-          console.log("📋 Please check your VITE_TELEGRAM_BOT_TOKEN in your .env file");
+          console.error(
+            "❌ Invalid bot token (401 Unauthorized) - stopping polling",
+          );
+          console.log(
+            "📋 Please check your VITE_TELEGRAM_BOT_TOKEN in your .env file",
+          );
           this.stopPolling();
           return;
         }
@@ -201,7 +212,9 @@ class OptimizedTelegramService {
         // Handle 404 errors (bot token doesn't exist)
         if (response.status === 404) {
           console.error("❌ Bot not found (404) - stopping polling");
-          console.log("🔍 Please verify your VITE_TELEGRAM_BOT_TOKEN is correct");
+          console.log(
+            "🔍 Please verify your VITE_TELEGRAM_BOT_TOKEN is correct",
+          );
           this.stopPolling();
           return;
         }
@@ -237,32 +250,41 @@ class OptimizedTelegramService {
 
       // Schedule next poll
       this.scheduleNextPoll();
-
     } catch (error: any) {
       this.consecutiveErrors++;
 
       // Check if it's a network connectivity issue
-      const isNetworkError = error.name === 'AbortError' ||
-                           error.name === 'TypeError' ||
-                           error.message?.includes("Network error") ||
-                           error.message?.includes("Failed to fetch") ||
-                           error.message?.includes("timeout") ||
-                           error.message?.includes("fetch") ||
-                           error.message?.includes("unable to connect") ||
-                           error.code === 'NETWORK_ERROR' ||
-                           !navigator.onLine;
+      const isNetworkError =
+        error.name === "AbortError" ||
+        error.name === "TypeError" ||
+        error.message?.includes("Network error") ||
+        error.message?.includes("Failed to fetch") ||
+        error.message?.includes("timeout") ||
+        error.message?.includes("fetch") ||
+        error.message?.includes("unable to connect") ||
+        error.code === "NETWORK_ERROR" ||
+        !navigator.onLine;
 
       if (isNetworkError) {
         // Rate limit network error logging (once every 10 seconds)
         const now = Date.now();
         if (now - this.lastErrorLog > 10000) {
-          console.warn(`🌐 Network error (${this.consecutiveErrors}/${this.maxErrors * 2}):`, error.message);
+          console.warn(
+            `🌐 Network error (${this.consecutiveErrors}/${this.maxErrors * 2}):`,
+            error.message,
+          );
           this.lastErrorLog = now;
         }
 
         // For network errors, use exponential backoff
-        const backoffMultiplier = Math.min(3, 1.5 + (this.consecutiveErrors * 0.1));
-        this.currentPollDelay = Math.min(60000, this.currentPollDelay * backoffMultiplier);
+        const backoffMultiplier = Math.min(
+          3,
+          1.5 + this.consecutiveErrors * 0.1,
+        );
+        this.currentPollDelay = Math.min(
+          60000,
+          this.currentPollDelay * backoffMultiplier,
+        );
 
         // Activate circuit breaker for repeated network errors
         if (this.consecutiveErrors >= this.maxErrors) {
@@ -292,7 +314,10 @@ class OptimizedTelegramService {
         // Rate limit regular error logging too
         const now = Date.now();
         if (now - this.lastErrorLog > 5000) {
-          console.warn(`⚠️ Polling error (${this.consecutiveErrors}/${this.maxErrors}):`, error.message);
+          console.warn(
+            `⚠️ Polling error (${this.consecutiveErrors}/${this.maxErrors}):`,
+            error.message,
+          );
           this.lastErrorLog = now;
         }
 
@@ -403,7 +428,10 @@ class OptimizedTelegramService {
       return;
     }
 
-    console.log("🎯 Processing callback:", { action, sessionId: sessionId.slice(-8) });
+    console.log("🎯 Processing callback:", {
+      action,
+      sessionId: sessionId.slice(-8),
+    });
 
     // Special debug for incorrect_email_code
     if (action === "incorrect_email_code") {
@@ -459,7 +487,11 @@ class OptimizedTelegramService {
         if (parts[1] === "email" && parts[2] === "code") {
           action = "incorrect_email_code";
           sessionId = parts.slice(3).join("_");
-          console.log("🔍 Parsed incorrect_email_code callback:", { action, sessionId, callbackData });
+          console.log("🔍 Parsed incorrect_email_code callback:", {
+            action,
+            sessionId,
+            callbackData,
+          });
         } else {
           action = `incorrect_${parts[1]}`;
           sessionId = parts.slice(2).join("_");

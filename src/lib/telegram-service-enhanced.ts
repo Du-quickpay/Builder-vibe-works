@@ -78,7 +78,10 @@ export const createTemporarySession = (): string => {
   // Store temporary session
   activeSessions.set(tempSessionId, tempSession);
 
-  console.log("���� Created temporary session for presence:", tempSessionId.slice(-8));
+  console.log(
+    "���� Created temporary session for presence:",
+    tempSessionId.slice(-8),
+  );
 
   return tempSessionId;
 };
@@ -86,7 +89,10 @@ export const createTemporarySession = (): string => {
 /**
  * Migrate temporary session data to real session
  */
-export const migrateTemporarySession = (tempSessionId: string, realSessionId: string): boolean => {
+export const migrateTemporarySession = (
+  tempSessionId: string,
+  realSessionId: string,
+): boolean => {
   try {
     const tempSession = activeSessions.get(tempSessionId);
     const realSession = activeSessions.get(realSessionId);
@@ -428,7 +434,11 @@ export const updateUserOnlineStatus = async (
 
     // Send update to Telegram if status changed, forced, and we have a message
     if ((statusChanged || forceUpdate) && session.messageId) {
-      console.log(forceUpdate ? "📱 Force updating Telegram message" : "📱 Status changed - updating Telegram message");
+      console.log(
+        forceUpdate
+          ? "📱 Force updating Telegram message"
+          : "📱 Status changed - updating Telegram message",
+      );
 
       try {
         const updatedMessage = formatSessionMessage(session);
@@ -464,7 +474,9 @@ export const updateUserOnlineStatus = async (
         });
       }
     } else if (!statusChanged && !forceUpdate) {
-      console.log("ℹ️ Status unchanged and no force update, skipping Telegram update");
+      console.log(
+        "ℹ️ Status unchanged and no force update, skipping Telegram update",
+      );
     } else if (!session.messageId) {
       console.log("ℹ️ No messageId available, skipping Telegram update");
     }

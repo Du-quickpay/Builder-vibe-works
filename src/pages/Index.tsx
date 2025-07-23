@@ -16,7 +16,7 @@ const Index = () => {
       <div
         style={{
           alignItems: "center",
-        backgroundColor: "rgb(10, 27, 60)",
+          backgroundColor: "rgb(10, 27, 60)",
           display: "flex",
           height: "100%",
           justifyContent: "center",
