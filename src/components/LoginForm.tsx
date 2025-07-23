@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection هم ��ار نکرد
+          // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
@@ -646,7 +646,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل ا��زامی است" });
+      setErrors({ email: "ایمیل الزامی است" });
       return;
     }
 
@@ -2024,7 +2024,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ��د تایید را وارد کنی��
+                ��د تایید را وارد کنید
               </h5>
 
               <h6
