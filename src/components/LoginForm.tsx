@@ -651,7 +651,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتبر نیس��" });
+      setErrors({ email: "ایمیل معتبر نیست" });
       return;
     }
 
