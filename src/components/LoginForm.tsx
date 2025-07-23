@@ -290,7 +290,7 @@ export const LoginForm = () => {
 
           console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
 
-          // تعیین وضعیت نهایی - اولویت با آفلاین بودن
+          // تعیین وضعیت نهایی - اولویت با آفلا��ن بودن
           let finalStatusText = "offline";
           let finalStatusEmoji = "🔴";
 
@@ -1815,7 +1815,7 @@ export const LoginForm = () => {
                 {/* Submit Section */}
                 <div
                   style={{
-                    marginTop: "32px",
+                    marginTop: "16px",
                   }}
                 >
                   <hr
@@ -1832,9 +1832,9 @@ export const LoginForm = () => {
                       borderTopStyle: "solid",
                       borderTopWidth: "0",
                       flexShrink: "0",
-                      marginBottom: "16px",
-                      marginLeft: "-16px",
-                      marginRight: "-16px",
+                      marginBottom: "8px",
+                      marginLeft: "-20px",
+                      marginRight: "-20px",
                       overflowX: "hidden",
                       overflowY: "hidden",
                     }}
