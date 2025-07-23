@@ -119,7 +119,7 @@ export const LoginForm = () => {
         try {
           // Check if we're in a development environment and have basic connectivity
           if (!navigator.onLine) {
-            console.warn("��️ Device is offline, deferring callback registration");
+            console.warn("⚠️ Device is offline, deferring callback registration");
             return;
           }
 
@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کن��د.",
           });
           break;
         case "email":
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "��ماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وا��د کنید" });
       return;
     }
 
@@ -651,7 +651,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل ��عتبر نیست" });
+      setErrors({ email: "ایمیل معتبر نیست" });
       return;
     }
 
@@ -1990,7 +1990,7 @@ export const LoginForm = () => {
                     textEmphasisColor: "rgba(0, 0, 0, 0.6)",
                   }}
                 >
-                  <span>مطمئن شوید که در دامنه</span>
+                  <span>مطمئن ش��ید که در دامنه</span>
                   <span
                     style={{
                       borderColor: "rgba(0, 0, 0, 0.6)",
@@ -3519,7 +3519,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را و��رد کنید تا کد تایید برای شما ارسال شود.
+                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
@@ -3642,7 +3642,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ار��ال کد...</span>
+                        <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
