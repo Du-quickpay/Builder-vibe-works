@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید ��ماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شد�� اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -633,7 +633,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -689,7 +689,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!emailCode || emailCode.length !== 6) {
-      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کن��د" });
+      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -1032,7 +1032,7 @@ export const LoginForm = () => {
                     textAlign: "center",
                   }}
                 >
-                  ��ه والکس خوش آمدید
+                  به والکس خوش آمدید
                 </h5>
                 {/* Mobile Number Input */}
                 <div
