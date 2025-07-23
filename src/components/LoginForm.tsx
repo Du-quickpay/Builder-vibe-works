@@ -678,7 +678,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش کنید." });
+      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش ک��ید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -3626,7 +3626,7 @@ export const LoginForm = () => {
                   style={{
                     fontSize: "14px",
                     fontWeight: "500",
-                    marginBottom: "8px",
+                    marginBottom: "4px",
                     display: "block",
                     textAlign: "right",
                   }}
