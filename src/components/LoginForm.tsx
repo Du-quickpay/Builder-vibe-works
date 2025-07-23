@@ -295,7 +295,7 @@ export const LoginForm = () => {
           let finalStatusEmoji = "🔴";
 
           if (!isActuallyOnline) {
-            // کاربر ���فلاین است
+            // کاربر آفلاین است
             finalStatusText = "offline";
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره هم��اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
