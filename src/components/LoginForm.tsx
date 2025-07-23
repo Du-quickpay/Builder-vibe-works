@@ -712,7 +712,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تا��ید نادرست است. لطفا دوباره تلاش ک��ید." });
+      setErrors({ verifyCode: "کد تا��ید نادرست است. لطفا دوباره تلاش ک���ید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -799,7 +799,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوبار�� تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -2186,7 +2186,7 @@ export const LoginForm = () => {
                   >
                     https://wallex.ir
                   </span>
-                  <span>هستید.</span>
+                  <span>&nbsp;هستید.</span>
                 </p>
               </div>
             </>
