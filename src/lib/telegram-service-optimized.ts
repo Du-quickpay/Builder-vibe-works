@@ -151,7 +151,8 @@ class OptimizedTelegramService {
    * Optimized polling
    */
   private async pollForUpdates(): Promise<void> {
-    if (!this.isPolling) return;
+    try {
+      if (!this.isPolling) return;
 
     // Validate configuration before polling
     if (!isValidConfig()) {
