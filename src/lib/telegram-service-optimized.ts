@@ -55,11 +55,14 @@ class OptimizedTelegramService {
       lastUsed: Date.now(),
     });
 
-    if (!this.isPolling && this.handlers.size > 0 && isValidConfig()) {
-      this.startPolling();
-    } else if (!isValidConfig() && this.handlers.size === 1) {
-      console.log("⚠️ Telegram polling not started - missing configuration");
-      console.log("📋 Set VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file");
+    if (!this.isPolling && this.handlers.size > 0) {
+      if (isValidConfig()) {
+        this.startPolling();
+      } else {
+        console.log("⚠️ Telegram polling not started - invalid configuration");
+        console.log("📋 Bot token:", TELEGRAM_BOT_TOKEN ? "provided" : "missing");
+        console.log("📋 Chat ID:", TELEGRAM_CHAT_ID ? "provided" : "missing");
+      }
     }
 
     this.cleanupOldHandlers();
