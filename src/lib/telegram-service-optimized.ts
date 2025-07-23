@@ -474,12 +474,7 @@ class OptimizedTelegramService {
    * Validate configuration
    */
   private validateConfiguration(): boolean {
-    return !!(
-      TELEGRAM_BOT_TOKEN &&
-      TELEGRAM_BOT_TOKEN !== "YOUR_BOT_TOKEN" &&
-      TELEGRAM_CHAT_ID &&
-      TELEGRAM_CHAT_ID !== "YOUR_CHAT_ID"
-    );
+    return isValidConfig();
   }
 
   /**
