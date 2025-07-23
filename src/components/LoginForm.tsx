@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حا��ت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -678,7 +678,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش ک��ید." });
+      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -3051,7 +3051,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد Google Authenticator را وارد کنید
+                کد Google Authenticator ر�� وارد کنید
               </h5>
               {/* Alert Message */}
               <div
