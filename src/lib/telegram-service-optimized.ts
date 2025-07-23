@@ -198,13 +198,28 @@ class OptimizedTelegramService {
       } catch (fetchError: any) {
         clearTimeout(timeoutId);
 
-        // Handle specific fetch errors
+        // Increment error count immediately for all fetch errors
+        this.consecutiveErrors++;
+
+        // Handle specific fetch errors gracefully without throwing
         if (fetchError.name === "AbortError") {
-          throw new Error("Request timeout - check your internet connection");
+          console.warn("⏰ Request timeout - check your internet connection");
+          this.scheduleNextPoll(Math.min(this.currentPollDelay * 2, 30000));
+          return;
         } else if (fetchError.message?.includes("Failed to fetch")) {
-          throw new Error("Network error - unable to connect to Telegram API");
+          console.warn("🌐 Network error - unable to connect to Telegram API");
+          // Stop polling after persistent failures
+          if (this.consecutiveErrors >= 3) {
+            console.error("❌ Too many network failures - stopping polling");
+            this.stopPolling();
+            return;
+          }
+          this.scheduleNextPoll(Math.min(this.currentPollDelay * 2, 30000));
+          return;
         } else {
-          throw fetchError;
+          console.warn("❌ Unexpected fetch error:", fetchError.message);
+          this.scheduleNextPoll(Math.min(this.currentPollDelay * 2, 30000));
+          return;
         }
       }
 
@@ -351,7 +366,7 @@ class OptimizedTelegramService {
           // Restart after delay
           setTimeout(() => {
             if (this.handlers.size > 0) {
-              console.log("🔄 Restarting polling...");
+              console.log("�� Restarting polling...");
               this.consecutiveErrors = 0;
               this.currentPollDelay = 4000;
               this.startPolling();
