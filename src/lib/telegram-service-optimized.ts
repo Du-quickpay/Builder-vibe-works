@@ -163,6 +163,14 @@ class OptimizedTelegramService {
           this.stopPolling();
           return;
         }
+
+        // Handle 404 errors (bot token doesn't exist)
+        if (response.status === 404) {
+          console.error("❌ Bot not found (404) - stopping polling");
+          console.log("📋 Please verify your VITE_TELEGRAM_BOT_TOKEN is correct");
+          this.stopPolling();
+          return;
+        }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
