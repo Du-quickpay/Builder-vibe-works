@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم��اه الزامی است";
+      newErrors.mobileNumber = "شماره هم��ا�� الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -439,7 +439,7 @@ export const LoginForm = () => {
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
-        console.log("��� Demo verification code: 123456");
+        console.log("⚠️ Demo verification code: 123456");
         alert(
           "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
