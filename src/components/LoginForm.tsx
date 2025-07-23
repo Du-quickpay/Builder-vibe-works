@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم��اه الزامی است";
+      newErrors.mobileNumber = "شماره هم����اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرام ارسال می‌شود)",
         );
       }
 
@@ -3036,10 +3036,10 @@ export const LoginForm = () => {
                   fontSize: "12px",
                   lineHeight: "20.004px",
                   outlineColor: "rgb(0, 122, 255)",
-                  paddingBottom: "16px",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                  paddingTop: "16px",
+                  paddingBottom: "12px",
+                  paddingLeft: "12px",
+                  paddingRight: "12px",
+                  paddingTop: "12px",
                   textDecorationColor: "rgb(0, 122, 255)",
                   textEmphasisColor: "rgb(0, 122, 255)",
                   transitionDuration: "0.3s",
