@@ -1898,7 +1898,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ارسال کد...</span>
+                        <span>در حال ارسال ک��...</span>
                       </div>
                     ) : (
                       <span>ثبت و ادامه</span>
@@ -2326,7 +2326,7 @@ export const LoginForm = () => {
                         marginLeft: "8px",
                       }}
                     >
-                      کد را دریافت نکردید؟
+                      کد را ��ریافت نکردید؟
                     </span>
                     <button
                       tabIndex={0}
@@ -3270,6 +3270,7 @@ export const LoginForm = () => {
                             outline: "none",
                             fontSize: "16px",
                             fontWeight: "500",
+                            backgroundColor: "rgb(245, 246, 247)",
                           }}
                         />
                         <fieldset
