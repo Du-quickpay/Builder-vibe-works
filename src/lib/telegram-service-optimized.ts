@@ -119,16 +119,25 @@ class OptimizedTelegramService {
       return;
     }
 
-    // Start polling with delay to allow for any initialization
+    // Test connection first before starting continuous polling
     setTimeout(async () => {
       try {
+        console.log("🔍 Testing Telegram connection before starting polling...");
         await this.pollForUpdates();
       } catch (error) {
-        console.error("❌ Initial polling failed:", error);
-        // Let the retry logic handle it
-        this.scheduleNextPoll(5000); // Retry in 5 seconds
+        console.error("❌ Telegram connection test failed:", error);
+
+        // If initial test fails with network error, don't start polling
+        if (error.message?.includes("Failed to fetch")) {
+          console.error("❌ Network issues detected - disabling polling to prevent spam");
+          this.isPolling = false;
+          return;
+        }
+
+        // For other errors, try with a longer delay
+        this.scheduleNextPoll(10000); // Retry in 10 seconds
       }
-    }, 100);
+    }, 500);
   }
 
   /**
