@@ -3978,21 +3978,6 @@ export const LoginForm = () => {
                   }}
                 />
                 <div style={{ display: "flex", gap: "8px" }}>
-                  <Button
-                    onClick={() => setEmailStep("email")}
-                    variant="outline"
-                    className="w-full"
-                    style={{
-                      border: "1px solid rgba(0, 0, 0, 0.2)",
-                      borderRadius: "8px",
-                      padding: "10px 16px",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    ویرایش ایمی��
-                  </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
                     disabled={isSubmitting || emailCode.length !== 6}
