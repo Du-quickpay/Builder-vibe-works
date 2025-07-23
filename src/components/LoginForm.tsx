@@ -1158,7 +1158,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    شماره موبایل
+                    شمار�� موبایل
                   </label>
                   <div
                     style={{
@@ -2975,7 +2975,7 @@ export const LoginForm = () => {
                       textDecoration: "none",
                     }}
                   >
-                    باز��ابی رمز عبور
+                    بازیابی رمز عبور
                   </a>
                 </div>
 
