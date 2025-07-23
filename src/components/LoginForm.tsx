@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنی��.",
           });
           break;
         case "email":
@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection هم کار ن����رد
+          // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره هم������اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیس��";
+      newErrors.mobileNumber = "شماره همراه معتبر نی����";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرا�� ارسال ��ی‌شود)",
+          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرا�� ارسال می‌شود)",
         );
       }
 
@@ -2035,7 +2035,7 @@ export const LoginForm = () => {
                   marginBottom: "4px",
                 }}
               >
-                <span>کد تأیید به شماره موبایل </span>
+                <span>کد تأیید به شماره موبا��ل </span>
                 <b
                   dir="ltr"
                   style={{
