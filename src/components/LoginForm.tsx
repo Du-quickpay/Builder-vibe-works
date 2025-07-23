@@ -300,7 +300,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنلاین است ��ما صفحه hidden است
+            // کاربر آنلاین است اما صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نم��‌تواند خالی باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب را وارد کنید.
+                          رمز عبور حساب ��ا وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
