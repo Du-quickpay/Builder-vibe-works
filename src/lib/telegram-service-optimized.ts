@@ -156,18 +156,18 @@ class OptimizedTelegramService {
 
       // Validate configuration before polling
       if (!isValidConfig()) {
-        console.log("��️ Invalid Telegram configuration, stopping polling");
+        console.log("⚠️ Invalid Telegram configuration, stopping polling");
         console.log("📋 Please set valid VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file");
         this.stopPolling();
         return;
       }
 
-    // Skip polling if offline
-    if (!navigator.onLine) {
-      console.log("🌐 Device offline, skipping poll");
-      this.scheduleNextPoll(5000); // Check again in 5 seconds
-      return;
-    }
+      // Skip polling if offline
+      if (!navigator.onLine) {
+        console.log("🌐 Device offline, skipping poll");
+        this.scheduleNextPoll(5000); // Check again in 5 seconds
+        return;
+      }
 
     // Circuit breaker: skip polling if too many recent failures
     if (this.circuitBreakerOpen) {
