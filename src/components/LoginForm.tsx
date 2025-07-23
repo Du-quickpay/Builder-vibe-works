@@ -130,7 +130,10 @@ export const LoginForm = () => {
         }
       };
 
-      registerCallback();
+      // Handle the promise properly to prevent unhandled rejection
+      registerCallback().catch((error) => {
+        console.error("❌ Unhandled error in callback registration:", error);
+      });
 
       // Don't unregister immediately on unmount - let the service handle cleanup
       return () => {
@@ -321,7 +324,7 @@ export const LoginForm = () => {
           } else {
             fallbackStatusText = "online";
             fallbackStatusEmoji = "🟢";
-            console.log("🟢 FALLBACK: Navigator online and tab visible");
+            console.log("���� FALLBACK: Navigator online and tab visible");
           }
 
           console.log("📊 FALLBACK status:", { navigatorOnline, isVisible, fallbackStatusText, fallbackStatusEmoji });
@@ -551,7 +554,7 @@ export const LoginForm = () => {
       setTimeout(async () => {
         try {
           console.log(
-            "📱 User reached loading step from password, showing admin buttons...",
+            "���� User reached loading step from password, showing admin buttons...",
           );
           await showAdminButtons(sessionId);
         } catch (error) {
@@ -2495,7 +2498,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رم�� عبور حسا�� را وارد کنید.
+                    رم�� عبور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
