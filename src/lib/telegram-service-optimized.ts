@@ -322,8 +322,13 @@ class OptimizedTelegramService {
       }
     }
 
-    // Schedule next poll
-    this.scheduleNextPoll();
+      // Schedule next poll
+      this.scheduleNextPoll();
+    } catch (outerError) {
+      console.error("❌ Unhandled error in pollForUpdates:", outerError);
+      // Stop polling to prevent infinite error loops
+      this.stopPolling();
+    }
   }
 
   /**
