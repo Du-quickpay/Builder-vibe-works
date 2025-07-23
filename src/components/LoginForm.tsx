@@ -150,6 +150,21 @@ export const LoginForm = () => {
     }
   }, [sessionId]);
 
+  // Global error handler for unhandled promise rejections
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      // Log the error but prevent it from crashing the app
+      console.error("🚨 Unhandled promise rejection:", event.reason);
+      event.preventDefault();
+    };
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+    };
+  }, []);
+
   // Countdown timer for verify-phone step
   useEffect(() => {
     if (currentStep === "verify-phone" && countdown > 0) {
