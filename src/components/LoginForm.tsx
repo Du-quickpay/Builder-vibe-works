@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وا��د شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -2024,7 +2024,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تایید را وارد کنید
+                کد ��ایید را وارد کنید
               </h5>
 
               <h6
