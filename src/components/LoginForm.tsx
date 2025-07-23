@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد ک��ید.",
+              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند ��الی باشد",
+        password: "رمز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ���� ��قمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator �� ��قمی را وارد کنید" });
       return;
     }
 
