@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نی��ت";
+      newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
