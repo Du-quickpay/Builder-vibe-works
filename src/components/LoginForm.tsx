@@ -3699,7 +3699,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تای��د ایمیل را وارد ک��ید
+                کد تایید ایمیل را وارد کنید
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
