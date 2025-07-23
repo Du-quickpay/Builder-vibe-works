@@ -275,7 +275,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "ک�� ایمیل وارد شده اشتباه است. لطف���� کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطف���� کد صحیح را وارد کنید.",
           });
           break;
         case "email_code":
@@ -286,7 +286,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح ر�� وارد کنید.",
+              "کد ��یمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           setHasError(true);
           setIsSubmitting(false);
@@ -351,7 +351,7 @@ export const LoginForm = () => {
 
         const isVisible = !document.hidden;
 
-        // اول یک simple test ��نیم
+        // اول یک simple test کنیم
         console.log("🧪 Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
@@ -393,7 +393,7 @@ export const LoginForm = () => {
               finalStatusEmoji = "🟡";
               console.log("🟡 User is AWAY - online but tab hidden");
             } else if (isActuallyOnline && isVisible) {
-              // کاربر کاملاً آنلاین است
+              // کاربر کاملا�� آنلاین است
               finalStatusText = "online";
               finalStatusEmoji = "🟢";
               console.log("🟢 User is ONLINE - fully active");
@@ -712,7 +712,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تا��ید نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ verifyCode: "کد تا��ید نادرست است. لطفا دوباره تلاش ک��ید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -1155,7 +1155,7 @@ export const LoginForm = () => {
                   ? "Google Authenticator"
                   : currentStep === "email"
                     ? "تایید ایمیل"
-                    : "ورود و ثبت‌نام"}
+                    : "و��ود و ثبت‌نام"}
           </span>
         </div>
 
@@ -1376,7 +1376,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          شماره موبایل
+                          شماره موب��یل
                         </span>
                       </legend>
                     </fieldset>
@@ -3362,7 +3362,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ک�� تایید ایمیل را وارد کنید
+                کد تایید ایمیل را وارد کنید
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
