@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد کن��د.",
+              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "رمز ع��ور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -1903,7 +1903,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ارسال ک��...</span>
+                        <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
                       <span>ثبت و ادامه</span>
@@ -2093,7 +2093,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  ویرای�� شماره موبایل
+                  ویرایش شماره موبایل
                 </button>
               </div>
 
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب را وارد کنید.
+                          رم�� عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
