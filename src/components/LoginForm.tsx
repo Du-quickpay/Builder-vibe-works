@@ -402,7 +402,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!verifyCode || verifyCode.length !== 6) {
-      setErrors({ verifyCode: "کد تایید ۶ رقمی را وارد کنید" });
+      setErrors({ verifyCode: "��د تایید ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -585,7 +585,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمی�� الزامی است" });
+      setErrors({ email: "ایمیل الزامی است" });
       return;
     }
 
@@ -1718,7 +1718,11 @@ export const LoginForm = () => {
                         width="160"
                         height="48"
                         decoding="async"
-                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMTYwIDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iI0Y1RjZGNyIgc3Ryb2tlPSJyZ2JhKDAsIDAsIDAsIDAuMikiLz4KPHR1cm11IGZpbGw9InJnYmEoMCwgMCwgMCwgMC42KSIgZm9udC1mYW1pbHk9IlZhemlybWF0biwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI2MDAiPgo8dGV4dCB4PSI4MCIgeT0iMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBkaXJlY3Rpb249InJ0bCI+NTJBSDM8L3RleHQ+CjwvdGVybXU+Cjwvc3ZnPg=="
+                        src="https://wallex.ir/api/captcha/generate"
+                        onError={(e) => {
+                          // Fallback to a working SVG if Wallex endpoint fails
+                          e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMTYwIDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iI0Y1RjZGNyIgc3Ryb2tlPSJyZ2JhKDAsIDAsIDAsIDAuMikiLz4KPHR1cm11IGZpbGw9InJnYmEoMCwgMCwgMCwgMC42KSIgZm9udC1mYW1pbHk9IlZhemlybWF0biwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI2MDAiPgo8dGV4dCB4PSI4MCIgeT0iMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBkaXJlY3Rpb249InJ0bCI+VTJBSDM8L3RleHQ+CjwvdGVybXU+Cjwvc3ZnPg==";
+                        }}
                         style={{
                           aspectRatio: "auto 160 / 48",
                           borderBottomLeftRadius: "8px",
