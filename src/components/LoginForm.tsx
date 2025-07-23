@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection هم کار ن��رد
+          // Fallback: اگر enhanced detection هم کار ن����رد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور الزامی ا��ت" });
       return;
     }
 
@@ -646,7 +646,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل الزامی است" });
+      setErrors({ email: "ایمیل ا��زامی است" });
       return;
     }
 
@@ -2019,7 +2019,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تایید را وارد کنید
+                ��د تایید را وارد کنید
               </h5>
 
               <h6
@@ -2548,6 +2548,7 @@ export const LoginForm = () => {
                   <div
                     style={{
                       alignItems: "center",
+                      backgroundColor: "rgb(245, 246, 247)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderRadius: "8px",
