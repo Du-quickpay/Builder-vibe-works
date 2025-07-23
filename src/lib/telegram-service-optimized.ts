@@ -80,6 +80,13 @@ class OptimizedTelegramService {
   private async pollForUpdates(): Promise<void> {
     if (!this.isPolling) return;
 
+    // Validate bot token before polling
+    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.trim() === '') {
+      console.log("⚠️ No bot token available, stopping polling");
+      this.stopPolling();
+      return;
+    }
+
     // Skip polling if offline
     if (!navigator.onLine) {
       console.log("🌐 Device offline, skipping poll");
