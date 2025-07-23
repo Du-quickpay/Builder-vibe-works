@@ -134,8 +134,13 @@ class OptimizedTelegramService {
     // Listen for network events
     this.setupNetworkListeners();
 
-    // Start polling immediately
-    this.pollForUpdates();
+    // Start polling immediately with error handling
+    try {
+      await this.pollForUpdates();
+    } catch (error) {
+      console.error("❌ Initial polling failed:", error);
+      // Don't stop the service, let the retry logic handle it
+    }
   }
 
   /**
