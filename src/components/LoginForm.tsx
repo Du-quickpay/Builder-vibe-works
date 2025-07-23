@@ -302,7 +302,7 @@ export const LoginForm = () => {
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است ��ما صفحه hidden است
             finalStatusText = "away";
-            finalStatusEmoji = "🟡";
+            finalStatusEmoji = "���";
             console.log("🟡 User is AWAY - online but tab hidden");
           } else if (isActuallyOnline && isVisible) {
             // کاربر کاملاً آنلاین است
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شمار�� همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رم�� عبور نمی‌تواند خالی باشد",
+        password: "رمز عبور نمی��تواند خالی باشد",
       });
       return;
     }
@@ -2331,7 +2331,7 @@ export const LoginForm = () => {
                         marginLeft: "8px",
                       }}
                     >
-                      کد ��ا ��ریافت نکردید؟
+                      کد را دریافت نکردید؟
                     </span>
                     <button
                       tabIndex={0}
@@ -3510,7 +3510,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ایمیل خود را وارد کنید
+                ایمیل خود را وار�� کنید
               </h5>
               <form onSubmit={handleEmailSubmit}>
                 <div style={{ marginBottom: "8px" }}>
@@ -3670,7 +3670,7 @@ export const LoginForm = () => {
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
+                  <strong style={{ direction: "ltr" }}>{email}</strong> ��رسال
                   شد.
                 </AlertMessage>
               </div>
