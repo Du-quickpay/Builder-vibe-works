@@ -179,7 +179,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا ��د صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. ل��فا ��د صحیح را وارد کنید.",
           });
           break;
       }
@@ -402,7 +402,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!verifyCode || verifyCode.length !== 6) {
-      setErrors({ verifyCode: "��د تایید ۶ رقمی را وارد کنید" });
+      setErrors({ verifyCode: "کد تایید ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -1567,7 +1567,12 @@ export const LoginForm = () => {
                             tabIndex={0}
                             type="button"
                             onClick={() => {
-                              // Refresh captcha logic can be added here
+                              // Refresh captcha by adding timestamp to force reload
+                              const captchaImg = document.querySelector('img[alt="کد امنیتی"]') as HTMLImageElement;
+                              if (captchaImg) {
+                                const timestamp = new Date().getTime();
+                                captchaImg.src = `https://wallex.ir/api/captcha/generate?t=${timestamp}`;
+                              }
                               console.log("Refreshing captcha...");
                             }}
                             style={{
