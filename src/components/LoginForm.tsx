@@ -3336,7 +3336,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ​
+                              ���
                             </span>
                           </legend>
                         </fieldset>
@@ -3654,16 +3654,16 @@ export const LoginForm = () => {
                 )}
               </div>
 
-              <div style={{ marginTop: "24px" }}>
+              <div style={{ marginTop: "16px" }}>
                 <hr
                   style={{
                     borderColor: "rgba(0, 0, 0, 0.2)",
                     marginLeft: "-20px",
                     marginRight: "-20px",
-                    marginBottom: "16px",
+                    marginBottom: "8px",
                   }}
                 />
-                <div style={{ display: "flex", gap: "12px" }}>
+                <div style={{ display: "flex", gap: "8px" }}>
                   <Button
                     onClick={() => setEmailStep("email")}
                     variant="outline"
