@@ -1333,8 +1333,15 @@ const updateTelegramMessage = async (
       return;
     }
 
-    const result = await response.json();
-    console.log("✅ Message updated successfully:", result.ok);
+    let result;
+    try {
+      result = await response.json();
+      console.log("✅ Message updated successfully:", result.ok);
+    } catch (parseError) {
+      console.error("❌ Failed to parse success response:", parseError);
+      // Assume success if we can't parse but response was ok
+      result = { ok: true };
+    }
 
     // Clear any rate limit info on successful update
     rateLimitMap.delete(messageId);
