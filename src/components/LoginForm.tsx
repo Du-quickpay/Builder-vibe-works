@@ -3649,6 +3649,17 @@ export const LoginForm = () => {
           {/* Step 7: Email Code Verification */}
           {currentStep === "email" && emailStep === "code" && (
             <>
+              <h5
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  lineHeight: "28px",
+                  marginBottom: "12px",
+                  textAlign: "center",
+                }}
+              >
+                کد تایید ایمیل را وارد کنید
+              </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
