@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیست";
+      newErrors.mobileNumber = "شماره ه��راه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 حا��ت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -523,7 +523,7 @@ export const LoginForm = () => {
 
               switch (choice) {
                 case "1":
-                  console.log("🎭 Demo admin chose: Password");
+                  console.log("���� Demo admin chose: Password");
                   handleAdminAction("password");
                   break;
                 case "2":
@@ -689,7 +689,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!emailCode || emailCode.length !== 6) {
-      setErrors({ emailCode: "کد ایمیل ۶ رقمی را ��ارد کنید" });
+      setErrors({ emailCode: "کد ایمیل ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -3051,7 +3051,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد Google Authenticator ر�� وارد کنید
+                کد Google Authenticator را وارد کنید
               </h5>
               {/* Alert Message */}
               <div
