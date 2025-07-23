@@ -119,7 +119,7 @@ export const LoginForm = () => {
         try {
           // Check if we're in a development environment and have basic connectivity
           if (!navigator.onLine) {
-            console.warn("⚠️ Device is offline, deferring callback registration");
+            console.warn("⚠��� Device is offline, deferring callback registration");
             return;
           }
 
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "ش��اره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -651,7 +651,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتبر نیست" });
+      setErrors({ email: "ایمیل م��تبر نیست" });
       return;
     }
 
@@ -2024,7 +2024,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد ��ایید را وارد کنید
+                کد تایید را وارد کنید
               </h5>
 
               <h6
@@ -3912,7 +3912,7 @@ export const LoginForm = () => {
                       textTransform: "uppercase",
                     }}
                   >
-                    ویرایش ایمیل
+                    و��رایش ایمیل
                   </Button>
                   <button
                     onClick={handleEmailCodeSubmit}
