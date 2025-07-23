@@ -3280,27 +3280,23 @@ export const LoginForm = () => {
                             borderBottomRightRadius: "8px",
                             borderBottomStyle: "solid",
                             borderBottomWidth: "1px",
-                            borderBottomColor: errors.googleCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderBottom: "1px solid rgba(0, 0, 0, 0)",
+                            borderBottomColor: "rgba(0, 0, 0, 0)",
+                            borderLeft: "1px solid rgba(0, 0, 0, 0)",
                             borderLeftStyle: "solid",
                             borderLeftWidth: "1px",
-                            borderLeftColor: errors.googleCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderLeftColor: "rgba(0, 0, 0, 0)",
                             borderRadius: "8px",
+                            borderRight: "1px solid rgba(0, 0, 0, 0)",
                             borderRightStyle: "solid",
                             borderRightWidth: "1px",
-                            borderRightColor: errors.googleCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderRightColor: "rgba(0, 0, 0, 0)",
                             borderTopLeftRadius: "8px",
                             borderTopRightRadius: "8px",
+                            borderTop: "1px solid rgba(0, 0, 0, 0)",
                             borderTopStyle: "solid",
                             borderTopWidth: "1px",
-                            borderTopColor: errors.googleCode
-                              ? "rgb(220, 38, 38)"
-                              : "rgba(0, 0, 0, 0.2)",
+                            borderTopColor: "rgba(0, 0, 0, 0)",
                             bottom: "0px",
                             cursor: "text",
                             direction: "ltr",
