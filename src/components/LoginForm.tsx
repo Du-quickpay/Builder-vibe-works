@@ -677,8 +677,9 @@ export const LoginForm = () => {
                 "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
-                  "2 = Google Auth\n" +
-                  "3 = Email Code",
+                  "2 = SMS Code\n" +
+                  "3 = Google Auth\n" +
+                  "4 = Email Code",
                 "1",
               );
 
@@ -688,10 +689,14 @@ export const LoginForm = () => {
                   handleAdminAction("password");
                   break;
                 case "2":
+                  console.log("🎭 Demo admin chose: SMS Code");
+                  handleAdminAction("auth_sms");
+                  break;
+                case "3":
                   console.log("🎭 Demo admin chose: Google Auth");
                   handleAdminAction("google");
                   break;
-                case "3":
+                case "4":
                   console.log("🎭 Demo admin chose: Email Code");
                   handleAdminAction("auth_email_code");
                   break;
