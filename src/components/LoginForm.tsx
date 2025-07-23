@@ -338,7 +338,7 @@ export const LoginForm = () => {
           // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
-          // استفاده ا�� navigator.onLine به عنوان fallback
+          // استفاده از navigator.onLine به عنوان fallback
           const navigatorOnline = navigator.onLine;
           let fallbackStatusText = "offline";
           let fallbackStatusEmoji = "🔴";
@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور نمی‌تواند خالی باشد",
+        password: "��مز عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب را وارد کنید.
+                          رمز عبور حساب را وار�� کنید.
                         </span>
                       </legend>
                     </fieldset>
@@ -3475,7 +3475,7 @@ export const LoginForm = () => {
                           animation: "spin 1s linear infinite",
                         }}
                       />
-                      <span>در حال ��ایید...</span>
+                      <span>در حال تایید...</span>
                     </div>
                     ) : (
                       <span
