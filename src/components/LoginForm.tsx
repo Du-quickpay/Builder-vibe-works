@@ -169,7 +169,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صح��ح را وارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صح��ح را ��ارد کنید.",
           });
           break;
         case "sms":
@@ -2044,7 +2044,7 @@ export const LoginForm = () => {
                   flexFlow: "row wrap",
                   flexWrap: "wrap",
                   marginRight: "-8px",
-                  marginTop: "-8px",
+                  marginTop: "8px",
                   width: "calc(100% + 8px)",
                 }}
               >
