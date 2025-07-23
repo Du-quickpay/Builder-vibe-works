@@ -10,8 +10,17 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       port: 8080,
       host: "localhost",
+      // Add WebSocket options for better error handling
+      clientErrorOverlay: false, // Disable error overlay for WebSocket issues
     },
     cors: true,
+    // Add WebSocket options
+    ws: {
+      error: (error, request) => {
+        // Log WebSocket errors as warnings instead of errors
+        console.warn('Vite WebSocket warning:', error.message);
+      }
+    },
   },
   plugins: [react()],
   resolve: {
