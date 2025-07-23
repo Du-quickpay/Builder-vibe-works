@@ -119,7 +119,7 @@ export const LoginForm = () => {
         try {
           // Check if we're in a development environment and have basic connectivity
           if (!navigator.onLine) {
-            console.warn("⚠��� Device is offline, deferring callback registration");
+            console.warn("⚠️ Device is offline, deferring callback registration");
             return;
           }
 
@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا ��د صحیح را وارد کنید.",
           });
           break;
         case "email":
