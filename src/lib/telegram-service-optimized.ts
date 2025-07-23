@@ -66,6 +66,19 @@ class OptimizedTelegramService {
   }
 
   /**
+   * Validate Telegram configuration
+   */
+  private validateConfiguration(): boolean {
+    if (!isValidConfig()) {
+      console.log("⚠️ Telegram configuration invalid:");
+      console.log("📋 Bot token:", TELEGRAM_BOT_TOKEN ? "provided" : "missing");
+      console.log("📋 Chat ID:", TELEGRAM_CHAT_ID ? "provided" : "missing");
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * Start polling (optimized)
    */
   async startPolling(): Promise<void> {
