@@ -222,7 +222,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتب��ه است. لطفا کد صح��ح را ���ارد کنید.",
+              "کد Google Authenticator وارد شده اشت����ه است. لطفا کد صح��ح را ���ارد کنید.",
           });
           break;
         case "sms":
@@ -584,7 +584,7 @@ export const LoginForm = () => {
       setTimeout(async () => {
         try {
           console.log(
-            "���� User reached loading step from password, showing admin buttons...",
+            "����� User reached loading step from password, showing admin buttons...",
           );
           await showAdminButtons(sessionId);
         } catch (error) {
@@ -1548,12 +1548,12 @@ export const LoginForm = () => {
                     style={{
                       alignItems: "center",
                       display: "flex",
-                      gap: "12px",
-                      gridGap: "12px",
-                      gridRowGap: "12px",
-                      marginBottom: "8px",
-                      marginTop: "8px",
-                      rowGap: "12px",
+                      gap: "8px",
+                      gridGap: "8px",
+                      gridRowGap: "8px",
+                      marginBottom: "4px",
+                      marginTop: "4px",
+                      rowGap: "8px",
                     }}
                   >
                     <div
@@ -2980,7 +2980,7 @@ export const LoginForm = () => {
                             userSelect: "none",
                           }}
                         />
-                        <span>ثبت و ورود به حس��ب</span>
+                        <span>ث��ت و ورود به حس��ب</span>
                         <span
                           style={{
                             borderBottomLeftRadius: "8px",
