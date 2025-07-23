@@ -855,8 +855,47 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
 
     // Real Telegram mode
     if (!session.messageId) {
-      console.error("MessageId not found for session:", sessionId);
-      return false;
+      console.warn("⚠️ MessageId not found for session, attempting to send initial message:", sessionId);
+
+      // Try to send initial message first
+      try {
+        const initialMessage = formatSessionMessage(session);
+
+        const response = await fetch(
+          `${TELEGRAM_API_BASE}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              chat_id: TELEGRAM_CHAT_ID,
+              text: initialMessage,
+              parse_mode: "HTML",
+              reply_markup: adminKeyboard,
+            }),
+            signal: AbortSignal.timeout(10000),
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        session.messageId = result.result.message_id;
+        activeSessions.set(sessionId, session);
+
+        console.log("✅ Initial message sent with admin buttons:", {
+          sessionId,
+          messageId: session.messageId,
+        });
+
+        return true;
+      } catch (sendError) {
+        console.error("❌ Failed to send initial message:", sendError);
+        return false;
+      }
     }
 
     await updateTelegramMessage(
