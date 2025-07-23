@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیست";
+      newErrors.mobileNumber = "شماره هم��اه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -435,7 +435,7 @@ export const LoginForm = () => {
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
       // Real-time status tracking disabled - status will be checked manually by admin
-      console.log("������ Automatic status updates disabled - admin can check status manually");
+      console.log("⚠️ Automatic status updates disabled - admin can check status manually");
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
@@ -2035,7 +2035,7 @@ export const LoginForm = () => {
                   marginBottom: "4px",
                 }}
               >
-                <span>کد تأ��ید به شماره موبایل </span>
+                <span>کد تأیید به شماره موبایل </span>
                 <b
                   dir="ltr"
                   style={{
