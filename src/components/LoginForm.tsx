@@ -564,7 +564,7 @@ export const LoginForm = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز ع��ور نمی‌تواند خالی باشد",
+        password: "رم�� عبور نمی‌تواند خالی باشد",
       });
       return;
     }
@@ -2024,7 +2024,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ��د تایید را وارد کنید
+                کد تایید را وارد کنید
               </h5>
 
               <h6
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رم�� عبور حساب را وارد کنید.
+                          رمز عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
