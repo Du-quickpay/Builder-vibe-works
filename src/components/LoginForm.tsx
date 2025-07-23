@@ -593,7 +593,7 @@ export const LoginForm = () => {
       }, 500);
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوبا��ه تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -2505,7 +2505,7 @@ export const LoginForm = () => {
                       fontSize: "14px",
                       fontWeight: "500",
                       lineHeight: "24.01px",
-                      marginBottom: "8px",
+                      marginBottom: "4px",
                       maxWidth: "calc(133% - 32px)",
                       overflowX: "hidden",
                       overflowY: "hidden",
@@ -3616,7 +3616,7 @@ export const LoginForm = () => {
               <div style={{ marginBottom: "16px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
+                  <strong style={{ direction: "ltr" }}>{email}</strong> ارس��ل
                   شد.
                 </AlertMessage>
               </div>
