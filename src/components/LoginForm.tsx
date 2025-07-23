@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید ش��اره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الز��می اس��" });
+      setErrors({ password: "رمز عبور الزامی اس��" });
       return;
     }
 
@@ -3476,7 +3476,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید ت�� کد تایید برای شما ا��سال شود.
+                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
@@ -3599,7 +3599,7 @@ export const LoginForm = () => {
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        <span>در حال ار��ال کد...</span>
+                        <span>در حال ا����ال کد...</span>
                       </div>
                     ) : (
                       "ارسال کد تایید"
