@@ -3035,6 +3035,17 @@ export const LoginForm = () => {
           {/* Step 5: Google Authenticator */}
           {currentStep === "google" && (
             <>
+              <h5
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  lineHeight: "28px",
+                  marginBottom: "12px",
+                  textAlign: "center",
+                }}
+              >
+                کد Google Authenticator را وارد کنید
+              </h5>
               {/* Alert Message */}
               <div
                 role="alert"
