@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتبا�� است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -290,7 +290,7 @@ export const LoginForm = () => {
 
           console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
 
-          // تعیین وضعیت نهایی - اولویت با آفلا��ن بودن
+          // تعیین وضعیت نهایی - اولویت با آفلاین بودن
           let finalStatusText = "offline";
           let finalStatusEmoji = "🔴";
 
@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection هم کار ن����رد
+          // Fallback: اگر enhanced detection ��م کار ن����رد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
