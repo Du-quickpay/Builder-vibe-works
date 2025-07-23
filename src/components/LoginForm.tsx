@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection هم کار نکرد
+          // Fallback: اگر enhanced detection هم ��ار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به عنوان fallback
@@ -633,7 +633,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -2024,7 +2024,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                ��د تایید را وارد کنید
+                ��د تایید را وارد کنی��
               </h5>
 
               <h6
