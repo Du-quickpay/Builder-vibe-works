@@ -1258,19 +1258,21 @@ const updateTelegramMessage = async (
 
     // Parse response once to avoid "body stream already read" error
     let responseData;
-    let responseText;
+    let responseText = "";
 
     try {
       responseText = await response.text();
       responseData = JSON.parse(responseText);
     } catch (parseError) {
       console.error("❌ Failed to parse response:", parseError);
+      // Ensure responseText is always a string
+      responseText = responseText || "";
       responseData = { description: responseText || "Unknown error" };
     }
 
     if (!response.ok) {
       // Handle specific "message is not modified" error
-      if (responseText.includes("message is not modified")) {
+      if (responseText && responseText.includes("message is not modified")) {
         console.log("ℹ️ Message content is identical, no update needed");
         // Store the content to avoid future attempts
         lastMessageContent.set(messageId, {
