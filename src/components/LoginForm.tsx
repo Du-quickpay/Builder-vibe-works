@@ -598,7 +598,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتبر نیست" });
+      setErrors({ email: "ایمیل ��عتبر نیست" });
       return;
     }
 
@@ -2066,8 +2066,6 @@ export const LoginForm = () => {
                         display: "inline-flex",
                         flexDirection: "column",
                         flexFlow: "column nowrap",
-                        marginBottom: "8px",
-                        marginTop: "16px",
                         position: "relative",
                         verticalAlign: "top",
                         width: "100%",
@@ -2076,6 +2074,7 @@ export const LoginForm = () => {
                       <div
                         style={{
                           alignItems: "center",
+                          backgroundColor: "rgb(245, 246, 247)",
                           borderBottomLeftRadius: "8px",
                           borderBottomRightRadius: "8px",
                           borderRadius: "8px",
@@ -2084,6 +2083,7 @@ export const LoginForm = () => {
                           cursor: "text",
                           direction: "ltr",
                           display: "flex",
+                          marginBottom: "28px",
                           position: "relative",
                           textAlign: "center",
                           width: "100%",
