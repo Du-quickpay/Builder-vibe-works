@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وا��د شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیست";
+      newErrors.mobileNumber = "شماره همراه معتبر نی��ت";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -1990,7 +1990,7 @@ export const LoginForm = () => {
                     textEmphasisColor: "rgba(0, 0, 0, 0.6)",
                   }}
                 >
-                  <span>مطمئن ش��ید که در دامنه</span>
+                  <span>مطمئن شوید که در دامنه</span>
                   <span
                     style={{
                       borderColor: "rgba(0, 0, 0, 0.6)",
