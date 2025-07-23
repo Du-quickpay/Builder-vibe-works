@@ -874,11 +874,11 @@ export const LoginForm = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "8px",
-          paddingBottom: "20px",
+          gap: "4px",
+          paddingBottom: "16px",
           paddingLeft: "20px",
           paddingRight: "20px",
-          paddingTop: "20px",
+          paddingTop: "16px",
           width: "100%",
         }}
       >
