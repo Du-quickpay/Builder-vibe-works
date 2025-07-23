@@ -435,7 +435,7 @@ export const LoginForm = () => {
       sessionStorage.setItem("phoneNumber", mobileNumber);
 
       // Real-time status tracking disabled - status will be checked manually by admin
-      console.log("���� Automatic status updates disabled - admin can check status manually");
+      console.log("������ Automatic status updates disabled - admin can check status manually");
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
@@ -1525,7 +1525,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                            ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                           </span>
                         </p>
                       </div>
@@ -3532,13 +3532,13 @@ export const LoginForm = () => {
                   )}
                 </div>
 
-                <div style={{ marginTop: "16px" }}>
+                <div style={{ marginTop: "8px" }}>
                   <hr
                     style={{
                       borderColor: "rgba(0, 0, 0, 0.2)",
                       marginLeft: "-20px",
                       marginRight: "-20px",
-                      marginBottom: "16px",
+                      marginBottom: "8px",
                     }}
                   />
                   <button
