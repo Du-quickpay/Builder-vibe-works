@@ -336,7 +336,7 @@ export const LoginForm = () => {
           });
         }).catch((error) => {
           // Fallback: اگر enhanced detection هم کار نکرد
-          console.error("❌ Enhanced network detection failed:", error);
+          console.error("�� Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به ع��وا�� fallback
           const navigatorOnline = navigator.onLine;
@@ -2528,7 +2528,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رم�� عبور حس��ب ر�� وارد کنید.
+                    رمز عبور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
