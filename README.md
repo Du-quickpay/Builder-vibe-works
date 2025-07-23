@@ -1,264 +1,256 @@
-# Wallex Authentication System
+# 🏦 سیستم احراز هویت والکس
 
-A comprehensive authentication system for Wallex exchange platform with Telegram integration and real-time presence tracking.
+سیستم جامع احراز هویت برای پلتفرم صرافی والکس با قابلیت‌های پیشرفته تلگرام و tracking حضور real-time.
 
-## 🌟 Features
+## ✨ امکانات اصلی
 
-### 🔐 Authentication Methods
+### 🔐 روش‌های احراز هویت
+- **تایید شماره موبایل** با SMS/تلگرام
+- **تایید ایمیل** با سیستم کد ۶ رقمی  
+- **احراز هویت رمز عبور** با امکان بازیابی
+- **Google Authenticator (2FA)** 
+- **جریان احراز هویت چندمرحله‌ای**
 
-- **Phone Number Verification** with SMS/Telegram integration
-- **Email Verification** with 6-digit code system
-- **Password Authentication** with recovery options
-- **Google Authenticator (2FA)** support
-- **Multi-step Authentication** flow
+### 📱 ادغام تلگرام
+- **کنترل ادمین real-time** از طریق ربات تلگرام
+- **ردیابی وضعیت کاربر زنده** (آنلاین/آفلاین/غایب)
+- **دکمه‌های تعاملی ادمین** برای مدیریت احراز هویت
+- **مدیریت جلسه** با اطلاعات کامل کاربر
+- **به‌روزرسانی خودکار وضعیت** با تشخیص حضور
 
-### 📱 Telegram Integration
+### 🎨 رابط کاربری
+- **طراحی responsive** برای موبایل و دسکتاپ
+- **پشتیبانی فارسی/RTL** با encoding صحیح
+- **رابط مدرن و تمیز** با برندینگ والکس
+- **اعتبارسنجی فرم real-time** و مدیریت خطا
+- **نمایشگرهای پیشرفت** و loading state ها
+- **پشتیبانی از accessibility** با ویژگی‌های ARIA
 
-- **Real-time Admin Control** via Telegram bot
-- **Live User Status Tracking** (online/offline/away)
-- **Interactive Admin Buttons** for authentication management
-- **Session Management** with detailed user information
-- **Automatic Status Updates** with presence detection
+### 🚀 ویژگی‌های فنی
+- **TypeScript** برای type safety
+- **React 18** با hook های مدرن
+- **Vite** برای development و build سریع
+- **Tailwind CSS** برای styling
+- **سیستم حضور real-time** با WebSocket fallback
+- **مقاومت شبکه** با circuit breaker pattern
+- **Error boundary** و مدیریت جامع خطا
 
-### 🎨 UI/UX Features
+## 🛠️ نصب و راه‌اندازی
 
-- **Responsive Design** optimized for mobile and desktop
-- **Persian/RTL Support** with proper text encoding
-- **Clean Modern Interface** with Wallex branding
-- **Real-time Form Validation** and error handling
-- **Progress Indicators** and loading states
-- **Accessibility Support** with proper ARIA attributes
-
-### 🚀 Technical Features
-
-- **TypeScript** for type safety
-- **React 18** with modern hooks
-- **Vite** for fast development and building
-- **Tailwind CSS** for styling
-- **Real-time Presence System** with WebSocket fallback
-- **Network Resilience** with circuit breaker pattern
-- **Error Boundary** and comprehensive error handling
-
-## 🛠️ Installation
-
-### Prerequisites
-
+### پیش‌نیازها
 - Node.js 16+
 - npm/yarn/pnpm
-- Telegram Bot Token (optional)
+- Telegram Bot Token (اختیاری)
 
-### Quick Start
-
-1. **Clone the repository:**
+### شروع سریع
 
 ```bash
+# کلون کردن پروژه
 git clone <repository-url>
 cd wallex-auth-system
-```
 
-2. **Install dependencies:**
-
-```bash
+# نصب وابستگی‌ها
 npm install
-```
 
-3. **Set up environment variables:**
-
-```bash
+# تنظیم متغیرهای محیطی
 cp .env.example .env
+
+# اجرای سرور development
+npm run dev
+
+# build برای production
+npm run build
 ```
 
-Edit `.env` file with your configuration:
+### تنظیمات محیطی
 
 ```env
-# Telegram Bot Configuration (Optional)
+# تنظیمات ربات تلگرام (اختیاری)
 VITE_TELEGRAM_BOT_TOKEN=your_bot_token_here
 VITE_TELEGRAM_CHAT_ID=your_chat_id_here
 
-# Wallex Support Chat Configuration
+# تنظیمات چت پشتیبانی والکس
 VITE_WALLEX_CHAT_TYPE=telegram
 VITE_WALLEX_TELEGRAM_SUPPORT=https://t.me/WallexSupport
 ```
 
-4. **Start development server:**
+## 📋 دستورات در دسترس
 
-```bash
-npm run dev
-```
+- `npm run dev` - اجرای سرور development
+- `npm run build` - build برای production
+- `npm run preview` - preview build production
+- `npm run typecheck` - بررسی type های TypeScript
+- `npm run format.fix` - فرمت کردن کد با Prettier
 
-5. **Build for production:**
-
-```bash
-npm run build
-```
-
-## 📋 Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run typecheck` - Run TypeScript type checking
-- `npm run format.fix` - Format code with Prettier
-
-## 🏗️ Project Structure
+## 🏗️ ساختار پروژه
 
 ```
 src/
-├── components/           # Reusable UI components
-│   ├── ui/              # Base UI components (buttons, inputs, etc.)
-│   ├── LoginForm.tsx    # Main authentication form
-│   ├── AlertMessage.tsx # Alert/notification component
-│   └── WallexSupportChat.tsx # Support chat widget
-├── pages/               # Application pages
-│   ├── Index.tsx        # Main entry page
-│   ├── AuthEmail.tsx    # Email verification page
-│   ├── AuthGoogle.tsx   # Google Auth page
+├── components/           # کامپوننت‌های قابل استفاده مجدد
+│   ├── ui/              # کامپوننت‌های پایه UI
+│   ├── LoginForm.tsx    # فرم اصلی احراز هویت
+│   ├── AlertMessage.tsx # کامپوننت alert/notification
+│   └── WallexSupportChat.tsx # ویجت چت پشتیبانی
+├── pages/               # صفحات اپلیکیشن
+│   ├── Index.tsx        # صفحه ورودی اصلی
+│   ├── AuthEmail.tsx    # صفحه تایید ایمیل
+│   ├── AuthGoogle.tsx   # صفحه احراز هویت گوگل
 │   └── ...
-├── lib/                 # Utility libraries and services
-│   ├── telegram-service-enhanced.ts  # Telegram integration
-│   ├── network-manager-lite.ts      # Network handling
-│   ├── persian-utils.ts             # Persian/RTL utilities
+├── lib/                 # کتابخانه‌های کمکی و سرویس‌ها
+│   ├── telegram-service-enhanced.ts  # ادغام تلگرام
+│   ├── network-manager-lite.ts      # مدیریت شبکه
+│   ├── persian-utils.ts             # ابزارهای فارسی/RTL
 │   └── ...
-├── hooks/               # Custom React hooks
-└── styles/              # CSS and styling files
+├── hooks/               # hook های سفارشی React
+└── styles/              # فایل‌های CSS و styling
 ```
 
-## 🔧 Configuration
+## 🔧 تنظیمات پیشرفته
 
-### Telegram Bot Setup (Optional)
+### راه‌اندازی ربات تلگرام
 
-1. **Create a Telegram Bot:**
+1. **ایجاد ربات تلگرام:**
+   - پیام دادن به @BotFather در تلگرام
+   - استفاده از دستور `/newbot`
+   - دریافت token ربات
 
-   - Message @BotFather on Telegram
-   - Use `/newbot` command
-   - Get your bot token
+2. **دریافت Chat ID:**
+   - پیام دادن به @userinfobot برای دریافت chat ID
+   - یا پیا�� دادن به ربات و بررسی webhook logs
 
-2. **Get Chat ID:**
-
-   - Message @userinfobot to get your chat ID
-   - Or message your bot and check webhook logs
-
-3. **Configure Environment:**
-
+3. **تنظیم محیط:**
 ```env
 VITE_TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz
 VITE_TELEGRAM_CHAT_ID=123456789
 ```
 
-### Support Chat Configuration
+### تنظیمات چت پشتیبانی
 
-Choose your preferred support integration:
+انتخاب نوع integration مورد نظر:
 
 ```env
-# Telegram (Default)
+# تلگرام (پیش‌فرض)
 VITE_WALLEX_CHAT_TYPE=telegram
 VITE_WALLEX_TELEGRAM_SUPPORT=https://t.me/WallexSupport
 
-# Other options: iframe, intercom, zendesk, crisp, widget
+# سایر گزینه‌ها: iframe, intercom, zendesk, crisp, widget
 ```
 
-## 🎯 Authentication Flow
+## 🎯 جریان احراز هویت
 
-1. **Phone Number Entry** - User enters mobile number
-2. **CAPTCHA Verification** - Security verification
-3. **SMS/Telegram Code** - 6-digit verification code
-4. **Multi-Factor Auth** (if enabled):
-   - Password verification
-   - Email verification
+1. **ورود شماره موبایل** - کاربر شماره وارد می‌کند
+2. **تایید CAPTCHA** - اعتبارسنجی امنیتی
+3. **کد SMS/تلگرام** - کد تایید ۶ رقمی
+4. **احراز هویت چندعاملی** (در صورت فعال بودن):
+   - تایید رمز عبور
+   - تایید ایمیل
    - Google Authenticator
-5. **Session Creation** - Successful authentication
+5. **ایجاد جلسه** - احراز هویت موفق
 
-## 📱 Telegram Admin Features
+## 📱 امکانات ادمین تلگرام
 
-When properly configured, admins can:
+در صورت تنظیم صحیح، ادمین‌ها می‌توانند:
 
-- **Monitor User Status** - Real-time online/offline tracking
-- **Control Authentication** - Approve/reject auth attempts
-- **View Session Details** - Complete user session information
-- **Manage User Flow** - Guide users through auth steps
-- **Error Resolution** - Help with authentication issues
+- **نظارت بر وضعیت کاربر** - ردیابی آنلاین/آفلاین real-time
+- **کنترل احراز هویت** - تایید/رد تلاش‌های احراز هویت
+- **مشاهده جزئیات جلسه** - ��طلاعات کامل جلسه کاربر
+- **مدیریت جریان کاربر** - راهنمایی کاربران در مراحل احراز هویت
+- **حل مشکلات** - کمک در مسائل احراز هویت
 
-## 🔒 Security Features
+## 🔒 ویژگی‌های امنیتی
 
-- **Input Validation** and sanitization
-- **Rate Limiting** for API calls
-- **Session Management** with secure tokens
-- **CSRF Protection**
-- **Network Error Handling** with retry logic
-- **Circuit Breaker Pattern** for resilience
+- **اعتبارسنجی و پاکسازی ورودی‌ها**
+- **محدودیت نرخ** برای فراخوانی‌های API
+- **مدیریت جلسه** با token های امن
+- **محافظت CSRF**
+- **مدیریت خطاهای شبکه** با retry logic
+- **Circuit Breaker Pattern** برای مقاومت
 
-## 🌐 Browser Support
+## 🌐 پشتیبانی مرورگر
 
 - Chrome 90+
 - Firefox 88+
 - Safari 14+
 - Edge 90+
-- Mobile browsers (iOS Safari, Chrome Mobile)
+- مرورگرهای موبایل (iOS Safari, Chrome Mobile)
 
-## 📖 Development Guidelines
+## 📖 راهنمای توسعه
 
-### Code Style
+### سبک کدنویسی
+- استفاده از TypeScript برای کدهای جدید
+- پیروی از بهترین practices React
+- پیاده‌سازی error boundary مناسب
+- نوشتن کامپوننت‌های responsive و accessible
+- استفاده از element های HTML semantic
 
-- Use TypeScript for all new code
-- Follow React best practices
-- Implement proper error boundaries
-- Write responsive, accessible components
-- Use semantic HTML elements
+### کارایی
+- lazy load کردن کامپوننت‌ها در صورت امکان
+- بهینه‌سازی bundle size
+- پیاده‌سازی استراتژی‌های caching مناسب
+- نظارت بر Core Web Vitals
 
-### Performance
+## 🚀 استقرار (Deployment)
 
-- Lazy load components when possible
-- Optimize bundle size
-- Implement proper caching strategies
-- Monitor Core Web Vitals
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
+### Vercel (پیشنهادی)
 ```bash
 npm install -g vercel
 vercel --prod
 ```
 
 ### Netlify
-
 ```bash
 npm run build
-# Upload dist/ folder to Netlify
+# آپلود پوشه dist/ به Netlify
 ```
 
-### Manual Deploy
-
+### استقرار دستی
 ```bash
 npm run build
-# Serve dist/ folder with any static server
+# سرو کردن پوشه dist/ با هر static server
 ```
 
-## 🤝 Contributing
+## 📊 گزارش وضعیت سیستم
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+### اجزای سیستم
+- ✅ **Dev Server**: فعال روی http://localhost:8080/
+- ✅ **Build System**: موفق (760.5 KB کل, 196.47 KB gzipped)
+- ✅ **React Router**: همه route ها تنظیم شده
+- ✅ **Query Client**: تنظیم شده و در حال اجرا
 
-## 📄 License
+### ادغام تلگرام
+- ✅ **Bot Token**: تنظیم شده
+- ✅ **Chat ID**: تنظیم شده
+- ✅ **Enhanced Service**: Circuit breaker pattern پیاده‌سازی شده
+- ✅ **Callback System**: Callback های امن مبتنی بر session
+- ✅ **Admin Keyboard**: دکمه‌های بررسی وضعیت در دسترس
 
-This project is licensed under the MIT License.
+### سیستم حضور و وضعیت
+- ✅ **Enhanced Offline Detection**: تست شبکه چندلایه
+- ✅ **Manual Status Check**: ادمین می‌تواند وضعیت کاربر را به صورت دستی بررسی کند
+- ✅ **Force Offline Test**: دکمه debug برای تست
+- ✅ **Global Presence Manager**: مدیریت state متمرکز
+- ✅ **Session Management**: جداسازی امن و پاکسازی
 
-## 🆘 Support
+### مدیریت شبکه و خطا
+- ✅ **Lite Network Manager**: سیستم failover endpoint
+- ✅ **Circuit Breaker**: جلوگیری از اتلاف منابع در زمان قطعی
+- ✅ **Exponential Backoff**: مکانیزم retry هوشمند
+- ✅ **Error Categorization**: تمایز خطاهای شبکه از API
+- ✅ **Health Monitoring**: وضعیت سرویس real-time
 
-For support and questions:
+## 🆘 پشتیبانی
 
-- Create an issue in the repository
-- Contact via Telegram: [@WallexSupport](https://t.me/WallexSupport)
-- Email: support@wallex.ir
+برای پشتیبانی و سوالات:
+- ایجاد issue در repository
+- تماس از طریق تلگرام: [@WallexSupport](https://t.me/WallexSupport)
+- ایمیل: support@wallex.ir
 
-## 🏆 Acknowledgments
+## 📄 مجوز
 
-Built with ❤️ for the Wallex community.
+این پروژه تحت مجوز MIT منتشر شده است.
 
 ---
 
-**Note:** This is a complete authentication system designed for the Wallex exchange platform. All branding and styling reflects Wallex's identity and requirements.
+**نکته مهم:** این سیستم احراز هویت کاملی است که مخصوص پلتفرم صرافی والکس طراحی شده. تمام برندینگ و styling منعکس‌کننده هویت و نیازهای والکس است.
+
+**ساخته شده با ❤️ برای جامعه والکس**
