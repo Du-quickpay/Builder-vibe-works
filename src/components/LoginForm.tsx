@@ -300,7 +300,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنل��ین است ��ما صفحه hidden است
+            // کاربر آنلاین است ��ما صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -445,7 +445,7 @@ export const LoginForm = () => {
         );
       }
 
-      console.log("���� Moving to verify-phone step");
+      console.log("🔄 Moving to verify-phone step");
       setCurrentStep("verify-phone");
       setIsSmsMode(false); // Regular phone verification, not SMS auth
     } catch (error) {
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور ��لزامی است" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator �� ��قمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -646,7 +646,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایم��ل ا��زامی است" });
+      setErrors({ email: "ایمیل ا��زامی است" });
       return;
     }
 
@@ -3169,7 +3169,7 @@ export const LoginForm = () => {
                         textEmphasisColor: "rgb(0, 122, 255)",
                       }}
                     >
-                      کد ۶ رقمی Google Authenticator خود را وارد کن��د.
+                      کد ۶ رقمی Google Authenticator خود را وارد کنید.
                     </div>
                   </div>
                   <div
@@ -3475,7 +3475,7 @@ export const LoginForm = () => {
                           animation: "spin 1s linear infinite",
                         }}
                       />
-                      <span>��ر حال ��ایید...</span>
+                      <span>در حال ��ایید...</span>
                     </div>
                     ) : (
                       <span
