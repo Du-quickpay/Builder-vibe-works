@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد ��ایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ��ایید شماره وارد شده اشتباه است. لطفا کد صحیح ��ا وارد کنید.",
           });
           break;
         case "email":
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی ر�� وارد کنید" });
       return;
     }
 
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب ��ا وارد کنید.
+                          رمز عبور حساب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
