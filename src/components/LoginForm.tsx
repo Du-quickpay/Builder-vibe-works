@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد ک��ید.",
           });
           break;
         case "email":
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی ��ست";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می���شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی ا��ت" });
+      setErrors({ password: "رمز عبور الزامی است" });
       return;
     }
 
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator �� ��قمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ���� ��قمی را وارد کنید" });
       return;
     }
 
