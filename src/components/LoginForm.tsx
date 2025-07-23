@@ -267,7 +267,7 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // ب��رسی دقیق وضعیت کاربر با Enhanced Offline Detection
+        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
