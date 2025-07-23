@@ -137,7 +137,7 @@ export const LoginForm = () => {
 
       // Don't unregister immediately on unmount - let the service handle cleanup
       return () => {
-        console.log("��� Scheduling unregistration for session:", sessionId);
+        console.log("🔌 Scheduling unregistration for session:", sessionId);
         // Longer delay to prevent premature cleanup
         setTimeout(() => {
           try {
@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا ��د صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -300,7 +300,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنلاین است ام�� صفحه hidden ��ست
+            // کاربر آنلا��ن است ام�� صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -335,7 +335,7 @@ export const LoginForm = () => {
             console.error("❌ Failed to send enhanced status check:", error);
           });
         }).catch((error) => {
-          // Fallback: اگر enhanced detection ه�� کار نکرد
+          // Fallback: اگر enhanced detection هم کار نکرد
           console.error("❌ Enhanced network detection failed:", error);
 
           // استفاده از navigator.onLine به ع��وا�� fallback
@@ -558,7 +558,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الز��می اس��" });
+      setErrors({ password: "رمز عبور الزامی اس��" });
       return;
     }
 
