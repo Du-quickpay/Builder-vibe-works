@@ -400,7 +400,7 @@ const AuthPassword = () => {
                       <span>در حال بررسی...</span>
                     </div>
                   ) : (
-                    "تایید رمز عبور"
+                    "ثبت و ادامه"
                   )}
                 </Button>
               </div>
