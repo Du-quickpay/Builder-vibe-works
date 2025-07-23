@@ -390,7 +390,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنی��.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوب��ره تلاش کنی��.",
       });
     } finally {
       setIsSubmitting(false);
@@ -1470,6 +1470,277 @@ export const LoginForm = () => {
                       </div>
                     </div>
                   )}
+                  </div>
+                </div>
+
+                {/* Captcha Section */}
+                <div
+                  style={{
+                    alignItems: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "80px",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      alignItems: "center",
+                      display: "flex",
+                      gap: "12px",
+                      gridGap: "12px",
+                      gridRowGap: "12px",
+                      marginBottom: "8px",
+                      marginTop: "8px",
+                      rowGap: "12px",
+                    }}
+                  >
+                    <div
+                      inputMode="numeric"
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        maxWidth: "160px",
+                        position: "relative",
+                        verticalAlign: "top",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          alignItems: "center",
+                          backgroundColor: "rgb(245, 246, 247)",
+                          borderBottomLeftRadius: "8px",
+                          borderBottomRightRadius: "8px",
+                          borderRadius: "8px",
+                          borderTopLeftRadius: "8px",
+                          borderTopRightRadius: "8px",
+                          cursor: "text",
+                          display: "flex",
+                          position: "relative",
+                          width: "100%",
+                        }}
+                      >
+                        <input
+                          aria-invalid="false"
+                          placeholder="کد امنیتی"
+                          type="text"
+                          maxLength={5}
+                          inputMode="numeric"
+                          value={captchaCode}
+                          onChange={(e) => setCaptchaCode(e.target.value)}
+                          style={{
+                            animation: "0.01s ease 0s 1 normal none running mui-auto-fill-cancel",
+                            animationDuration: "0.01s",
+                            animationName: "mui-auto-fill-cancel",
+                            appearance: "auto",
+                            boxSizing: "content-box",
+                            cursor: "text",
+                            overflowX: "clip",
+                            overflowY: "clip",
+                            paddingBottom: "10px",
+                            paddingLeft: "12px",
+                            paddingRight: "12px",
+                            paddingTop: "10px",
+                            width: "100%",
+                            border: "none",
+                            outline: "none",
+                            backgroundColor: "transparent",
+                          }}
+                        />
+                        <div
+                          style={{
+                            alignItems: "center",
+                            borderColor: "rgba(0, 0, 0, 0.6)",
+                            color: "rgba(0, 0, 0, 0.6)",
+                            cursor: "text",
+                            display: "flex",
+                            maxHeight: "32px",
+                            outlineColor: "rgba(0, 0, 0, 0.6)",
+                            textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                            textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                            textWrap: "nowrap",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          <button
+                            tabIndex={0}
+                            type="button"
+                            onClick={() => {
+                              // Refresh captcha logic can be added here
+                              console.log("Refreshing captcha...");
+                            }}
+                            style={{
+                              alignItems: "center",
+                              borderBottomLeftRadius: "50%",
+                              borderBottomRightRadius: "50%",
+                              borderColor: "rgba(0, 0, 0, 0.6)",
+                              borderRadius: "50%",
+                              borderTopLeftRadius: "50%",
+                              borderTopRightRadius: "50%",
+                              color: "rgba(0, 0, 0, 0.6)",
+                              cursor: "pointer",
+                              display: "flex",
+                              flexShrink: "0",
+                              fontSize: "24px",
+                              justifyContent: "center",
+                              lineHeight: "42px",
+                              outlineColor: "rgba(0, 0, 0, 0.6)",
+                              paddingBottom: "8px",
+                              paddingLeft: "8px",
+                              paddingRight: "8px",
+                              paddingTop: "8px",
+                              position: "relative",
+                              textAlign: "center",
+                              textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                              textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                              textWrap: "nowrap",
+                              transitionDuration: "0.15s",
+                              transitionProperty: "background-color",
+                              transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                              userSelect: "none",
+                              verticalAlign: "middle",
+                              whiteSpace: "nowrap",
+                              backgroundColor: "rgba(0, 0, 0, 0)",
+                              border: "none",
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              focusable="false"
+                              aria-hidden="true"
+                              viewBox="0 0 24 24"
+                              style={{
+                                borderColor: "rgba(0, 0, 0, 0.6)",
+                                color: "rgba(0, 0, 0, 0.6)",
+                                cursor: "pointer",
+                                fill: "rgba(0, 0, 0, 0.6)",
+                                flexShrink: "0",
+                                fontSize: "24px",
+                                height: "24px",
+                                lineHeight: "42px",
+                                outlineColor: "rgba(0, 0, 0, 0.6)",
+                                overflowClipMargin: "content-box",
+                                overflowX: "hidden",
+                                overflowY: "hidden",
+                                textAlign: "center",
+                                textDecorationColor: "rgba(0, 0, 0, 0.6)",
+                                textEmphasisColor: "rgba(0, 0, 0, 0.6)",
+                                textWrap: "nowrap",
+                                transitionDuration: "0.2s",
+                                transitionProperty: "fill",
+                                transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                                userSelect: "none",
+                                whiteSpace: "nowrap",
+                                width: "24px",
+                              }}
+                            >
+                              <path
+                                fill="currentColor"
+                                d="m21.67 9.208.009-.074.32-4.662a.8.8 0 0 0-.736-.849.797.797 0 0 0-.838.743l-.155 2.257a11.4 11.4 0 0 0-1.389-1.702c-3.86-3.904-10.138-3.889-13.99.008-3.851 3.897-3.859 10.24 0 14.145s10.13 3.896 13.99.007c1.395-1.411 1.967-2.226 2.583-4.29a.79.79 0 0 0-.616-.938.784.784 0 0 0-.928.623c-.468 1.379-.98 2.278-2.152 3.464a8.25 8.25 0 0 1-11.756 0c-3.243-3.28-3.243-8.611 0-11.892a8.25 8.25 0 0 1 11.756 0 9.7 9.7 0 0 1 1.5 1.97l-2.584-.408a.8.8 0 0 0-.675 1.359c.119.12.26.202.43.225l4.229.659a.6.6 0 0 0 .172.024.77.77 0 0 0 .455-.112.78.78 0 0 0 .375-.557"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <fieldset
+                          aria-hidden="true"
+                          style={{
+                            borderBottom: "1px solid rgba(0, 0, 0, 0)",
+                            borderBottomLeftRadius: "8px",
+                            borderBottomRightRadius: "8px",
+                            borderBottomStyle: "solid",
+                            borderBottomWidth: "1px",
+                            borderColor: "rgba(0, 0, 0, 0)",
+                            borderLeft: "1px solid rgba(0, 0, 0, 0)",
+                            borderLeftStyle: "solid",
+                            borderLeftWidth: "1px",
+                            borderRadius: "8px",
+                            borderRight: "1px solid rgba(0, 0, 0, 0)",
+                            borderRightStyle: "solid",
+                            borderRightWidth: "1px",
+                            borderStyle: "solid",
+                            borderTop: "1px solid rgba(0, 0, 0, 0)",
+                            borderTopLeftRadius: "8px",
+                            borderTopRightRadius: "8px",
+                            borderTopStyle: "solid",
+                            borderTopWidth: "1px",
+                            borderWidth: "1px",
+                            bottom: "0px",
+                            cursor: "text",
+                            left: "0px",
+                            minWidth: "0%",
+                            overflowX: "hidden",
+                            overflowY: "hidden",
+                            paddingLeft: "8px",
+                            paddingRight: "8px",
+                            pointerEvents: "none",
+                            position: "absolute",
+                            right: "0px",
+                            textAlign: "right",
+                            top: "-5px",
+                          }}
+                        >
+                          <legend
+                            style={{
+                              cursor: "text",
+                              lineHeight: "11px",
+                              overflowX: "hidden",
+                              overflowY: "hidden",
+                              pointerEvents: "none",
+                              textAlign: "right",
+                              transitionDuration: "0.15s",
+                              transitionProperty: "width",
+                              transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+                            }}
+                          >
+                            <span
+                              aria-hidden="true"
+                              style={{
+                                cursor: "text",
+                                display: "inline",
+                                lineHeight: "11px",
+                                pointerEvents: "none",
+                                textAlign: "right",
+                              }}
+                            >
+                              ​
+                            </span>
+                          </legend>
+                        </fieldset>
+                      </div>
+                    </div>
+                    <div style={{ height: "48px" }}>
+                      <img
+                        alt="کد امنیتی"
+                        width="160"
+                        height="48"
+                        decoding="async"
+                        src="https://via.placeholder.com/160x48/f5f6f7/666666?text=%DA%A9%D8%AF+%D8%A7%D9%85%D9%86%DB%8C%D8%AA%DB%8C"
+                        style={{
+                          aspectRatio: "auto 160 / 48",
+                          borderBottomLeftRadius: "8px",
+                          borderBottomRightRadius: "8px",
+                          borderColor: "rgba(0, 0, 0, 0.2)",
+                          borderRadius: "8px",
+                          borderTopLeftRadius: "8px",
+                          borderTopRightRadius: "8px",
+                          border: "1px solid rgba(0, 0, 0, 0.2)",
+                          color: "rgba(0, 0, 0, 0)",
+                          display: "inline",
+                          height: "48px",
+                          outlineColor: "rgba(0, 0, 0, 0)",
+                          overflowClipMargin: "content-box",
+                          overflowX: "clip",
+                          overflowY: "clip",
+                          textDecorationColor: "rgba(0, 0, 0, 0)",
+                          textEmphasisColor: "rgba(0, 0, 0, 0)",
+                          width: "160px",
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
 
