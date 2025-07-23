@@ -2127,7 +2127,7 @@ export const LoginForm = () => {
                 >
                   {phoneNumber || "09105556565"}
                 </b>
-                <span> ارسا�� شد.</span>
+                <span> ارسال شد.</span>
               </h6>
 
               <div
@@ -2172,7 +2172,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  و��رایش شماره موبایل
+                  ویرایش شماره موبایل
                 </button>
               </div>
 
