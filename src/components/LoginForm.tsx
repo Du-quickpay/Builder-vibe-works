@@ -295,7 +295,7 @@ export const LoginForm = () => {
           let finalStatusEmoji = "🔴";
 
           if (!isActuallyOnline) {
-            // کاربر ��فلاین است
+            // کاربر ���فلاین است
             finalStatusText = "offline";
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
@@ -814,7 +814,7 @@ export const LoginForm = () => {
               lineHeight: "1.5",
             }}
           >
-            لطفا صبر کن���د
+            لطفا صبر کن����د
           </p>
         </div>
 
@@ -2096,7 +2096,7 @@ export const LoginForm = () => {
                   flexFlow: "row wrap",
                   flexWrap: "wrap",
                   marginRight: "-8px",
-                  marginTop: "8px",
+                  marginTop: "4px",
                   width: "calc(100% + 8px)",
                 }}
               >
@@ -2528,7 +2528,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رم�� عبور حساب ر�� وارد کنید.
+                    رم�� عبور حس��ب ر�� وارد کنید.
                   </label>
                   <div
                     style={{
