@@ -633,7 +633,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید.",
+        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -2879,7 +2879,7 @@ export const LoginForm = () => {
                 </div>
 
                 {/* Submit Section */}
-                <div style={{ marginTop: "16px" }}>
+                <div style={{ marginTop: "8px" }}>
                   <hr
                     style={{
                       borderBottomStyle: "solid",
@@ -2895,7 +2895,7 @@ export const LoginForm = () => {
                       borderTopWidth: "0",
                       borderTopColor: "rgba(0, 0, 0, 0.2)",
                       flexShrink: "0",
-                      marginBottom: "16px",
+                      marginBottom: "8px",
                       marginLeft: "-20px",
                       marginRight: "-20px",
                       overflowX: "hidden",
