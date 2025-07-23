@@ -42,8 +42,8 @@ const Index = () => {
           className="desktop-bg-image"
         >
           <img
-            src="https://wallex.ir/rhino/wallex-public/banners/puv2vWcovprVkKayXiPwuM2uSeJ39mLtZXY0ZLNf.png?w=3840&q=90"
-            alt="رتبه یک حجم م��املات بیت‌کوین"
+            src="https://wallex.ir/rhino/wallex-public/banners/PV2hxEdlMuoKyJf96NGo1WpwnbvZ11xRZBZkV8k1.webp?w=3840&q=90"
+            alt="بنر لاگین پامپ"
             loading="lazy"
             decoding="async"
             style={{
