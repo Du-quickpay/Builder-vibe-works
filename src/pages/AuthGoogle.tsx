@@ -385,7 +385,7 @@ const AuthGoogle = () => {
                     <span>در حال تایید...</span>
                   </div>
                 ) : (
-                  "تایید کد"
+                  "ثبت و ادامه"
                 )}
               </Button>
             </div>
