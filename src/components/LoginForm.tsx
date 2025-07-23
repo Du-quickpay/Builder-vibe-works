@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره ��مراه الزامی است";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("��� Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال م��‌شود)",
         );
       }
 
@@ -513,7 +513,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه‌سا��ی ادمین\n\n" +
+                "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = Google Auth\n" +
@@ -728,7 +728,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email code verification error:", error);
-      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره تلاش کنید." });
+      setErrors({ emailCode: "خطا در ارسال کد. لطفا دوباره ت��اش کنید." });
     } finally {
       setIsSubmitting(false);
     }
