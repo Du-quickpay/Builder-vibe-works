@@ -55,9 +55,13 @@ class OptimizedTelegramService {
       lastUsed: Date.now(),
     });
 
-    // Don't auto-start polling to prevent network errors
-    // Polling will be started manually only when needed
-    console.log("ℹ️ Handler registered, polling disabled to prevent network errors");
+    // Only start polling if we have valid Telegram configuration and user explicitly needs it
+    if (!this.isPolling && this.validateConfiguration() && isValidConfig()) {
+      console.log("🚀 Starting polling for valid Telegram configuration");
+      this.startPolling();
+    } else {
+      console.log("ℹ️ Polling disabled - either no config or demo mode to prevent network errors");
+    }
   }
 
   /**
