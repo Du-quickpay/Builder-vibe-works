@@ -408,9 +408,9 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم������اه الزامی است";
+      newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر نیس��";
+      newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -2035,7 +2035,7 @@ export const LoginForm = () => {
                   marginBottom: "4px",
                 }}
               >
-                <span>کد تأیید به شماره موبایل </span>
+                <span>کد تأ��ید به شماره موبایل </span>
                 <b
                   dir="ltr"
                   style={{
