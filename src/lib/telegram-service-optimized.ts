@@ -143,6 +143,13 @@ class OptimizedTelegramService {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
+        // Handle authentication errors by stopping polling immediately
+        if (response.status === 401) {
+          console.error("❌ Invalid bot token (401 Unauthorized) - stopping polling");
+          console.log("📋 Please check your VITE_TELEGRAM_BOT_TOKEN in your .env file");
+          this.stopPolling();
+          return;
+        }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
