@@ -297,7 +297,7 @@ export const LoginForm = () => {
 
           console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
 
-          // تعیین وضعیت نهایی - اولو��ت با آفلاین بودن
+          // تعیین وضعیت نهایی - اولویت با آفلاین بودن
           let finalStatusText = "offline";
           let finalStatusEmoji = "🔴";
 
@@ -387,7 +387,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 کد ایمیل تایید شد! احراز هویت با موفقیت تکمیل شد.");
+        alert("🎉 کد ایمی�� تایید شد! احراز هویت با موفقیت تکمیل شد.");
         navigate("/", { replace: true });
         break;
       case "incorrect_email_code":
@@ -558,8 +558,8 @@ export const LoginForm = () => {
                   handleAdminAction("google");
                   break;
                 case "3":
-                  console.log("🎭 Demo admin chose: Email");
-                  handleAdminAction("email");
+                  console.log("🎭 Demo admin chose: Email Code");
+                  handleAdminAction("auth_email_code");
                   break;
                 default:
                   console.log("🎭 Demo admin chose: Password (default)");
@@ -573,7 +573,7 @@ export const LoginForm = () => {
       }, 2000);
     } catch (error) {
       console.error("Verification error:", error);
-      setErrors({ verifyCode: "کد تایید نادرست است. لطفا دوباره تلاش کنید." });
+      setErrors({ verifyCode: "کد تا��ید نادرست است. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
