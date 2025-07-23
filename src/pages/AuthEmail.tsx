@@ -73,7 +73,7 @@ const AuthEmail = () => {
     setErrors({});
 
     if (!email) {
-      setErrors({ email: "ایمیل الزامی است" });
+      setErrors({ email: "ایمیل ال��امی است" });
       return;
     }
 
@@ -352,7 +352,7 @@ const AuthEmail = () => {
                         <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
-                      "ارسال کد تایید"
+                      "ثبت و ادامه"
                     )}
                   </Button>
                 </div>

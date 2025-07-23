@@ -542,7 +542,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!verifyCode || verifyCode.length !== 6) {
-      setErrors({ verifyCode: "کد تایید ۶ رقم�� را وارد کنید" });
+      setErrors({ verifyCode: "کد تایید ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -3724,7 +3724,7 @@ export const LoginForm = () => {
                         <span>در حال ارسال کد...</span>
                       </div>
                     ) : (
-                      "ارسال کد تایید"
+                      "ثبت و ادامه"
                     )}
                   </button>
                 </div>
