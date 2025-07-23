@@ -297,7 +297,7 @@ export const LoginForm = () => {
 
           console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
 
-          // تعیین وضعیت نهایی - اولویت با آفلاین بودن
+          // تعیین وضعیت نهایی - اولو��ت با آفلاین بودن
           let finalStatusText = "offline";
           let finalStatusEmoji = "🔴";
 
@@ -544,7 +544,7 @@ export const LoginForm = () => {
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = Google Auth\n" +
-                  "3 = Email",
+                  "3 = Email Code",
                 "1",
               );
 
