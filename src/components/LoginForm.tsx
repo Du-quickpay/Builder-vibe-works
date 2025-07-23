@@ -439,7 +439,7 @@ export const LoginForm = () => {
 
       // Show demo verification code if in demo mode
       if (!validateTelegramConfig()) {
-        console.log("���� Demo verification code: 123456");
+        console.log("��� Demo verification code: 123456");
         alert(
           "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
@@ -513,7 +513,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه���سا��ی ادمین\n\n" +
+                "🎭 حالت دمو - شبیه‌سا��ی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = Google Auth\n" +
@@ -633,7 +633,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Google Auth submission error:", error);
       setErrors({
-        googleCode: "خطا در ارس��ل کد. لط��ا دوباره تلاش کنید.",
+        googleCode: "خطا در ارس��ل کد. لطفا دوباره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -1016,7 +1016,7 @@ export const LoginForm = () => {
             display: "flex",
             flexDirection: "column",
             gap: "4px",
-            marginTop: "8px",
+            marginTop: "4px",
           }}
         >
           {/* Step 1: Phone Number Input */}
