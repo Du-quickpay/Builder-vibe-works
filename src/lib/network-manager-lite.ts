@@ -212,6 +212,15 @@ export const liteFetch = (
   options?: RequestInit,
   botToken?: string,
 ) => {
+  // Validate bot token before making request
+  if (botToken && (
+    !botToken.trim() ||
+    botToken.includes('YOUR_BOT_TOKEN') ||
+    botToken.length < 10
+  )) {
+    return Promise.reject(new Error('Invalid bot token configuration'));
+  }
+
   return liteNetworkManager.fetch(path, options, botToken);
 };
 
