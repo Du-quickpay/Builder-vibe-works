@@ -264,6 +264,13 @@ class OptimizedTelegramService {
         error.code === "NETWORK_ERROR" ||
         !navigator.onLine;
 
+      // For persistent "Failed to fetch" errors, stop polling entirely
+      if (error.message?.includes("Failed to fetch") && this.consecutiveErrors >= 3) {
+        console.error("❌ Persistent 'Failed to fetch' errors - stopping polling completely");
+        this.stopPolling();
+        return;
+      }
+
       if (isNetworkError) {
         // Rate limit network error logging (once every 10 seconds)
         const now = Date.now();
