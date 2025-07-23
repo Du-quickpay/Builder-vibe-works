@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره ��ارد شده اشتباه است. لطفا کد صحیح را وارد کن��د.",
           });
           break;
         case "email":
@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره ه��راه معتبر نیست";
+      newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -523,7 +523,7 @@ export const LoginForm = () => {
 
               switch (choice) {
                 case "1":
-                  console.log("���� Demo admin chose: Password");
+                  console.log("🎭 Demo admin chose: Password");
                   handleAdminAction("password");
                   break;
                 case "2":
@@ -984,7 +984,7 @@ export const LoginForm = () => {
             {currentStep === "verify-phone" ? "تایید شماره موبایل" :
              currentStep === "password" ? "رمز عبور" :
              currentStep === "google" ? "Google Authenticator" :
-             currentStep === "email" ? "تایید ایم��ل" :
+             currentStep === "email" ? "تایید ایمیل" :
              "ورود و ثبت‌نام"}
           </span>
         </div>
@@ -2093,7 +2093,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  ویرایش شماره موبایل
+                  ویرای�� شماره موبایل
                 </button>
               </div>
 
