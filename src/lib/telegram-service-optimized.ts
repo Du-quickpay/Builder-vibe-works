@@ -93,13 +93,10 @@ class OptimizedTelegramService {
   private async pollForUpdates(): Promise<void> {
     if (!this.isPolling) return;
 
-    // Validate bot token before polling
-    if (!TELEGRAM_BOT_TOKEN ||
-        TELEGRAM_BOT_TOKEN.trim() === '' ||
-        TELEGRAM_BOT_TOKEN.includes('YOUR_BOT_TOKEN') ||
-        TELEGRAM_BOT_TOKEN.length < 10) {
-      console.log("⚠️ Invalid or missing bot token, stopping polling");
-      console.log("📋 Please set a valid VITE_TELEGRAM_BOT_TOKEN in your .env file");
+    // Validate configuration before polling
+    if (!isValidConfig()) {
+      console.log("⚠️ Invalid Telegram configuration, stopping polling");
+      console.log("📋 Please set valid VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in your .env file");
       this.stopPolling();
       return;
     }
