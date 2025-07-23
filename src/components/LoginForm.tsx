@@ -295,7 +295,7 @@ export const LoginForm = () => {
           let finalStatusEmoji = "🔴";
 
           if (!isActuallyOnline) {
-            // کاربر آفلاین است
+            // کاربر ��فلاین است
             finalStatusText = "offline";
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
@@ -814,7 +814,7 @@ export const LoginForm = () => {
               lineHeight: "1.5",
             }}
           >
-            لطفا صبر کن��د
+            لطفا صبر کن���د
           </p>
         </div>
 
@@ -2015,7 +2015,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تایید را وارد کنید
+                کد تایید را وا��د کنید
               </h5>
 
               <h6
@@ -2023,7 +2023,7 @@ export const LoginForm = () => {
                   fontSize: "14px",
                   fontWeight: "500",
                   lineHeight: "24.01px",
-                  marginBottom: "8px",
+                  marginBottom: "4px",
                 }}
               >
                 <span>کد تأیید به شماره موبایل </span>
@@ -2528,7 +2528,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رم�� عبور حساب را وارد کنید.
+                    رم�� عبور حساب ر�� وارد کنید.
                   </label>
                   <div
                     style={{
