@@ -247,7 +247,7 @@ export const LoginForm = () => {
             finalStatusEmoji = connectionType === 'offline' ? "📵" : "🔴";
             console.log("🔴 User is OFFLINE - network status:", connectionType);
           } else if (isActuallyOnline && !isVisible) {
-            // کاربر آنلاین است اما صفحه hidden است
+            // کاربر آنلاین است ام�� صفحه hidden است
             finalStatusText = "away";
             finalStatusEmoji = "🟡";
             console.log("🟡 User is AWAY - online but tab hidden");
@@ -505,7 +505,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!password) {
-      setErrors({ password: "رمز عبور الزامی است" });
+      setErrors({ password: "رمز عبور الزامی اس��" });
       return;
     }
 
@@ -928,7 +928,7 @@ export const LoginForm = () => {
               textAlign: "center",
             }}
           >
-            ورود و ثبت‌نام
+            {currentStep === "verify-phone" ? "تایید شماره موبایل" : "ورود و ثبت‌نام"}
           </span>
         </div>
 
