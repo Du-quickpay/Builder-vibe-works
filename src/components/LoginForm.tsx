@@ -222,7 +222,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشت����ه است. لطفا کد صح��ح را ���ارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "sms":
@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("��� Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد ت��یید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
+          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به تلگرام ارسال می‌شود)",
         );
       }
 
@@ -3136,7 +3136,7 @@ export const LoginForm = () => {
                         textEmphasisColor: "rgb(0, 122, 255)",
                       }}
                     >
-                      ��د ۶ رقمی Google Authenticator خود را وارد کنید.
+                      کد ۶ رقمی Google Authenticator خود را وارد کنید.
                     </div>
                   </div>
                   <div
