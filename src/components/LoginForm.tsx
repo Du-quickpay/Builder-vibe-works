@@ -3494,6 +3494,17 @@ export const LoginForm = () => {
           {/* Step 6: Email Authentication */}
           {currentStep === "email" && emailStep === "email" && (
             <>
+              <h5
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  lineHeight: "28px",
+                  marginBottom: "12px",
+                  textAlign: "center",
+                }}
+              >
+                ایمیل خود را وارد کنید
+              </h5>
               <form onSubmit={handleEmailSubmit}>
                 <div style={{ marginBottom: "8px" }}>
                   <AlertMessage>
