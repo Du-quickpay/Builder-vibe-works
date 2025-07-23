@@ -380,9 +380,11 @@ class OptimizedTelegramService {
 
     // Parse callback data
     const parsed = this.parseCallbackData(callbackData);
+    console.log("📞 Parsing callback data:", callbackData, "→", parsed);
     if (!parsed) return;
 
     const { action, sessionId } = parsed;
+    console.log("🎯 Callback parsed - Action:", action, "SessionId:", sessionId);
 
     // Check if session is processing
     if (this.processingCommands.has(sessionId)) {
