@@ -100,13 +100,28 @@ class OptimizedTelegramService {
     // Setup network listeners for recovery
     this.setupNetworkListeners();
 
-    // Start polling immediately with error handling
-    try {
-      await this.pollForUpdates();
-    } catch (error) {
-      console.error("❌ Initial polling failed:", error);
-      // Don't stop the service, let the retry logic handle it
+    // Check network status before starting
+    if (!navigator.onLine) {
+      console.warn("⚠️ Device appears offline, but starting polling anyway");
     }
+
+    // Validate configuration
+    if (!isValidConfig()) {
+      console.error("❌ Invalid Telegram configuration - polling will not work");
+      console.log("📋 Please check your VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID");
+      return;
+    }
+
+    // Start polling with delay to allow for any initialization
+    setTimeout(async () => {
+      try {
+        await this.pollForUpdates();
+      } catch (error) {
+        console.error("❌ Initial polling failed:", error);
+        // Let the retry logic handle it
+        this.scheduleNextPoll(5000); // Retry in 5 seconds
+      }
+    }, 100);
   }
 
   /**
@@ -142,7 +157,7 @@ class OptimizedTelegramService {
           // Try to reset circuit breaker
           this.circuitBreakerOpen = false;
           this.consecutiveErrors = Math.floor(this.consecutiveErrors / 2); // Reduce error count
-          console.log("�� Circuit breaker reset, attempting to resume polling");
+          console.log("🔄 Circuit breaker reset, attempting to resume polling");
         }
       }
 
