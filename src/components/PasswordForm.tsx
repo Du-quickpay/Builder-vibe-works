@@ -14,6 +14,8 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
   onSubmit,
   onForgotPassword,
   isSubmitting = false,
+  error,
+  hasError = false,
 }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
