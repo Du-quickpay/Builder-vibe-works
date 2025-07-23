@@ -3646,7 +3646,7 @@ export const LoginForm = () => {
                       color: "rgb(220, 38, 38)",
                       fontSize: "12px",
                       textAlign: "right",
-                      marginTop: "8px",
+                      marginTop: "4px",
                     }}
                   >
                     {errors.emailCode}
