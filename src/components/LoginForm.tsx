@@ -302,7 +302,7 @@ export const LoginForm = () => {
           } else if (isActuallyOnline && !isVisible) {
             // کاربر آنلاین است اما صفحه hidden است
             finalStatusText = "away";
-            finalStatusEmoji = "🟡";
+            finalStatusEmoji = "���";
             console.log("🟡 User is AWAY - online but tab hidden");
           } else if (isActuallyOnline && isVisible) {
             // کاربر کاملاً آنلاین است
@@ -3360,7 +3360,7 @@ export const LoginForm = () => {
               )}
 
               {/* Submit Button */}
-              <div style={{ marginTop: "16px" }}>
+              <div style={{ marginTop: "8px" }}>
                 <hr
                   style={{
                     borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
@@ -3372,7 +3372,7 @@ export const LoginForm = () => {
                     borderStyle: "solid",
                     borderTopStyle: "solid",
                     flexShrink: "0",
-                    marginBottom: "16px",
+                    marginBottom: "8px",
                     marginLeft: "-20px",
                     marginRight: "-20px",
                     overflowX: "hidden",
