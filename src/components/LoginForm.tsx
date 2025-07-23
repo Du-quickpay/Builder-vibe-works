@@ -214,7 +214,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وارد شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وارد شده اشتباه است. لط��ا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -2283,7 +2283,7 @@ export const LoginForm = () => {
                     color: "rgb(220, 38, 38)",
                     fontSize: "12px",
                     textAlign: "right",
-                    marginTop: "8px",
+                    marginTop: "4px",
                   }}
                 >
                   {errors.verifyCode}
@@ -2291,7 +2291,7 @@ export const LoginForm = () => {
               )}
 
               {/* Countdown Timer */}
-              <div style={{ marginTop: "8px" }}>
+              <div style={{ marginTop: "4px" }}>
                 {countdown > 0 ? (
                   <span
                     style={{
