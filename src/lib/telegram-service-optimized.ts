@@ -152,9 +152,12 @@ class OptimizedTelegramService {
       this.consecutiveErrors++;
 
       // Check if it's a network connectivity issue
-      const isNetworkError = error.message?.includes("Network error") ||
+      const isNetworkError = error.name === 'AbortError' ||
+                           error.name === 'TypeError' ||
+                           error.message?.includes("Network error") ||
                            error.message?.includes("Failed to fetch") ||
-                           error.message?.includes("timeout");
+                           error.message?.includes("timeout") ||
+                           error.message?.includes("fetch");
 
       if (isNetworkError) {
         // Rate limit network error logging (once every 10 seconds)
