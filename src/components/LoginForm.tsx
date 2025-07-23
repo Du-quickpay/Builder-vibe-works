@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertMessage } from "./AlertMessage";
 import { OTPInput } from "./OTPInput";
+import { PasswordForm } from "./PasswordForm";
 import { cn } from "@/lib/utils";
 import { toPersianDigits, toEnglishDigits } from "@/lib/persian-utils";
 import {
@@ -274,7 +275,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطف�� کد صحیح را وارد کنید.",
           });
           break;
         case "email_code":
