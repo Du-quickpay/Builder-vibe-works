@@ -332,7 +332,10 @@ class OptimizedTelegramService {
     if (this.isPolling) {
       const delay = customDelay || this.currentPollDelay;
       this.pollInterval = setTimeout(() => {
-        this.pollForUpdates();
+        this.pollForUpdates().catch((error) => {
+          console.error("❌ Scheduled polling failed:", error);
+          // Let the error handling inside pollForUpdates deal with it
+        });
       }, delay);
     }
   }
