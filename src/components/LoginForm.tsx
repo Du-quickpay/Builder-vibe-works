@@ -236,7 +236,7 @@ export const LoginForm = () => {
           setPassword(""); // Clear password field
           setErrors({
             password:
-              "رمز عبور وا��د شده اشتباه است. لطفا رمز صحیح را وارد کنید.",
+              "رمز عبور وا��د شده اشتبا�� است. لطفا رمز صحیح را وارد کنید.",
           });
           break;
         case "google":
@@ -2410,7 +2410,7 @@ export const LoginForm = () => {
                         marginLeft: "8px",
                       }}
                     >
-                      کد را دریافت نکردید؟
+                      ک�� را دریافت نکردید؟
                     </span>
                     <button
                       tabIndex={0}
@@ -3748,7 +3748,7 @@ export const LoginForm = () => {
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
-                  کد تایید به ای��یل{" "}
+                  کد تایید به ایمیل{" "}
                   <strong style={{ direction: "ltr" }}>{maskEmail(email)}</strong> ارسال
                   شد.
                 </AlertMessage>
