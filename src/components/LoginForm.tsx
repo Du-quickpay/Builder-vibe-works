@@ -64,7 +64,15 @@ export const LoginForm = () => {
   const [showInviteCode, setShowInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
   const [captchaCode, setCaptchaCode] = useState("");
+  const [currentCaptchaIndex, setCurrentCaptchaIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Wallex captcha images
+  const captchaImages = [
+    "https://cdn.builder.io/api/v1/image/assets%2F3a5bf4f1d4394c31bc164112c90fe0fc%2F1df011ffccd04cf6a5853621be56e3ae?format=webp&width=800",
+    "https://cdn.builder.io/api/v1/image/assets%2F3a5bf4f1d4394c31bc164112c90fe0fc%2F71c75370377c4470ba9a52d95ca31d19?format=webp&width=800",
+    "https://cdn.builder.io/api/v1/image/assets%2F3a5bf4f1d4394c31bc164112c90fe0fc%2Fd721034f576545cebadb5e558068195d?format=webp&width=800"
+  ];
 
   // Phone verification states
   const [verifyCode, setVerifyCode] = useState("");
