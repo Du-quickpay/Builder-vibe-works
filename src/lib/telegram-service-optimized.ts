@@ -55,10 +55,9 @@ class OptimizedTelegramService {
       lastUsed: Date.now(),
     });
 
-    // Auto-start polling if needed
-    if (!this.isPolling && this.validateConfiguration()) {
-      this.startPolling();
-    }
+    // Don't auto-start polling to prevent network errors
+    // Polling will be started manually only when needed
+    console.log("ℹ️ Handler registered, polling disabled to prevent network errors");
   }
 
   /**
