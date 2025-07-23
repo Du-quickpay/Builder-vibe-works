@@ -150,16 +150,29 @@ class OptimizedTelegramService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 25000);
 
-      const response = await liteFetch(
-        `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=20`,
-        {
-          method: "GET",
-          signal: controller.signal,
-        },
-        TELEGRAM_BOT_TOKEN,
-      );
+      let response;
+      try {
+        response = await liteFetch(
+          `getUpdates?offset=${this.lastUpdateId + 1}&limit=10&timeout=20`,
+          {
+            method: "GET",
+            signal: controller.signal,
+          },
+          TELEGRAM_BOT_TOKEN,
+        );
+        clearTimeout(timeoutId);
+      } catch (fetchError: any) {
+        clearTimeout(timeoutId);
 
-      clearTimeout(timeoutId);
+        // Handle specific fetch errors
+        if (fetchError.name === 'AbortError') {
+          throw new Error("Request timeout - check your internet connection");
+        } else if (fetchError.message?.includes("Failed to fetch")) {
+          throw new Error("Network error - unable to connect to Telegram API");
+        } else {
+          throw fetchError;
+        }
+      }
 
       if (!response.ok) {
         // Handle authentication errors by stopping polling immediately
