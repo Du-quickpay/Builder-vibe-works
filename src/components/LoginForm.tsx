@@ -2048,7 +2048,7 @@ export const LoginForm = () => {
                 >
                   {phoneNumber || "09105556565"}
                 </b>
-                <span> ارسال شد.</span>
+                <span> ارسا�� شد.</span>
               </h6>
 
               <div
@@ -2372,7 +2372,7 @@ export const LoginForm = () => {
                         border: "none",
                       }}
                     >
-                      ارسال مجدد
+                      ار��ال مجدد
                     </button>
                   </>
                 )}
@@ -3589,7 +3589,7 @@ export const LoginForm = () => {
                     disabled={isSubmitting}
                     style={{
                       alignItems: "center",
-                      backgroundColor: "rgb(23, 29, 38)",
+                      backgroundColor: "rgb(0, 122, 255)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderColor: "rgb(255, 255, 255)",
@@ -3665,7 +3665,7 @@ export const LoginForm = () => {
                   textAlign: "center",
                 }}
               >
-                کد تایید ایمیل را وارد کنید
+                کد تای��د ایمیل را وارد کنید
               </h5>
               <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
