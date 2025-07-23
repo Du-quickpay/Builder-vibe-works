@@ -441,7 +441,7 @@ export const LoginForm = () => {
       if (!validateTelegramConfig()) {
         console.log("⚠️ Demo verification code: 123456");
         alert(
-          "🎭 حالت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرام ارسال می‌شود)",
+          "🎭 ��الت دمو\n\nکد تایید: 123456\n\n(در حالت واقعی این کد به ت��گرام ارسال می‌شود)",
         );
       }
 
@@ -984,7 +984,7 @@ export const LoginForm = () => {
             {currentStep === "verify-phone" ? "تایید شماره موبایل" :
              currentStep === "password" ? "رمز عبور" :
              currentStep === "google" ? "Google Authenticator" :
-             currentStep === "email" ? "تایید ایمیل" :
+             currentStep === "email" ? "تایید ایم��ل" :
              "ورود و ثبت‌نام"}
           </span>
         </div>
@@ -1529,7 +1529,7 @@ export const LoginForm = () => {
                             }}
                           />
                           <span>
-                            ��د دعوت صرفا د�� زمان ثبت‌نام قابل استفاده است.
+                            ��د دعوت صرفا د�� زمان ثبت‌نام قاب�� استفاده است.
                           </span>
                         </p>
                       </div>
@@ -2599,6 +2599,7 @@ export const LoginForm = () => {
                         border: "none",
                         outline: "none",
                         fontSize: "14px",
+                        backgroundColor: "rgb(245, 246, 247)",
                       }}
                     />
                     <div
@@ -2867,7 +2868,7 @@ export const LoginForm = () => {
                       color: "rgb(0, 0, 0)",
                     }}
                   >
-                    رمز عبور را فراموش کرده‌اید؟
+                    رمز عبور را فراموش کرده���اید؟
                   </p>
                   <a
                     href="#"
@@ -3469,7 +3470,7 @@ export const LoginForm = () => {
                           animation: "spin 1s linear infinite",
                         }}
                       />
-                      <span>در حال تایید...</span>
+                      <span>در حال ��ایید...</span>
                     </div>
                     ) : (
                       <span
