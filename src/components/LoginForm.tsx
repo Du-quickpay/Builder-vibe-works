@@ -380,7 +380,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 ��حراز هویت ب�� موفقیت تکمیل شد! خوش آ��دید.");
+        alert("🎉 احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -410,7 +410,7 @@ export const LoginForm = () => {
     if (!mobileNumber) {
       newErrors.mobileNumber = "شماره هم��اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "شماره همراه معتبر ن��س��";
+      newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "��د Google Authenticator ۶ رقمی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
