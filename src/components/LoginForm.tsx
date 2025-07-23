@@ -3613,15 +3613,15 @@ export const LoginForm = () => {
           {/* Step 7: Email Code Verification */}
           {currentStep === "email" && emailStep === "code" && (
             <>
-              <div style={{ marginBottom: "16px" }}>
+              <div style={{ marginBottom: "8px" }}>
                 <AlertMessage>
                   کد تایید به ایمیل{" "}
-                  <strong style={{ direction: "ltr" }}>{email}</strong> ارس��ل
+                  <strong style={{ direction: "ltr" }}>{email}</strong> ارسال
                   شد.
                 </AlertMessage>
               </div>
 
-              <div style={{ marginBottom: "16px" }}>
+              <div style={{ marginBottom: "8px" }}>
                 <label
                   style={{
                     fontSize: "14px",
