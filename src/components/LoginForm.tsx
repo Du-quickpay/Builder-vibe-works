@@ -888,7 +888,7 @@ export const LoginForm = () => {
             alignItems: "center",
             display: "flex",
             justifyContent: "center",
-            minHeight: "48px",
+            minHeight: "32px",
             paddingLeft: "6px",
             paddingRight: "6px",
             position: "relative",
