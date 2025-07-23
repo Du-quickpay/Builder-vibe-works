@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "شماره ��مراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -814,7 +814,7 @@ export const LoginForm = () => {
               lineHeight: "1.5",
             }}
           >
-            لطفا صبر کن����د
+            لطفا صبر کنید
           </p>
         </div>
 
@@ -3136,7 +3136,7 @@ export const LoginForm = () => {
                         textEmphasisColor: "rgb(0, 122, 255)",
                       }}
                     >
-                      کد ۶ رقمی Google Authenticator خود را ��ارد کنید.
+                      کد ۶ رقمی Google Authenticator خود را وارد کنید.
                     </div>
                   </div>
                   <div
