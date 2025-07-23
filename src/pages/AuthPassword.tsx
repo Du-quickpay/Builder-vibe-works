@@ -88,7 +88,7 @@ const AuthPassword = () => {
 
     if (!validatePassword(password)) {
       setErrors({
-        password: "رمز عبور باید حداقل ۸ کاراکتر و شامل ح��وف و اعداد باشد",
+        password: "رمز عبور باید حداقل ۸ کاراکتر و شامل حروف و اعداد باشد",
       });
       return;
     }
@@ -122,7 +122,7 @@ const AuthPassword = () => {
       });
     } catch (error) {
       console.error("Password submission error:", error);
-      setErrors({ password: "خطا در ارسال رمز عبور. ل��فا دوباره تلاش کنید." });
+      setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
