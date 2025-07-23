@@ -178,7 +178,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشت��اه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email":
@@ -2306,63 +2306,6 @@ export const LoginForm = () => {
                     rowGap: "12px",
                   }}
                 >
-                  {/* Edit Number Button */}
-                  <button
-                    tabIndex={0}
-                    type="button"
-                    onClick={() => setCurrentStep("phone")}
-                    style={{
-                      alignItems: "center",
-                      borderBottomLeftRadius: "8px",
-                      borderBottomRightRadius: "8px",
-                      borderBottomStyle: "solid",
-                      borderBottomWidth: "1px",
-                      borderBottomColor: "rgba(0, 0, 0, 0.2)",
-                      borderLeftStyle: "solid",
-                      borderLeftWidth: "1px",
-                      borderLeftColor: "rgba(0, 0, 0, 0.2)",
-                      borderRadius: "8px",
-                      borderRightStyle: "solid",
-                      borderRightWidth: "1px",
-                      borderRightColor: "rgba(0, 0, 0, 0.2)",
-                      borderTopLeftRadius: "8px",
-                      borderTopRightRadius: "8px",
-                      borderTopStyle: "solid",
-                      borderTopWidth: "1px",
-                      borderTopColor: "rgba(0, 0, 0, 0.2)",
-                      color: "rgba(0, 0, 0, 0.6)",
-                      cursor: "pointer",
-                      display: "flex",
-                      fontWeight: "500",
-                      justifyContent: "center",
-                      outlineColor: "rgba(0, 0, 0, 0.6)",
-                      paddingBottom: "10px",
-                      paddingLeft: "16px",
-                      paddingRight: "16px",
-                      paddingTop: "10px",
-                      position: "relative",
-                      textAlign: "center",
-                      textDecorationColor: "rgba(0, 0, 0, 0.6)",
-                      textEmphasisColor: "rgba(0, 0, 0, 0.6)",
-                      textTransform: "uppercase",
-                      transitionBehavior: "normal, normal, normal",
-                      transitionDelay: "0s, 0s, 0s",
-                      transitionDuration: "0.25s, 0.25s, 0.25s",
-                      transitionProperty:
-                        "background-color, box-shadow, border-color",
-                      transitionTimingFunction:
-                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
-                      userSelect: "none",
-                      verticalAlign: "middle",
-                      width: "100%",
-                      backgroundColor: "rgba(0, 0, 0, 0)",
-                      fontSize: "14px",
-                    }}
-                  >
-                    ویرایش شماره
-                  </button>
-
-                  {/* Submit Button */}
                   <button
                     tabIndex={0}
                     type="button"
@@ -2370,7 +2313,7 @@ export const LoginForm = () => {
                     disabled={isSubmitting || verifyCode.length !== 6}
                     style={{
                       alignItems: "center",
-                      backgroundColor: "rgb(23, 29, 38)",
+                      backgroundColor: "rgb(0, 122, 255)",
                       borderBottomLeftRadius: "8px",
                       borderBottomRightRadius: "8px",
                       borderColor: "rgb(255, 255, 255)",
@@ -2378,37 +2321,27 @@ export const LoginForm = () => {
                       borderTopLeftRadius: "8px",
                       borderTopRightRadius: "8px",
                       color: "rgb(255, 255, 255)",
-                      cursor:
-                        isSubmitting || verifyCode.length !== 6
-                          ? "not-allowed"
-                          : "pointer",
+                      cursor: isSubmitting || verifyCode.length !== 6 ? "not-allowed" : "pointer",
                       display: "flex",
                       fontWeight: "500",
                       justifyContent: "center",
-                      outlineColor: "rgb(255, 255, 255)",
                       paddingBottom: "10px",
                       paddingLeft: "16px",
                       paddingRight: "16px",
                       paddingTop: "10px",
                       position: "relative",
                       textAlign: "center",
-                      textDecorationColor: "rgb(255, 255, 255)",
-                      textEmphasisColor: "rgb(255, 255, 255)",
                       textTransform: "uppercase",
                       transitionBehavior: "normal, normal, normal",
                       transitionDelay: "0s, 0s, 0s",
                       transitionDuration: "0.25s, 0.25s, 0.25s",
-                      transitionProperty:
-                        "background-color, box-shadow, border-color",
-                      transitionTimingFunction:
-                        "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
+                      transitionProperty: "background-color, box-shadow, border-color",
+                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)",
                       userSelect: "none",
                       verticalAlign: "middle",
                       width: "100%",
                       border: "none",
-                      fontSize: "14px",
-                      opacity:
-                        isSubmitting || verifyCode.length !== 6 ? "0.5" : "1",
+                      opacity: isSubmitting || verifyCode.length !== 6 ? "0.5" : "1",
                     }}
                   >
                     {isSubmitting ? (
