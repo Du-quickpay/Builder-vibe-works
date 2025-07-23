@@ -267,12 +267,12 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی دقیق وضعی�� کاربر با Enhanced Offline Detection
+        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
 
-        // اول یک simple test کنیم
+        // اول ی�� simple test کنیم
         console.log("🧪 Simple status test:", {
           navigatorOnline: navigator.onLine,
           documentHidden: document.hidden,
@@ -290,7 +290,7 @@ export const LoginForm = () => {
 
           console.log("📊 Status display from enhanced detection:", { statusText, statusEmoji });
 
-          // تعیین وضعیت نهایی - اولوی�� با آفلا��ن بودن
+          // تعیین وضعیت نهایی - اولویت با آفلا��ن بودن
           let finalStatusText = "offline";
           let finalStatusEmoji = "🔴";
 
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم����اه الزامی است";
+      newErrors.mobileNumber = "شماره هم������اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -1530,7 +1530,7 @@ export const LoginForm = () => {
                           />
                           <span>
                             <p style={{textAlign: "right"}}>
-                              کد دعوت صرفا در زمان ثبت‌نام قابل استفاده است.
+                              کد دعوت صرفا در زمان ثبت‌نام قابل اس��فاده است.
                             </p>
                             <p>
                               <br />
