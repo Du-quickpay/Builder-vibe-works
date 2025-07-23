@@ -57,7 +57,8 @@ class OptimizedTelegramService {
 
     if (!this.isPolling && this.handlers.size > 0) {
       if (isValidConfig()) {
-        this.startPolling();
+        // Add a small delay and connectivity check before starting polling
+        this.startPollingSafely();
       } else {
         console.log("⚠️ Telegram polling not started - invalid configuration");
         console.log("📋 Bot token:", TELEGRAM_BOT_TOKEN ? "provided" : "missing");
@@ -66,6 +67,40 @@ class OptimizedTelegramService {
     }
 
     this.cleanupOldHandlers();
+  }
+
+  /**
+   * Start polling with safety checks
+   */
+  private startPollingSafely(): void {
+    // Check connectivity first
+    if (!navigator.onLine) {
+      console.log("🌐 Device offline, deferring polling start");
+      // Try again when online
+      window.addEventListener('online', () => {
+        if (!this.isPolling && this.handlers.size > 0) {
+          setTimeout(() => this.startPolling(), 1000);
+        }
+      }, { once: true });
+      return;
+    }
+
+    // Add a small delay to prevent immediate startup issues
+    setTimeout(() => {
+      if (!this.isPolling && this.handlers.size > 0) {
+        try {
+          this.startPolling();
+        } catch (error) {
+          console.error("❌ Failed to start polling:", error);
+          // Retry after a longer delay
+          setTimeout(() => {
+            if (!this.isPolling && this.handlers.size > 0) {
+              this.startPolling();
+            }
+          }, 5000);
+        }
+      }
+    }, 1000);
   }
 
   /**
