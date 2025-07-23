@@ -1404,7 +1404,7 @@ const formatSessionMessage = (session: UserSession): string => {
 
   // Professional header
   let message = `${status.emoji} <b>WALLEX AUTH</b> ${status.priority} ${status.urgency}
-▬▬▬▬▬▬▬▬▬▬▬▬▬���▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 📱 <b>${escapeHtml(session.phoneNumber)}</b>
 🕐 ${currentDate} ${currentTime} • ${durationText}`;
 
