@@ -119,7 +119,7 @@ export const LoginForm = () => {
         try {
           // Check if we're in a development environment and have basic connectivity
           if (!navigator.onLine) {
-            console.warn("⚠️ Device is offline, deferring callback registration");
+            console.warn("��️ Device is offline, deferring callback registration");
             return;
           }
 
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره همراه الزامی است";
+      newErrors.mobileNumber = "��ماره همراه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیست";
     }
@@ -651,7 +651,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل معتبر نیست" });
+      setErrors({ email: "ایمیل ��عتبر نیست" });
       return;
     }
 
@@ -2093,7 +2093,7 @@ export const LoginForm = () => {
                     border: "none",
                   }}
                 >
-                  ویرایش شماره موبای��
+                  ویرایش شماره موبایل
                 </button>
               </div>
 
@@ -3519,7 +3519,7 @@ export const LoginForm = () => {
                       className="inline ml-2"
                       style={{ width: "16px", height: "16px" }}
                     />
-                    ایمیل خود را وارد کنید تا کد تایید برای شما ارسال شود.
+                    ایمیل خود را و��رد کنید تا کد تایید برای شما ارسال شود.
                   </AlertMessage>
                 </div>
 
