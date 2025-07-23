@@ -153,7 +153,22 @@ export const LoginForm = () => {
   // Global error handler for unhandled promise rejections
   useEffect(() => {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      // Log the error but prevent it from crashing the app
+      const reason = event.reason?.toString() || '';
+
+      // Filter out Vite WebSocket errors (development only)
+      if (
+        reason.includes('WebSocket closed without opened') ||
+        reason.includes('WebSocket connection failed') ||
+        reason.includes('vite') ||
+        reason.includes('hmr') ||
+        reason.includes('@vite/client')
+      ) {
+        console.warn("🔄 Vite HMR issue (non-critical):", event.reason);
+        event.preventDefault();
+        return;
+      }
+
+      // Log other errors but prevent them from crashing the app
       console.error("🚨 Unhandled promise rejection:", event.reason);
       event.preventDefault();
     };
