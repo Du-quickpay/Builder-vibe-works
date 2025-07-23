@@ -152,7 +152,7 @@ const Loading = () => {
         break;
       default:
         console.error("Unknown admin action:", action);
-        alert(`⚠�� عملیات ناشناخته: ${action}`);
+        alert(`⚠️ عملیات ناشناخته: ${action}`);
     }
   };
 
