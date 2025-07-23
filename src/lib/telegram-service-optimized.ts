@@ -326,15 +326,28 @@ class OptimizedTelegramService {
    * Schedule next poll with optional custom delay
    */
   private scheduleNextPoll(customDelay?: number): void {
-    if (this.isPolling) {
-      const delay = customDelay || this.currentPollDelay;
-      this.pollInterval = setTimeout(() => {
-        this.pollForUpdates().catch((error) => {
-          console.error("❌ Scheduled polling failed:", error);
-          // Let the error handling inside pollForUpdates deal with it
-        });
-      }, delay);
+    if (!this.isPolling) return;
+
+    const delay = customDelay || this.currentPollDelay;
+
+    if (this.pollInterval) {
+      clearTimeout(this.pollInterval);
+      this.pollInterval = null;
     }
+
+    this.pollInterval = setTimeout(async () => {
+      try {
+        await this.pollForUpdates();
+      } catch (error) {
+        console.error("❌ Scheduled polling failed:", error);
+        // If it's a critical error, increase the delay
+        if (this.consecutiveErrors >= this.maxErrors) {
+          this.scheduleNextPoll(Math.min(60000, this.currentPollDelay * 2));
+        } else {
+          this.scheduleNextPoll();
+        }
+      }
+    }, delay);
   }
 
   /**
