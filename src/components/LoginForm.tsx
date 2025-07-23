@@ -2374,7 +2374,7 @@ export const LoginForm = () => {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ marginTop: "32px" }}>
+              <div style={{ marginTop: "16px" }}>
                 <hr
                   style={{
                     borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
@@ -2386,9 +2386,9 @@ export const LoginForm = () => {
                     borderStyle: "solid",
                     borderTopStyle: "solid",
                     flexShrink: "0",
-                    marginBottom: "16px",
-                    marginLeft: "-16px",
-                    marginRight: "-16px",
+                    marginBottom: "8px",
+                    marginLeft: "-20px",
+                    marginRight: "-20px",
                     overflowX: "hidden",
                     overflowY: "hidden",
                   }}
