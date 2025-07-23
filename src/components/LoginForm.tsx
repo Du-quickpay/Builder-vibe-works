@@ -262,7 +262,7 @@ export const LoginForm = () => {
           setEmailCode(""); // Clear email code field
           setErrors({
             emailCode:
-              "کد ایمیل وارد شده اشتباه است. لطفا کد صح��ح را وارد کنید.",
+              "کد ایمیل وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
           });
           break;
         case "email_code":
@@ -429,7 +429,7 @@ export const LoginForm = () => {
         localStorage.setItem("userPhone", phoneNumber);
         sessionStorage.removeItem("sessionId");
         sessionStorage.removeItem("phoneNumber");
-        alert("🎉 کد ایمیل تایید شد! احراز هویت با موفقیت تکمیل شد.");
+        alert("🎉 کد ��یمیل تایید شد! احراز هویت با موفقیت تکمیل شد.");
         navigate("/", { replace: true });
         break;
       case "incorrect_email_code":
