@@ -405,6 +405,7 @@ class OptimizedTelegramService {
         if (parts[1] === "email" && parts[2] === "code") {
           action = "incorrect_email_code";
           sessionId = parts.slice(3).join("_");
+          console.log("🔍 Parsed incorrect_email_code callback:", { action, sessionId, callbackData });
         } else {
           action = `incorrect_${parts[1]}`;
           sessionId = parts.slice(2).join("_");
