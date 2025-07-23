@@ -604,7 +604,7 @@ export const LoginForm = () => {
     setErrors({});
 
     if (!googleCode || googleCode.length !== 6) {
-      setErrors({ googleCode: "کد Google Authenticator ۶ رق��ی را وارد کنید" });
+      setErrors({ googleCode: "کد Google Authenticator ۶ رقمی را وارد کنید" });
       return;
     }
 
@@ -651,7 +651,7 @@ export const LoginForm = () => {
     }
 
     if (!validateEmail(email)) {
-      setErrors({ email: "ایمیل م��تبر نیست" });
+      setErrors({ email: "ایمیل معتبر نیست" });
       return;
     }
 
@@ -2838,7 +2838,7 @@ export const LoginForm = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          رمز عبور حساب را وارد کنید.
+                          رمز عبور ح��اب را وارد کنید.
                         </span>
                       </legend>
                     </fieldset>
