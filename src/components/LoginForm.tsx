@@ -231,7 +231,7 @@ export const LoginForm = () => {
           setIsSmsMode(true); // Mark as SMS auth mode
           setErrors({
             verifyCode:
-              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کنید.",
+              "کد تایید شماره وارد شده اشتباه است. لطفا کد صحیح را وارد کن��د.",
           });
           break;
         case "email":
@@ -408,7 +408,7 @@ export const LoginForm = () => {
     const newErrors: { mobileNumber?: string; inviteCode?: string } = {};
 
     if (!mobileNumber) {
-      newErrors.mobileNumber = "شماره هم��اه الز��می است";
+      newErrors.mobileNumber = "شماره هم��اه الزامی است";
     } else if (!validateMobileNumber(mobileNumber)) {
       newErrors.mobileNumber = "شماره همراه معتبر نیس��";
     }
@@ -1098,7 +1098,7 @@ export const LoginForm = () => {
                       aria-describedby=":R1aekpj1l6:-helper-text"
                       autoFocus
                       name="mobile_number"
-                      placeholder="شمار�� موبایل خود را وارد کنید."
+                      placeholder="شماره موبایل خود را وارد کنید."
                       type="text"
                       inputMode="numeric"
                       maxLength={13}
@@ -2980,7 +2980,7 @@ export const LoginForm = () => {
                             userSelect: "none",
                           }}
                         />
-                        <span>ث��ت و ورود به حس��ب</span>
+                        <span>ثبت و ورود به حساب</span>
                         <span
                           style={{
                             borderBottomLeftRadius: "8px",
