@@ -46,9 +46,19 @@ class LiteNetworkManager {
           ? `${endpoint}/bot${botToken}/${path}`
           : `${endpoint}/${path}`;
 
+        // Create manual AbortController if no signal provided and for better compatibility
+        let finalSignal = options.signal;
+        let timeoutId: number | undefined;
+
+        if (!finalSignal) {
+          const controller = new AbortController();
+          finalSignal = controller.signal;
+          timeoutId = setTimeout(() => controller.abort(), 25000) as any;
+        }
+
         const response = await fetch(url, {
           ...options,
-          signal: options.signal || AbortSignal.timeout(25000), // 25 second timeout
+          signal: finalSignal,
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
