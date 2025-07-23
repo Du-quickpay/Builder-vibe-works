@@ -184,7 +184,6 @@ class OptimizedTelegramService {
         }
       }
 
-    try {
       // Create manual AbortController for better browser compatibility
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 25000);
