@@ -3486,7 +3486,7 @@ export const LoginForm = () => {
                     style={{
                       fontSize: "14px",
                       fontWeight: "500",
-                      marginBottom: "8px",
+                      marginBottom: "4px",
                       display: "block",
                       textAlign: "right",
                     }}
