@@ -169,7 +169,7 @@ export const LoginForm = () => {
           setGoogleCode(""); // Clear Google code field
           setErrors({
             googleCode:
-              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صح��ح را ��ارد کنید.",
+              "کد Google Authenticator وارد شده اشتباه است. لطفا کد صح��ح را ���ارد کنید.",
           });
           break;
         case "sms":
@@ -2278,25 +2278,21 @@ export const LoginForm = () => {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ marginTop: "16px" }}>
+              <div style={{ marginTop: "32px" }}>
                 <hr
                   style={{
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                     borderBottomStyle: "solid",
                     borderBottomWidth: "1px",
-                    borderBottomColor: "rgba(0, 0, 0, 0.2)",
+                    borderColor: "rgba(0, 0, 0, 0.2)",
                     borderLeftStyle: "solid",
-                    borderLeftWidth: "0",
-                    borderLeftColor: "rgba(0, 0, 0, 0.2)",
                     borderRightStyle: "solid",
-                    borderRightWidth: "0",
-                    borderRightColor: "rgba(0, 0, 0, 0.2)",
+                    borderStyle: "solid",
                     borderTopStyle: "solid",
-                    borderTopWidth: "0",
-                    borderTopColor: "rgba(0, 0, 0, 0.2)",
                     flexShrink: "0",
                     marginBottom: "16px",
-                    marginLeft: "-20px",
-                    marginRight: "-20px",
+                    marginLeft: "-16px",
+                    marginRight: "-16px",
                     overflowX: "hidden",
                     overflowY: "hidden",
                   }}
@@ -2305,6 +2301,9 @@ export const LoginForm = () => {
                   style={{
                     display: "flex",
                     gap: "12px",
+                    gridGap: "12px",
+                    gridRowGap: "12px",
+                    rowGap: "12px",
                   }}
                 >
                   {/* Edit Number Button */}
