@@ -213,14 +213,17 @@ class OptimizedTelegramService {
           this.scheduleNextPoll(Math.min(this.currentPollDelay * 2, 30000));
           return;
         } else if (fetchError.message?.includes("Failed to fetch")) {
-          console.warn("🌐 Network error - unable to connect to Telegram API");
+          // Only log every 10th error to prevent spam
+          if (this.consecutiveErrors % 10 === 1) {
+            console.warn(`🌐 Network error - unable to connect to Telegram API (${this.consecutiveErrors} errors)`);
+          }
           // Stop polling after persistent failures
-          if (this.consecutiveErrors >= 3) {
+          if (this.consecutiveErrors >= 10) {
             console.error("❌ Too many network failures - stopping polling");
             this.stopPolling();
             return;
           }
-          this.scheduleNextPoll(Math.min(this.currentPollDelay * 2, 30000));
+          this.scheduleNextPoll(Math.min(this.currentPollDelay * 2, 60000));
           return;
         } else {
           console.warn("❌ Unexpected fetch error:", fetchError.message);
