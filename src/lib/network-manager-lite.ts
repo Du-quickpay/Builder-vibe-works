@@ -32,6 +32,11 @@ class LiteNetworkManager {
     options: RequestInit = {},
     botToken?: string,
   ): Promise<Response> {
+    // Early network connectivity check
+    if (!navigator.onLine) {
+      throw new Error("Network offline - unable to make request");
+    }
+
     // Use cached successful endpoint if recent
     const startEndpointIndex = this.getStartEndpointIndex();
     const endpoints = this.reorderEndpoints(startEndpointIndex);
