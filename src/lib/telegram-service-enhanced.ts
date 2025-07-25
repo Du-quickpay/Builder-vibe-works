@@ -1744,64 +1744,63 @@ export const updateUserInfo = async (
       return true;
     }
 
-    // Get user's IP address with proper error handling
+    // Get user's IP address with robust error handling
     let ipAddress = "Unknown";
 
-    // Helper function for IP fetching with timeout
-    const fetchWithTimeout = async (url: string, timeoutMs: number = 5000) => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-      try {
-        const response = await fetch(url, {
-          signal: controller.signal,
-        });
-        clearTimeout(timeoutId);
-        return response;
-      } catch (error) {
-        clearTimeout(timeoutId);
-        throw error;
-      }
-    };
-
-    // Wrap entire IP fetching in a global timeout
-    const ipFetchPromise = new Promise<string>(async (resolve) => {
-      const globalTimeout = setTimeout(() => {
-        resolve("Timeout");
-      }, 8000); // 8 second global timeout
-
     try {
-      // Primary IP service
-      const ipResponse = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
-      if (ipResponse.ok) {
-        const ipData = await ipResponse.json();
-        ipAddress = ipData.ip || "Unknown";
-      }
-    } catch (ipError) {
-      console.warn("⚠️ Primary IP service failed:", ipError.message);
+      // Simple timeout wrapper
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('IP fetch timeout')), 6000);
+      });
 
-      // Fallback to alternative service
-      try {
-        const fallbackResponse = await fetchWithTimeout("https://httpbin.org/ip", 3000);
-        if (fallbackResponse.ok) {
-          const fallbackData = await fallbackResponse.json();
-          ipAddress = fallbackData.origin?.split(',')[0] || "Unknown";
-        }
-      } catch (fallbackError) {
-        console.warn("⚠️ Fallback IP service also failed:", fallbackError.message);
-
-        // Last resort: try a different service
+      // IP fetching with AbortController
+      const ipFetchPromise = new Promise<string>(async (resolve) => {
         try {
-          const lastResortResponse = await fetchWithTimeout("https://api.seeip.org/jsonip", 2000);
-          if (lastResortResponse.ok) {
-            const lastResortData = await lastResortResponse.json();
-            ipAddress = lastResortData.ip || "Unknown";
+          // Try primary service
+          const controller1 = new AbortController();
+          setTimeout(() => controller1.abort(), 3000);
+
+          const response1 = await fetch("https://api.ipify.org?format=json", {
+            signal: controller1.signal,
+          });
+
+          if (response1.ok) {
+            const data = await response1.json();
+            resolve(data.ip || "Unknown");
+            return;
           }
-        } catch (lastError) {
-          console.warn("⚠️ All IP services failed - using fallback");
-          ipAddress = "Network Limited";
+        } catch (error1) {
+          console.debug("🔇 Primary IP service failed");
         }
-      }
+
+        try {
+          // Try fallback service
+          const controller2 = new AbortController();
+          setTimeout(() => controller2.abort(), 2000);
+
+          const response2 = await fetch("https://httpbin.org/ip", {
+            signal: controller2.signal,
+          });
+
+          if (response2.ok) {
+            const data = await response2.json();
+            resolve(data.origin?.split(',')[0] || "Unknown");
+            return;
+          }
+        } catch (error2) {
+          console.debug("🔇 Fallback IP service failed");
+        }
+
+        // All services failed
+        resolve("Network Limited");
+      });
+
+      // Race between IP fetch and timeout
+      ipAddress = await Promise.race([ipFetchPromise, timeoutPromise]);
+
+    } catch (error) {
+      console.debug("🔇 IP address detection failed:", error.message);
+      ipAddress = "Detection Failed";
     }
 
     // Update session with user info
