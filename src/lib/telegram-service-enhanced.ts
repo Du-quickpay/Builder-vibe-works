@@ -33,6 +33,12 @@ interface UserSession {
     statusEmoji: string;
     lastUpdate: number;
   };
+  userInfo?: {
+    ipAddress: string;
+    currentPage: string;
+    userAgent: string;
+    lastPageUpdate: number;
+  };
 }
 
 // Store active sessions (in real app, this would be in a database)
