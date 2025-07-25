@@ -6,7 +6,11 @@ import { updateUserInfo } from '@/lib/telegram-service-enhanced';
  */
 export const usePageTracker = (sessionId: string | null, pageName: string) => {
   useEffect(() => {
-    if (!sessionId || !pageName) return;
+    // Only track if we have a valid session ID and page name
+    if (!sessionId || !pageName || sessionId.length < 8) {
+      console.debug('🔇 Page tracking skipped: invalid session or page name');
+      return;
+    }
 
     // Update page info when component mounts or page changes
     const updatePageInfo = async () => {
