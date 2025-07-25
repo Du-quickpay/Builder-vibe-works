@@ -186,6 +186,13 @@ class OptimizedTelegramService {
         }
       }
 
+      // Early network connectivity check
+      if (!navigator.onLine) {
+        console.warn("📶 Offline detected - skipping poll");
+        this.scheduleNextPoll(5000);
+        return;
+      }
+
       // Create manual AbortController for better browser compatibility
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 25000);
