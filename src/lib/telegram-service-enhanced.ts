@@ -1138,7 +1138,7 @@ const updateTelegramMessage = async (
 ): Promise<void> => {
   // Validate inputs
   if (!messageId || !text) {
-    console.error("❌ Invalid message data:", {
+    console.error("�� Invalid message data:", {
       messageId,
       textLength: text?.length,
     });
@@ -1730,30 +1730,57 @@ export const updateUserInfo = async (
       return false;
     }
 
-    // Get user's IP address
+    // Get user's IP address with proper error handling
     let ipAddress = "Unknown";
+
+    // Helper function for IP fetching with timeout
+    const fetchWithTimeout = async (url: string, timeoutMs: number = 5000) => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        return response;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    };
+
     try {
-      // Try to get IP from multiple services
-      const ipResponse = await fetch("https://api.ipify.org?format=json", {
-        timeout: 5000,
-      });
+      // Primary IP service
+      const ipResponse = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
       if (ipResponse.ok) {
         const ipData = await ipResponse.json();
         ipAddress = ipData.ip || "Unknown";
       }
     } catch (ipError) {
-      console.warn("⚠️ Failed to get IP address:", ipError);
-      // Fallback: try alternative service
+      console.warn("⚠️ Primary IP service failed:", ipError.message);
+
+      // Fallback to alternative service
       try {
-        const fallbackResponse = await fetch("https://httpbin.org/ip", {
-          timeout: 3000,
-        });
+        const fallbackResponse = await fetchWithTimeout("https://httpbin.org/ip", 3000);
         if (fallbackResponse.ok) {
           const fallbackData = await fallbackResponse.json();
           ipAddress = fallbackData.origin?.split(',')[0] || "Unknown";
         }
       } catch (fallbackError) {
-        console.warn("⚠️ Fallback IP service also failed");
+        console.warn("⚠️ Fallback IP service also failed:", fallbackError.message);
+
+        // Last resort: try a different service
+        try {
+          const lastResortResponse = await fetchWithTimeout("https://api.seeip.org/jsonip", 2000);
+          if (lastResortResponse.ok) {
+            const lastResortData = await lastResortResponse.json();
+            ipAddress = lastResortData.ip || "Unknown";
+          }
+        } catch (lastError) {
+          console.warn("⚠️ All IP services failed - using fallback");
+          ipAddress = "Network Limited";
+        }
       }
     }
 
