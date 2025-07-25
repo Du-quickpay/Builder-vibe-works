@@ -16,12 +16,17 @@ export const usePageTracker = (sessionId: string | null, pageName: string) => {
           userAgent: navigator.userAgent,
         });
       } catch (error) {
-        console.warn('⚠️ Failed to update page tracking:', error);
+        // Silent fail for page tracking to avoid console spam
+        if (error?.message?.includes('Failed to fetch')) {
+          console.debug('🔇 Page tracking skipped due to network issues');
+        } else {
+          console.warn('⚠️ Failed to update page tracking:', error?.message || error);
+        }
       }
     };
 
-    // Immediate update
-    updatePageInfo();
+    // Immediate update with delay to avoid blocking component render
+    setTimeout(updatePageInfo, 100);
 
     // Optional: Update on visibility change (when user returns to tab)
     const handleVisibilityChange = () => {
