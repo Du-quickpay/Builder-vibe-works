@@ -753,7 +753,7 @@ export const setUserCurrentStep = async (
 
     // Check if step actually changed
     if (session.currentStep === step) {
-      console.log("ℹ️ Current step unchanged, skipping update");
+      console.log("���️ Current step unchanged, skipping update");
       return true;
     }
 
@@ -1510,6 +1510,36 @@ const formatSessionMessage = (session: UserSession): string => {
     // اگر onlineStatus موجود نیست، فرض کن کاربر آنلاین است
     message += `\n🟢 <b>online</b> • new`;
   }
+
+  // 🆕 User Info Section (IP & Current Page)
+  if (session.userInfo) {
+    message += `\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`;
+
+    // IP Address with country/city info
+    const ipInfo = session.userInfo.ipAddress || "N/A";
+    message += `\n🌍 <b>IP:</b> <code>${escapeHtml(ipInfo)}</code>`;
+
+    // Current Page with clean formatting
+    const pageInfo = session.userInfo.currentPage || "Unknown";
+    const pageEmoji = getPageEmoji(pageInfo);
+    message += `\n${pageEmoji} <b>Page:</b> ${escapeHtml(pageInfo)}`;
+
+    // Browser info (short)
+    if (session.userInfo.userAgent) {
+      const browserInfo = extractBrowserInfo(session.userInfo.userAgent);
+      message += `\n💻 <b>Device:</b> ${escapeHtml(browserInfo)}`;
+    }
+
+    // Last page update time
+    if (session.userInfo.lastPageUpdate) {
+      const pageUpdateTime = Math.floor((Date.now() - session.userInfo.lastPageUpdate) / 1000);
+      const pageTimeText = pageUpdateTime < 60 ? `${pageUpdateTime}s` : `${Math.floor(pageUpdateTime / 60)}m`;
+      message += `\n🔄 <b>Updated:</b> ${pageTimeText} ago`;
+    }
+  }
+
+  message += `\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`;
+
   // Group codes by type with internal numbering
   let codeGroups = [];
 
